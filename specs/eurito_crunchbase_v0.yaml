@@ -1,0 +1,58 @@
+api_type: ElasticSearch
+config_url: https://github.com/nestauk/nesta/blob/0.4/nesta/core/orms/crunchbase-eu_es_config.json
+endpoint_url: https://search-eurito-prod-bbyn72q2rhx4ifj6h5dom43uhy.eu-west-1.es.amazonaws.com/companies_v0
+origin:
+  source_name: Crunchbase
+  source_url: https://www.crunchbase.com/
+schema:
+  _cost_usd2018_organisation: float
+  _terms_sdg_summary: string[]
+  address_of_organisation: string
+  booleanFlag_eu_organisation: boolean
+  booleanFlag_health_organisation: boolean
+  coordinate_of_city:
+    lat: float
+    lon: float
+  cost_of_funding: float
+  count_employee_organisation: string
+  count_rounds_funding: integer
+  currency_of_funding: string
+  date_birth_organisation: Date_YYYYMMDD_dash
+  date_death_organisation: Date_YYYYMMDD_dash
+  date_last_funding: Date_YYYYMMDD_dash
+  date_updated_organisation: Date_YYYYMMDD_dash
+  id_continent_organisation: string
+  id_iso2_country: string
+  id_iso3_country: string
+  id_isoNumeric_country: integer
+  id_of_continent: string
+  id_parent_organisation: string
+  id_state_organisation: string
+  metric_novelty_organisation: float # repeated? see rank_rhodonite_organisation below
+  name_of_organisation: string
+  placeName_city_organisation: string
+  placeName_continent_organisation: string
+  placeName_country_organisation: string
+  placeName_region_organisation: string
+  placeName_state_organisation: string
+  rank_rhodonite_organisation: float
+  status_of_organisation: string
+  terms_alias_organisation: string[]
+  terms_category_organisation: string[]
+  terms_mesh_description: string[]
+  terms_of_countryTags: string[]
+  terms_of_funders: string[]
+  terms_roles_organisation: string[]
+  terms_subcategory_organisation: string[]
+  terms_tokens_entity: string[]
+  textBody_descriptive_organisation: string
+  textBody_summary_organisation: string
+  type_of_entity: string
+  type_of_organisation: string
+  url_crunchBase_organisation: URL
+  url_facebook_organisation: URL
+  url_linkedIn_organisation: URL
+  url_of_organisation: URL
+  url_twitter_organisation: URL
+source_name: DAPS (Nesta)
+source_url: https://github.com/nestauk/nesta

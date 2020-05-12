@@ -1,0 +1,38 @@
+api_type: ElasticSearch
+config_url: https://github.com/nestauk/nesta/blob/0.4/nesta/core/orms/meetup_es_config.json
+endpoint_url: https://search-health-scanner-5cs7g52446h7qscocqmiky5dn4.eu-west-2.es.amazonaws.com/meetup_v3
+origin:
+  source_name: Meetup
+  source_url: https://www.meetup.com/
+schema:
+  _id_state_group: string
+  _placeName_state_group: string
+  _terms_memberOrigin_group: string[]
+  _terms_sdg_description: string[]
+  booleanFlag_autotranslated_entity: boolean
+  coordinate_of_group:
+    lat: float
+    lon: float
+  count_member_group: integer
+  date_start_group: Date_YYYYMMDD_dash
+  id_continent_group: string
+  id_country_group: string
+  id_iso2_country: string
+  id_iso3_country: string
+  id_isoNumeric_country: integer
+  id_of_group: string
+  name_of_category: string
+  name_of_group: string
+  placeName_city_group: string
+  placeName_continent_group: string
+  placeName_country_group: string
+  rank_rhodonite_group: float
+  terms_iso2lang_entity: string[]
+  terms_mesh_group: string[]
+  terms_of_countryTags: string[]
+  terms_topics_group: string[]
+  textBody_descriptive_group: string
+  type_of_entity: string
+  url_of_group: URL
+source_name: DAPS (Nesta)
+source_url: https://github.com/nestauk/nesta

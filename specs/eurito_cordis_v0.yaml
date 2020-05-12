@@ -1,0 +1,22 @@
+api_type: ElasticSearch
+config_url: https://github.com/nestauk/nesta/blob/dev/nesta/core/orms/cordis-eu_es_config.json
+endpoint_url: https://search-eurito-dev-vq22tw6otqjpdh47u75bh2g7ba.eu-west-2.es.amazonaws.com/cordis_v0
+origin:
+  source_name: CORDIS (Community Research and Development Information Service)
+  source_url: https://cordis.europa.eu/home_en.html
+schema:
+  cost_ecFunding_project: integer
+  cost_total_project: integer
+  date_ended_project: Date_YYYYMMDD_dash
+  date_started_project: Date_YYYYMMDD_dash
+  metric_novelty_project: float
+  name_framework_project: string
+  status_of_project: string
+  terms_tokens_entity: string[]
+  textBody_description_project: string
+  title_of_project: string
+  type_of_entity: string
+  url_of_project: URL
+  year_of_project: integer
+source_name: DAPS (Nesta)
+source_url: https://github.com/nestauk/nesta

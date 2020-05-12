@@ -1,0 +1,45 @@
+api_type: ElasticSearch
+config_url: https://github.com/nestauk/nesta/blob/0.4/nesta/core/orms/arxiv_es_config.json
+endpoint_url: https://search-arxlive-t2brq66muzxag44zwmrcfrlmq4.eu-west-2.es.amazonaws.com/arxiv_v3
+origin:
+  -
+    source_name: arXiv
+    source_url: https://arxiv.org/
+  -
+    source_name: MAG (Microsoft Academic Graph)
+    source_url: https://docs.microsoft.com/en-us/azure/cognitive-services/academic-knowledge/home
+  -
+    source_name: GRID (Global Research Identifier Database)
+    source_url: https://www.grid.ac/
+schema:
+  booleanFlag_multinational_article: boolean
+  count_citations_article: integer
+  date_created_article: date # FIXME no format
+  id_digitalObjectIdentifier_article: string
+  json_category_article:
+    ancestors: string
+    level: integer
+    order: integer
+    value: string
+  json_fieldOfStudy_article:
+    ancestors: string
+    level: integer
+    order: integer
+    value: string
+  json_location_article:
+    ancestors: string
+    level: integer
+    order: integer
+    value: string
+  metric_citations_article: float
+  metric_novelty_article: float
+  terms_authors_article: string[]
+  terms_institutes_article: string[]
+  terms_tokens_article: string[]
+  textBody_abstract_article: string
+  title_of_article: string
+  type_of_entity: string
+  url_of_article: URL
+  year_of_article: integer
+source_name: DAPS (Nesta)
+source_url: https://github.com/nestauk/nesta
