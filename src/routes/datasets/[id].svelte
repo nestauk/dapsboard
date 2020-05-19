@@ -8,6 +8,8 @@
 		request
 	} from 'app/net';
 
+	import JSONTree from 'svelte-json-tree'
+
 	// TODO It seems like a bug that an instance import declaration is
 	// available at the module level. Moved import to module
 	// script.
@@ -80,9 +82,9 @@
 
 <div>
 	<h3>Dataset Information</h3>
-	<pre>{JSON.stringify(spec, null, 2)}</pre>
+	<JSONTree value={spec} />
 	<h3>Aggregation Results</h3>
-	<pre>{JSON.stringify($aggStore, null, 2)}</pre>
+	<JSONTree value={$aggStore} />
 </div>
 
 <style>
