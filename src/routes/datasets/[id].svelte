@@ -1,27 +1,92 @@
 <script context='module'>
+	import { writable } from 'svelte/store';
+	import {
+		aggregationsPerType,
+		determineESType,
+	} from 'app/elasticsearch';
+	import {
+		request
+	} from 'app/net';
+
+	// TODO It seems like a bug that an instance import declaration is
+	// available at the module level. Moved import to module
+	// script.
 	import routes from 'app/data/routes.json';
 
-	export function preload({ params: {id} }) {
+	export const aggStore = writable('');
+
+	function constructQuery(schema) {
+		const fields = Object.keys(schema);
+		const aggs = {};
+		for ( let f in schema ) {
+			const fType = schema[f];
+			const typeAggs = aggregationsPerType[fType];
+			for (let i in typeAggs) {
+				const at = typeAggs[i];
+				const atName = `${f}_${at}`;
+				if (at !== 'weighted_avg')
+					aggs[atName] = {
+						[at] : {
+							field: f
+						}
+					}
+				else
+					aggs[atName] = {
+						[at] : {
+							values: f
+						}
+					}
+			}
+		}
+
+		return {
+			size: 0,
+			aggs
+		};
+	}
+
+	async function requestAllAggregations(fetch, basepath, schema, store) {
+		const url = `${basepath}/_search`;
+		const data = constructQuery(schema);
+		const response = await request(fetch, 'POST', url, {data});
+		store.set(response);
+	}
+
+	export function preload({ params: {id}, query }) {
+		const datasetInfo = routes[id];
+		const endpoint = datasetInfo.spec.endpoint_url;
+		if (process.browser)
+			requestAllAggregations(this.fetch, endpoint, datasetInfo.spec.schema, aggStore);
+
 		return {
 			id,
-			spec: routes[id]
+			spec: datasetInfo.spec,
+			aggStore
 		}
 	}
 </script>
 
 <script>
+	import * as _ from 'lamb';
+
 	export let id;
 	export let spec;
+	export let aggStore;
 </script>
 
 <svelte:head>
 	<title>dapsboard - {id}</title>
 </svelte:head>
 
-<pre>{JSON.stringify(spec, null, 2)}</pre>
+<div>
+	<h3>Dataset Information</h3>
+	<pre>{JSON.stringify(spec, null, 2)}</pre>
+	<h3>Aggregation Results</h3>
+	<pre>{JSON.stringify($aggStore, null, 2)}</pre>
+</div>
 
 <style>
-	pre {
+	div {
 		width: 100%;
 		height: 100%;
 		overflow-y: auto;
