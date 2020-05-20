@@ -14,7 +14,6 @@
 					{#each releases as {dataset, id}}
 					<p>
 						<a
-							rel='prefetch'
 							href='datasets/{id}'
 						>
 							<span>{id}</span>
