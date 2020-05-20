@@ -3,6 +3,7 @@
 	import {
 		aggregationsPerType,
 		determineESType,
+		buildAggregation
 	} from 'app/elasticsearch';
 	import {
 		request
@@ -10,9 +11,6 @@
 
 	import JSONTree from 'svelte-json-tree'
 
-	// TODO It seems like a bug that an instance import declaration is
-	// available at the module level. Moved import to module
-	// script.
 	import routes from 'app/data/routes.json';
 
 	export const aggStore = writable('');
@@ -26,18 +24,9 @@
 			for (let i in typeAggs) {
 				const at = typeAggs[i];
 				const atName = `${f}_${at}`;
-				if (at !== 'weighted_avg')
-					aggs[atName] = {
-						[at] : {
-							field: f
-						}
-					}
-				else
-					aggs[atName] = {
-						[at] : {
-							values: f
-						}
-					}
+				aggs[atName] = {
+					[at]: buildAggregation(at, f)
+				};
 			}
 		}
 
