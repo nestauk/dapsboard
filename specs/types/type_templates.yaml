@@ -1,0 +1,45 @@
+# generic type
+
+<Type>:
+  data_type: string
+  description: string # OPTIONAL
+  format: string # OPTIONAL - e.g. YYYYMMDD
+  kind: string # e.g. density, currency
+  # constraints
+  regex: RegExp # OPTIONAL – if `data_type` = `string`, a regular expression that the value must match
+  range: number[] # OPTIONAL – if `data_type` = `integer`|`float`, min and max acceptable values (included) – e.g. `[0, 1]`
+  min: number # OPTIONAL – if `data_type` = `integer`|`float`, min acceptable value (included) – e.g. 0 for weight
+  max: number # OPTIONAL – if `data_type` = `integer`|`float`, max acceptable value (included) – e.g. `700` for visible light wavelength (nm)
+  values: array # OPTIONAL – if there are a handful of known acceptable values – `e.g. ['brown', 'blue', 'orange']`
+
+# GEOGRAPHY
+
+GeoRegion:
+  data_type: object
+  id_regex: RegExp # OPTIONAL – a regular expression useful to test ID values
+  id: string # the region id e.g. UKF2
+  kind: geographic region
+  level: int # OPTIONAL – the region level, used for NUTS, e.g. 2
+  levels: int[] # OPTIONAL – a list of all the possible levels – e.g for NUTS: [0, 1, 2, 3]
+  name: string # name of the region, e.g. Cornwall, France
+  provider: string # OPTIONAL - use `PROVIDED` in case `provider_url` is unknown because the data have already been reverse geocoded
+  provider_url: URL # OPTIONAL - url of the boundaries used for reverse geocoding, if known
+  region_type: string # the region type (e.g. `NUTS`, `LEP`, etc)
+  year_enforced: int # OPTIONAL - year of spec being enforced
+  year_spec: int # year of specification release
+
+# UNITS
+
+Unit:
+  data_type: string
+  description: string # OPTIONAL
+  kind: string # e.g. density, currency
+  label: string # short text
+  unit_latex: string # e.g. \SI{32}{mg.m^{-3}}
+  unit_string: string # e.g. `mg m^-3`
+
+Datestring:
+  data_type: string
+  format: string # e.g. YYYYMMDD
+  kind:  date
+  regex: RegExp # OPTIONAL – a regular expression useful to test values

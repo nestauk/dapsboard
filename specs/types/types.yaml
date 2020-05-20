@@ -1,0 +1,117 @@
+# dates
+
+Date_YYYYMMDD:
+  format: YYYYMMDD
+  regex: /\d{8}/gu
+  type: Datestring
+
+Date_YYYYMMDD_dash:
+  format: YYYY-MM-DD
+  regex: /\d{4}-\d{2}-\d{2}/gu
+  type: Datestring
+
+Date_YYYYMMDD_dash_time:
+  format: YYYY-MM-DD hh:mm:ss
+  regex: /\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/gu
+  type: Datestring
+
+Date_YYYYMMDD_dash_T_time:
+  format: <YYYY-MM-DD>T<hh:mm:ss> # e.g 2010-11-30T00:00:00
+  regex: /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/gu
+  type: Datestring
+
+# internet resources
+
+URL:
+  kind: uri
+  regex: /[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/gu
+  type: string
+
+# GEOGRAPHY
+
+NutsRegion:
+  id: GeoRegion.id # e.g. UKF2
+  level: int
+  levels: [0, 1, 2, 3]
+  name: GeoRegion.name # e.g. Leicestershire, Rutland and Northamptonshire
+  region_type: NUTS
+  provider: GeoRegion.provider
+  provider_url: GeoRegion.provider_url
+  type: GeoRegion
+  year_enforced: GeoRegion.year_enforced
+  year_spec: GeoRegion.year_spec
+
+LepRegion:
+  id: GeoRegion.id # e.g. E37000001
+  name: GeoRegion.name # e.g. Black Country
+  region_type: LEP
+  provider: GeoRegion.provider
+  provider_url: GeoRegion.provider_url
+  type: GeoRegion
+  year_enforced: GeoRegion.year_enforced
+  year_spec: GeoRegion.year_spec
+
+# UNITS
+
+# currency
+
+EUR:
+  kind: currency
+  label: Euro
+  data_type: int|float
+  unit_string: EUR
+  type: Unit
+GBP:
+  kind: currency
+  label: British Pound
+  data_type: int|float
+  unit_string: GBP
+  type: Unit
+USD:
+  kind: currency
+  label: US Dollar
+  data_type: int|float
+  unit_string: USD
+  type: Unit
+
+# density
+
+GravimetricUnit:
+  kind: density
+  label: Gravimetric Units
+  data_type: int|float
+  unit_string: µg m^-3
+  type: Unit
+
+# area
+
+Area_hectare:
+  kind: area
+  label: Hectare
+  data_type: int|float
+  unit_string: hectare
+  type: Unit
+
+# score
+
+REF:
+  kind: score
+  label: REF score
+  data_type: int|float
+  unit_string: REF Score (1-4)
+  type: Unit
+FTE:
+  kind: score
+  label: Full Time Equivalent
+  data_type: float
+  range: [0, 1]
+  unit_string: FTE
+  type: Unit
+
+# digital signals
+
+BitTransferRate:
+  kind: bit transfer rate
+  data_type: float
+  unit_string: Mb/s
+  type: Unit

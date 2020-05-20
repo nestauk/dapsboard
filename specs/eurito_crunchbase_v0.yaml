@@ -1,58 +1,125 @@
-api_type: ElasticSearch
-config_url: https://github.com/nestauk/nesta/blob/0.4/nesta/core/orms/crunchbase-eu_es_config.json
-endpoint_url: https://search-eurito-prod-bbyn72q2rhx4ifj6h5dom43uhy.eu-west-1.es.amazonaws.com/companies_v0
-origin:
-  source_name: Crunchbase
-  source_url: https://www.crunchbase.com/
-schema:
-  _cost_usd2018_organisation: float
-  _terms_sdg_summary: string[]
-  address_of_organisation: string
-  booleanFlag_eu_organisation: boolean
-  booleanFlag_health_organisation: boolean
-  coordinate_of_city:
-    lat: float
-    lon: float
-  cost_of_funding: float
-  count_employee_organisation: string
-  count_rounds_funding: integer
-  currency_of_funding: string
-  date_birth_organisation: Date_YYYYMMDD_dash
-  date_death_organisation: Date_YYYYMMDD_dash
-  date_last_funding: Date_YYYYMMDD_dash
-  date_updated_organisation: Date_YYYYMMDD_dash
-  id_continent_organisation: string
-  id_iso2_country: string
-  id_iso3_country: string
-  id_isoNumeric_country: integer
-  id_of_continent: string
-  id_parent_organisation: string
-  id_state_organisation: string
-  metric_novelty_organisation: float # repeated? see rank_rhodonite_organisation below
-  name_of_organisation: string
-  placeName_city_organisation: string
-  placeName_continent_organisation: string
-  placeName_country_organisation: string
-  placeName_region_organisation: string
-  placeName_state_organisation: string
-  rank_rhodonite_organisation: float
-  status_of_organisation: string
-  terms_alias_organisation: string[]
-  terms_category_organisation: string[]
-  terms_mesh_description: string[]
-  terms_of_countryTags: string[]
-  terms_of_funders: string[]
-  terms_roles_organisation: string[]
-  terms_subcategory_organisation: string[]
-  terms_tokens_entity: string[]
-  textBody_descriptive_organisation: string
-  textBody_summary_organisation: string
-  type_of_entity: string
-  type_of_organisation: string
-  url_crunchBase_organisation: URL
-  url_facebook_organisation: URL
-  url_linkedIn_organisation: URL
-  url_of_organisation: URL
-  url_twitter_organisation: URL
-source_name: DAPS (Nesta)
-source_url: https://github.com/nestauk/nesta
+source:
+  provider_name: Crunchbase
+  provider_url: https://www.crunchbase.com/
+dataset:
+  api_type: ElasticSearch
+  config_url: https://github.com/nestauk/nesta/blob/0.4/nesta/core/orms/crunchbase-eu_es_config.json
+  endpoint_url: https://search-eurito-prod-bbyn72q2rhx4ifj6h5dom43uhy.eu-west-1.es.amazonaws.com/companies_v0
+  provider_name: DAPS (Nesta)
+  provider_url: https://github.com/nestauk/nesta
+  schema:
+    _cost_usd2018_organisation: float
+    _terms_sdg_summary:
+      data_type: string[]
+      es_type: ES_keyword[]
+    address_of_organisation:
+      data_type: string
+      es_type: ES_keyword
+    booleanFlag_eu_organisation: boolean
+    booleanFlag_health_organisation: boolean
+    coordinate_of_city: ES_geo_point_obj
+    cost_of_funding: float
+    count_employee_organisation:
+      data_type: string
+      es_type: ES_keyword
+    count_rounds_funding: integer
+    currency_of_funding:
+      data_type: string
+      es_type: ES_keyword
+    date_birth_organisation: Date_YYYYMMDD_dash
+    date_death_organisation: Date_YYYYMMDD_dash
+    date_last_funding: Date_YYYYMMDD_dash
+    date_updated_organisation: Date_YYYYMMDD_dash
+    id_continent_organisation:
+      data_type: string
+      es_type: ES_keyword
+    id_iso2_country:
+      data_type: string
+      es_type: ES_keyword
+    id_iso3_country:
+      data_type: string
+      es_type: ES_keyword
+    id_isoNumeric_country: integer
+    id_of_continent:
+      data_type: string
+      es_type: ES_keyword
+    id_parent_organisation:
+      data_type: string
+      es_type: ES_keyword
+    id_state_organisation:
+      data_type: string
+      es_type: ES_keyword
+    metric_novelty_organisation: float # repeated? see rank_rhodonite_organisation below
+    name_of_organisation:
+      data_type: string
+      es_type: ES_text
+    placeName_city_organisation:
+      data_type: string
+      es_type: ES_text_w_keyword
+    placeName_continent_organisation:
+      data_type: string
+      es_type: ES_text_w_keyword
+    placeName_country_organisation:
+      data_type: string
+      es_type: ES_text_w_keyword
+    placeName_region_organisation:
+      data_type: string
+      es_type: ES_text_w_keyword
+    placeName_state_organisation:
+      data_type: string
+      es_type: ES_text_w_keyword
+    rank_rhodonite_organisation: float
+    status_of_organisation:
+      data_type: string
+      es_type: ES_keyword
+    terms_alias_organisation:
+      data_type: string[]
+      es_type: ES_keyword[]
+    terms_category_organisation:
+      data_type: string[]
+      es_type: ES_keyword[]
+    terms_mesh_description:
+      data_type: string[]
+      es_type: ES_text_w_keyword[]
+    terms_of_countryTags:
+      data_type: string[]
+      es_type: ES_keyword[]
+    terms_of_funders:
+      data_type: string[]
+      es_type: ES_text_w_keyword[]
+    terms_roles_organisation:
+      data_type: string[]
+      es_type: ES_text_w_keyword[]
+    terms_subcategory_organisation:
+      data_type: string[]
+      es_type: ES_text_w_keyword[]
+    terms_tokens_entity:
+      data_type: string[]
+      es_type: ES_keyword[]
+    textBody_descriptive_organisation:
+      data_type: string
+      es_type: ES_text
+    textBody_summary_organisation:
+      data_type: string
+      es_type: ES_text
+    type_of_entity:
+      data_type: string
+      es_type: ES_keyword
+    type_of_organisation:
+      data_type: string
+      es_type: ES_keyword
+    url_crunchBase_organisation:
+      data_type: URL
+      es_type: ES_keyword
+    url_facebook_organisation:
+      data_type: URL
+      es_type: ES_keyword
+    url_linkedIn_organisation:
+      data_type: URL
+      es_type: ES_keyword
+    url_of_organisation:
+      data_type: URL
+      es_type: ES_keyword
+    url_twitter_organisation:
+      data_type: URL
+      es_type: ES_keyword

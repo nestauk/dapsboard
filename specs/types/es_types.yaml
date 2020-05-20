@@ -1,0 +1,28 @@
+# https://www.elastic.co/guide/en/elasticsearch/reference/7.6/mapping-types.html
+
+# https://www.elastic.co/guide/en/elasticsearch/reference/7.6/geo-point.html
+# in ES it can be an object, a string, an array and more
+ES_geo_point_obj:
+  data_type: object
+  shape:
+    lat: float
+    lon: float
+
+ES_keyword:
+  data_type: string
+  searchable: false
+  accessible: true # [1]
+
+ES_text:
+  data_type: string
+  searchable: true
+  accessible: false # [1]
+
+ES_text_w_keyword:
+  data_type: string
+  extends: ES_text
+  fields:
+    keyword: ES_keyword # e.g. if `foo` is of type `ES_text_w_keyword`, `foo` is not accessible, but `foo.keyword` is
+
+# [1] Sorting, aggregations, and accessing field values in scripts
+# https://www.elastic.co/guide/en/elasticsearch/reference/current/fielddata.html

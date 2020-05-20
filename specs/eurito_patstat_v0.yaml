@@ -1,26 +1,49 @@
-api_type: ElasticSearch
-config_url: https://github.com/nestauk/nesta/blob/0.4/nesta/core/orms/patstat-eu_es_config.json
-endpoint_url: https://search-eurito-prod-bbyn72q2rhx4ifj6h5dom43uhy.eu-west-1.es.amazonaws.com/patstat_v0
-origin:
-  source_name: EPO (European Patent Office)
-  source_url: https://www.epo.org/searching-for-patents/business/patstat.html
-schema:
-  booleanFlag_autotranslated_entity: boolean
-  booleanFlag_eu_patent: boolean
-  count_citations_patent: integer
-  date_of_patent: Date_YYYYMMDD_dash
-  metric_novelty_patent: float
-  terms_authCountry_patent: string[]
-  terms_ipc_patent: string[]
-  terms_iso2lang_entity: string[]
-  terms_nace2_patent: string[]
-  terms_personCountry_patent: string[]
-  terms_personNuts_patent: string[]
-  terms_techFieldNumber_patent: string[]
-  terms_tokens_entity: string[]
-  textBody_abstract_patent: string
-  title_of_patent: string
-  type_of_entity: string
-  year_of_patent: integer
-source_name: DAPS (Nesta)
-source_url: https://github.com/nestauk/nesta
+source:
+  provider_name: EPO (European Patent Office)
+  provider_url: https://www.epo.org/searching-for-patents/business/patstat.html
+dataset:
+  api_type: ElasticSearch
+  config_url: https://github.com/nestauk/nesta/blob/0.4/nesta/core/orms/patstat-eu_es_config.json
+  endpoint_url: https://search-eurito-prod-bbyn72q2rhx4ifj6h5dom43uhy.eu-west-1.es.amazonaws.com/patstat_v0
+  provider_name: DAPS (Nesta)
+  provider_url: https://github.com/nestauk/nesta
+  schema:
+    booleanFlag_autotranslated_entity: boolean
+    booleanFlag_eu_patent: boolean
+    count_citations_patent: integer
+    date_of_patent: Date_YYYYMMDD_dash
+    metric_novelty_patent: float
+    terms_authCountry_patent:
+      data_type: string[]
+      es_type: ES_text_w_keyword[]
+    terms_ipc_patent:
+      data_type: string[]
+      es_type: ES_text_w_keyword[]
+    terms_iso2lang_entity:
+      data_type: string[]
+      es_type: ES_text_w_keyword[]
+    terms_nace2_patent:
+      data_type: string[]
+      es_type: ES_text_w_keyword[]
+    terms_personCountry_patent:
+      data_type: string[]
+      es_type: ES_text_w_keyword[]
+    terms_personNuts_patent:
+      data_type: string[]
+      es_type: ES_text_w_keyword[]
+    terms_techFieldNumber_patent:
+      data_type: string[]
+      es_type: ES_text_w_keyword[]
+    terms_tokens_entity:
+      data_type: string[]
+      es_type: ES_keyword[]
+    textBody_abstract_patent:
+      data_type: string
+      es_type: ES_text
+    title_of_patent:
+      data_type: string
+      es_type: ES_text
+    type_of_entity:
+      data_type: string
+      es_type: ES_keyword
+    year_of_patent: integer

@@ -1,38 +1,79 @@
-api_type: ElasticSearch
-config_url: https://github.com/nestauk/nesta/blob/0.4/nesta/core/orms/meetup_es_config.json
-endpoint_url: https://search-health-scanner-5cs7g52446h7qscocqmiky5dn4.eu-west-2.es.amazonaws.com/meetup_v3
-origin:
-  source_name: Meetup
-  source_url: https://www.meetup.com/
-schema:
-  _id_state_group: string
-  _placeName_state_group: string
-  _terms_memberOrigin_group: string[]
-  _terms_sdg_description: string[]
-  booleanFlag_autotranslated_entity: boolean
-  coordinate_of_group:
-    lat: float
-    lon: float
-  count_member_group: integer
-  date_start_group: Date_YYYYMMDD_dash
-  id_continent_group: string
-  id_country_group: string
-  id_iso2_country: string
-  id_iso3_country: string
-  id_isoNumeric_country: integer
-  id_of_group: string
-  name_of_category: string
-  name_of_group: string
-  placeName_city_group: string
-  placeName_continent_group: string
-  placeName_country_group: string
-  rank_rhodonite_group: float
-  terms_iso2lang_entity: string[]
-  terms_mesh_group: string[]
-  terms_of_countryTags: string[]
-  terms_topics_group: string[]
-  textBody_descriptive_group: string
-  type_of_entity: string
-  url_of_group: URL
-source_name: DAPS (Nesta)
-source_url: https://github.com/nestauk/nesta
+source:
+  provider_name: Meetup
+  provider_url: https://www.meetup.com/
+dataset:
+  api_type: ElasticSearch
+  config_url: https://github.com/nestauk/nesta/blob/0.4/nesta/core/orms/meetup_es_config.json
+  endpoint_url: https://search-health-scanner-5cs7g52446h7qscocqmiky5dn4.eu-west-2.es.amazonaws.com/meetup_v3
+  provider_name: DAPS (Nesta)
+  provider_url: https://github.com/nestauk/nesta
+  schema:
+    _id_state_group:
+      data_type: string
+      es_type: ES_keyword
+    _placeName_state_group:
+      data_type: string
+      es_type: ES_text_w_keyword
+    _terms_memberOrigin_group:
+      data_type: string[]
+      es_type: ES_text_w_keyword[]
+    _terms_sdg_description:
+      data_type: string[]
+      es_type: ES_keyword[]
+    booleanFlag_autotranslated_entity: boolean
+    coordinate_of_group: ES_geo_point_obj
+    count_member_group: integer
+    date_start_group: Date_YYYYMMDD_dash
+    id_continent_group:
+      data_type: string
+      es_type: ES_keyword
+    id_country_group:
+      data_type: string
+      es_type: ES_keyword
+    id_iso2_country:
+      data_type: string
+      es_type: ES_keyword
+    id_iso3_country:
+      data_type: string
+      es_type: ES_keyword
+    id_isoNumeric_country: integer
+    id_of_group:
+      data_type: string
+      es_type: ES_keyword
+    name_of_category:
+      data_type: string
+      es_type: ES_text_w_keyword
+    name_of_group:
+      data_type: string
+      es_type: ES_text_w_keyword
+    placeName_city_group:
+      data_type: string
+      es_type: ES_text_w_keyword
+    placeName_continent_group:
+      data_type: string
+      es_type: ES_text_w_keyword
+    placeName_country_group:
+      data_type: string
+      es_type: ES_text_w_keyword
+    rank_rhodonite_group: float
+    terms_iso2lang_entity:
+      data_type: string[]
+      es_type: ES_keyword[]
+    terms_mesh_group:
+      data_type: string[]
+      es_type: ES_text_w_keyword[]
+    terms_of_countryTags:
+      data_type: string[]
+      es_type: ES_keyword[]
+    terms_topics_group:
+      data_type: string[]
+      es_type: ES_text_w_keyword[]
+    textBody_descriptive_group:
+      data_type: string
+      es_type: ES_text
+    type_of_entity:
+      data_type: string
+      es_type: ES_keyword
+    url_of_group:
+      data_type: URL
+      es_type: ES_keyword

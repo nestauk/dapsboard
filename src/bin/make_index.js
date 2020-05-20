@@ -19,6 +19,8 @@ const ROUTES_PATH = path.resolve(__dirname, '../node_modules/app/data/routes.jso
 const SIDEBAR_PATH = path.resolve(__dirname, '../node_modules/app/data/sidebar.json');
 const SPECS_DIR = path.resolve(__dirname, '../../specs');
 
+const isYamlFile = name => path.parse(name).ext === '.yaml';
+
 const makeDatasetName = string => getPathName(string).split('_v')[0];
 const makeLabel = string => getPathName(string).replace(/_/gu, ' ');
 const makeProject = string => getPathName(string).split('_')[0];
@@ -39,7 +41,8 @@ const makeSchemaObj = applyFnMap({
 const save = (data, dest) => saveObj(dest, 2)(data).then(tapMessage(`Saved ${dest}`));
 
 const process = async () => {
-	const refs = await readDir(SPECS_DIR).then(_.mapWith(makeSchemaObj));
+	const refs = await readDir(SPECS_DIR)
+		.then(_.pipe([_.filterWith(isYamlFile), _.mapWith(makeSchemaObj)]));
 
 	const datasets = await Promise.all(
 		refs.map(obj =>

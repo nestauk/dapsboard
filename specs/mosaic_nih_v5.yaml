@@ -1,47 +1,89 @@
-api_type: ElasticSearch
-config_url: https://github.com/nestauk/nesta/blob/0.4/nesta/core/orms/nih_es_config.json
-endpoint_url: https://search-health-scanner-5cs7g52446h7qscocqmiky5dn4.eu-west-2.es.amazonaws.com/nih_v5
-origin:
-  source_name: NIH (National Institutes of Health)
-  source_url: https://www.nih.gov/
-schema:
-  booleanFlag_duplicate_abstract: boolean
-  coordinate_of_organisation:
-    lat: float
-    lon: float
-  cost_total_project: float
-  currency_total_cost: string
-  date_end_project: Date_YYYYMMDD_dash
-  date_start_project: Date_YYYYMMDD_dash
-  id_iso2_country: string
-  id_iso3_country: string
-  id_isoNumeric_country: integer
-  id_of_continent: string
-  id_of_project: string
-  id_state_organisation: string
-  json_funding_project:
-    []:
-      cost_ref: long
-      end_date: date
-      start_date: date
-      year: integer
-  placeName_city_organisation: string
-  placeName_continent_organisation: string
-  placeName_country_organisation: string
-  placeName_state_organisation: string
-  placeName_zipcode_organisation: string
-  rank_rhodonite_abstract: float
-  terms_descriptive_project: string[]
-  terms_mesh_abstract: string[]
-  terms_of_countryTags: string[]
-  terms_of_funders: string[]
-  terms_sdg_abstract: string[]
-  textBody_abstract_project: string
-  textBody_descriptive_project: string
-  title_of_funder: string
-  title_of_organisation: string
-  title_of_project: string
-  type_of_entity: string
-  year_fiscal_funding: integer
-source_name: DAPS (Nesta)
-source_url: https://github.com/nestauk/nesta
+source:
+  provider_name: NIH (National Institutes of Health)
+  provider_url: https://www.nih.gov/
+dataset:
+  api_type: ElasticSearch
+  config_url: https://github.com/nestauk/nesta/blob/0.4/nesta/core/orms/nih_es_config.json
+  endpoint_url: https://search-health-scanner-5cs7g52446h7qscocqmiky5dn4.eu-west-2.es.amazonaws.com/nih_v5
+  provider_name: DAPS (Nesta)
+  provider_url: https://github.com/nestauk/nesta
+  schema:
+    booleanFlag_duplicate_abstract: boolean
+    coordinate_of_organisation: ES_geo_point_obj
+    cost_total_project: float
+    currency_total_cost:
+      data_type: string
+      es_type: ES_keyword
+    date_end_project: Date_YYYYMMDD_dash
+    date_start_project: Date_YYYYMMDD_dash
+    id_iso2_country:
+      data_type: string
+      es_type: ES_keyword
+    id_iso3_country:
+      data_type: string
+      es_type: ES_keyword
+    id_isoNumeric_country: integer
+    id_of_continent:
+      data_type: string
+      es_type: ES_keyword
+    id_of_project: string
+    id_state_organisation:
+      data_type: string
+      es_type: ES_keyword
+    json_funding_project:
+      type: object[]
+      shape:
+        cost_ref: long
+        end_date: date
+        start_date: date
+        year: integer
+    placeName_city_organisation:
+      data_type: string
+      es_type: ES_text_w_keyword
+    placeName_continent_organisation:
+      data_type: string
+      es_type: ES_text_w_keyword
+    placeName_country_organisation:
+      data_type: string
+      es_type: ES_text_w_keyword
+    placeName_state_organisation:
+      data_type: string
+      es_type: ES_text_w_keyword
+    placeName_zipcode_organisation:
+      data_type: string
+      es_type: ES_keyword
+    rank_rhodonite_abstract: float
+    terms_descriptive_project:
+      data_type: string[]
+      es_type: ES_text[]
+    terms_mesh_abstract:
+      data_type: string[]
+      es_type: ES_text_w_keyword[]
+    terms_of_countryTags:
+      data_type: string[]
+      es_type: ES_keyword[]
+    terms_of_funders:
+      data_type: string[]
+      es_type: ES_text_w_keyword[]
+    terms_sdg_abstract:
+      data_type: string[]
+      es_type: ES_keyword[]
+    textBody_abstract_project:
+      data_type: string[]
+      es_type: ES_text[]
+    textBody_descriptive_project:
+      data_type: string
+      es_type: ES_text
+    title_of_funder:
+      data_type: string
+      es_type: ES_text
+    title_of_organisation:
+      data_type: string
+      es_type: ES_text
+    title_of_project:
+      data_type: string
+      es_type: ES_text
+    type_of_entity:
+      data_type: string
+      es_type: ES_keyword
+    year_fiscal_funding: integer
