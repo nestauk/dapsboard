@@ -9,9 +9,9 @@ import {tapMessage} from '@svizzle/dev';
 import {applyFnMap} from '@svizzle/utils';
 
 import {
-  getPathName,
-  indexById,
-  makeDatasetBySource
+	getPathName,
+	indexById,
+	makeDatasetBySource
 } from 'app/utils';
 
 const DATASETS_PATH = path.resolve(__dirname, '../node_modules/app/data/datasets.json');
@@ -27,34 +27,34 @@ const makeVersion = string => getPathName(string).split('_')[2].replace('v', '')
 const resolveSchema = string => path.resolve(SPECS_DIR, string);
 
 const makeSchemaObj = applyFnMap({
-  dataset: makeDatasetName,
-  filepath: resolveSchema,
-  id: getPathName,
-  label: makeLabel,
-  project: makeProject,
-  source: makeSource,
-  version: makeVersion
+	dataset: makeDatasetName,
+	filepath: resolveSchema,
+	id: getPathName,
+	label: makeLabel,
+	project: makeProject,
+	source: makeSource,
+	version: makeVersion
 });
 
 const save = (data, dest) => saveObj(dest, 2)(data).then(tapMessage(`Saved ${dest}`));
 
 const process = async () => {
-  const refs = await readDir(SPECS_DIR).then(_.mapWith(makeSchemaObj));
+	const refs = await readDir(SPECS_DIR).then(_.mapWith(makeSchemaObj));
 
-  const datasets = await Promise.all(
-    refs.map(obj =>
-      readFile(obj.filepath, 'utf-8')
-      .then(yaml.safeLoad)
-      .then(spec => ({
-        ..._.skip(obj, ['filepath']),
-        spec
-      }))
-    )
-  );
+	const datasets = await Promise.all(
+		refs.map(obj =>
+			readFile(obj.filepath, 'utf-8')
+				.then(yaml.safeLoad)
+				.then(spec => ({
+					..._.skip(obj, ['filepath']),
+					spec
+				}))
+		)
+	);
 
-  await save(datasets, DATASETS_PATH);
-  await save(indexById(datasets), ROUTES_PATH);
-  await save(makeDatasetBySource(datasets), SIDEBAR_PATH);
+	await save(datasets, DATASETS_PATH);
+	await save(indexById(datasets), ROUTES_PATH);
+	await save(makeDatasetBySource(datasets), SIDEBAR_PATH);
 }
 
 process().then(tapMessage('Done'));

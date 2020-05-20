@@ -2,6 +2,7 @@
   "dependencies": {
     "@svizzle/utils": "^0.7.1",
     "compression": "^1.7.4",
+    "eslint-plugin-import": "^2.20.2",
     "lamb": "^0.58.0",
     "polka": "^0.5.2",
     "sirv": "^0.4.2"
@@ -39,6 +40,7 @@
     "build": "sapper build --legacy",
     "dev": "sapper dev",
     "export": "export SAPPER_EXPORT=true && sapper export --legacy",
+    "lint": "eslint src/**/*.js",
     "start": "node __sapper__/build",
     "test": "run-p --race dev cy:run",
     "unittest": "mocha -r esm --spec src/**/*.spec.js"
