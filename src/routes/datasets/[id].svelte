@@ -13,7 +13,7 @@
 
 	import routes from 'app/data/routes.json';
 
-	export const aggStore = writable('');
+	export const aggStore = writable("");
 
 	function constructQuery(schema) {
 		const fields = Object.keys(schema);
@@ -46,6 +46,7 @@
 	export function preload({ params: {id}, query }) {
 		const datasetInfo = routes[id];
 		const endpoint = datasetInfo.spec.endpoint_url;
+		aggStore.set("loading...");
 		if (process.browser)
 			requestAllAggregations(this.fetch, endpoint, datasetInfo.spec.schema, aggStore);
 
