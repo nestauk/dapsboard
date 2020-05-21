@@ -1,0 +1,80 @@
+source:
+  -
+    provider_name: arXiv
+    provider_url: https://arxiv.org/
+  -
+    provider_name: MAG (Microsoft Academic Graph)
+    provider_url: https://docs.microsoft.com/en-us/azure/cognitive-services/academic-knowledge/home
+  -
+    provider_name: GRID (Global Research Identifier Database)
+    provider_url: https://www.grid.ac/
+dataset:
+  api_type: ElasticSearch
+  config_url: https://github.com/nestauk/nesta/blob/243_text_aggregation/nesta/core/orms/arxiv-eu_es_config.json # FIXME use a stable branch
+  endpoint_url: https://search-arxlive-t2brq66muzxag44zwmrcfrlmq4.eu-west-2.es.amazonaws.com/arxiv_v4
+  provider_name: DAPS (Nesta)
+  provider_url: https://github.com/nestauk/nesta
+  schema:
+    booleanFlag_multinational_article: boolean
+    count_citations_article: integer
+    date_created_article: date # FIXME no format
+    id_digitalObjectIdentifier_article:
+      data_type: string
+      es_type: ES_keyword
+    json_category_article:
+      type: object[]
+      shape:
+        ancestors:
+          data_type: string
+          es_type: ES_keyword
+        level: integer
+        order: integer
+        value:
+          data_type: string
+          es_type: ES_keyword
+    json_fieldOfStudy_article:
+      type: object[]
+      shape:
+        ancestors:
+          data_type: string
+          es_type: ES_keyword
+        level: integer
+        order: integer
+        value:
+          data_type: string
+          es_type: ES_keyword
+    json_location_article:
+      type: object[]
+      shape:
+        ancestors:
+          data_type: string
+          es_type: ES_keyword
+        level: integer
+        order: integer
+        value:
+          data_type: string
+          es_type: ES_keyword
+    metric_citations_article: float
+    metric_novelty_article: float
+    terms_authors_article:
+      data_type: string[]
+      es_type: ES_text_w_keyword[]
+    terms_institutes_article:
+      data_type: string[]
+      es_type: ES_text_w_keyword[]
+    terms_tokens_article:
+      data_type: string[]
+      es_type: ES_keyword[]
+    textBody_abstract_article:
+      data_type: string
+      es_type: ES_text_w_keyword
+    title_of_article:
+      data_type: string
+      es_type: ES_text_w_keyword
+    type_of_entity:
+      data_type: string
+      es_type: ES_text_w_keyword
+    url_of_article:
+      data_type: URL
+      es_type: ES_text_w_keyword
+    year_of_article: integer

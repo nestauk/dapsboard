@@ -1,6 +1,3 @@
-<script>
-</script>
-
 <svelte:head>
 	<title>Dapsboard - Home</title>
 </svelte:head>
