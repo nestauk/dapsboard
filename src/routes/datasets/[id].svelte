@@ -19,13 +19,13 @@
 		const fields = Object.keys(schema);
 		const aggs = {};
 		for ( let f in schema ) {
-			const fType = schema[f];
+			const fType = determineESType(schema[f]);
 			const typeAggs = aggregationsPerType[fType];
 			for (let i in typeAggs) {
 				const at = typeAggs[i];
 				const atName = `${f}_${at}`;
 				aggs[atName] = {
-					[at]: buildAggregation(at, f)
+					[at]: buildAggregation(at, f, schema[f])
 				};
 			}
 		}
@@ -36,23 +36,27 @@
 		};
 	}
 
-	async function requestAllAggregations(fetch, basepath, schema, store) {
+	function requestAllAggregations(fetch, basepath, schema, store) {
 		const url = `${basepath}/_search`;
 		const data = constructQuery(schema);
-		const response = await request(fetch, 'POST', url, {data});
-		store.set(response);
+		request(fetch, 'POST', url, {data}).then( response => store.set(response));
+		//const response = await request(fetch, 'POST', url, {data});
+		//store.set(response);
+		return data;
 	}
 
 	export function preload({ params: {id}, query }) {
 		const datasetInfo = routes[id];
-		const endpoint = datasetInfo.spec.endpoint_url;
+		const endpoint = datasetInfo.spec.dataset.endpoint_url;
 		aggStore.set("loading...");
+		let requestData;
 		if (process.browser)
-			requestAllAggregations(this.fetch, endpoint, datasetInfo.spec.schema, aggStore);
+			requestData = requestAllAggregations(this.fetch, endpoint, datasetInfo.spec.dataset.schema, aggStore);
 
 		return {
 			id,
 			spec: datasetInfo.spec,
+			query: requestData,
 			aggStore
 		}
 	}
@@ -63,6 +67,7 @@
 
 	export let id;
 	export let spec;
+	export let query;
 	export let aggStore;
 </script>
 
@@ -71,9 +76,11 @@
 </svelte:head>
 
 <div>
-	<h3>Dataset Information</h3>
+	<h2>Dataset Information</h2>
 	<JSONTree value={spec} />
-	<h3>Aggregation Results</h3>
+	<h2>Query</h2>
+	<JSONTree value={query} />
+	<h2>Aggregation Results</h2>
 	<JSONTree value={$aggStore} />
 </div>
 
