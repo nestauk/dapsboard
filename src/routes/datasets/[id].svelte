@@ -12,7 +12,9 @@
 </script>
 
 <script>
-	import DatasetExplorer from 'app/components/DatasetExplorer.svelte';
+	import SchemaExplorer from 'app/components/SchemaExplorer.svelte';
+	import QueryExplorer from 'app/components/QueryExplorer.svelte';
+	import ResultExplorer from 'app/components/ResultExplorer.svelte';
 	import { request } from 'app/net';
 	import {
 		constructQuery
@@ -21,6 +23,7 @@
 	export let id;
 	export let datasetInfo;
 
+	let schema;
 	let query;
 	let responsePromise;
 
@@ -30,7 +33,8 @@
 		return request(fetch, 'POST', url, {data:query});
 	}
 
-	$: query = constructQuery(datasetInfo.spec.dataset.schema);
+	$: schema = datasetInfo.spec.dataset.schema;
+	$: query = constructQuery(schema);
 	$: responsePromise = doQuery(query);
 </script>
 
@@ -38,4 +42,56 @@
 	<title>dapsboard - {id}</title>
 </svelte:head>
 
-<DatasetExplorer {datasetInfo} {query} {responsePromise} />
+<section class='dataset'>
+	<header>Dataset</header>
+
+	<section class='schema'>
+		<header>Schema</header>
+		<SchemaExplorer {schema} />
+	</section>
+
+	<section class='query'>
+		<header>Query</header>
+		<QueryExplorer {schema} {query} />
+	</section>
+
+	<section class='results'>
+		<header>Result</header>
+		{#await responsePromise}
+			Loading...
+		{:then response}
+			<ResultExplorer {schema} {query} {response} />
+		{:catch error}
+			<p style="color: red">{error.message}</p>
+		{/await}
+	</section>
+
+	<footer>footer</footer>
+</section>
+
+<style>
+	.dataset {
+		width: 100%;
+		height: 100%;
+		overflow-y: auto;
+		font-family: courier;
+		display: grid;
+		grid-template-areas: 
+			"header header header" 
+			"schema query results" 
+			"footer footer footer";
+		grid-template-columns: 1fr 1fr 1fr;
+		grid-template-rows: 0fr 1fr 0fr;
+	}
+	header 	{grid-area: header;}
+	footer 	{grid-area: footer;}
+	.schema {grid-area: schema;}
+	.query 	{grid-area: query;}
+	.results {grid-area: results;}
+
+	.schema,
+	.query,
+	.results {
+		overflow: auto;
+	}
+</style>
