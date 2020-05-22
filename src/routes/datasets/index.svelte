@@ -1,6 +1,3 @@
-<script>
-</script>
-
 <svelte:head>
 	<title>Dapsboard - datasets</title>
 </svelte:head>

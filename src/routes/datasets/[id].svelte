@@ -1,5 +1,7 @@
 <script context='module'>
-	export function preload({ params: {id}, query }) {
+	import routes from 'app/data/routes.json';
+
+	export function preload({ params: {id} }) {
 		return {
 			id,
 			spec: routes[id]
@@ -8,10 +10,6 @@
 </script>
 
 <script>
-	import * as _ from 'lamb';
-
-	import routes from 'app/data/routes.json';
-
 	export let id;
 	export let spec;
 </script>

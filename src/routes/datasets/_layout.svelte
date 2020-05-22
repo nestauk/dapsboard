@@ -1,6 +1,5 @@
 <script>
 	import sources from 'app/data/sidebar.json';
-	import {capitalise} from 'svizzle/utils/string-string';
 </script>
 
 <section class="container">
@@ -8,14 +7,9 @@
 		<ul>
 			{#each sources as {source, releases}}
 			<li>
-				<!-- <a
-					rel='prefetch'
-					href='datasets/{source}'
-				> -->
-					<p>
-						{source}
-					</p>
-				<!-- </a> -->
+				<p>
+					{source}
+				</p>
 				<ul>
 					{#each releases as {dataset, id}}
 					<p>

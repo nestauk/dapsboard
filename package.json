@@ -45,7 +45,7 @@
     "deploy": "npm run makedata && npm run export",
     "dev": "sapper dev",
     "export": "export SAPPER_EXPORT=true && sapper export --legacy",
-    "lint": "eslint src/**/*.{js,svelte}",
+    "lint": "eslint 'src/**/*.{js,svelte}'",
     "mkdirdata": "mkdirp ./src/node_modules/app/data",
     "makedata": "npm run mkdirdata && npm run chmod && node -r esm ./src/bin/make_data.js",
     "start": "node __sapper__/build",
