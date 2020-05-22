@@ -15,24 +15,23 @@
 	import SchemaExplorer from 'app/components/SchemaExplorer.svelte';
 	import QueryExplorer from 'app/components/QueryExplorer.svelte';
 	import ResultExplorer from 'app/components/ResultExplorer.svelte';
-	import { request } from 'app/net';
 	import {
 		constructQuery
 	} from 'app/elasticsearch';
+	import { request } from 'app/net';
 
 	export let id;
 	export let datasetInfo;
 
-	let schema;
-	let query;
 	let responsePromise;
 
-	function doQuery(query) {
+	function doQuery(_query) {
 		const endpoint = datasetInfo.spec.dataset.endpoint_url;
 		const url = `${endpoint}/_search`;
-		return request(fetch, 'POST', url, {data:query});
+		return request(fetch, 'POST', url, {data: _query});
 	}
 
+	/* eslint-disable prefer-destructuring */
 	$: schema = datasetInfo.spec.dataset.schema;
 	$: query = constructQuery(schema);
 	$: responsePromise = doQuery(query);
@@ -76,9 +75,9 @@
 		overflow-y: auto;
 		font-family: courier;
 		display: grid;
-		grid-template-areas: 
-			"header header header" 
-			"schema query results" 
+		grid-template-areas:
+			"header header header"
+			"schema query results"
 			"footer footer footer";
 		grid-template-columns: 1fr 1fr 1fr;
 		grid-template-rows: 0fr 1fr 0fr;
