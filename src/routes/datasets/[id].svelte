@@ -27,7 +27,7 @@
 	function doQuery(query) {
 		const endpoint = datasetInfo.spec.dataset.endpoint_url;
 		const url = `${endpoint}/_search`;
-		return request(fetch, 'POST', url, {query});
+		return request(fetch, 'POST', url, {data:query});
 	}
 
 	$: query = constructQuery(datasetInfo.spec.dataset.schema);
