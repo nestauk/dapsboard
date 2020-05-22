@@ -1,51 +1,14 @@
 <script context='module'>
 	import { writable } from 'svelte/store';
-	import {
-		aggregationsPerType,
-		determineESType,
-		buildAggregation
-	} from 'app/elasticsearch';
-	import {
-		request
-	} from 'app/net';
-
 	import JSONTree from 'svelte-json-tree'
 
+	import { requestAllAggregations } from 'app/elasticsearch';
+	//import { AggregationStore as aggStore } from 'app/stores';
 	import routes from 'app/data/routes.json';
 
-	export const aggStore = writable("");
+	const aggStore = writable("");
 
-	function constructQuery(schema) {
-		const fields = Object.keys(schema);
-		const aggs = {};
-		for ( let f in schema ) {
-			const fType = determineESType(schema[f]);
-			const typeAggs = aggregationsPerType[fType];
-			for (let i in typeAggs) {
-				const at = typeAggs[i];
-				const atName = `${f}_${at}`;
-				aggs[atName] = {
-					[at]: buildAggregation(at, f, schema[f])
-				};
-			}
-		}
-
-		return {
-			size: 0,
-			aggs
-		};
-	}
-
-	function requestAllAggregations(fetch, basepath, schema, store) {
-		const url = `${basepath}/_search`;
-		const data = constructQuery(schema);
-		request(fetch, 'POST', url, {data}).then( response => store.set(response));
-		//const response = await request(fetch, 'POST', url, {data});
-		//store.set(response);
-		return data;
-	}
-
-	export function preload({ params: {id}, query }) {
+	export function preload({ params: {id} }) {
 		const datasetInfo = routes[id];
 		const endpoint = datasetInfo.spec.dataset.endpoint_url;
 		aggStore.set("loading...");
