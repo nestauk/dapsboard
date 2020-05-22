@@ -57,8 +57,8 @@
 	<h2>Aggregation Results</h2>
 	{#await response}
 		Loading...
-	{:then json}
-		<JSONTree {json} />
+	{:then value}
+		<JSONTree {value} />
 	{:catch error}
 		<p style="color: red">{error.message}</p>
 	{/await}
