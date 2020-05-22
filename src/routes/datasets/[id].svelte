@@ -42,11 +42,11 @@
 </svelte:head>
 
 <section class='dataset'>
-	<header>Dataset</header>
+	<header>Dataset {id}</header>
 
 	<section class='schema'>
-		<header>Schema</header>
-		<SchemaExplorer {schema} />
+		<header>Info</header>
+		<SchemaExplorer schema={datasetInfo} />
 	</section>
 
 	<section class='query'>
