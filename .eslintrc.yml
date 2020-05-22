@@ -13,9 +13,9 @@ overrides:
       - '**/*.svelte'
     processor: svelte3/svelte3
     rules:
-      no-invalid-this: 'off'
-      no-new: 'off'
-      brace-style: 'off'
+      no-invalid-this: off
+      no-new: off
+      brace-style: off
 plugins:
   - svelte3
 parserOptions:
@@ -74,7 +74,7 @@ rules:
   function-paren-newline: off
   generator-star-spacing: error
   global-require: error
-  guard-for-in: error
+  guard-for-in: off
   handle-callback-err: error
   id-blacklist: error
   id-length: off
