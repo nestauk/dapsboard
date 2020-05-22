@@ -10,7 +10,8 @@ source:
     provider_url: https://www.grid.ac/
 dataset:
   api_type: ElasticSearch
-  config_url: https://github.com/nestauk/nesta/blob/243_text_aggregation/nesta/core/orms/arxiv-eu_es_config.json # FIXME use a stable branch
+  api_version: 6.4
+  config_url: https://github.com/nestauk/nesta/blob/dev_20200522/nesta/core/orms/arxiv-eu_es_config.json
   endpoint_url: https://search-arxlive-t2brq66muzxag44zwmrcfrlmq4.eu-west-2.es.amazonaws.com/arxiv_v4
   provider_name: DAPS (Nesta)
   provider_url: https://github.com/nestauk/nesta
@@ -78,3 +79,4 @@ dataset:
       data_type: URL
       es_type: ES_text_w_keyword
     year_of_article: integer
+  version: 4

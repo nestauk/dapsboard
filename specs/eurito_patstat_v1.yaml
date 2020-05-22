@@ -4,8 +4,8 @@ source:
 dataset:
   api_type: ElasticSearch
   api_version: 6.4
-  config_url: https://github.com/nestauk/nesta/blob/0.4/nesta/core/orms/patstat-eu_es_config.json
-  endpoint_url: https://search-eurito-prod-bbyn72q2rhx4ifj6h5dom43uhy.eu-west-1.es.amazonaws.com/patstat_v0
+  config_url: https://github.com/nestauk/nesta/blob/dev_20200522/nesta/core/orms/patstat-eu_es_config.json
+  endpoint_url: https://search-eurito-prod-bbyn72q2rhx4ifj6h5dom43uhy.eu-west-1.es.amazonaws.com/patstat_v1
   provider_name: DAPS (Nesta)
   provider_url: https://github.com/nestauk/nesta
   schema:
@@ -40,12 +40,12 @@ dataset:
       es_type: ES_keyword[]
     textBody_abstract_patent:
       data_type: string
-      es_type: ES_text
+      es_type: ES_text_w_keyword
     title_of_patent:
       data_type: string
-      es_type: ES_text
+      es_type: ES_text_w_keyword
     type_of_entity:
       data_type: string
       es_type: ES_keyword
     year_of_patent: integer
-  version: 0
+  version: 1

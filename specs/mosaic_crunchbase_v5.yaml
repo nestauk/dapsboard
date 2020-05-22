@@ -4,8 +4,8 @@ source:
 dataset:
   api_type: ElasticSearch
   api_version: 6.4
-  config_url: https://github.com/nestauk/nesta/blob/0.4/nesta/core/orms/crunchbase_es_config.json
-  endpoint_url: https://search-health-scanner-5cs7g52446h7qscocqmiky5dn4.eu-west-2.es.amazonaws.com/companies_v4
+  config_url: https://github.com/nestauk/nesta/blob/dev_20200522/nesta/core/orms/crunchbase_es_config.json
+  endpoint_url: https://search-health-scanner-5cs7g52446h7qscocqmiky5dn4.eu-west-2.es.amazonaws.com/companies_v5
   provider_name: DAPS (Nesta)
   provider_url: https://github.com/nestauk/nesta
   schema:
@@ -51,7 +51,7 @@ dataset:
       es_type: ES_keyword
     name_of_organisation:
       data_type: string
-      es_type: ES_text
+      es_type: ES_text_w_keyword
     placeName_city_organisation:
       data_type: string
       es_type: ES_text_w_keyword
@@ -94,29 +94,29 @@ dataset:
       es_type: ES_text_w_keyword[]
     textBody_descriptive_organisation:
       data_type: string
-      es_type: ES_text
+      es_type: ES_text_w_keyword
     textBody_summary_organisation:
       data_type: string
-      es_type: ES_text
+      es_type: ES_text_w_keyword
     type_of_entity:
       data_type: string
-      es_type: ES_keyword
+      es_type: ES_text_w_keyword
     type_of_organisation:
       data_type: string
       es_type: ES_keyword
     url_crunchBase_organisation:
       data_type: URL
-      es_type: ES_keyword
+      es_type: ES_text_w_keyword
     url_facebook_organisation:
       data_type: URL
-      es_type: ES_keyword
+      es_type: ES_text_w_keyword
     url_linkedIn_organisation:
       data_type: URL
-      es_type: ES_keyword
+      es_type: ES_text_w_keyword
     url_of_organisation:
       data_type: URL
-      es_type: ES_keyword
+      es_type: ES_text_w_keyword
     url_twitter_organisation:
       data_type: URL
-      es_type: ES_keyword
-  version: 4
+      es_type: ES_text_w_keyword
+  version: 5

@@ -4,8 +4,8 @@ source:
 dataset:
   api_type: ElasticSearch
   api_version: 6.4
-  config_url: https://github.com/nestauk/nesta/blob/0.4/nesta/core/orms/meetup_es_config.json
-  endpoint_url: https://search-health-scanner-5cs7g52446h7qscocqmiky5dn4.eu-west-2.es.amazonaws.com/meetup_v3
+  config_url: https://github.com/nestauk/nesta/blob/dev_20200522/nesta/core/orms/meetup_es_config.json
+  endpoint_url: https://search-health-scanner-5cs7g52446h7qscocqmiky5dn4.eu-west-2.es.amazonaws.com/meetup_v4
   provider_name: DAPS (Nesta)
   provider_url: https://github.com/nestauk/nesta
   schema:
@@ -71,11 +71,11 @@ dataset:
       es_type: ES_text_w_keyword[]
     textBody_descriptive_group:
       data_type: string
-      es_type: ES_text
+      es_type: ES_text_w_keyword
     type_of_entity:
       data_type: string
       es_type: ES_keyword
     url_of_group:
       data_type: URL
-      es_type: ES_keyword
-  version: 3
+      es_type: ES_text_w_keyword
+  version: 4
