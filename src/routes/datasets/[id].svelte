@@ -22,7 +22,7 @@
 	export let datasetInfo;
 
 	let query;
-	let response;
+	let responsePromise;
 
 	function doQuery(query) {
 		const endpoint = datasetInfo.spec.dataset.endpoint_url;
@@ -31,11 +31,11 @@
 	}
 
 	$: query = constructQuery(datasetInfo.spec.dataset.schema);
-	$: response = doQuery(query);
+	$: responsePromise = doQuery(query);
 </script>
 
 <svelte:head>
 	<title>dapsboard - {id}</title>
 </svelte:head>
 
-<DatasetExplorer {datasetInfo} {query} {response} />
+<DatasetExplorer {datasetInfo} {query} {responsePromise} />
