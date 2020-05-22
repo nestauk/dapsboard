@@ -11,7 +11,7 @@ source:
 dataset:
   api_type: ElasticSearch
   api_version: 6.4
-  config_url: https://github.com/nestauk/nesta/blob/0.4/nesta/core/orms/arxiv-eu_es_config.json
+  config_url: https://github.com/nestauk/nesta/blob/dev_20200522/nesta/core/orms/arxiv-eu_es_config.json
   endpoint_url: https://search-eurito-prod-bbyn72q2rhx4ifj6h5dom43uhy.eu-west-1.es.amazonaws.com/arxiv_v0
   provider_name: DAPS (Nesta)
   provider_url: https://github.com/nestauk/nesta
@@ -60,15 +60,15 @@ dataset:
       es_type: ES_keyword[]
     textBody_abstract_article:
       data_type: string
-      es_type: ES_text
+      es_type: ES_text_w_keyword
     title_of_article:
       data_type: string
-      es_type: ES_text
+      es_type: ES_text_w_keyword
     type_of_entity:
       data_type: string
       es_type: ES_keyword
     url_of_article:
       data_type: URL
-      es_type: ES_text
+      es_type: ES_text_w_keyword
     year_of_article: integer
-  version: 0
+  version: 1

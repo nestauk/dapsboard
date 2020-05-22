@@ -56,7 +56,7 @@ dataset:
     rank_rhodonite_abstract: float
     terms_descriptive_project:
       data_type: string[]
-      es_type: ES_text[]
+      es_type: ES_text_w_keyword[]
     terms_mesh_abstract:
       data_type: string[]
       es_type: ES_text_w_keyword[]
@@ -70,22 +70,22 @@ dataset:
       data_type: string[]
       es_type: ES_keyword[]
     textBody_abstract_project:
-      data_type: string
-      es_type: ES_text
+      data_type: string[]
+      es_type: ES_text_w_keyword
     textBody_descriptive_project:
       data_type: string
-      es_type: ES_text
+      es_type: ES_text_w_keyword
     title_of_funder:
       data_type: string
-      es_type: ES_text
+      es_type: ES_text_w_keyword
     title_of_organisation:
       data_type: string
-      es_type: ES_text
+      es_type: ES_text_w_keyword
     title_of_project:
       data_type: string
-      es_type: ES_text
+      es_type: ES_text_w_keyword
     type_of_entity:
       data_type: string
       es_type: ES_keyword
     year_fiscal_funding: integer
-  version: 5
+  version: 6

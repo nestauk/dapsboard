@@ -40,12 +40,12 @@ dataset:
       es_type: ES_keyword[]
     textBody_abstract_patent:
       data_type: string
-      es_type: ES_text
+      es_type: ES_text_w_keyword
     title_of_patent:
       data_type: string
-      es_type: ES_text
+      es_type: ES_text_w_keyword
     type_of_entity:
       data_type: string
       es_type: ES_keyword
     year_of_patent: integer
-  version: 0
+  version: 1
