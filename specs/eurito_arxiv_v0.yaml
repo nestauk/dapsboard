@@ -12,7 +12,7 @@ dataset:
   api_type: ElasticSearch
   api_version: 6.4
   config_url: https://github.com/nestauk/nesta/blob/0.4/nesta/core/orms/arxiv-eu_es_config.json
-  endpoint_url: https://search-eurito-prod-bbyn72q2rhx4ifj6h5dom43uhy.eu-west-1.es.amazonaws.com/arxiv_v0
+  endpoint_url: https://search-eurito-dev-vq22tw6otqjpdh47u75bh2g7ba.eu-west-2.es.amazonaws.com/arxiv_v0
   provider_name: DAPS (Nesta)
   provider_url: https://github.com/nestauk/nesta
   schema:
