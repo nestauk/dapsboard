@@ -6,6 +6,7 @@
         determineESType,
         buildAggregation
 	} from 'app/elasticsearch';
+	import { request } from 'app/net';
 
     //const matrixDimensions = ['aggregations', 'types', 'fields', 'datasets'];
     const crossIndex = {
@@ -112,7 +113,6 @@
     }
 
     //console.log(crossIndex);
-
 </script>
 
 <script>
@@ -135,23 +135,7 @@
         }
     };
 
-    let queryTemplate = {
-        size: 0,
-        aggs: {
-            mainAxis: {
-                mainAggregation: {
-                    field: null,
-                    aggs: {
-                        secondaryAxis: {
-                            secondaryAggregation: {
-                                field: null,
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
+    let queryTemplate = {};
 
     const axisOptions = [
         {
@@ -164,7 +148,7 @@
             value: 'secondary',
             disabled: false
         }
-    ]
+    ];
     let aggregatorOptions = [];
     let typeOptions = [];
     let datasetOptions = [];
@@ -174,6 +158,8 @@
     let selectedAxisConfig;
 
     let readyForRequest = false;
+
+    let responsePromise;
 
     function verify(k, indexName) {
         const index = crossIndex[indexName+'s'];
@@ -243,8 +229,13 @@
                 };
             }
         }
-
     }
+
+	function doQuery() {
+		const endpoint = DATASETS[queryConfig.dataset].spec.dataset.endpoint_url;
+		const url = `${endpoint}/_search`;
+		responsePromise = request(fetch, 'POST', url, {data: queryTemplate});
+	}
 
     $: selectedAxisConfig = queryConfig.axes[selectedAxis];
     $: computeLists(queryConfig);
@@ -281,13 +272,21 @@
         <div class='json'>
             <JSONValue value={queryTemplate} />
         </div>
-        <button disabled={!readyForRequest}>Execute</button>
+        <button disabled={!readyForRequest} on:click={doQuery}>Execute</button>
     </section>
 
     <section class='response'>
         <header>Response</header>
         <div class='json'>
-            <JSONValue value={queryConfig} />
+            {#if responsePromise}
+                {#await responsePromise}
+                    waiting for response...
+                {:then response}
+                    <JSONValue value={response} />
+                {:catch error}
+                    <JSONValue value={error.jsonMessage} />
+                {/await}
+            {/if}
         </div>
     </section>
 
