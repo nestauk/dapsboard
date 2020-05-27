@@ -320,7 +320,14 @@
         display: grid;
         grid-template-areas: "header" "select";
         grid-template-rows: min-content auto min-content;
+        overflow: hidden;
+        height: 100%;
     }
 
     header { grid-area: header; }
+    .json {
+        grid-area: select; 
+        overflow: auto;
+        height: 100%;
+    }
 </style>
