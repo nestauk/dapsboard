@@ -3,7 +3,8 @@
     import {
         descriptionsEN,
         aggregationsPerType,
-        determineESType
+        determineESType,
+        buildAggregation
 	} from 'app/elasticsearch';
 
     //const matrixDimensions = ['aggregations', 'types', 'fields', 'datasets'];
@@ -172,6 +173,8 @@
     let selectedAxis = 'main';
     let selectedAxisConfig;
 
+    let readyForRequest = false;
+
     function verify(k, indexName) {
         const index = crossIndex[indexName+'s'];
         // index[t][selectedAxisConfig[t]])
@@ -215,8 +218,32 @@
                 (selectedAxisConfig.type === 'none'? false : !crossIndex.types[selectedAxisConfig.type].fields.has(f))
                 || (queryConfig.dataset === 'none'? false : !crossIndex.datasets[DATASETS[queryConfig.dataset].id].fields.has(f))
                 || (selectedAxisConfig.aggregation === 'none'? false : !crossIndex.aggregations[selectedAxisConfig.aggregation].fields.has(f))
-
         }));
+
+        const main = queryConfig.axes.main;
+        readyForRequest = false;
+        queryTemplate = {
+            size: 0
+        }
+        if (queryConfig.dataset !== 'none' && main.aggregation !== 'none' && main.field !== 'none') {
+            readyForRequest = true;
+            const fieldInfo = DATASETS[queryConfig.dataset].spec.dataset.schema[main.field];
+            queryTemplate.aggs= {
+                mainAxis: {
+                    [main.aggregation]: buildAggregation(main.aggregation, main.field, fieldInfo)
+                }
+            };
+            const secondary = queryConfig.axes.secondary;
+            if (secondary.aggregation !== 'none' && secondary.field !== 'none') {
+                const fieldInfo = DATASETS[queryConfig.dataset].spec.dataset.schema[secondary.field];
+                queryTemplate.aggs.mainAxis.aggs = {
+                    secondaryAxis: {
+                        [secondary.aggregation]: buildAggregation(secondary.aggregation, secondary.field, fieldInfo)
+                    }
+                };
+            }
+        }
+
     }
 
     $: selectedAxisConfig = queryConfig.axes[selectedAxis];
@@ -254,7 +281,7 @@
         <div class='json'>
             <JSONValue value={queryTemplate} />
         </div>
-        <button>Execute</button>
+        <button disabled={!readyForRequest}>Execute</button>
     </section>
 
     <section class='response'>
