@@ -110,13 +110,12 @@
         }
     }
 
-    console.log(crossIndex);
+    //console.log(crossIndex);
 
 </script>
 
 <script>
-    import JSONTree from 'svelte-json-tree'
-
+    import JSONValue from 'app/components/JSONValue.svelte';
     import Select from 'app/components/Select.svelte';
 
     let queryConfig = {
@@ -253,7 +252,7 @@
     <section class='request'>
         <header>Request</header>
         <div class='json'>
-            <JSONTree value={queryTemplate} />
+            <JSONValue value={queryTemplate} />
         </div>
         <button>Execute</button>
     </section>
@@ -261,7 +260,7 @@
     <section class='response'>
         <header>Response</header>
         <div class='json'>
-            <JSONTree value={queryConfig} />
+            <JSONValue value={queryConfig} />
         </div>
     </section>
 
