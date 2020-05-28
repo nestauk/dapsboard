@@ -8,11 +8,7 @@ import {readDir, readFile, saveObj} from '@svizzle/file';
 import {tapMessage} from '@svizzle/dev';
 import {applyFnMap} from '@svizzle/utils';
 
-import {
-	getPathName,
-	indexById,
-	makeDatasetBySource
-} from 'app/utils';
+import {indexById, makeDatasetBySource} from 'app/utils';
 
 const DATASETS_PATH = path.resolve(__dirname, '../node_modules/app/data/datasets.json');
 const ROUTES_PATH = path.resolve(__dirname, '../node_modules/app/data/routes.json');
@@ -20,6 +16,8 @@ const SIDEBAR_PATH = path.resolve(__dirname, '../node_modules/app/data/sidebar.j
 const SPECS_DIR = path.resolve(__dirname, '../../specs');
 
 const isYamlFile = name => path.parse(name).ext === '.yaml';
+
+const getPathName = string => path.parse(string).name;
 
 const makeDatasetName = string => getPathName(string).split('_v')[0];
 const makeLabel = string => getPathName(string).replace(/_/gu, ' ');

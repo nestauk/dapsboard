@@ -1,0 +1,91 @@
+source:
+  provider_name: NIH (National Institutes of Health)
+  provider_url: https://www.nih.gov/
+dataset:
+  api_type: ElasticSearch
+  api_version: 6.4
+  config_url: https://github.com/nestauk/nesta/blob/dev_20200522/nesta/core/orms/nih_es_config.json
+  endpoint_url: https://search-health-scanner-5cs7g52446h7qscocqmiky5dn4.eu-west-2.es.amazonaws.com/nih_v6
+  provider_name: DAPS (Nesta)
+  provider_url: https://github.com/nestauk/nesta
+  schema:
+    booleanFlag_duplicate_abstract: boolean
+    coordinate_of_organisation: ES_geo_point_obj
+    cost_total_project: float
+    currency_total_cost:
+      data_type: string
+      es_type: ES_keyword
+    date_end_project: Date_YYYYMMDD_dash
+    date_start_project: Date_YYYYMMDD_dash
+    id_iso2_country:
+      data_type: string
+      es_type: ES_keyword
+    id_iso3_country:
+      data_type: string
+      es_type: ES_keyword
+    id_isoNumeric_country: integer
+    id_of_continent:
+      data_type: string
+      es_type: ES_keyword
+    id_of_project: string
+    id_state_organisation:
+      data_type: string
+      es_type: ES_keyword
+    json_funding_project:
+      type: object[]
+      shape:
+        cost_ref: long
+        end_date: date
+        start_date: date
+        year: integer
+    placeName_city_organisation:
+      data_type: string
+      es_type: ES_text_w_keyword
+    placeName_continent_organisation:
+      data_type: string
+      es_type: ES_text_w_keyword
+    placeName_country_organisation:
+      data_type: string
+      es_type: ES_text_w_keyword
+    placeName_state_organisation:
+      data_type: string
+      es_type: ES_text_w_keyword
+    placeName_zipcode_organisation:
+      data_type: string
+      es_type: ES_keyword
+    rank_rhodonite_abstract: float
+    terms_descriptive_project:
+      data_type: string[]
+      es_type: ES_text_w_keyword[]
+    terms_mesh_abstract:
+      data_type: string[]
+      es_type: ES_text_w_keyword[]
+    terms_of_countryTags:
+      data_type: string[]
+      es_type: ES_keyword[]
+    terms_of_funders:
+      data_type: string[]
+      es_type: ES_text_w_keyword[]
+    terms_sdg_abstract:
+      data_type: string[]
+      es_type: ES_keyword[]
+    textBody_abstract_project:
+      data_type: string[]
+      es_type: ES_text_w_keyword
+    textBody_descriptive_project:
+      data_type: string
+      es_type: ES_text_w_keyword
+    title_of_funder:
+      data_type: string
+      es_type: ES_text_w_keyword
+    title_of_organisation:
+      data_type: string
+      es_type: ES_text_w_keyword
+    title_of_project:
+      data_type: string
+      es_type: ES_text_w_keyword
+    type_of_entity:
+      data_type: string
+      es_type: ES_keyword
+    year_fiscal_funding: integer
+  version: 6

@@ -19,6 +19,7 @@
 		constructQuery
 	} from 'app/elasticsearch';
 	import { request } from 'app/net';
+	import { IS_BROWSER } from 'app/utils';
 
 	export let id;
 	export let datasetInfo;
@@ -28,7 +29,8 @@
 	function doQuery(_query) {
 		const endpoint = datasetInfo.spec.dataset.endpoint_url;
 		const url = `${endpoint}/_search`;
-		return request(fetch, 'POST', url, {data: _query});
+
+		return IS_BROWSER && request(fetch, 'POST', url, {data: _query});
 	}
 
 	/* eslint-disable prefer-destructuring */

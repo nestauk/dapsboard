@@ -4,7 +4,7 @@ source:
 dataset:
   api_type: ElasticSearch
   api_version: 6.4
-  config_url: https://github.com/nestauk/nesta/blob/dev/nesta/core/orms/cordis-eu_es_config.json
+  config_url: https://github.com/nestauk/nesta/blob/dev_20200504/nesta/core/orms/cordis-eu_es_config.json
   endpoint_url: https://search-eurito-dev-vq22tw6otqjpdh47u75bh2g7ba.eu-west-2.es.amazonaws.com/cordis_v0
   provider_name: DAPS (Nesta)
   provider_url: https://github.com/nestauk/nesta

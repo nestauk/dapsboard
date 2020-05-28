@@ -11,6 +11,7 @@ import yaml from '@rollup/plugin-yaml';
 import config from 'sapper/config/rollup.js';
 import pkg from './package.json';
 
+/* eslint-disable no-process-env */
 const mode = process.env.NODE_ENV;
 const isExported = process.env.SAPPER_EXPORT;
 const dev = mode === 'development';
