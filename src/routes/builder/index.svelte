@@ -136,6 +136,7 @@
     };
 
     let queryTemplate = {};
+    let parsedQuery = queryTemplate;
 
     const axisOptions = [
         {
@@ -211,7 +212,7 @@
         queryTemplate = {
             size: 0
         }
-        if (queryConfig.dataset !== 'none' && main.aggregation !== 'none' && main.field !== 'none') {
+        if (queryConfig.dataset !== 'none' && main.aggregation !== 'none' && main.field !== 'none' && parsedQuery) {
             readyForRequest = true;
             const fieldInfo = DATASETS[queryConfig.dataset].spec.dataset.schema[main.field];
             queryTemplate.aggs= {
@@ -234,7 +235,7 @@
 	function doQuery() {
 		const endpoint = DATASETS[queryConfig.dataset].spec.dataset.endpoint_url;
 		const url = `${endpoint}/_search`;
-		responsePromise = request(fetch, 'POST', url, {data: queryTemplate});
+		responsePromise = request(fetch, 'POST', url, {data: parsedQuery});
 	}
 
     $: selectedAxisConfig = queryConfig.axes[selectedAxis];
@@ -270,7 +271,7 @@
     <section class='request'>
         <header>Request</header>
         <div class='json'>
-            <JSONValue value={queryTemplate} />
+            <JSONValue value={queryTemplate} editable={true} bind:parsedValue={parsedQuery}/>
         </div>
         <button disabled={!readyForRequest} on:click={doQuery}>Execute</button>
     </section>
