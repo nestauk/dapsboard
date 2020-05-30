@@ -120,17 +120,17 @@
     import Select from 'app/components/Select.svelte';
 
     let queryConfig = {
-        dataset: 'none',
+        dataset: undefined,
         axes: {
             main: {
-                aggregation: 'none',
-                type: 'none',
-                field: 'none'
+                aggregation: undefined,
+                type: undefined,
+                field: undefined
             },
             secondary: {
-                aggregation: 'none',
-                type: 'none',
-                field: 'none'
+                aggregation: undefined,
+                type: undefined,
+                field: undefined
             }
         }
     };
@@ -171,40 +171,40 @@
     }
     function computeLists() {
         let selectedAgg = selectedAxisConfig.aggregation 
-        if (selectedAgg !== 'none') {
+        if (selectedAgg !== undefined) {
 
         }
         aggregatorOptions = Object.keys(descriptionsEN).map(k => ({
             text: descriptionsEN[k],
             value: k,
             disabled: 
-                (selectedAxisConfig.type === 'none'? false : !crossIndex.types[selectedAxisConfig.type].aggregations.has(k))
-                || (queryConfig.dataset === 'none'? false : !crossIndex.datasets[DATASETS[queryConfig.dataset].id].aggregations.has(k))
-                || (selectedAxisConfig.field === 'none'? false : !crossIndex.fields[selectedAxisConfig.field].aggregations.has(k))
+                (selectedAxisConfig.type === undefined? false : !crossIndex.types[selectedAxisConfig.type].aggregations.has(k))
+                || (queryConfig.dataset === undefined? false : !crossIndex.datasets[DATASETS[queryConfig.dataset].id].aggregations.has(k))
+                || (selectedAxisConfig.field === undefined? false : !crossIndex.fields[selectedAxisConfig.field].aggregations.has(k))
         }));
         typeOptions = Object.keys(crossIndex.types).map(k => ({
             text: k,
             value: k,
             disabled: 
-                (selectedAxisConfig.aggregation === 'none'? false : !crossIndex.aggregations[selectedAxisConfig.aggregation].types.has(k))
-                || (queryConfig.dataset === 'none'? false : !crossIndex.datasets[DATASETS[queryConfig.dataset].id].types.has(k))
-                || (selectedAxisConfig.field === 'none'? false : !crossIndex.fields[selectedAxisConfig.field].types.has(k))
+                (selectedAxisConfig.aggregation === undefined? false : !crossIndex.aggregations[selectedAxisConfig.aggregation].types.has(k))
+                || (queryConfig.dataset === undefined? false : !crossIndex.datasets[DATASETS[queryConfig.dataset].id].types.has(k))
+                || (selectedAxisConfig.field === undefined? false : !crossIndex.fields[selectedAxisConfig.field].types.has(k))
         }));
         datasetOptions = DATASETS.map((k, i) => ({
             text: k.id,
             value: i,
             disabled: 
-                (selectedAxisConfig.type === 'none'? false : !crossIndex.types[selectedAxisConfig.type].datasets.has(k.id))
-                || (selectedAxisConfig.field === 'none'? false : !crossIndex.fields[selectedAxisConfig.field].datasets.has(k.id))
-                || (selectedAxisConfig.aggregation === 'none'? false : !crossIndex.aggregations[selectedAxisConfig.aggregation].datasets.has(k.id))
+                (selectedAxisConfig.type === undefined? false : !crossIndex.types[selectedAxisConfig.type].datasets.has(k.id))
+                || (selectedAxisConfig.field === undefined? false : !crossIndex.fields[selectedAxisConfig.field].datasets.has(k.id))
+                || (selectedAxisConfig.aggregation === undefined? false : !crossIndex.aggregations[selectedAxisConfig.aggregation].datasets.has(k.id))
         }));
         fieldOptions = fieldNames.map( f => ({
             text: f,
             value: f,
             disabled: 
-                (selectedAxisConfig.type === 'none'? false : !crossIndex.types[selectedAxisConfig.type].fields.has(f))
-                || (queryConfig.dataset === 'none'? false : !crossIndex.datasets[DATASETS[queryConfig.dataset].id].fields.has(f))
-                || (selectedAxisConfig.aggregation === 'none'? false : !crossIndex.aggregations[selectedAxisConfig.aggregation].fields.has(f))
+                (selectedAxisConfig.type === undefined? false : !crossIndex.types[selectedAxisConfig.type].fields.has(f))
+                || (queryConfig.dataset === undefined? false : !crossIndex.datasets[DATASETS[queryConfig.dataset].id].fields.has(f))
+                || (selectedAxisConfig.aggregation === undefined? false : !crossIndex.aggregations[selectedAxisConfig.aggregation].fields.has(f))
         }));
 
         const main = queryConfig.axes.main;
@@ -212,8 +212,9 @@
         queryTemplate = {
             size: 0
         }
-        if (queryConfig.dataset !== 'none' && main.aggregation !== 'none' && main.field !== 'none' && parsedQuery) {
+        if (queryConfig.dataset !== undefined && main.aggregation !== undefined && main.field !== undefined && parsedQuery) {
             readyForRequest = true;
+            console.log(parsedQuery)
             const fieldInfo = DATASETS[queryConfig.dataset].spec.dataset.schema[main.field];
             queryTemplate.aggs= {
                 mainAxis: {
@@ -221,7 +222,7 @@
                 }
             };
             const secondary = queryConfig.axes.secondary;
-            if (secondary.aggregation !== 'none' && secondary.field !== 'none') {
+            if (secondary.aggregation !== undefined && secondary.field !== undefined) {
                 const fieldInfo = DATASETS[queryConfig.dataset].spec.dataset.schema[secondary.field];
                 queryTemplate.aggs.mainAxis.aggs = {
                     secondaryAxis: {
@@ -300,8 +301,11 @@
         grid-template-areas:
             "axes agreggations types datasets fields request"
             "axes agreggations types datasets fields response";
-        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+        grid-template-columns: fit-content(100%) fit-content(100%) fit-content(100%) fit-content(100%) fit-content(100%)  1fr;
         grid-template-rows: 0.5fr 0.5fr;
+        grid-gap: 1em;
+        background: #DDD;
+        padding: 1em;
     }
     .axes {grid-area: axes;}
     .agreggations {grid-area: agreggations;}
@@ -319,13 +323,22 @@
     .request,
     .response {
         display: grid;
+        background: white;
         grid-template-areas: "header" "select";
         grid-template-rows: min-content auto min-content;
         overflow: hidden;
+        box-sizing: border-box;
         height: 100%;
+        box-shadow: .2em .2em .4em #8888;
+        padding: 1em;
     }
 
-    header { grid-area: header; }
+    header { 
+        grid-area: header; 
+        font-weight: bold;
+        font-size: 1.1em;
+        background: #EEE;
+    }
     .json {
         grid-area: select; 
         overflow: auto;
