@@ -96,9 +96,7 @@ rules:
   indent:
     - error
     - tab
-  indent-legacy:
-    - error
-    - tab
+    - SwitchCase: 1
   init-declarations: off
   jsx-quotes: error
   key-spacing: off
@@ -221,7 +219,7 @@ rules:
     - always
   operator-linebreak:
     - error
-    - null
+    - before
   padded-blocks: off
   padding-line-between-statements: error
   prefer-arrow-callback: off
@@ -251,7 +249,7 @@ rules:
   sort-keys: off
   sort-vars: error
   space-before-blocks: error
-  space-before-function-paren: off
+  space-before-function-paren: error
   space-in-parens:
     - error
     - never

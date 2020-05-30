@@ -105,8 +105,8 @@ export default {
 					'@svizzle/choropleth',
 				].includes(name))
 				.concat(
-					require('module').builtinModules ||
-					Object.keys(process.binding('natives'))
+					require('module').builtinModules
+					|| Object.keys(process.binding('natives'))
 				),
 
 		onwarn,
