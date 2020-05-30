@@ -132,7 +132,14 @@
             )
         }
     }
-
+    function AxisConfig () {
+        this.aggregations = undefined;
+        this.type = undefined;
+        this.field = undefined;
+    }
+    function capitalize(string) { 
+        return string.charAt(0).toUpperCase() + string.slice(1); 
+    }
     //console.log(crossIndex);
 </script>
 
@@ -140,62 +147,30 @@
     import JSONValue from 'app/components/JSONValue.svelte';
     import Select from 'app/components/Select.svelte';
 
+    const AXIS_NAMES = ['primary', 'secondary', 'tertiary', 'quaternary', 'quinary', 'senary', 'septenary', 'octonary', 'nonary', 'denary'];
     let queryConfig = {
         dataset: undefined,
-        axes: {
-            main: {
-                aggregation: undefined,
-                type: undefined,
-                field: undefined
-            },
-            secondary: {
-                aggregation: undefined,
-                type: undefined,
-                field: undefined
-            }
-        }
+        axes: Object.fromEntries(AXIS_NAMES.map( q => [q, new AxisConfig] ))
     };
 
     let queryTemplate = {};
     let parsedQuery = queryTemplate;
 
-    const axisOptions = [
-        {
-            text: 'Main',
-            value: 'main',
-            disabled: false
-        },
-        {
-            text: 'Secondary',
-            value: 'secondary',
-            disabled: false
-        }
-    ];
+    let axisOptions = [];
     let bucketOptions = [];
     let aggregatorOptions = [];
     let typeOptions = [];
     let datasetOptions = [];
     let fieldOptions = [];
 
-    let selectedAxis = 'main';
+    let selectedAxis = AXIS_NAMES[0];
     let selectedAxisConfig;
 
     let readyForRequest = false;
 
     let responsePromise;
 
-    function verify(k, indexName) {
-        const index = crossIndex[indexName+'s'];
-        // index[t][selectedAxisConfig[t]])
-        //console.log(selectedAxisConfig)
-        Object.keys(index)
-            .every(t => console.log(t));
-    }
     function computeLists() {
-        let selectedAgg = selectedAxisConfig.aggregation 
-        if (selectedAgg !== undefined) {
-
-        }
         bucketOptions = Object.keys(bucketDescriptionsEN).map(k => ({
             text: bucketDescriptionsEN[k],
             value: k,
@@ -237,29 +212,41 @@
                 || (selectedAxisConfig.aggregation === undefined? false : !crossIndex.aggregations[selectedAxisConfig.aggregation].fields.has(f))
         }));
 
-        const main = queryConfig.axes.main;
         readyForRequest = false;
         queryTemplate = {
             size: 0
         }
-        if (queryConfig.dataset !== undefined && main.aggregation !== undefined && main.field !== undefined && parsedQuery) {
-            readyForRequest = true;
-            console.log(parsedQuery)
-            const fieldInfo = DATASETS[queryConfig.dataset].spec.dataset.schema[main.field];
-            queryTemplate.aggs= {
-                mainAxis: {
-                    [main.aggregation]: buildAggregation(main.aggregation, main.field, fieldInfo)
+        let activeAxes = 0;
+        let currentTemplate = queryTemplate;
+        let active = true;
+        while(active) {
+            active = false;
+            const currentName = AXIS_NAMES[activeAxes++];
+            const current = queryConfig.axes[currentName];
+            if (current.aggregation !== undefined && current.field !== undefined) {
+                if (activeAxes < AXIS_NAMES.length)
+                    active = true;
+                readyForRequest = true;
+                if (queryConfig.dataset) {
+                    const fieldInfo = DATASETS[queryConfig.dataset].spec.dataset.schema[current.field];
+                    currentTemplate.aggs = {
+                        [currentName]: {
+                            [current.aggregation]: buildAggregation(current.aggregation, current.field, fieldInfo)
+                        }
+                    };
+                    currentTemplate = currentTemplate.aggs[currentName];
                 }
-            };
-            const secondary = queryConfig.axes.secondary;
-            if (secondary.aggregation !== undefined && secondary.field !== undefined) {
-                const fieldInfo = DATASETS[queryConfig.dataset].spec.dataset.schema[secondary.field];
-                queryTemplate.aggs.mainAxis.aggs = {
-                    secondaryAxis: {
-                        [secondary.aggregation]: buildAggregation(secondary.aggregation, secondary.field, fieldInfo)
-                    }
-                };
             }
+        }
+
+        axisOptions = []
+        for ( let i = 0; i < activeAxes; i++ ) {
+            const name = AXIS_NAMES[i];
+            axisOptions.push({
+                text: capitalize(name),
+                value: name,
+                disabled: false
+            });
         }
     }
 
