@@ -2,6 +2,7 @@
     import DATASETS from 'app/data/datasets.json';
     import {
         descriptionsEN,
+        bucketDescriptionsEN,
         aggregationsPerType,
         determineESType,
         buildAggregation
@@ -111,6 +112,26 @@
             )
         }
     }
+    
+    for (let agg of Object.keys(bucketDescriptionsEN)) {
+        crossIndex.aggregations[agg] = {
+            types: new Set(
+                Object.keys(crossIndex.types)
+                    .filter(typeName => crossIndex.types[typeName].aggregations.has(agg))
+                    .map(typeName => typeName)
+            ),
+            datasets: new Set(
+                Object.keys(crossIndex.datasets)
+                    .filter(dsName => crossIndex.datasets[dsName].aggregations.has(agg))
+                    .map(dsName => dsName)
+            ),
+            fields: new Set(
+                Object.keys(crossIndex.fields)
+                    .filter(fieldName => crossIndex.fields[fieldName].aggregations.has(agg))
+                    .map(fieldName => fieldName)
+            )
+        }
+    }
 
     //console.log(crossIndex);
 </script>
@@ -150,6 +171,7 @@
             disabled: false
         }
     ];
+    let bucketOptions = [];
     let aggregatorOptions = [];
     let typeOptions = [];
     let datasetOptions = [];
@@ -174,6 +196,14 @@
         if (selectedAgg !== undefined) {
 
         }
+        bucketOptions = Object.keys(bucketDescriptionsEN).map(k => ({
+            text: bucketDescriptionsEN[k],
+            value: k,
+            disabled: 
+                (selectedAxisConfig.type === undefined? false : !crossIndex.types[selectedAxisConfig.type].aggregations.has(k))
+                || (queryConfig.dataset === undefined? false : !crossIndex.datasets[DATASETS[queryConfig.dataset].id].aggregations.has(k))
+                || (selectedAxisConfig.field === undefined? false : !crossIndex.fields[selectedAxisConfig.field].aggregations.has(k))
+        }));
         aggregatorOptions = Object.keys(descriptionsEN).map(k => ({
             text: descriptionsEN[k],
             value: k,
@@ -251,7 +281,14 @@
 
     <section class='agreggations'>
         <header>Aggregations</header>
-        <Select options={aggregatorOptions} bind:selectedOption={selectedAxisConfig.aggregation} />
+        <section>
+            <header>Bucketing</header>
+            <Select options={bucketOptions} bind:selectedOption={selectedAxisConfig.aggregation} />
+        </section>
+        <section>
+            <header>Metrics</header>
+            <Select options={aggregatorOptions} bind:selectedOption={selectedAxisConfig.aggregation} />
+        </section>
     </section>
 
     <section class='types'>
@@ -337,7 +374,10 @@
         grid-area: header; 
         font-weight: bold;
         font-size: 1.1em;
-        background: #EEE;
+        margin: .5em 0;
+    }
+    section > section > section > header {
+        font-size: 1em;
     }
     .json {
         grid-area: select; 
