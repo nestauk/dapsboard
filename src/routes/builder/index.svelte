@@ -8,21 +8,18 @@
 		buildAggregation
 	} from 'app/elasticsearch';
 	import { request } from 'app/net';
-	import { getEndpointURL, getSchema } from 'app/utils';
+	import {
+		getEndpointURL,
+		getSchema,
+		capitalize
+	} from 'app/utils';
 
-	// const matrixDimensions = ['aggregations', 'types', 'fields', 'datasets'];
 	const crossIndex = {
 		aggregations: {},
 		types: {},
 		fields: {},
 		datasets: {}
 	};
-	/*
-	for (let dim of matrixDimensions) {
-		crossIndex[dim] = {};
-		// Object.fromEntries(matrixDimensions.filter(i => dim !== i).map(i => ([i, []])));
-	}
-	*/
 
 	const fieldNamesSet = new Set();
 	const typeNamesSet = new Set();
@@ -49,7 +46,6 @@
 			if (aggs) {
 				aggs.forEach(a => {
 					newDataset.aggregations.add(a);
-					// crossIndex.aggregations[a].datasets.add(dataset.id);
 				})
 			}
 		}
@@ -142,72 +138,40 @@
 	import JSONValue from 'app/components/JSONValue.svelte';
 	import Select from 'app/components/Select.svelte';
 
+	const AXIS_NAMES = ['primary', 'secondary', 'tertiary', 'quaternary', 'quinary', 'senary', 'septenary', 'octonary', 'nonary', 'denary'];
 	let queryConfig = {
 		dataset: undefined,
-		axes: {
-			main: {
-				aggregation: undefined,
-				type: undefined,
-				field: undefined
-			},
-			secondary: {
-				aggregation: undefined,
-				type: undefined,
-				field: undefined
-			}
-		}
+		axes: Object.fromEntries(AXIS_NAMES.map(q => [q, {
+			aggregations: undefined,
+			type: undefined,
+			field: undefined
+		}]))
 	};
 
 	let queryTemplate = {};
 	let parsedQuery = queryTemplate;
 
-	const axisOptions = [
-		{
-			text: 'Main',
-			value: 'main',
-			disabled: false
-		},
-		{
-			text: 'Secondary',
-			value: 'secondary',
-			disabled: false
-		}
-	];
+	let axisOptions = [];
 	let bucketOptions = [];
 	let aggregatorOptions = [];
 	let typeOptions = [];
 	let datasetOptions = [];
 	let fieldOptions = [];
 
-	let selectedAxis = 'main';
+	let [ selectedAxis ] = AXIS_NAMES;
 	let selectedAxisConfig;
 
 	let readyForRequest = false;
 
 	let responsePromise;
 
-	/*
-	function verify(k, indexName) {
-		const index = crossIndex[indexName+'s'];
-		// index[t][selectedAxisConfig[t]])
-		//console.log(selectedAxisConfig)
-		Object.keys(index)
-			.every(t => console.log(t));
-	}
-	*/
-	function computeLists () {
-		/*
-		let selectedAgg = selectedAxisConfig.aggregation
-		if (selectedAgg !== undefined) {
-
-		}
-		*/
+	function computeLists (config) {
 		bucketOptions = Object.keys(bucketDescriptionsEN).map(k => ({
 			text: bucketDescriptionsEN[k],
 			value: k,
 			disabled:
 				(selectedAxisConfig.type === undefined? false : !crossIndex.types[selectedAxisConfig.type].aggregations.has(k))
-				|| (queryConfig.dataset === undefined? false : !crossIndex.datasets[DATASETS[queryConfig.dataset].id].aggregations.has(k))
+				|| (config.dataset === undefined? false : !crossIndex.datasets[DATASETS[config.dataset].id].aggregations.has(k))
 				|| (selectedAxisConfig.field === undefined? false : !crossIndex.fields[selectedAxisConfig.field].aggregations.has(k))
 		}));
 		aggregatorOptions = Object.keys(descriptionsEN).map(k => ({
@@ -215,7 +179,7 @@
 			value: k,
 			disabled:
 				(selectedAxisConfig.type === undefined? false : !crossIndex.types[selectedAxisConfig.type].aggregations.has(k))
-				|| (queryConfig.dataset === undefined? false : !crossIndex.datasets[DATASETS[queryConfig.dataset].id].aggregations.has(k))
+				|| (config.dataset === undefined? false : !crossIndex.datasets[DATASETS[config.dataset].id].aggregations.has(k))
 				|| (selectedAxisConfig.field === undefined? false : !crossIndex.fields[selectedAxisConfig.field].aggregations.has(k))
 		}));
 		typeOptions = Object.keys(crossIndex.types).map(k => ({
@@ -223,7 +187,7 @@
 			value: k,
 			disabled:
 				(selectedAxisConfig.aggregation === undefined? false : !crossIndex.aggregations[selectedAxisConfig.aggregation].types.has(k))
-				|| (queryConfig.dataset === undefined? false : !crossIndex.datasets[DATASETS[queryConfig.dataset].id].types.has(k))
+				|| (config.dataset === undefined? false : !crossIndex.datasets[DATASETS[config.dataset].id].types.has(k))
 				|| (selectedAxisConfig.field === undefined? false : !crossIndex.fields[selectedAxisConfig.field].types.has(k))
 		}));
 		datasetOptions = DATASETS.map((k, i) => ({
@@ -239,33 +203,46 @@
 			value: f,
 			disabled:
 				(selectedAxisConfig.type === undefined? false : !crossIndex.types[selectedAxisConfig.type].fields.has(f))
-				|| (queryConfig.dataset === undefined? false : !crossIndex.datasets[DATASETS[queryConfig.dataset].id].fields.has(f))
+				|| (config.dataset === undefined? false : !crossIndex.datasets[DATASETS[config.dataset].id].fields.has(f))
 				|| (selectedAxisConfig.aggregation === undefined? false : !crossIndex.aggregations[selectedAxisConfig.aggregation].fields.has(f))
 		}));
 
-		const {main} = queryConfig.axes;
 		readyForRequest = false;
 		queryTemplate = {
 			size: 0
 		}
-		if (queryConfig.dataset !== undefined && main.aggregation !== undefined && main.field !== undefined && parsedQuery) {
-			readyForRequest = true;
-			// console.log(parsedQuery);
-			let fieldInfo = getSchema(DATASETS[queryConfig.dataset])[main.field];
-			queryTemplate.aggs= {
-				mainAxis: {
-					[main.aggregation]: buildAggregation(main.aggregation, main.field, fieldInfo)
+		let activeAxes = 0;
+		let currentTemplate = queryTemplate;
+		let active = true;
+		while (active) {
+			active = false;
+			const currentName = AXIS_NAMES[activeAxes++];
+			const current = config.axes[currentName];
+			if (current.aggregation !== undefined && current.field !== undefined) {
+				if (activeAxes < AXIS_NAMES.length) {
+					active = true;
 				}
-			};
-			const {secondary} = queryConfig.axes;
-			if (secondary.aggregation !== undefined && secondary.field !== undefined) {
-				fieldInfo = getSchema(DATASETS[queryConfig.dataset])[secondary.field];
-				queryTemplate.aggs.mainAxis.aggs = {
-					secondaryAxis: {
-						[secondary.aggregation]: buildAggregation(secondary.aggregation, secondary.field, fieldInfo)
-					}
+				readyForRequest = true;
+				if (config.dataset) {
+					const fieldInfo = getSchema(DATASETS[config.dataset])[current.field];
+					currentTemplate.aggs = {
+						[currentName]: {
+							[current.aggregation]: buildAggregation(current.aggregation, current.field, fieldInfo)
+						}
+					};
+					currentTemplate = currentTemplate.aggs[currentName];
 				}
 			}
+		}
+
+		axisOptions = []
+		for (let i = 0; i < activeAxes; i++) {
+			const name = AXIS_NAMES[i];
+			axisOptions.push({
+				text: capitalize(name),
+				value: name,
+				disabled: false
+			});
 		}
 	}
 
