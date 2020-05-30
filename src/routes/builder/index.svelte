@@ -185,10 +185,10 @@
 		typeOptions = Object.keys(crossIndex.types).map(k => ({
 			text: k,
 			value: k,
-			disabled:
-				(selectedAxisConfig.aggregation === undefined? false : !crossIndex.aggregations[selectedAxisConfig.aggregation].types.has(k))
-				|| (config.dataset === undefined? false : !crossIndex.datasets[DATASETS[config.dataset].id].types.has(k))
-				|| (selectedAxisConfig.field === undefined? false : !crossIndex.fields[selectedAxisConfig.field].types.has(k))
+			disabled: false
+//				(selectedAxisConfig.aggregation === undefined? false : !crossIndex.aggregations[selectedAxisConfig.aggregation].types.has(k))
+//				|| (config.dataset === undefined? false : !crossIndex.datasets[DATASETS[config.dataset].id].types.has(k))
+//				|| (selectedAxisConfig.field === undefined? false : !crossIndex.fields[selectedAxisConfig.field].types.has(k))
 		}));
 		datasetOptions = DATASETS.map((k, i) => ({
 			text: k.id,
