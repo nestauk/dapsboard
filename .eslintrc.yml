@@ -3,7 +3,11 @@ env:
   es6: true
   node: true
   mocha: true
-extends: 'eslint:recommended'
+extends:
+  - eslint:recommended
+  - plugin:node/recommended
+  - plugin:import/errors
+  - plugin:import/warnings
 globals:
   Atomics: readonly
   SharedArrayBuffer: readonly
@@ -22,6 +26,18 @@ parserOptions:
   ecmaVersion: 2018
   sourceType: module
 rules:
+  node/no-unsupported-features/es-syntax: off
+  node/no-missing-import:
+    - error
+    - tryExtensions:
+      - .js
+      - .json
+      - .node
+      - .mjs # @sapper/server.mjs
+  node/no-extraneous-import:
+    - error
+    - allowModules:
+      - 'app'
   accessor-pairs: error
   array-bracket-newline: off
   array-bracket-spacing: off
@@ -40,7 +56,6 @@ rules:
   brace-style:
     - error
     - 1tbs
-  callback-return: error
   capitalized-comments: off
   class-methods-use-this: error
   comma-dangle: off
@@ -73,9 +88,7 @@ rules:
   function-call-argument-newline: off
   function-paren-newline: off
   generator-star-spacing: error
-  global-require: error
   guard-for-in: off
-  handle-callback-err: error
   id-blacklist: error
   id-length: off
   id-match: error
@@ -152,7 +165,6 @@ rules:
   no-loop-func: error
   no-magic-numbers: off
   no-mixed-operators: off
-  no-mixed-requires: error
   no-multi-assign: error
   no-multi-spaces: off
   no-multi-str: error
@@ -164,14 +176,10 @@ rules:
   no-new: error
   no-new-func: error
   no-new-object: error
-  no-new-require: error
   no-new-wrappers: error
   no-octal-escape: error
   no-param-reassign: error
-  no-path-concat: error
   no-plusplus: off
-  no-process-env: error
-  no-process-exit: error
   no-proto: error
   no-restricted-globals: error
   no-restricted-imports: error
@@ -185,7 +193,6 @@ rules:
   no-sequences: error
   no-shadow: error
   no-spaced-func: error
-  no-sync: error
   no-tabs: off
   no-template-curly-in-string: error
   no-ternary: off

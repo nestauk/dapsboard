@@ -1,3 +1,9 @@
+/* eslint-disable
+	node/no-unpublished-import,
+	node/no-process-env,
+	node/no-deprecated-api
+*/
+
 import { terser } from 'rollup-plugin-terser';
 import babel from 'rollup-plugin-babel';
 import cleanup from "rollup-plugin-cleanup";
@@ -11,7 +17,6 @@ import yaml from '@rollup/plugin-yaml';
 import config from 'sapper/config/rollup.js';
 import pkg from './package.json';
 
-/* eslint-disable no-process-env */
 const mode = process.env.NODE_ENV;
 const isExported = process.env.SAPPER_EXPORT;
 const dev = mode === 'development';
@@ -93,15 +98,16 @@ export default {
 			cleanup(),
 		],
 		external:
+			// /* eslint-disable node/global-require */
 			Object.keys(pkg.dependencies)
-			.filter(name => ![
-				'@svizzle/barchart',
-				'@svizzle/choropleth',
-			].includes(name))
-			.concat(
-				require('module').builtinModules ||
-				Object.keys(process.binding('natives'))
-			),
+				.filter(name => ![
+					'@svizzle/barchart',
+					'@svizzle/choropleth',
+				].includes(name))
+				.concat(
+					require('module').builtinModules ||
+					Object.keys(process.binding('natives'))
+				),
 
 		onwarn,
 	},

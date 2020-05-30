@@ -1,5 +1,10 @@
 #!/usr/bin/env node -r esm
 
+/* eslint-disable
+	node/no-unpublished-import,
+	node/shebang
+*/
+
 import path from 'path';
 
 import * as _ from 'lamb';

@@ -5,7 +5,8 @@
     "lamb": "^0.58.0",
     "mkdirp": "^1.0.4",
     "polka": "^0.5.2",
-    "sirv": "^0.4.2"
+    "sirv": "^0.4.2",
+    "svelte-json-tree": "^0.1.0"
   },
   "description": "Nesta DAPS dashboard",
   "devDependencies": {
@@ -21,8 +22,9 @@
     "@rollup/plugin-yaml": "^2.1.0",
     "@svizzle/dev": "^0.3.0",
     "@svizzle/file": "^0.7.0",
-    "eslint": "^6.8.0",
+    "eslint": "^7.1.0",
     "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-svelte3": "^2.7.3",
     "esm": "^3.2.25",
     "husky": "^4.2.5",
@@ -35,8 +37,10 @@
     "rollup-plugin-svelte": "^5.2.1",
     "rollup-plugin-terser": "^5.3.0",
     "sapper": "^0.27.12",
-    "svelte": "^3.20.1",
-    "svelte-json-tree": "^0.1.0"
+    "svelte": "^3.20.1"
+  },
+  "engines": {
+    "node": ">=10.0.0"
   },
   "husky": {
     "hooks": {
@@ -52,7 +56,7 @@
     "deploy": "npm run makedata && npm run export",
     "dev": "sapper dev",
     "export": "export SAPPER_EXPORT=true && sapper export --legacy",
-    "lint": "eslint 'src/**/*.{js,svelte}'",
+    "lint": "eslint rollup.config.js 'src/**/*.{js,svelte}'",
     "mkdirdata": "mkdirp ./src/node_modules/app/data",
     "makedata": "npm run mkdirdata && npm run chmod && node -r esm ./src/bin/make_data.js",
     "start": "node __sapper__/build",
