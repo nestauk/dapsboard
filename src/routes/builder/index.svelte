@@ -318,7 +318,7 @@
 	<section class='response'>
 		<PanelMenu>
 			<MenuItem>
-				<input type='checkbox' bind:checked={showFullResponse}> Show full response
+				<input type='checkbox' bind:checked={showFullResponse} id='showFullResponseID'> <label for='showFullResponseID'>Show full response</label>
 			</MenuItem>
 		</PanelMenu>
 
