@@ -152,7 +152,12 @@
 	let queryTemplate = {};
 	let parsedQuery = queryTemplate;
 
-	let axisOptions = [];
+	let axisOptions = AXIS_NAMES.map(name => ({
+		text: capitalize(name),
+		value: name,
+		disabled: true
+	}));
+
 	let bucketOptions = [];
 	let aggregatorOptions = [];
 	let typeOptions = [];
@@ -160,12 +165,13 @@
 	let fieldOptions = [];
 
 	let [ selectedAxis ] = AXIS_NAMES;
-	let selectedAxisConfig;
+	let selectedAxisConfig = queryConfig.axes[selectedAxis];
 
 	let readyForRequest = false;
 
 	let responsePromise;
 
+	let hideDisabledAxes = true;
 	let hideDisabledDatasets = false;
 	let hideDisabledAggregations = false;
 	let hideDisabledFields = true;
@@ -241,15 +247,8 @@
 			}
 		}
 
-		axisOptions = []
-		for (let i = 0; i < activeAxes; i++) {
-			const name = AXIS_NAMES[i];
-			axisOptions.push({
-				text: capitalize(name),
-				value: name,
-				disabled: false
-			});
-		}
+		axisOptions.forEach((o,i) => {o.disabled = (i >= activeAxes)} );
+		axisOptions = axisOptions;
 	}
 
 	function doQuery () {
@@ -264,8 +263,9 @@
 
 <section class="query-builder">
 	<section class='axes'>
+		<SelectMenu bind:hideDisabled={hideDisabledAxes} />
 		<header>Axes</header>
-		<Select options={axisOptions} bind:selectedOption={selectedAxis} unselectable={false} />
+		<Select options={axisOptions} bind:selectedOption={selectedAxis} unselectable={false} hideDisabled={hideDisabledAxes} />
 	</section>
 
 	<section class='agreggations'>
