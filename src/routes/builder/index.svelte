@@ -316,7 +316,7 @@
 				{#await responsePromise}
 					waiting for response...
 				{:then response}
-					<JSONValue value={response} />
+					<JSONValue value={response && response.aggregations} />
 				{:catch error}
 					<JSONValue value={error.jsonMessage} />
 				{/await}
