@@ -284,7 +284,6 @@
 	</section>
 
 	<section class='types'>
-		<SelectMenu />
 		<header>Types</header>
 		<Select options={typeOptions} bind:selectedOption={selectedAxisConfig.type} />
 	</section>
