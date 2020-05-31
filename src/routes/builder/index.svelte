@@ -253,7 +253,9 @@
 			}
 		}
 
-		axisOptions.forEach((o,i) => {o.disabled = (i >= activeAxes)} );
+		axisOptions.forEach((o,i) => {
+			o.disabled = i >= activeAxes
+		});
 		axisOptions = axisOptions;
 		responsePromise = Promise.resolve(undefined);
 	}
