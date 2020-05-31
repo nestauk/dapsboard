@@ -140,6 +140,8 @@
 	import JSONValue from 'app/components/JSONValue.svelte';
 	import Select from 'app/components/Select.svelte';
 	import SelectMenu from 'app/components/SelectMenu.svelte';
+    import PanelMenu from 'app/components/elementary/PanelMenu.svelte';
+    import MenuItem from 'app/components/elementary/MenuItem.svelte';
 
 	const AXIS_NAMES = ['primary', 'secondary', 'tertiary', 'quaternary', 'quinary', 'senary', 'septenary', 'octonary', 'nonary', 'denary'];
 	let queryConfig = {
@@ -177,6 +179,8 @@
 	let hideDisabledDatasets = false;
 	let hideDisabledAggregations = false;
 	let hideDisabledFields = true;
+
+	let showFullResponse = false;
 
 	function computeLists (config) {
 		bucketOptions = Object.keys(bucketDescriptionsEN).map(k => ({
@@ -310,13 +314,19 @@
 	</section>
 
 	<section class='response'>
+		<PanelMenu>
+			<MenuItem>
+				<input type='checkbox' bind:checked={showFullResponse}> Show full response
+			</MenuItem>
+		</PanelMenu>
+
 		<header>Response</header>
 		<div class='json'>
 			{#if responsePromise}
 				{#await responsePromise}
 					waiting for response...
 				{:then response}
-					<JSONValue value={response && response.aggregations} />
+					<JSONValue value={showFullResponse ? response : response && response.aggregations} />
 				{:catch error}
 					<JSONValue value={error.jsonMessage} />
 				{/await}
