@@ -143,7 +143,7 @@
 	let queryConfig = {
 		dataset: undefined,
 		axes: Object.fromEntries(AXIS_NAMES.map(q => [q, {
-			aggregations: undefined,
+			aggregation: undefined,
 			type: undefined,
 			field: undefined
 		}]))
