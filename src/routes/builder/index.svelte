@@ -137,6 +137,7 @@
 <script>
 	import JSONValue from 'app/components/JSONValue.svelte';
 	import Select from 'app/components/Select.svelte';
+	import SelectMenu from 'app/components/SelectMenu.svelte';
 
 	const AXIS_NAMES = ['primary', 'secondary', 'tertiary', 'quaternary', 'quinary', 'senary', 'septenary', 'octonary', 'nonary', 'denary'];
 	let queryConfig = {
@@ -164,6 +165,10 @@
 	let readyForRequest = false;
 
 	let responsePromise;
+
+	let hideDisabledDatasets = false;
+	let hideDisabledAggregations = false;
+	let hideDisabledFields = true;
 
 	function computeLists (config) {
 		bucketOptions = Object.keys(bucketDescriptionsEN).map(k => ({
@@ -263,10 +268,11 @@
 	</section>
 
 	<section class='agreggations'>
+		<SelectMenu bind:hideDisabled={hideDisabledAggregations} />
 		<header>Aggregations</header>
 		<section>
 			<header>Bucketing</header>
-			<Select options={bucketOptions} bind:selectedOption={selectedAxisConfig.aggregation} />
+			<Select options={bucketOptions} bind:selectedOption={selectedAxisConfig.aggregation} hideDisabled={hideDisabledAggregations} />
 		</section>
 		<section>
 			<header>Metrics</header>
@@ -275,18 +281,21 @@
 	</section>
 
 	<section class='types'>
+		<SelectMenu />
 		<header>Types</header>
 		<Select options={typeOptions} bind:selectedOption={selectedAxisConfig.type} />
 	</section>
 
 	<section class='datasets'>
+		<SelectMenu bind:hideDisabled={hideDisabledDatasets} />
 		<header>Datasets</header>
-		<Select options={datasetOptions} bind:selectedOption={queryConfig.dataset} />
+		<Select options={datasetOptions} bind:selectedOption={queryConfig.dataset}  hideDisabled={hideDisabledDatasets}  />
 	</section>
 
 	<section class='fields'>
+		<SelectMenu bind:hideDisabled={hideDisabledFields} />
 		<header>Fields</header>
-		<Select options={fieldOptions} bind:selectedOption={selectedAxisConfig.field} />
+		<Select options={fieldOptions} bind:selectedOption={selectedAxisConfig.field} hideDisabled={hideDisabledFields} />
 	</section>
 
 	<section class='request'>
@@ -351,6 +360,7 @@
 		height: 100%;
 		box-shadow: .2em .2em .4em #8888;
 		padding: 1em;
+		position: relative;
 	}
 
 	header {
