@@ -1,4 +1,6 @@
 <script context='module'>
+	import * as _ from 'lamb';
+
 	import DATASETS from 'app/data/datasets.json';
 	import {
 		descriptionsEN,
@@ -142,7 +144,7 @@
 	const AXIS_NAMES = ['primary', 'secondary', 'tertiary', 'quaternary', 'quinary', 'senary', 'septenary', 'octonary', 'nonary', 'denary'];
 	let queryConfig = {
 		dataset: undefined,
-		axes: Object.fromEntries(AXIS_NAMES.map(q => [q, {
+		axes: _.fromPairs(AXIS_NAMES.map(q => [q, {
 			aggregation: undefined,
 			type: undefined,
 			field: undefined
