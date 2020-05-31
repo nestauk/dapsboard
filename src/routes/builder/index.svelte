@@ -283,8 +283,6 @@
 		<section>
 			<header>Bucketing</header>
 			<Select options={bucketOptions} bind:selectedOption={selectedAxisConfig.aggregation} hideDisabled={hideDisabledAggregations} />
-		</section>
-		<section>
 			<header>Metrics</header>
 			<Select options={aggregatorOptions} bind:selectedOption={selectedAxisConfig.aggregation} hideDisabled={hideDisabledAggregations} />
 		</section>
