@@ -110,8 +110,7 @@ rules:
   linebreak-style:
     - error
     - unix
-  lines-around-comment: error
-  lines-around-directive: error
+  lines-around-comment: off
   lines-between-class-members: error
   max-classes-per-file: error
   max-depth: error
@@ -127,16 +126,12 @@ rules:
     - error
     - always-multiline
   new-parens: error
-  newline-after-var: off
-  newline-before-return: off
   newline-per-chained-call: off
   no-alert: error
   no-array-constructor: error
   no-await-in-loop: error
   no-bitwise: error
-  no-buffer-constructor: error
   no-caller: error
-  no-catch-shadow: error
   no-confusing-arrow: off
   no-console: off
   no-continue: error
@@ -169,9 +164,7 @@ rules:
   no-multi-spaces: off
   no-multi-str: error
   no-multiple-empty-lines: error
-  no-native-reassign: error
   no-negated-condition: off
-  no-negated-in-lhs: error
   no-nested-ternary: off
   no-new: error
   no-new-func: error
@@ -183,7 +176,6 @@ rules:
   no-proto: error
   no-restricted-globals: error
   no-restricted-imports: error
-  no-restricted-modules: error
   no-restricted-properties: error
   no-restricted-syntax: error
   no-return-assign: error
@@ -192,7 +184,6 @@ rules:
   no-self-compare: error
   no-sequences: error
   no-shadow: error
-  no-spaced-func: error
   no-tabs: off
   no-template-curly-in-string: error
   no-ternary: off
@@ -240,7 +231,6 @@ rules:
   prefer-numeric-literals: error
   prefer-object-spread: error
   prefer-promise-reject-errors: error
-  prefer-reflect: off
   prefer-regex-literals: error
   prefer-rest-params: off
   prefer-spread: error
@@ -249,7 +239,6 @@ rules:
   quotes: off
   radix: error
   require-await: error
-  require-jsdoc: off
   require-unicode-regexp: error
   rest-spread-spacing:
     - error
@@ -266,7 +255,9 @@ rules:
   space-in-parens:
     - error
     - never
-  space-infix-ops: off
+  space-infix-ops:
+    - error
+    - int32Hint: false
   space-unary-ops: error
   spaced-comment:
     - error
@@ -281,9 +272,18 @@ rules:
   unicode-bom:
     - error
     - never
-  valid-jsdoc: off
   vars-on-top: error
   wrap-iife: error
   wrap-regex: error
   yield-star-spacing: error
   yoda: error
+
+  # deprecated with no replacement
+  no-buffer-constructor: error
+  no-catch-shadow: error
+  no-native-reassign: error
+  no-negated-in-lhs: error
+  no-restricted-modules: error
+  prefer-reflect: off
+  require-jsdoc: off
+  valid-jsdoc: off
