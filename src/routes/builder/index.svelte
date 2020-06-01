@@ -140,8 +140,8 @@
 	import JSONValue from 'app/components/JSONValue.svelte';
 	import Select from 'app/components/Select.svelte';
 	import SelectMenu from 'app/components/SelectMenu.svelte';
-    import PanelMenu from 'app/components/elementary/PanelMenu.svelte';
-    import MenuItem from 'app/components/elementary/MenuItem.svelte';
+	import PanelMenu from 'app/components/elementary/PanelMenu.svelte';
+	import MenuItem from 'app/components/elementary/MenuItem.svelte';
 
 	const AXIS_NAMES = ['primary', 'secondary', 'tertiary', 'quaternary', 'quinary', 'senary', 'septenary', 'octonary', 'nonary', 'denary'];
 	let queryConfig = {
@@ -187,43 +187,43 @@
 			text: bucketDescriptionsEN[k],
 			value: k,
 			disabled:
-				(selectedAxisConfig.type === undefined? false : !crossIndex.types[selectedAxisConfig.type].aggregations.has(k))
-				|| (config.dataset === undefined? false : !crossIndex.datasets[DATASETS[config.dataset].id].aggregations.has(k))
-				|| (selectedAxisConfig.field === undefined? false : !crossIndex.fields[selectedAxisConfig.field].aggregations.has(k))
+				(selectedAxisConfig.type === undefined ? false : !crossIndex.types[selectedAxisConfig.type].aggregations.has(k))
+				|| (config.dataset === undefined ? false : !crossIndex.datasets[DATASETS[config.dataset].id].aggregations.has(k))
+				|| (selectedAxisConfig.field === undefined ? false : !crossIndex.fields[selectedAxisConfig.field].aggregations.has(k))
 		}));
 		aggregatorOptions = Object.keys(descriptionsEN).map(k => ({
 			text: descriptionsEN[k],
 			value: k,
 			disabled:
-				(selectedAxisConfig.type === undefined? false : !crossIndex.types[selectedAxisConfig.type].aggregations.has(k))
-				|| (config.dataset === undefined? false : !crossIndex.datasets[DATASETS[config.dataset].id].aggregations.has(k))
-				|| (selectedAxisConfig.field === undefined? false : !crossIndex.fields[selectedAxisConfig.field].aggregations.has(k))
+				(selectedAxisConfig.type === undefined ? false : !crossIndex.types[selectedAxisConfig.type].aggregations.has(k))
+				|| (config.dataset === undefined ? false : !crossIndex.datasets[DATASETS[config.dataset].id].aggregations.has(k))
+				|| (selectedAxisConfig.field === undefined ? false : !crossIndex.fields[selectedAxisConfig.field].aggregations.has(k))
 		}));
 		typeOptions = Object.keys(crossIndex.types).map(k => ({
 			text: k,
 			value: k,
 			disabled: false,
 			effaced:
-				(selectedAxisConfig.aggregation === undefined? false : !crossIndex.aggregations[selectedAxisConfig.aggregation].types.has(k))
-				|| (config.dataset === undefined? false : !crossIndex.datasets[DATASETS[config.dataset].id].types.has(k))
-				|| (selectedAxisConfig.field === undefined? false : !crossIndex.fields[selectedAxisConfig.field].types.has(k))
+				(selectedAxisConfig.aggregation === undefined ? false : !crossIndex.aggregations[selectedAxisConfig.aggregation].types.has(k))
+				|| (config.dataset === undefined ? false : !crossIndex.datasets[DATASETS[config.dataset].id].types.has(k))
+				|| (selectedAxisConfig.field === undefined ? false : !crossIndex.fields[selectedAxisConfig.field].types.has(k))
 		}));
 		datasetOptions = DATASETS.map((k, i) => ({
 			text: k.id,
 			value: i,
 			disabled:
-				(selectedAxisConfig.type === undefined? false : !crossIndex.types[selectedAxisConfig.type].datasets.has(k.id))
-				|| (selectedAxisConfig.field === undefined? false : !crossIndex.fields[selectedAxisConfig.field].datasets.has(k.id))
-				|| (selectedAxisConfig.aggregation === undefined? false : !crossIndex.aggregations[selectedAxisConfig.aggregation].datasets.has(k.id))
+				(selectedAxisConfig.type === undefined ? false : !crossIndex.types[selectedAxisConfig.type].datasets.has(k.id))
+				|| (selectedAxisConfig.field === undefined ? false : !crossIndex.fields[selectedAxisConfig.field].datasets.has(k.id))
+				|| (selectedAxisConfig.aggregation === undefined ? false : !crossIndex.aggregations[selectedAxisConfig.aggregation].datasets.has(k.id))
 		}));
 		fieldOptions = fieldNames.map(f => ({
 			text: f,
 			value: f,
 			disabled:
 				!config.dataset
-				|| (selectedAxisConfig.type === undefined? false : !crossIndex.types[selectedAxisConfig.type].fields.has(f))
-				|| (config.dataset === undefined? false : !crossIndex.datasets[DATASETS[config.dataset].id].fields.has(f))
-				|| (selectedAxisConfig.aggregation === undefined? false : !crossIndex.aggregations[selectedAxisConfig.aggregation].fields.has(f))
+				|| (selectedAxisConfig.type === undefined ? false : !crossIndex.types[selectedAxisConfig.type].fields.has(f))
+				|| (config.dataset === undefined ? false : !crossIndex.datasets[DATASETS[config.dataset].id].fields.has(f))
+				|| (selectedAxisConfig.aggregation === undefined ? false : !crossIndex.aggregations[selectedAxisConfig.aggregation].fields.has(f))
 		}));
 
 		readyForRequest = false;
