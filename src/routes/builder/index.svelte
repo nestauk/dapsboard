@@ -220,7 +220,8 @@
 			text: f,
 			value: f,
 			disabled:
-				(selectedAxisConfig.type === undefined? false : !crossIndex.types[selectedAxisConfig.type].fields.has(f))
+				!config.dataset
+				|| (selectedAxisConfig.type === undefined? false : !crossIndex.types[selectedAxisConfig.type].fields.has(f))
 				|| (config.dataset === undefined? false : !crossIndex.datasets[DATASETS[config.dataset].id].fields.has(f))
 				|| (selectedAxisConfig.aggregation === undefined? false : !crossIndex.aggregations[selectedAxisConfig.aggregation].fields.has(f))
 		}));
