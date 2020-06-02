@@ -6,6 +6,14 @@
   font-family: 'Open Sans Regular';
   src: url('/font/OpenSans-Regular.ttf') format('truetype');
 }
+@font-face {
+  font-family: 'Open Sans Bold';
+  src: url('/font/OpenSans-Bold.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Open Sans SemiBold';
+  src: url('/font/OpenSans-SemiBold.ttf') format('truetype');
+}
 
 * {
 	box-sizing: border-box;
@@ -46,27 +54,28 @@ a {
 	color: inherit;
 }
 
-.distancer {
-	margin-bottom: 1rem;
+.semibold {
+  font-family: 'Open Sans SemiBold', sans-serif;
+}
+.bold {
+  font-family: 'Open Sans Bold', sans-serif;
+}
+
+.clickable {
+	user-select: none;
+	cursor: pointer;
 }
 
 :root {
-	--box-shadow-y: 0px 8px 9px -4px lightgrey;
-	--box-shadow-xy: 2px 8px 9px -4px lightgrey;
-	--color-main-desat-50: hsla(199, 50%, 52%, 1);
 	--color-main-lighter: rgb(180, 180, 180);
 	--color-main: rgb(40, 40, 40);
 	--color-selected: lightseagreen;
-	--color-grey-lighter: #f7f7f7;
-	--color-grey-180: rgb(180, 180, 180);
 	--color-grey-70: rgb(70, 70, 70);
-	--color-grey-40: rgb(40, 40, 40);
-	--color-paleyellow: #f9f7dd;
 	--color-link: var(--color-main);
+  --color-link-ext: rgb(16, 174, 249);
 	--color-background: var(--color-main-lighter);
 	--dim-fontsize-light: 200;
 	--dim-header-height: 3rem;
 	--dim-main-height: calc(100% - var(--dim-header-height));
-	--dim-padding-minor: 0.5rem;
 	--dim-padding: 1rem;
 }

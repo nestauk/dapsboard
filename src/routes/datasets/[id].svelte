@@ -1,12 +1,12 @@
 <script context='module'>
 	import routes from 'app/data/routes.json';
 
-	export function preload({ params: {id} }) {
-		const datasetInfo = routes[id];
+	export function preload ({ params: {id} }) {
+		const dataset = routes[id];
 
 		return {
 			id,
-			datasetInfo
+			dataset
 		}
 	}
 </script>
@@ -19,22 +19,21 @@
 		constructQuery
 	} from 'app/elasticsearch';
 	import { request } from 'app/net';
-	import { IS_BROWSER } from 'app/utils';
+	import { IS_BROWSER, getEndpointURL, getSchema } from 'app/utils';
 
 	export let id;
-	export let datasetInfo;
+	export let dataset;
 
 	let responsePromise;
 
-	function doQuery(_query) {
-		const endpoint = datasetInfo.spec.dataset.endpoint_url;
+	function doQuery (data) {
+		const endpoint = getEndpointURL(dataset);
 		const url = `${endpoint}/_search`;
 
-		return IS_BROWSER && request(fetch, 'POST', url, {data: _query});
+		return IS_BROWSER && request(fetch, 'POST', url, {data});
 	}
 
-	/* eslint-disable prefer-destructuring */
-	$: schema = datasetInfo.spec.dataset.schema;
+	$: schema = getSchema(dataset);
 	$: query = constructQuery(schema);
 	$: responsePromise = doQuery(query);
 </script>
@@ -48,7 +47,7 @@
 
 	<section class='schema'>
 		<header>Info</header>
-		<SchemaExplorer schema={datasetInfo} />
+		<SchemaExplorer schema={dataset} />
 	</section>
 
 	<section class='query'>

@@ -1,5 +1,11 @@
+# 0.0.5
+
+- Add the aggregation builder (#21)
+
 # 0.0.4
 
+- Upgraded ESlint and some linting rules (#28)
+- Setup linting as a precommit hook (#24)
 - Add new datasets (#17, #22)
 - Use `eurito-dev` endpoint (#19)
 
