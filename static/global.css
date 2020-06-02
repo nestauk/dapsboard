@@ -46,8 +46,9 @@ a {
 	color: inherit;
 }
 
-.distancer {
-	margin-bottom: 1rem;
+.clickable {
+	user-select: none;
+	cursor: pointer;
 }
 
 :root {
