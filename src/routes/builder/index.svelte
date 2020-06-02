@@ -288,7 +288,7 @@
 <section class="query-builder">
 	<section class='axes'>
 		<SelectMenu bind:hideDisabled={hideDisabledAxes} />
-		<header>Axes</header>
+		<header class='bold'>Axes</header>
 		<Select
 			bind:selectedOption={selectedAxis}
 			hideDisabled={hideDisabledAxes}
@@ -307,15 +307,15 @@
 
 	<section class='agreggations'>
 		<SelectMenu bind:hideDisabled={hideDisabledAggregations} />
-		<header>Aggregations</header>
+		<header class='bold'>Aggregations</header>
 		<section>
-			<header>Bucketing</header>
+			<header class='semibold'>Bucketing</header>
 			<Select
 				bind:selectedOption={selectedAxisConfig.aggregation}
 				hideDisabled={hideDisabledAggregations}
 				options={bucketOptions}
 			/>
-			<header>Metrics</header>
+			<header class='semibold'>Metrics</header>
 			<Select
 				bind:selectedOption={selectedAxisConfig.aggregation}
 				hideDisabled={hideDisabledAggregations}
@@ -325,7 +325,7 @@
 	</section>
 
 	<section class='types'>
-		<header>Types</header>
+		<header class='bold'>Types</header>
 		<Select
 			bind:selectedOption={selectedAxisConfig.type}
 			options={typeOptions}
@@ -334,7 +334,7 @@
 
 	<section class='datasets'>
 		<SelectMenu bind:hideDisabled={hideDisabledDatasets} />
-		<header>Datasets</header>
+		<header class='bold'>Datasets</header>
 		<Select
 			bind:selectedOption={queryConfig.dataset}
 			hideDisabled={hideDisabledDatasets}
@@ -344,7 +344,7 @@
 
 	<section class='fields'>
 		<SelectMenu bind:hideDisabled={hideDisabledFields} />
-		<header>Fields</header>
+		<header class='bold'>Fields</header>
 		<Select
 			bind:selectedOption={selectedAxisConfig.field}
 			hideDisabled={hideDisabledFields}
@@ -353,7 +353,7 @@
 	</section>
 
 	<section class='request'>
-		<header>Request</header>
+		<header class='bold'>Request</header>
 		<div class='json'>
 			<JSONValue
 				bind:parsedValue={parsedQuery}
@@ -379,7 +379,7 @@
 			</MenuItem>
 		</PanelMenu>
 
-		<header>Response</header>
+		<header class='bold'>Response</header>
 		<div class='json'>
 			{#if responsePromise}
 				{#await responsePromise}

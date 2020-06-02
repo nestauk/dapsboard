@@ -18,6 +18,8 @@
 		width: 100%;
 		padding: 0 var(--dim-padding);
 		border-bottom: 1px solid var(--color-main-lighter);
+		background-color: var(--color-main);
+		color: white;
 	}
 
 	main {
