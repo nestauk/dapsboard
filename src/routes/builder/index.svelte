@@ -37,55 +37,55 @@
 		datasets[dataset.id] = newDataset;
 
 		const schema = getSchema(dataset);
-		for (let fieldName in schema) {
-			fieldNamesSet.add(fieldName);
-			newDataset.fields.add(fieldName);
+		for (let field in schema) {
+			fieldNamesSet.add(field);
+			newDataset.fields.add(field);
 
-			const fieldType = determineESType(schema[fieldName]);
-			typeNamesSet.add(fieldType)
-			newDataset.types.add(fieldType);
+			const esType = determineESType(schema[field]);
+			typeNamesSet.add(esType)
+			newDataset.types.add(esType);
 
-			const aggs = aggregationsPerType[fieldType]
+			const aggs = aggregationsPerType[esType]
 			if (aggs) {
-				aggs.forEach(a => {
-					newDataset.aggregations.add(a);
+				aggs.forEach(agg => {
+					newDataset.aggregations.add(agg);
 				})
 			}
 		}
 	}
 
 	const typeNames = Array.from(typeNamesSet).sort();
-	for (let type of typeNames) {
-		types[type] = {
-			aggregations: new Set(aggregationsPerType[type]),
+	for (let esType of typeNames) {
+		types[esType] = {
+			aggregations: new Set(aggregationsPerType[esType]),
 			datasets: new Set(
 				Object.keys(datasets)
-					.filter(dsName => datasets[dsName].types.has(type))
+					.filter(dsName => datasets[dsName].types.has(esType))
 			),
 			fields: new Set()
 		}
 	}
 
 	const fieldNames = Array.from(fieldNamesSet).sort();
-	for (let f of fieldNames) {
+	for (let field of fieldNames) {
 		const _datasets = new Set(
 			Object.keys(datasets)
-				.filter(dsName => datasets[dsName].fields.has(f))
+				.filter(dsName => datasets[dsName].fields.has(field))
 		)
 		const _types = new Set(
 			Object.keys(datasets)
-				.filter(dsName => datasets[dsName].fields.has(f))
-				.map(dsName => determineESType(getSchema(DATASETS[datasets[dsName].index])[f]))
+				.filter(dsName => datasets[dsName].fields.has(field))
+				.map(dsName => determineESType(getSchema(DATASETS[datasets[dsName].index])[field]))
 		);
 		const _aggregations = new Set();
-		for (let t of _types) {
-			const aggs = aggregationsPerType[t];
+		for (let esType of _types) {
+			const aggs = aggregationsPerType[esType];
 			if (aggs) {
 				aggs.forEach(agg => _aggregations.add(agg));
 			}
-			types[t].fields.add(f);
+			types[esType].fields.add(field);
 		}
-		fields[f] = {
+		fields[field] = {
 			datasets: _datasets,
 			types: _types,
 			aggregations: _aggregations
@@ -96,7 +96,7 @@
 		aggregations[agg] = {
 			types: new Set(
 				Object.keys(types)
-					.filter(typeName => types[typeName].aggregations.has(agg))
+					.filter(esType => types[esType].aggregations.has(agg))
 			),
 			datasets: new Set(
 				Object.keys(datasets)
@@ -104,7 +104,7 @@
 			),
 			fields: new Set(
 				Object.keys(fields)
-					.filter(fieldName => fields[fieldName].aggregations.has(agg))
+					.filter(field => fields[field].aggregations.has(agg))
 			)
 		}
 	}
@@ -113,7 +113,7 @@
 		aggregations[agg] = {
 			types: new Set(
 				Object.keys(types)
-					.filter(typeName => types[typeName].aggregations.has(agg))
+					.filter(esType => types[esType].aggregations.has(agg))
 			),
 			datasets: new Set(
 				Object.keys(datasets)
@@ -121,7 +121,7 @@
 			),
 			fields: new Set(
 				Object.keys(fields)
-					.filter(fieldName => fields[fieldName].aggregations.has(agg))
+					.filter(field => fields[field].aggregations.has(agg))
 			)
 		}
 	}
@@ -185,47 +185,47 @@
 	}
 
 	function computeLists (config) {
-		bucketOptions = Object.keys(bucketDescriptionsEN).map(k => ({
-			text: bucketDescriptionsEN[k],
-			value: k,
+		bucketOptions = Object.keys(bucketDescriptionsEN).map(agg => ({
+			text: bucketDescriptionsEN[agg],
+			value: agg,
 			disabled:
-				(selectedAxisConfig.type === undefined ? false : !types[selectedAxisConfig.type].aggregations.has(k))
-				|| (config.dataset === undefined ? false : !datasets[DATASETS[config.dataset].id].aggregations.has(k))
-				|| (selectedAxisConfig.field === undefined ? false : !fields[selectedAxisConfig.field].aggregations.has(k))
+				(selectedAxisConfig.type === undefined ? false : !types[selectedAxisConfig.type].aggregations.has(agg))
+				|| (config.dataset === undefined ? false : !datasets[DATASETS[config.dataset].id].aggregations.has(agg))
+				|| (selectedAxisConfig.field === undefined ? false : !fields[selectedAxisConfig.field].aggregations.has(agg))
 		}));
-		aggregatorOptions = Object.keys(metricDescriptionsEN).map(k => ({
-			text: metricDescriptionsEN[k],
-			value: k,
+		aggregatorOptions = Object.keys(metricDescriptionsEN).map(agg => ({
+			text: metricDescriptionsEN[agg],
+			value: agg,
 			disabled:
-				(selectedAxisConfig.type === undefined ? false : !types[selectedAxisConfig.type].aggregations.has(k))
-				|| (config.dataset === undefined ? false : !datasets[DATASETS[config.dataset].id].aggregations.has(k))
-				|| (selectedAxisConfig.field === undefined ? false : !fields[selectedAxisConfig.field].aggregations.has(k))
+				(selectedAxisConfig.type === undefined ? false : !types[selectedAxisConfig.type].aggregations.has(agg))
+				|| (config.dataset === undefined ? false : !datasets[DATASETS[config.dataset].id].aggregations.has(agg))
+				|| (selectedAxisConfig.field === undefined ? false : !fields[selectedAxisConfig.field].aggregations.has(agg))
 		}));
-		typeOptions = Object.keys(types).map(k => ({
-			text: k,
-			value: k,
+		typeOptions = Object.keys(types).map(type => ({
+			text: type,
+			value: type,
 			disabled: false,
 			effaced:
-				(selectedAxisConfig.aggregation === undefined ? false : !aggregations[selectedAxisConfig.aggregation].types.has(k))
-				|| (config.dataset === undefined ? false : !datasets[DATASETS[config.dataset].id].types.has(k))
-				|| (selectedAxisConfig.field === undefined ? false : !fields[selectedAxisConfig.field].types.has(k))
+				(selectedAxisConfig.aggregation === undefined ? false : !aggregations[selectedAxisConfig.aggregation].types.has(type))
+				|| (config.dataset === undefined ? false : !datasets[DATASETS[config.dataset].id].types.has(type))
+				|| (selectedAxisConfig.field === undefined ? false : !fields[selectedAxisConfig.field].types.has(type))
 		}));
-		datasetOptions = DATASETS.map((k, i) => ({
-			text: k.id,
-			value: i,
+		datasetOptions = DATASETS.map((dataset, index) => ({
+			text: dataset.id,
+			value: index,
 			disabled:
-				(selectedAxisConfig.type === undefined ? false : !types[selectedAxisConfig.type].datasets.has(k.id))
-				|| (selectedAxisConfig.field === undefined ? false : !fields[selectedAxisConfig.field].datasets.has(k.id))
-				|| (selectedAxisConfig.aggregation === undefined ? false : !aggregations[selectedAxisConfig.aggregation].datasets.has(k.id))
+				(selectedAxisConfig.type === undefined ? false : !types[selectedAxisConfig.type].datasets.has(dataset.id))
+				|| (selectedAxisConfig.field === undefined ? false : !fields[selectedAxisConfig.field].datasets.has(dataset.id))
+				|| (selectedAxisConfig.aggregation === undefined ? false : !aggregations[selectedAxisConfig.aggregation].datasets.has(dataset.id))
 		}));
-		fieldOptions = fieldNames.map(f => ({
-			text: f,
-			value: f,
+		fieldOptions = fieldNames.map(field => ({
+			text: field,
+			value: field,
 			disabled:
 				!config.dataset
-				|| (selectedAxisConfig.type === undefined ? false : !types[selectedAxisConfig.type].fields.has(f))
-				|| (config.dataset === undefined ? false : !datasets[DATASETS[config.dataset].id].fields.has(f))
-				|| (selectedAxisConfig.aggregation === undefined ? false : !aggregations[selectedAxisConfig.aggregation].fields.has(f))
+				|| (selectedAxisConfig.type === undefined ? false : !types[selectedAxisConfig.type].fields.has(field))
+				|| (config.dataset === undefined ? false : !datasets[DATASETS[config.dataset].id].fields.has(field))
+				|| (selectedAxisConfig.aggregation === undefined ? false : !aggregations[selectedAxisConfig.aggregation].fields.has(field))
 		}));
 
 		readyForRequest = false;
