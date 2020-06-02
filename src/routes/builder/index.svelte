@@ -132,8 +132,6 @@
 			)
 		}
 	}
-
-	// console.log(crossIndex);
 </script>
 
 <script>
@@ -312,33 +310,56 @@
 		<header>Aggregations</header>
 		<section>
 			<header>Bucketing</header>
-			<Select options={bucketOptions} bind:selectedOption={selectedAxisConfig.aggregation} hideDisabled={hideDisabledAggregations} />
+			<Select
+				bind:selectedOption={selectedAxisConfig.aggregation}
+				hideDisabled={hideDisabledAggregations}
+				options={bucketOptions}
+			/>
 			<header>Metrics</header>
-			<Select options={aggregatorOptions} bind:selectedOption={selectedAxisConfig.aggregation} hideDisabled={hideDisabledAggregations} />
+			<Select
+				bind:selectedOption={selectedAxisConfig.aggregation}
+				hideDisabled={hideDisabledAggregations}
+				options={aggregatorOptions}
+			/>
 		</section>
 	</section>
 
 	<section class='types'>
 		<header>Types</header>
-		<Select options={typeOptions} bind:selectedOption={selectedAxisConfig.type} />
+		<Select
+			bind:selectedOption={selectedAxisConfig.type}
+			options={typeOptions}
+		/>
 	</section>
 
 	<section class='datasets'>
 		<SelectMenu bind:hideDisabled={hideDisabledDatasets} />
 		<header>Datasets</header>
-		<Select options={datasetOptions} bind:selectedOption={queryConfig.dataset}  hideDisabled={hideDisabledDatasets}  />
+		<Select
+			bind:selectedOption={queryConfig.dataset}
+			hideDisabled={hideDisabledDatasets}
+			options={datasetOptions}
+		/>
 	</section>
 
 	<section class='fields'>
 		<SelectMenu bind:hideDisabled={hideDisabledFields} />
 		<header>Fields</header>
-		<Select options={fieldOptions} bind:selectedOption={selectedAxisConfig.field} hideDisabled={hideDisabledFields} />
+		<Select
+			bind:selectedOption={selectedAxisConfig.field}
+			hideDisabled={hideDisabledFields}
+			options={fieldOptions}
+		/>
 	</section>
 
 	<section class='request'>
 		<header>Request</header>
 		<div class='json'>
-			<JSONValue value={queryTemplate} editable={true} bind:parsedValue={parsedQuery}/>
+			<JSONValue
+				bind:parsedValue={parsedQuery}
+				editable={true}
+				value={queryTemplate}
+			/>
 		</div>
 		<button disabled={!readyForRequest} on:click={doQuery}>Execute</button>
 	</section>
@@ -346,7 +367,15 @@
 	<section class='response'>
 		<PanelMenu>
 			<MenuItem>
-				<input type='checkbox' bind:checked={showFullResponse} id='showFullResponseID'> <label for='showFullResponseID'>Show full response</label>
+				<input
+					bind:checked={showFullResponse}
+					id='showFullResponseID'
+					type='checkbox'
+				>
+				<label
+					class='clickable'
+					for='showFullResponseID'
+				>Show full response</label>
 			</MenuItem>
 		</PanelMenu>
 
@@ -354,9 +383,11 @@
 		<div class='json'>
 			{#if responsePromise}
 				{#await responsePromise}
-					waiting for response...
+					Waiting for response...
 				{:then response}
-					<JSONValue value={showFullResponse ? response : response && response.aggregations} />
+					<JSONValue
+						value={showFullResponse ? response : response && response.aggregations}
+					/>
 				{:catch error}
 					<JSONValue value={error.jsonMessage} />
 				{/await}
