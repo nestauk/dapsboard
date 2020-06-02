@@ -406,17 +406,25 @@
 			"axes agreggations types datasets fields response";
 		grid-template-columns: fit-content(100%) fit-content(100%) fit-content(100%) fit-content(100%) fit-content(100%)  1fr;
 		grid-template-rows: 0.5fr 0.5fr;
-		grid-gap: 1em;
-		background: #DDD;
-		padding: 1em;
 	}
 	.axes {grid-area: axes;}
 	.agreggations {grid-area: agreggations;}
 	.types {grid-area: types;}
 	.datasets {grid-area: datasets;}
 	.fields {grid-area: fields;}
-	.request {grid-area: request;}
+	.request {
+		border-bottom: 1px solid var(--color-main-lighter);
+		grid-area: request;
+	}
 	.response {grid-area: response;}
+
+	.axes,
+	.agreggations,
+	.types,
+	.datasets,
+	.fields {
+		border-right: 1px solid var(--color-main-lighter);
+	}
 
 	.axes,
 	.agreggations,
@@ -426,16 +434,14 @@
 	.request,
 	.response {
 		display: grid;
-		background: white;
 		grid-template-areas: "header" "select";
 		grid-template-rows: min-content auto min-content;
 		overflow: hidden;
 		box-sizing: border-box;
 		height: 100%;
-		box-shadow: .2em .2em .4em #8888;
 		padding: 1em;
 		position: relative;
-		min-width: 7em;
+		min-width: 12em;
 	}
 
 	header {
@@ -458,4 +464,9 @@
 		grid-template-columns: 1fr min-content;
 		grid-column-gap: 1em;
 	}
+
+	button {
+		padding: 0.4em;
+	}
+
 </style>
