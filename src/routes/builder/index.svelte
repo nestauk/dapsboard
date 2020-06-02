@@ -18,24 +18,23 @@
 		capitalize
 	} from 'app/utils';
 
-	const crossIndex = {
-		aggregations: {},
-		types: {},
-		fields: {},
-		datasets: {}
-	};
+	const aggregations = {};
+	const datasets = {};
+	const fields = {};
+	const types = {};
 
 	const fieldNamesSet = new Set();
 	const typeNamesSet = new Set();
-	for (let i in DATASETS) {
-		const dataset = DATASETS[i];
+
+	for (let index in DATASETS) {
+		const dataset = DATASETS[index];
 		const newDataset = {
 			aggregations: new Set(),
 			types: new Set(),
 			fields: new Set(),
-			index: i
+			index
 		};
-		crossIndex.datasets[dataset.id] = newDataset;
+		datasets[dataset.id] = newDataset;
 
 		const schema = getSchema(dataset);
 		for (let fieldName in schema) {
@@ -57,11 +56,11 @@
 
 	const typeNames = Array.from(typeNamesSet).sort();
 	for (let type of typeNames) {
-		crossIndex.types[type] = {
+		types[type] = {
 			aggregations: new Set(aggregationsPerType[type]),
 			datasets: new Set(
-				Object.keys(crossIndex.datasets)
-					.filter(dsName => crossIndex.datasets[dsName].types.has(type))
+				Object.keys(datasets)
+					.filter(dsName => datasets[dsName].types.has(type))
 					.map(dsName => dsName)
 			),
 			fields: new Set()
@@ -70,66 +69,66 @@
 
 	const fieldNames = Array.from(fieldNamesSet).sort();
 	for (let f of fieldNames) {
-		const datasets = new Set(
-			Object.keys(crossIndex.datasets)
-				.filter(dsName => crossIndex.datasets[dsName].fields.has(f))
+		const _datasets = new Set(
+			Object.keys(datasets)
+				.filter(dsName => datasets[dsName].fields.has(f))
 				.map(dsName => dsName)
 		)
-		const types = new Set(
-			Object.keys(crossIndex.datasets)
-				.filter(dsName => crossIndex.datasets[dsName].fields.has(f))
-				.map(dsName => determineESType(getSchema(DATASETS[crossIndex.datasets[dsName].index])[f]))
+		const _types = new Set(
+			Object.keys(datasets)
+				.filter(dsName => datasets[dsName].fields.has(f))
+				.map(dsName => determineESType(getSchema(DATASETS[datasets[dsName].index])[f]))
 		);
-		const aggregations = new Set();
-		for (let t of types) {
+		const _aggregations = new Set();
+		for (let t of _types) {
 			const aggs = aggregationsPerType[t];
 			if (aggs) {
-				aggs.forEach(agg => aggregations.add(agg));
+				aggs.forEach(agg => _aggregations.add(agg));
 			}
-			crossIndex.types[t].fields.add(f);
+			types[t].fields.add(f);
 		}
-		crossIndex.fields[f] = {
-			datasets,
-			types,
-			aggregations
+		fields[f] = {
+			datasets: _datasets,
+			types: _types,
+			aggregations: _aggregations
 		};
 	}
 
 	for (let agg of Object.keys(metricDescriptionsEN)) {
-		crossIndex.aggregations[agg] = {
+		aggregations[agg] = {
 			types: new Set(
-				Object.keys(crossIndex.types)
-					.filter(typeName => crossIndex.types[typeName].aggregations.has(agg))
+				Object.keys(types)
+					.filter(typeName => types[typeName].aggregations.has(agg))
 					.map(typeName => typeName)
 			),
 			datasets: new Set(
-				Object.keys(crossIndex.datasets)
-					.filter(dsName => crossIndex.datasets[dsName].aggregations.has(agg))
+				Object.keys(datasets)
+					.filter(dsName => datasets[dsName].aggregations.has(agg))
 					.map(dsName => dsName)
 			),
 			fields: new Set(
-				Object.keys(crossIndex.fields)
-					.filter(fieldName => crossIndex.fields[fieldName].aggregations.has(agg))
+				Object.keys(fields)
+					.filter(fieldName => fields[fieldName].aggregations.has(agg))
 					.map(fieldName => fieldName)
 			)
 		}
 	}
 
 	for (let agg of Object.keys(bucketDescriptionsEN)) {
-		crossIndex.aggregations[agg] = {
+		aggregations[agg] = {
 			types: new Set(
-				Object.keys(crossIndex.types)
-					.filter(typeName => crossIndex.types[typeName].aggregations.has(agg))
+				Object.keys(types)
+					.filter(typeName => types[typeName].aggregations.has(agg))
 					.map(typeName => typeName)
 			),
 			datasets: new Set(
-				Object.keys(crossIndex.datasets)
-					.filter(dsName => crossIndex.datasets[dsName].aggregations.has(agg))
+				Object.keys(datasets)
+					.filter(dsName => datasets[dsName].aggregations.has(agg))
 					.map(dsName => dsName)
 			),
 			fields: new Set(
-				Object.keys(crossIndex.fields)
-					.filter(fieldName => crossIndex.fields[fieldName].aggregations.has(agg))
+				Object.keys(fields)
+					.filter(fieldName => fields[fieldName].aggregations.has(agg))
 					.map(fieldName => fieldName)
 			)
 		}
@@ -147,11 +146,13 @@
 	const AXIS_NAMES = ['primary', 'secondary', 'tertiary', 'quaternary', 'quinary', 'senary', 'septenary', 'octonary', 'nonary', 'denary'];
 	let queryConfig = {
 		dataset: undefined,
-		axes: _.fromPairs(AXIS_NAMES.map(q => [q, {
-			aggregation: undefined,
-			type: undefined,
-			field: undefined
-		}]))
+		axes: _.fromPairs(AXIS_NAMES.map(name =>
+			[name, {
+				aggregation: undefined,
+				type: undefined,
+				field: undefined
+			}]
+		))
 	};
 
 	let queryTemplate = {};
@@ -196,43 +197,43 @@
 			text: bucketDescriptionsEN[k],
 			value: k,
 			disabled:
-				(selectedAxisConfig.type === undefined ? false : !crossIndex.types[selectedAxisConfig.type].aggregations.has(k))
-				|| (config.dataset === undefined ? false : !crossIndex.datasets[DATASETS[config.dataset].id].aggregations.has(k))
-				|| (selectedAxisConfig.field === undefined ? false : !crossIndex.fields[selectedAxisConfig.field].aggregations.has(k))
+				(selectedAxisConfig.type === undefined ? false : !types[selectedAxisConfig.type].aggregations.has(k))
+				|| (config.dataset === undefined ? false : !datasets[DATASETS[config.dataset].id].aggregations.has(k))
+				|| (selectedAxisConfig.field === undefined ? false : !fields[selectedAxisConfig.field].aggregations.has(k))
 		}));
 		aggregatorOptions = Object.keys(metricDescriptionsEN).map(k => ({
 			text: metricDescriptionsEN[k],
 			value: k,
 			disabled:
-				(selectedAxisConfig.type === undefined ? false : !crossIndex.types[selectedAxisConfig.type].aggregations.has(k))
-				|| (config.dataset === undefined ? false : !crossIndex.datasets[DATASETS[config.dataset].id].aggregations.has(k))
-				|| (selectedAxisConfig.field === undefined ? false : !crossIndex.fields[selectedAxisConfig.field].aggregations.has(k))
+				(selectedAxisConfig.type === undefined ? false : !types[selectedAxisConfig.type].aggregations.has(k))
+				|| (config.dataset === undefined ? false : !datasets[DATASETS[config.dataset].id].aggregations.has(k))
+				|| (selectedAxisConfig.field === undefined ? false : !fields[selectedAxisConfig.field].aggregations.has(k))
 		}));
-		typeOptions = Object.keys(crossIndex.types).map(k => ({
+		typeOptions = Object.keys(types).map(k => ({
 			text: k,
 			value: k,
 			disabled: false,
 			effaced:
-				(selectedAxisConfig.aggregation === undefined ? false : !crossIndex.aggregations[selectedAxisConfig.aggregation].types.has(k))
-				|| (config.dataset === undefined ? false : !crossIndex.datasets[DATASETS[config.dataset].id].types.has(k))
-				|| (selectedAxisConfig.field === undefined ? false : !crossIndex.fields[selectedAxisConfig.field].types.has(k))
+				(selectedAxisConfig.aggregation === undefined ? false : !aggregations[selectedAxisConfig.aggregation].types.has(k))
+				|| (config.dataset === undefined ? false : !datasets[DATASETS[config.dataset].id].types.has(k))
+				|| (selectedAxisConfig.field === undefined ? false : !fields[selectedAxisConfig.field].types.has(k))
 		}));
 		datasetOptions = DATASETS.map((k, i) => ({
 			text: k.id,
 			value: i,
 			disabled:
-				(selectedAxisConfig.type === undefined ? false : !crossIndex.types[selectedAxisConfig.type].datasets.has(k.id))
-				|| (selectedAxisConfig.field === undefined ? false : !crossIndex.fields[selectedAxisConfig.field].datasets.has(k.id))
-				|| (selectedAxisConfig.aggregation === undefined ? false : !crossIndex.aggregations[selectedAxisConfig.aggregation].datasets.has(k.id))
+				(selectedAxisConfig.type === undefined ? false : !types[selectedAxisConfig.type].datasets.has(k.id))
+				|| (selectedAxisConfig.field === undefined ? false : !fields[selectedAxisConfig.field].datasets.has(k.id))
+				|| (selectedAxisConfig.aggregation === undefined ? false : !aggregations[selectedAxisConfig.aggregation].datasets.has(k.id))
 		}));
 		fieldOptions = fieldNames.map(f => ({
 			text: f,
 			value: f,
 			disabled:
 				!config.dataset
-				|| (selectedAxisConfig.type === undefined ? false : !crossIndex.types[selectedAxisConfig.type].fields.has(f))
-				|| (config.dataset === undefined ? false : !crossIndex.datasets[DATASETS[config.dataset].id].fields.has(f))
-				|| (selectedAxisConfig.aggregation === undefined ? false : !crossIndex.aggregations[selectedAxisConfig.aggregation].fields.has(f))
+				|| (selectedAxisConfig.type === undefined ? false : !types[selectedAxisConfig.type].fields.has(f))
+				|| (config.dataset === undefined ? false : !datasets[DATASETS[config.dataset].id].fields.has(f))
+				|| (selectedAxisConfig.aggregation === undefined ? false : !aggregations[selectedAxisConfig.aggregation].fields.has(f))
 		}));
 
 		readyForRequest = false;
