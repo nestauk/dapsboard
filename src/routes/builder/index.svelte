@@ -3,7 +3,7 @@
 
 	import DATASETS from 'app/data/datasets.json';
 	import {
-		descriptionsEN,
+		metricDescriptionsEN,
 		bucketDescriptionsEN,
 		aggregationsPerType,
 		determineESType,
@@ -93,7 +93,7 @@
 		};
 	}
 
-	for (let agg of Object.keys(descriptionsEN)) {
+	for (let agg of Object.keys(metricDescriptionsEN)) {
 		crossIndex.aggregations[agg] = {
 			types: new Set(
 				Object.keys(crossIndex.types)
@@ -198,8 +198,8 @@
 				|| (config.dataset === undefined ? false : !crossIndex.datasets[DATASETS[config.dataset].id].aggregations.has(k))
 				|| (selectedAxisConfig.field === undefined ? false : !crossIndex.fields[selectedAxisConfig.field].aggregations.has(k))
 		}));
-		aggregatorOptions = Object.keys(descriptionsEN).map(k => ({
-			text: descriptionsEN[k],
+		aggregatorOptions = Object.keys(metricDescriptionsEN).map(k => ({
+			text: metricDescriptionsEN[k],
 			value: k,
 			disabled:
 				(selectedAxisConfig.type === undefined ? false : !crossIndex.types[selectedAxisConfig.type].aggregations.has(k))
