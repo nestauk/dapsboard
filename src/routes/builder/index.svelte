@@ -142,6 +142,7 @@
 	import SelectMenu from 'app/components/SelectMenu.svelte';
 	import PanelMenu from 'app/components/elementary/PanelMenu.svelte';
 	import MenuItem from 'app/components/elementary/MenuItem.svelte';
+	import IconDelete from 'app/components/icons/IconDelete.svelte';
 
 	const AXIS_NAMES = ['primary', 'secondary', 'tertiary', 'quaternary', 'quinary', 'senary', 'septenary', 'octonary', 'nonary', 'denary'];
 	let queryConfig = {
@@ -181,6 +182,14 @@
 	let hideDisabledFields = true;
 
 	let showFullResponse = false;
+
+	function resetAxis (axis) {
+		queryConfig.axes[axis] = {
+			aggregation: undefined,
+			type: undefined,
+			field: undefined
+		};
+	}
 
 	function computeLists (config) {
 		bucketOptions = Object.keys(bucketDescriptionsEN).map(k => ({
@@ -282,7 +291,14 @@
 	<section class='axes'>
 		<SelectMenu bind:hideDisabled={hideDisabledAxes} />
 		<header>Axes</header>
-		<Select options={axisOptions} bind:selectedOption={selectedAxis} unselectable={false} hideDisabled={hideDisabledAxes} />
+		<Select options={axisOptions} bind:selectedOption={selectedAxis} unselectable={false} hideDisabled={hideDisabledAxes} let:option={option}>
+			<div class='axis-item'>
+				<div>{option.text}</div>
+				<div on:click={resetAxis(option.value)}>
+					<IconDelete size={14} />
+				</div>
+			</div>
+		</Select>
 	</section>
 
 	<section class='agreggations'>
@@ -382,6 +398,7 @@
 		box-shadow: .2em .2em .4em #8888;
 		padding: 1em;
 		position: relative;
+		min-width: 7em;
 	}
 
 	header {
@@ -397,5 +414,11 @@
 		grid-area: select;
 		overflow: auto;
 		height: 100%;
+	}
+
+	.axis-item {
+		display: grid;
+		grid-template-columns: 1fr min-content;
+		grid-column-gap: 1em;
 	}
 </style>
