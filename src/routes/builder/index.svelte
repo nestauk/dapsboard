@@ -6,6 +6,8 @@
 		metricDescriptionsEN,
 		bucketDescriptionsEN,
 		aggregationsPerType,
+	} from 'app/elasticsearch/config';
+	import {
 		determineESType,
 		buildAggregation
 	} from 'app/elasticsearch';
