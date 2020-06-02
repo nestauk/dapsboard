@@ -254,6 +254,13 @@
 			}
 		}
 
+		if (typeOptions.some(i => i.effaced && i.value === selectedAxisConfig.type)) {
+			queryTemplate = {
+				size: 0
+			}
+		}
+
+
 		axisOptions.forEach((o,i) => {
 			o.disabled = i >= activeAxes
 		});
