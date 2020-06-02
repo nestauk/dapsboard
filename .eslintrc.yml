@@ -17,9 +17,11 @@ overrides:
       - '**/*.svelte'
     processor: svelte3/svelte3
     rules:
+      brace-style: off
       no-invalid-this: off
       no-new: off
-      brace-style: off
+      import/no-unresolved: off # svelte components not found
+      node/no-missing-import: off # svelte components not found
 plugins:
   - svelte3
 parserOptions:

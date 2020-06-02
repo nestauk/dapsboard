@@ -291,7 +291,13 @@
 	<section class='axes'>
 		<SelectMenu bind:hideDisabled={hideDisabledAxes} />
 		<header>Axes</header>
-		<Select options={axisOptions} bind:selectedOption={selectedAxis} unselectable={false} hideDisabled={hideDisabledAxes} let:option={option}>
+		<Select
+			bind:selectedOption={selectedAxis}
+			hideDisabled={hideDisabledAxes}
+			let:option={option}
+			options={axisOptions}
+			unselectable={false}
+		>
 			<div class='axis-item'>
 				<div>{option.text}</div>
 				<div on:click={resetAxis(option.value)}>
