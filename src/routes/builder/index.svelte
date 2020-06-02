@@ -3,12 +3,12 @@
 
 	import DATASETS from 'app/data/datasets.json';
 	import {
-		metricDescriptionsEN,
-		bucketDescriptionsEN,
-		aggregationsPerType,
+		metricLabels,
+		bucketLabels,
+		aggsByType,
 	} from 'app/elasticsearch/config';
 	import {
-		determineESType,
+		getESType,
 		buildAggregation
 	} from 'app/elasticsearch';
 	import { request } from 'app/net';
@@ -41,11 +41,11 @@
 			fieldNamesSet.add(field);
 			newDataset.fields.add(field);
 
-			const esType = determineESType(schema[field]);
+			const esType = getESType(schema[field]);
 			typeNamesSet.add(esType)
 			newDataset.types.add(esType);
 
-			const aggs = aggregationsPerType[esType]
+			const aggs = aggsByType[esType]
 			if (aggs) {
 				aggs.forEach(agg => {
 					newDataset.aggregations.add(agg);
@@ -57,7 +57,7 @@
 	const typeNames = Array.from(typeNamesSet).sort();
 	for (let esType of typeNames) {
 		types[esType] = {
-			aggregations: new Set(aggregationsPerType[esType]),
+			aggregations: new Set(aggsByType[esType]),
 			datasets: new Set(
 				Object.keys(datasets)
 					.filter(dsName => datasets[dsName].types.has(esType))
@@ -75,11 +75,11 @@
 		const _types = new Set(
 			Object.keys(datasets)
 				.filter(dsName => datasets[dsName].fields.has(field))
-				.map(dsName => determineESType(getSchema(DATASETS[datasets[dsName].index])[field]))
+				.map(dsName => getESType(getSchema(DATASETS[datasets[dsName].index])[field]))
 		);
 		const _aggregations = new Set();
 		for (let esType of _types) {
-			const aggs = aggregationsPerType[esType];
+			const aggs = aggsByType[esType];
 			if (aggs) {
 				aggs.forEach(agg => _aggregations.add(agg));
 			}
@@ -92,7 +92,7 @@
 		};
 	}
 
-	for (let agg of Object.keys(metricDescriptionsEN)) {
+	for (let agg of Object.keys(metricLabels)) {
 		aggregations[agg] = {
 			types: new Set(
 				Object.keys(types)
@@ -109,7 +109,7 @@
 		}
 	}
 
-	for (let agg of Object.keys(bucketDescriptionsEN)) {
+	for (let agg of Object.keys(bucketLabels)) {
 		aggregations[agg] = {
 			types: new Set(
 				Object.keys(types)
@@ -185,16 +185,16 @@
 	}
 
 	function computeLists (config) {
-		bucketOptions = Object.keys(bucketDescriptionsEN).map(agg => ({
-			text: bucketDescriptionsEN[agg],
+		bucketOptions = Object.keys(bucketLabels).map(agg => ({
+			text: bucketLabels[agg],
 			value: agg,
 			disabled:
 				(selectedAxisConfig.type === undefined ? false : !types[selectedAxisConfig.type].aggregations.has(agg))
 				|| (config.dataset === undefined ? false : !datasets[DATASETS[config.dataset].id].aggregations.has(agg))
 				|| (selectedAxisConfig.field === undefined ? false : !fields[selectedAxisConfig.field].aggregations.has(agg))
 		}));
-		aggregatorOptions = Object.keys(metricDescriptionsEN).map(agg => ({
-			text: metricDescriptionsEN[agg],
+		aggregatorOptions = Object.keys(metricLabels).map(agg => ({
+			text: metricLabels[agg],
 			value: agg,
 			disabled:
 				(selectedAxisConfig.type === undefined ? false : !types[selectedAxisConfig.type].aggregations.has(agg))
