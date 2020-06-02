@@ -61,7 +61,6 @@
 			datasets: new Set(
 				Object.keys(datasets)
 					.filter(dsName => datasets[dsName].types.has(type))
-					.map(dsName => dsName)
 			),
 			fields: new Set()
 		}
@@ -72,7 +71,6 @@
 		const _datasets = new Set(
 			Object.keys(datasets)
 				.filter(dsName => datasets[dsName].fields.has(f))
-				.map(dsName => dsName)
 		)
 		const _types = new Set(
 			Object.keys(datasets)
@@ -99,17 +97,14 @@
 			types: new Set(
 				Object.keys(types)
 					.filter(typeName => types[typeName].aggregations.has(agg))
-					.map(typeName => typeName)
 			),
 			datasets: new Set(
 				Object.keys(datasets)
 					.filter(dsName => datasets[dsName].aggregations.has(agg))
-					.map(dsName => dsName)
 			),
 			fields: new Set(
 				Object.keys(fields)
 					.filter(fieldName => fields[fieldName].aggregations.has(agg))
-					.map(fieldName => fieldName)
 			)
 		}
 	}
@@ -119,17 +114,14 @@
 			types: new Set(
 				Object.keys(types)
 					.filter(typeName => types[typeName].aggregations.has(agg))
-					.map(typeName => typeName)
 			),
 			datasets: new Set(
 				Object.keys(datasets)
 					.filter(dsName => datasets[dsName].aggregations.has(agg))
-					.map(dsName => dsName)
 			),
 			fields: new Set(
 				Object.keys(fields)
 					.filter(fieldName => fields[fieldName].aggregations.has(agg))
-					.map(fieldName => fieldName)
 			)
 		}
 	}
