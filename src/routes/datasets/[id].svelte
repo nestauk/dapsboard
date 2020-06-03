@@ -12,9 +12,8 @@
 </script>
 
 <script>
-	import SchemaExplorer from 'app/components/SchemaExplorer.svelte';
-	import QueryExplorer from 'app/components/QueryExplorer.svelte';
-	import ResultExplorer from 'app/components/ResultExplorer.svelte';
+	import JSONTree from 'svelte-json-tree';
+
 	import {
 		constructQuery
 	} from 'app/elasticsearch';
@@ -47,12 +46,12 @@
 
 	<section class='schema'>
 		<header>Info</header>
-		<SchemaExplorer schema={dataset} />
+		<JSONTree value={dataset} />
 	</section>
 
 	<section class='query'>
 		<header>Query</header>
-		<QueryExplorer {schema} {query} />
+		<JSONTree value={query} />
 	</section>
 
 	<section class='results'>
@@ -60,7 +59,7 @@
 		{#await responsePromise}
 			Loading...
 		{:then response}
-			<ResultExplorer {schema} {query} {response} />
+			<JSONTree value={response} />
 		{:catch error}
 			<p style="color: red">{error.message}</p>
 		{/await}
