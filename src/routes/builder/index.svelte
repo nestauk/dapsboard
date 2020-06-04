@@ -189,48 +189,43 @@
 		};
 	}
 
+	function isMissing (dicts, set, value) {
+		return dicts.some(dict => !!dict && !dict[set].has(value))
+	}
+
 	function computeLists (config) {
+		const typeDicts = types[selectedAxisConfig.type];
+		const fieldDicts = fields[selectedAxisConfig.field];
+		const datasetDicts = config.dataset && datasets[DATASETS[config.dataset].id];
+		const aggDicts = aggregations[selectedAxisConfig.aggregation];
+
 		bucketOptions = Object.keys(bucketLabels).map(agg => ({
 			text: bucketLabels[agg],
 			value: agg,
-			disabled:
-				(selectedAxisConfig.type === undefined ? false : !types[selectedAxisConfig.type].aggregations.has(agg))
-				|| (config.dataset === undefined ? false : !datasets[DATASETS[config.dataset].id].aggregations.has(agg))
-				|| (selectedAxisConfig.field === undefined ? false : !fields[selectedAxisConfig.field].aggregations.has(agg))
+			disabled: isMissing([typeDicts, datasetDicts, fieldDicts], 'aggregations', agg)
 		}));
 		aggregatorOptions = Object.keys(metricLabels).map(agg => ({
 			text: metricLabels[agg],
 			value: agg,
-			disabled:
-				(selectedAxisConfig.type === undefined ? false : !types[selectedAxisConfig.type].aggregations.has(agg))
-				|| (config.dataset === undefined ? false : !datasets[DATASETS[config.dataset].id].aggregations.has(agg))
-				|| (selectedAxisConfig.field === undefined ? false : !fields[selectedAxisConfig.field].aggregations.has(agg))
+			disabled: isMissing([typeDicts, datasetDicts, fieldDicts], 'aggregations', agg)
 		}));
 		typeOptions = Object.keys(types).map(type => ({
 			text: type,
 			value: type,
 			disabled: false,
-			effaced:
-				(selectedAxisConfig.aggregation === undefined ? false : !aggregations[selectedAxisConfig.aggregation].types.has(type))
-				|| (config.dataset === undefined ? false : !datasets[DATASETS[config.dataset].id].types.has(type))
-				|| (selectedAxisConfig.field === undefined ? false : !fields[selectedAxisConfig.field].types.has(type))
+			effaced: isMissing([aggDicts, datasetDicts, fieldDicts], 'types', type)
 		}));
 		datasetOptions = DATASETS.map((dataset, index) => ({
 			text: dataset.id,
 			value: index,
-			disabled:
-				(selectedAxisConfig.type === undefined ? false : !types[selectedAxisConfig.type].datasets.has(dataset.id))
-				|| (selectedAxisConfig.field === undefined ? false : !fields[selectedAxisConfig.field].datasets.has(dataset.id))
-				|| (selectedAxisConfig.aggregation === undefined ? false : !aggregations[selectedAxisConfig.aggregation].datasets.has(dataset.id))
+			disabled: isMissing([typeDicts, fieldDicts, aggDicts], 'datasets', dataset.id)
 		}));
 		fieldOptions = fieldNames.map(field => ({
 			text: field,
 			value: field,
 			disabled:
 				!config.dataset
-				|| (selectedAxisConfig.type === undefined ? false : !types[selectedAxisConfig.type].fields.has(field))
-				|| (config.dataset === undefined ? false : !datasets[DATASETS[config.dataset].id].fields.has(field))
-				|| (selectedAxisConfig.aggregation === undefined ? false : !aggregations[selectedAxisConfig.aggregation].fields.has(field))
+				|| isMissing([typeDicts, datasetDicts, aggDicts], 'fields', field)
 		}));
 
 		readyForRequest = false;
