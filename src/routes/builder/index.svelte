@@ -18,6 +18,11 @@
 		capitalize
 	} from 'app/utils';
 
+	// The data computed below only changes once after `npm run makedata`,
+	// But it's recomputed on every page load.
+	// TODO This code could actually be run once on deploy and cached in `app/src/data`.
+	// And then it could also be moved to another file, clearing this one a bit.
+
 	const aggregations = {};
 	const datasets = {};
 	const fields = {};
