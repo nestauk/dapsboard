@@ -180,6 +180,7 @@
 	let hideDisabledFields = true;
 
 	let showFullResponse = false;
+	let runQueryOnSelect = true;
 
 	function resetAxis (axis) {
 		queryConfig.axes[axis] = {
@@ -274,27 +275,30 @@
 
 	const cache = {};
 	function doQuery () {
-		const endpoint = getEndpointURL(DATASETS[queryConfig.dataset]);
-		const url = `${endpoint}/_search`;
-		// TODO cache manage here
-		// perhaps store results with URL + request body JSON as string key
-		const cacheKey = `${url}/${JSON.stringify(parsedQuery)}`;
-		console.log(cacheKey);
-		console.log(cacheKey in cache && cache[cacheKey]);
+		if (readyForRequest ) {
+			const endpoint = getEndpointURL(DATASETS[queryConfig.dataset]);
+			const url = `${endpoint}/_search`;
+			// TODO cache manage here
+			// perhaps store results with URL + request body JSON as string key
+			const cacheKey = `${url}/${JSON.stringify(parsedQuery)}`;
+			console.log(cacheKey);
+			console.log(cacheKey in cache && cache[cacheKey]);
 
-		if (cacheKey in cache) {
-			responsePromise = Promise.resolve(cache[cacheKey]);
-		}
-		else {
-			responsePromise = request(fetch, 'POST', url, {data: parsedQuery});
-			responsePromise.then( (json) => {
-				cache[cacheKey] = json;
-			})
+			if (cacheKey in cache) {
+				responsePromise = Promise.resolve(cache[cacheKey]);
+			}
+			else {
+				responsePromise = request(fetch, 'POST', url, {data: parsedQuery});
+				responsePromise.then( (json) => {
+					cache[cacheKey] = json;
+				})
+			}
 		}
 	}
 
 	$: selectedAxisConfig = queryConfig.axes[selectedAxis];
 	$: computeLists(queryConfig);
+	$: parsedQuery && runQueryOnSelect && doQuery(true);
 </script>
 
 <section class="query-builder">
@@ -365,6 +369,20 @@
 	</section>
 
 	<section class='request'>
+			<PanelMenu>
+			<MenuItem>
+				<input
+					bind:checked={runQueryOnSelect}
+					id='runQueryOnSelectID'
+					type='checkbox'
+				>
+				<label
+					class='clickable'
+					for='runQueryOnSelectID'
+				>Run query on select</label>
+			</MenuItem>
+		</PanelMenu>
+
 		<header class='bold'>Request</header>
 		<div class='json'>
 			<JSONValue
