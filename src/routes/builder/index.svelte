@@ -272,10 +272,25 @@
 		responsePromise = Promise.resolve(undefined);
 	}
 
+	const cache = {};
 	function doQuery () {
 		const endpoint = getEndpointURL(DATASETS[queryConfig.dataset]);
 		const url = `${endpoint}/_search`;
-		responsePromise = request(fetch, 'POST', url, {data: parsedQuery});
+		// TODO cache manage here
+		// perhaps store results with URL + request body JSON as string key
+		const cacheKey = `${url}/${JSON.stringify(parsedQuery)}`;
+		console.log(cacheKey);
+		console.log(cacheKey in cache && cache[cacheKey]);
+
+		if (cacheKey in cache) {
+			responsePromise = Promise.resolve(cache[cacheKey]);
+		}
+		else {
+			responsePromise = request(fetch, 'POST', url, {data: parsedQuery});
+			responsePromise.then( (json) => {
+				cache[cacheKey] = json;
+			})
+		}
 	}
 
 	$: selectedAxisConfig = queryConfig.axes[selectedAxis];
