@@ -175,6 +175,7 @@
 	let hideDisabledFields = true;
 
 	let showFullResponse = false;
+	let runQueryOnSelect = true;
 
 	function resetAxis (axis) {
 		queryConfig.axes[axis] = {
@@ -184,54 +185,54 @@
 		};
 	}
 
+	function cleanRequestBody () {
+		readyForRequest = false;
+		queryTemplate = {
+			size: 0
+		}
+	}
+
+	function isMissing (objects, key, value) {
+		return objects.some(obj => Boolean(obj) && !obj[key].has(value))
+	}
+
 	function computeLists (config) {
+		const typeDicts = types[selectedAxisConfig.type];
+		const fieldDicts = fields[selectedAxisConfig.field];
+		const datasetDicts = config.dataset && datasets[DATASETS[config.dataset].id];
+		const aggDicts = aggregations[selectedAxisConfig.aggregation];
+
 		bucketOptions = Object.keys(bucketLabels).map(agg => ({
 			text: bucketLabels[agg],
 			value: agg,
-			disabled:
-				(selectedAxisConfig.type === undefined ? false : !types[selectedAxisConfig.type].aggregations.has(agg))
-				|| (config.dataset === undefined ? false : !datasets[DATASETS[config.dataset].id].aggregations.has(agg))
-				|| (selectedAxisConfig.field === undefined ? false : !fields[selectedAxisConfig.field].aggregations.has(agg))
+			disabled: isMissing([typeDicts, datasetDicts, fieldDicts], 'aggregations', agg)
 		}));
 		aggregatorOptions = Object.keys(metricLabels).map(agg => ({
 			text: metricLabels[agg],
 			value: agg,
-			disabled:
-				(selectedAxisConfig.type === undefined ? false : !types[selectedAxisConfig.type].aggregations.has(agg))
-				|| (config.dataset === undefined ? false : !datasets[DATASETS[config.dataset].id].aggregations.has(agg))
-				|| (selectedAxisConfig.field === undefined ? false : !fields[selectedAxisConfig.field].aggregations.has(agg))
+			disabled: isMissing([typeDicts, datasetDicts, fieldDicts], 'aggregations', agg)
 		}));
 		typeOptions = Object.keys(types).map(type => ({
 			text: type,
 			value: type,
 			disabled: false,
-			effaced:
-				(selectedAxisConfig.aggregation === undefined ? false : !aggregations[selectedAxisConfig.aggregation].types.has(type))
-				|| (config.dataset === undefined ? false : !datasets[DATASETS[config.dataset].id].types.has(type))
-				|| (selectedAxisConfig.field === undefined ? false : !fields[selectedAxisConfig.field].types.has(type))
+			effaced: isMissing([aggDicts, datasetDicts, fieldDicts], 'types', type)
 		}));
 		datasetOptions = DATASETS.map((dataset, index) => ({
 			text: dataset.id,
 			value: index,
-			disabled:
-				(selectedAxisConfig.type === undefined ? false : !types[selectedAxisConfig.type].datasets.has(dataset.id))
-				|| (selectedAxisConfig.field === undefined ? false : !fields[selectedAxisConfig.field].datasets.has(dataset.id))
-				|| (selectedAxisConfig.aggregation === undefined ? false : !aggregations[selectedAxisConfig.aggregation].datasets.has(dataset.id))
+			disabled: isMissing([typeDicts, fieldDicts, aggDicts], 'datasets', dataset.id)
 		}));
 		fieldOptions = fieldNames.map(field => ({
 			text: field,
 			value: field,
 			disabled:
 				!config.dataset
-				|| (selectedAxisConfig.type === undefined ? false : !types[selectedAxisConfig.type].fields.has(field))
-				|| (config.dataset === undefined ? false : !datasets[DATASETS[config.dataset].id].fields.has(field))
-				|| (selectedAxisConfig.aggregation === undefined ? false : !aggregations[selectedAxisConfig.aggregation].fields.has(field))
+				|| isMissing([typeDicts, datasetDicts, aggDicts], 'fields', field)
 		}));
 
-		readyForRequest = false;
-		queryTemplate = {
-			size: 0
-		}
+		cleanRequestBody();
+
 		let activeAxes = 0;
 		let currentTemplate = queryTemplate;
 		let active = true;
@@ -257,11 +258,8 @@
 		}
 
 		if (typeOptions.some(i => i.effaced && i.value === selectedAxisConfig.type)) {
-			queryTemplate = {
-				size: 0
-			}
+			cleanRequestBody();
 		}
-
 
 		axisOptions.forEach((o,i) => {
 			o.disabled = i >= activeAxes
@@ -270,14 +268,26 @@
 		responsePromise = Promise.resolve(undefined);
 	}
 
+	const cache = {};
 	function doQuery () {
-		const endpoint = getEndpointURL(DATASETS[queryConfig.dataset]);
-		const url = `${endpoint}/_search`;
-		responsePromise = request(fetch, 'POST', url, {data: parsedQuery});
+		if (readyForRequest) {
+			const endpoint = getEndpointURL(DATASETS[queryConfig.dataset]);
+			const url = `${endpoint}/_search`;
+			const cacheKey = `${url}/${JSON.stringify(parsedQuery)}`;
+			if (cacheKey in cache) {
+				responsePromise = Promise.resolve(cache[cacheKey]);
+			} else {
+				responsePromise = request(fetch, 'POST', url, {data: parsedQuery});
+				responsePromise.then(json => {
+					cache[cacheKey] = json;
+				})
+			}
+		}
 	}
 
 	$: selectedAxisConfig = queryConfig.axes[selectedAxis];
 	$: computeLists(queryConfig);
+	$: parsedQuery && runQueryOnSelect && doQuery(true);
 </script>
 
 <section class="query-builder">
@@ -348,6 +358,20 @@
 	</section>
 
 	<section class='request'>
+			<PanelMenu>
+			<MenuItem>
+				<input
+					bind:checked={runQueryOnSelect}
+					id='runQueryOnSelectID'
+					type='checkbox'
+				>
+				<label
+					class='clickable'
+					for='runQueryOnSelectID'
+				>Run query on select</label>
+			</MenuItem>
+		</PanelMenu>
+
 		<header class='bold'>Request</header>
 		<div class='json'>
 			<JSONValue
