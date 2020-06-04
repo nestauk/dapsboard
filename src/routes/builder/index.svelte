@@ -236,6 +236,7 @@
 		let activeAxes = 0;
 		let currentTemplate = queryTemplate;
 		let active = true;
+		readyForRequest = false;
 		while (active) {
 			active = false;
 			const currentName = AXIS_NAMES[activeAxes++];
@@ -244,8 +245,8 @@
 				if (activeAxes < AXIS_NAMES.length) {
 					active = true;
 				}
-				readyForRequest = true;
 				if (config.dataset) {
+					readyForRequest = true;
 					const fieldInfo = getSchema(DATASETS[config.dataset])[current.field];
 					currentTemplate.aggs = {
 						[currentName]: {
