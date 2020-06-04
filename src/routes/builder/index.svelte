@@ -189,6 +189,13 @@
 		};
 	}
 
+	function cleanRequestBody() {
+		readyForRequest = false;
+		queryTemplate = {
+			size: 0
+		}
+	}
+
 	function isMissing (dicts, set, value) {
 		return dicts.some(dict => !!dict && !dict[set].has(value))
 	}
@@ -228,10 +235,8 @@
 				|| isMissing([typeDicts, datasetDicts, aggDicts], 'fields', field)
 		}));
 
-		readyForRequest = false;
-		queryTemplate = {
-			size: 0
-		}
+		cleanRequestBody();
+
 		let activeAxes = 0;
 		let currentTemplate = queryTemplate;
 		let active = true;
@@ -257,11 +262,8 @@
 		}
 
 		if (typeOptions.some(i => i.effaced && i.value === selectedAxisConfig.type)) {
-			queryTemplate = {
-				size: 0
-			}
+			cleanRequestBody();
 		}
-
 
 		axisOptions.forEach((o,i) => {
 			o.disabled = i >= activeAxes
