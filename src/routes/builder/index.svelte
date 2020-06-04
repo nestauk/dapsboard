@@ -18,11 +18,6 @@
 		capitalize
 	} from 'app/utils';
 
-	// The data computed below only changes once after `npm run makedata`,
-	// But it's recomputed on every page load.
-	// TODO This code could actually be run once on deploy and cached in `app/src/data`.
-	// And then it could also be moved to another file, clearing this one a bit.
-
 	const aggregations = {};
 	const datasets = {};
 	const fields = {};
@@ -197,8 +192,8 @@
 		}
 	}
 
-	function isMissing (dicts, set, value) {
-		return dicts.some(dict => Boolean(dict) && !dict[set].has(value))
+	function isMissing (objects, key, value) {
+		return objects.some(obj => Boolean(obj) && !obj[key].has(value))
 	}
 
 	function computeLists (config) {
@@ -278,16 +273,10 @@
 		if (readyForRequest) {
 			const endpoint = getEndpointURL(DATASETS[queryConfig.dataset]);
 			const url = `${endpoint}/_search`;
-			// TODO cache manage here
-			// perhaps store results with URL + request body JSON as string key
 			const cacheKey = `${url}/${JSON.stringify(parsedQuery)}`;
-			console.log(cacheKey);
-			console.log(cacheKey in cache && cache[cacheKey]);
-
 			if (cacheKey in cache) {
 				responsePromise = Promise.resolve(cache[cacheKey]);
-			}
-			else {
+			} else {
 				responsePromise = request(fetch, 'POST', url, {data: parsedQuery});
 				responsePromise.then(json => {
 					cache[cacheKey] = json;
