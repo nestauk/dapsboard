@@ -190,7 +190,7 @@
 		};
 	}
 
-	function cleanRequestBody() {
+	function cleanRequestBody () {
 		readyForRequest = false;
 		queryTemplate = {
 			size: 0
@@ -198,7 +198,7 @@
 	}
 
 	function isMissing (dicts, set, value) {
-		return dicts.some(dict => !!dict && !dict[set].has(value))
+		return dicts.some(dict => Boolean(dict) && !dict[set].has(value))
 	}
 
 	function computeLists (config) {
@@ -275,7 +275,7 @@
 
 	const cache = {};
 	function doQuery () {
-		if (readyForRequest ) {
+		if (readyForRequest) {
 			const endpoint = getEndpointURL(DATASETS[queryConfig.dataset]);
 			const url = `${endpoint}/_search`;
 			// TODO cache manage here
@@ -289,7 +289,7 @@
 			}
 			else {
 				responsePromise = request(fetch, 'POST', url, {data: parsedQuery});
-				responsePromise.then( (json) => {
+				responsePromise.then(json => {
 					cache[cacheKey] = json;
 				})
 			}
