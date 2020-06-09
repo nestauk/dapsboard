@@ -287,7 +287,7 @@
 	}
 
 	$: selectedAxisConfig = queryConfig.axes[selectedAxis];
-	$: queryConfig.dataset === null && (selectedAxisConfig.field = null);
+	$: !queryConfig.dataset && (selectedAxisConfig.field = null);
 	$: computeLists(queryConfig);
 	$: parsedQuery && runQueryOnSelect && doQuery(true);
 </script>
