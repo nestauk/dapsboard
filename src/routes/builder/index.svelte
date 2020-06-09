@@ -381,7 +381,9 @@
 				value={queryTemplate}
 			/>
 		</div>
-		<button disabled={!readyForRequest} on:click={doQuery}>Execute</button>
+		{#if !runQueryOnSelect}
+			<button disabled={!readyForRequest} on:click={doQuery}>Execute</button>
+		{/if}
 	</section>
 
 	<section class='response'>
