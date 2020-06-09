@@ -197,11 +197,6 @@
 	}
 
 	function computeLists (config) {
-		if (!config.dataset) {
-			// This works, but the following assignment probably invokes `computeLists`
-			// needlesly a second time.
-			selectedAxisConfig.field = null;
-		}
 		const typeDicts = types[selectedAxisConfig.type];
 		const fieldDicts = fields[selectedAxisConfig.field];
 		const datasetDicts = config.dataset && datasets[DATASETS[config.dataset].id];
@@ -292,6 +287,7 @@
 	}
 
 	$: selectedAxisConfig = queryConfig.axes[selectedAxis];
+	$: queryConfig.dataset === null && (selectedAxisConfig.field = null);
 	$: computeLists(queryConfig);
 	$: parsedQuery && runQueryOnSelect && doQuery(true);
 </script>
