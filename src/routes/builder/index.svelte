@@ -1,5 +1,6 @@
 <script context='module'>
 	import * as _ from 'lamb';
+	import {capitalise} from 'svizzle/utils/string-string';
 
 	import DATASETS from 'app/data/datasets.json';
 	import {
@@ -151,7 +152,7 @@
 	let parsedQuery = queryTemplate;
 
 	let axisOptions = AXIS_NAMES.map(name => ({
-		text: capitalize(name),
+		text: capitalise(name),
 		value: name,
 		disabled: true
 	}));
