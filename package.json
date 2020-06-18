@@ -57,9 +57,9 @@
     "dev": "sapper dev",
     "export": "export SAPPER_EXPORT=true && sapper export --legacy",
     "lint": "eslint rollup.config.js 'src/**/*.{js,svelte}'",
+    "makedata": "npm run mkdirdata && npm run mkdirdsl && npm run chmod && node -r esm ./src/bin/make_data.js",
     "mkdirdata": "mkdirp ./src/node_modules/app/data",
     "mkdirdsl": "mkdirp ./static/dsl",
-    "makedata": "npm run mkdirdata && npm run mkdirdsl && npm run chmod && node -r esm ./src/bin/make_data.js",
     "start": "node __sapper__/build",
     "test": "run-p --race dev cy:run",
     "unittest": "mocha -r esm --spec src/**/*.spec.js"
