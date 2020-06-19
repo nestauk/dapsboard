@@ -193,9 +193,7 @@
 		}
 	}
 
-	function isMissing (objects, key, value) {
-		return objects.some(obj => Boolean(obj) && !obj[key].has(value))
-	}
+	const isMissing = (key, value) => obj => Boolean(obj) && !obj[key].has(value);
 
 	function computeLists (config) {
 		const typeDicts = types[selectedAxisConfig.type];
@@ -206,30 +204,30 @@
 		bucketOptions = Object.keys(bucketLabels).map(agg => ({
 			text: bucketLabels[agg],
 			value: agg,
-			disabled: isMissing([typeDicts, datasetDicts, fieldDicts], 'aggregations', agg)
+			disabled: [typeDicts, datasetDicts, fieldDicts].some(isMissing('aggregations', agg))
 		}));
 		aggregatorOptions = Object.keys(metricLabels).map(agg => ({
 			text: metricLabels[agg],
 			value: agg,
-			disabled: isMissing([typeDicts, datasetDicts, fieldDicts], 'aggregations', agg)
+			disabled: [typeDicts, datasetDicts, fieldDicts].some(isMissing('aggregations', agg))
 		}));
 		typeOptions = Object.keys(types).map(type => ({
 			text: type,
 			value: type,
 			disabled: false,
-			effaced: isMissing([aggDicts, datasetDicts, fieldDicts], 'types', type)
+			effaced: [aggDicts, datasetDicts, fieldDicts].some(isMissing('types', type))
 		}));
 		datasetOptions = DATASETS.map((dataset, index) => ({
 			text: dataset.id,
 			value: index,
-			disabled: isMissing([typeDicts, fieldDicts, aggDicts], 'datasets', dataset.id)
+			disabled: [typeDicts, fieldDicts, aggDicts].some(isMissing('datasets', dataset.id))
 		}));
 		fieldOptions = fieldNames.map(field => ({
 			text: field,
 			value: field,
 			disabled:
 				!config.dataset
-				|| isMissing([typeDicts, datasetDicts, aggDicts], 'fields', field)
+				|| [typeDicts, datasetDicts, aggDicts].some(isMissing('fields', field))
 		}));
 
 		cleanRequestBody();
@@ -282,7 +280,7 @@
 				responsePromise = request(fetch, 'POST', url, {data: parsedQuery});
 				responsePromise.then(json => {
 					cache[cacheKey] = json;
-				})
+				});
 			}
 		}
 	}
