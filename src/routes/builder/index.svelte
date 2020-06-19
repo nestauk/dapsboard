@@ -279,10 +279,10 @@
 			const code = `
 				const selection: Aggs<${ds}, '${selectedAxisConfig.field}'> = ${JSON.stringify(selectedAxisConfig.output)};
 			`;
-			const modifiedCode = [code.slice(0, code.length-8), ',', code.slice(code.length-8)].join('');
-			console.log(modifiedCode);
-			const fullCode = await requestText(fetch, 'GET', 'dsl/datasets.ts') + modifiedCode;
-			const output = getCompletions(fullCode, fullCode.length-8);
+			//const modifiedCode = [code.slice(0, code.length-8), ',', code.slice(code.length-8)].join('');
+			console.log(code);
+			const fullCode = await requestText(fetch, 'GET', 'dsl/datasets.ts') + code;
+			const output = getCompletions(fullCode, fullCode.lastIndexOf('{') + 1);
 			console.log(output);
 		}
 	}
