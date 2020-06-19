@@ -245,6 +245,7 @@
 			active = false;
 			const currentName = AXIS_NAMES[activeAxes++];
 			const current = config.axes[currentName];
+			current.output = null;
 			if (Boolean(current.aggregation) && Boolean(current.field)) {
 				if (activeAxes < AXIS_NAMES.length) {
 					active = true;
@@ -258,7 +259,6 @@
 						}
 					};
 					currentTemplate.aggs = {...current.output};
-					
 					currentTemplate = currentTemplate.aggs[currentName];
 				}
 			}
