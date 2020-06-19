@@ -1,4 +1,5 @@
 <script context='module'>
+	import { getCompletions } from 'app/tsservices';
 	import * as _ from 'lamb';
 	import {capitalise} from 'svizzle/utils/string-string';
 
@@ -12,11 +13,11 @@
 		getESType,
 		buildAggregation
 	} from 'app/elasticsearch';
-	import { request } from 'app/net';
+	import { request, requestText } from 'app/net';
 	import {
 		getEndpointURL,
 		getSchema,
-		capitalize
+		IS_BROWSER
 	} from 'app/utils';
 
 	const aggregations = {};
@@ -141,9 +142,10 @@
 		dataset: undefined,
 		axes: _.fromPairs(AXIS_NAMES.map(name =>
 			[name, {
-				aggregation: undefined,
-				type: undefined,
-				field: undefined
+				aggregation: null,
+				type: null,
+				field: null,
+				output: null
 			}]
 		))
 	};
@@ -180,9 +182,10 @@
 
 	function resetAxis (axis) {
 		queryConfig.axes[axis] = {
-			aggregation: undefined,
-			type: undefined,
-			field: undefined
+			aggregation: null,
+			type: null,
+			field: null,
+			output: null
 		};
 	}
 
@@ -195,7 +198,9 @@
 
 	const isMissing = (key, value) => obj => Boolean(obj) && !obj[key].has(value);
 
-	function computeLists (config) {
+	let tsFiles;
+
+	async function computeLists (config) {
 		const typeDicts = types[selectedAxisConfig.type];
 		const fieldDicts = fields[selectedAxisConfig.field];
 		const datasetDicts = config.dataset && datasets[DATASETS[config.dataset].id];
@@ -240,18 +245,20 @@
 			active = false;
 			const currentName = AXIS_NAMES[activeAxes++];
 			const current = config.axes[currentName];
-			if (current.aggregation !== undefined && current.field !== undefined) {
+			if (Boolean(current.aggregation) && Boolean(current.field)) {
 				if (activeAxes < AXIS_NAMES.length) {
 					active = true;
 				}
 				if (config.dataset) {
 					readyForRequest = true;
 					const fieldInfo = getSchema(DATASETS[config.dataset])[current.field];
-					currentTemplate.aggs = {
+					current.output = {
 						[currentName]: {
 							[current.aggregation]: buildAggregation(current.aggregation, current.field, fieldInfo)
 						}
 					};
+					currentTemplate.aggs = {...current.output};
+					
 					currentTemplate = currentTemplate.aggs[currentName];
 				}
 			}
@@ -266,6 +273,18 @@
 		});
 		axisOptions = axisOptions;
 		responsePromise = Promise.resolve(undefined);
+
+		if (IS_BROWSER && window.ts && selectedAxisConfig.output) {
+			const ds = DATASETS[config.dataset].id;
+			const code = `
+				const selection: Aggs<${ds}, '${selectedAxisConfig.field}'> = ${JSON.stringify(selectedAxisConfig.output)};
+			`;
+			const modifiedCode = [code.slice(0, code.length-8), ',', code.slice(code.length-8)].join('');
+			console.log(modifiedCode);
+			const fullCode = await requestText(fetch, 'GET', 'dsl/datasets.ts') + modifiedCode;
+			const output = getCompletions(fullCode, fullCode.length-8);
+			console.log(output);
+		}
 	}
 
 	const cache = {};
