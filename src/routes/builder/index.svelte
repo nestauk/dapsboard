@@ -1,6 +1,7 @@
 <script context='module'>
 	import { getCompletions } from 'app/tsservices';
 	import * as _ from 'lamb';
+	// eslint-disable-next-line node/no-extraneous-import
 	import {capitalise} from 'svizzle/utils/string-string';
 
 	import DATASETS from 'app/data/datasets.json';
@@ -198,8 +199,6 @@
 
 	const isMissing = (key, value) => obj => Boolean(obj) && !obj[key].has(value);
 
-	let tsFiles;
-
 	async function computeLists (config) {
 		const typeDicts = types[selectedAxisConfig.type];
 		const fieldDicts = fields[selectedAxisConfig.field];
@@ -279,7 +278,6 @@
 			const code = `
 				const selection: Aggs<${ds}, '${selectedAxisConfig.field}'> = ${JSON.stringify(selectedAxisConfig.output)};
 			`;
-			//const modifiedCode = [code.slice(0, code.length-8), ',', code.slice(code.length-8)].join('');
 			console.log(code);
 			const fullCode = await requestText(fetch, 'GET', 'dsl/datasets.ts') + code;
 			const output = getCompletions(fullCode, fullCode.lastIndexOf('{') + 1);

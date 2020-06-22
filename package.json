@@ -44,7 +44,9 @@
     "node": ">=10.0.0"
   },
   "husky": {
-    "hooks": {}
+    "hooks": {
+      "pre-push": "npm run lint"
+    }
   },
   "license": "MIT",
   "name": "dapsboard",
