@@ -3,6 +3,8 @@ import * as ts from "typescript";
 import path from 'path';
 import fs from 'fs';
 
+import { servicesHost } from 'app/tsservices';
+
 const LIBDTS = `// Standard types
 interface Date {}
 
@@ -11,41 +13,18 @@ type Record<K extends keyof any, T> = {
 };
 `;
 
-const servicesHost = files => ({
-	getScriptFileNames: () => Object.keys(files),
-	getScriptVersion: () => "0",
-	getScriptSnapshot: fileName => {
-		if (fileName in files) {
-			return ts.ScriptSnapshot.fromString(files[fileName]);
-		}
-		if (fileName === 'lib.d.ts') {
-			return ts.ScriptSnapshot.fromString(LIBDTS);
-		}
-		return undefined;
-	},
-	getCurrentDirectory: () => '/',
-	getCompilationSettings: () => ({}),
-	getDefaultLibFileName: () => 'lib.d.ts',
-	fileExists: fileName => fileName in Object.keys(files),
-	readFile: () => {
-		throw new Error("readFile is not implemented");
-	},
-	readDirectory: () => []
-});
-
 const srcname = "datasets.ts";
 const src = `${fs.readFileSync(path.resolve('static/dsl', srcname))}
 
 const selection: Aggs<eurito_cordis_v1, 'cost_total_project'> = {"primary":{"histogram":{"field":"cost_total_project"}}};
 `;
 
-const host = servicesHost({[srcname]: src});
+const host = servicesHost(ts, {[srcname]: src}, LIBDTS);
 const service = ts.createLanguageService(host, ts.createDocumentRegistry());
 const semDiags = service.getSemanticDiagnostics(srcname);
 console.log(semDiags);
 const synDiags = service.getSyntacticDiagnostics(srcname);
 console.log(synDiags);
-
 
 const targetPosition = src.lastIndexOf('{') + 1;
 for (let position = targetPosition - 20; position < src.length; position++) {
