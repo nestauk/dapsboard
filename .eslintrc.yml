@@ -98,7 +98,9 @@ rules:
   indent:
     - error
     - tab
-    - SwitchCase: 1
+    -
+      MemberExpression: 0
+      SwitchCase: 1
   init-declarations: off
   jsx-quotes: error
   key-spacing: off

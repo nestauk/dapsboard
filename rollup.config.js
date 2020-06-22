@@ -100,14 +100,14 @@ export default {
 		external:
 			// /* eslint-disable node/global-require */
 			Object.keys(pkg.dependencies)
-				.filter(name => ![
-					'@svizzle/barchart',
-					'@svizzle/choropleth',
-				].includes(name))
-				.concat(
-					require('module').builtinModules
-					|| Object.keys(process.binding('natives'))
-				),
+			.filter(name => ![
+				'@svizzle/barchart',
+				'@svizzle/choropleth',
+			].includes(name))
+			.concat(
+				require('module').builtinModules
+				|| Object.keys(process.binding('natives'))
+			),
 
 		onwarn,
 	},

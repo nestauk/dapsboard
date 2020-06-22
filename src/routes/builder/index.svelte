@@ -63,7 +63,7 @@
 			aggregations: new Set(aggsByType[esType]),
 			datasets: new Set(
 				Object.keys(datasets)
-					.filter(dsName => datasets[dsName].types.has(esType))
+				.filter(dsName => datasets[dsName].types.has(esType))
 			),
 			fields: new Set()
 		}
@@ -73,12 +73,12 @@
 	for (let field of fieldNames) {
 		const _datasets = new Set(
 			Object.keys(datasets)
-				.filter(dsName => datasets[dsName].fields.has(field))
+			.filter(dsName => datasets[dsName].fields.has(field))
 		)
 		const _types = new Set(
 			Object.keys(datasets)
-				.filter(dsName => datasets[dsName].fields.has(field))
-				.map(dsName => getESType(getSchema(DATASETS[datasets[dsName].index])[field]))
+			.filter(dsName => datasets[dsName].fields.has(field))
+			.map(dsName => getESType(getSchema(DATASETS[datasets[dsName].index])[field]))
 		);
 		const _aggregations = new Set();
 		for (let esType of _types) {
@@ -99,15 +99,15 @@
 		aggregations[agg] = {
 			types: new Set(
 				Object.keys(types)
-					.filter(esType => types[esType].aggregations.has(agg))
+				.filter(esType => types[esType].aggregations.has(agg))
 			),
 			datasets: new Set(
 				Object.keys(datasets)
-					.filter(dsName => datasets[dsName].aggregations.has(agg))
+				.filter(dsName => datasets[dsName].aggregations.has(agg))
 			),
 			fields: new Set(
 				Object.keys(fields)
-					.filter(field => fields[field].aggregations.has(agg))
+				.filter(field => fields[field].aggregations.has(agg))
 			)
 		}
 	}
@@ -116,15 +116,15 @@
 		aggregations[agg] = {
 			types: new Set(
 				Object.keys(types)
-					.filter(esType => types[esType].aggregations.has(agg))
+				.filter(esType => types[esType].aggregations.has(agg))
 			),
 			datasets: new Set(
 				Object.keys(datasets)
-					.filter(dsName => datasets[dsName].aggregations.has(agg))
+				.filter(dsName => datasets[dsName].aggregations.has(agg))
 			),
 			fields: new Set(
 				Object.keys(fields)
-					.filter(field => fields[field].aggregations.has(agg))
+				.filter(field => fields[field].aggregations.has(agg))
 			)
 		}
 	}

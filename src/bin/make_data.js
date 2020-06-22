@@ -50,16 +50,16 @@ const saveStr = (data, dest) => saveString(dest)(data).then(tapMessage(`Saved ${
 
 const process = async () => {
 	const refs = await readDir(SPECS_DIR)
-		.then(_.pipe([_.filterWith(isYamlFile), _.mapWith(makeSchemaObj)]));
+	.then(_.pipe([_.filterWith(isYamlFile), _.mapWith(makeSchemaObj)]));
 
 	const datasets = await Promise.all(
 		refs.map(obj =>
 			readFile(obj.filepath, 'utf-8')
-				.then(yaml.safeLoad)
-				.then(spec => ({
-					..._.skip(obj, ['filepath']),
-					spec
-				}))
+			.then(yaml.safeLoad)
+			.then(spec => ({
+				..._.skip(obj, ['filepath']),
+				spec
+			}))
 		)
 	);
 
