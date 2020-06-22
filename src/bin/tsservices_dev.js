@@ -3,23 +3,16 @@ import * as ts from "typescript";
 import path from 'path';
 import fs from 'fs';
 
-import { servicesHost } from 'app/tsservices';
+import { createServicesHost } from 'app/tsservices/serviceshost';
 
-const LIBDTS = `// Standard types
-interface Date {}
-
-type Record<K extends keyof any, T> = {
-	[P in K]: T;
-};
-`;
-
+const LIBDTS = fs.readFileSync('src/node_modules/app/tsservices/lib.d.ts').toString();
 const srcname = "datasets.ts";
 const src = `${fs.readFileSync(path.resolve('static/dsl', srcname))}
 
 const selection: Aggs<eurito_cordis_v1, 'cost_total_project'> = {"primary":{"histogram":{"field":"cost_total_project"}}};
 `;
 
-const host = servicesHost(ts, {[srcname]: src}, LIBDTS);
+const host = createServicesHost(ts, {[srcname]: src}, LIBDTS);
 const service = ts.createLanguageService(host, ts.createDocumentRegistry());
 const semDiags = service.getSemanticDiagnostics(srcname);
 console.log(semDiags);
