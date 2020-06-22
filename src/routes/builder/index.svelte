@@ -14,7 +14,7 @@
 		getESType,
 		buildAggregation
 	} from 'app/elasticsearch';
-	import { request, requestText } from 'app/net';
+	import { request } from 'app/net';
 	import {
 		getEndpointURL,
 		getSchema,
@@ -279,7 +279,7 @@
 				const selection: Aggs<${ds}, '${selectedAxisConfig.field}'> = ${JSON.stringify(selectedAxisConfig.output)};
 			`;
 			console.log(code);
-			const fullCode = await requestText(fetch, 'GET', 'dsl/datasets.ts') + code;
+			const fullCode = await request('GET', 'dsl/datasets.ts', {type:'text'}) + code;
 			const output = getCompletions(fullCode, fullCode.lastIndexOf('{') + 1);
 			console.log(output);
 		}
@@ -294,7 +294,7 @@
 			if (cacheKey in cache) {
 				responsePromise = Promise.resolve(cache[cacheKey]);
 			} else {
-				responsePromise = request(fetch, 'POST', url, {data: parsedQuery});
+				responsePromise = request('POST', url, {data: parsedQuery});
 				responsePromise.then(json => {
 					cache[cacheKey] = json;
 				});

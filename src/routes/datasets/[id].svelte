@@ -29,7 +29,7 @@
 		const endpoint = getEndpointURL(dataset);
 		const url = `${endpoint}/_search`;
 
-		return IS_BROWSER && request(fetch, 'POST', url, {data});
+		return IS_BROWSER && request('POST', url, {data});
 	}
 
 	$: schema = getSchema(dataset);
