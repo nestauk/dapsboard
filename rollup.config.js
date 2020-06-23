@@ -13,6 +13,7 @@ import replace from '@rollup/plugin-replace';
 import resolve from '@rollup/plugin-node-resolve';
 import svelte from 'rollup-plugin-svelte';
 import yaml from '@rollup/plugin-yaml';
+import { string } from "rollup-plugin-string";
 
 import config from 'sapper/config/rollup.js';
 import pkg from './package.json';
@@ -49,6 +50,9 @@ export default {
 			json(),
 			yaml(),
 			cleanup(),
+			string({
+				include: "**/*.ts",
+			}),
 
 			legacy && babel({
 				extensions: ['.js', '.mjs', '.html', '.svelte'],
@@ -96,18 +100,21 @@ export default {
 			json(),
 			yaml(),
 			cleanup(),
+			string({
+				include: "**/*.ts",
+			}),
 		],
 		external:
 			// /* eslint-disable node/global-require */
 			Object.keys(pkg.dependencies)
-				.filter(name => ![
-					'@svizzle/barchart',
-					'@svizzle/choropleth',
-				].includes(name))
-				.concat(
-					require('module').builtinModules
-					|| Object.keys(process.binding('natives'))
-				),
+			.filter(name => ![
+				'@svizzle/barchart',
+				'@svizzle/choropleth',
+			].includes(name))
+			.concat(
+				require('module').builtinModules
+				|| Object.keys(process.binding('natives'))
+			),
 
 		onwarn,
 	},
@@ -127,6 +134,9 @@ export default {
 			json(),
 			yaml(),
 			cleanup(),
+			string({
+				include: "**/*.ts",
+			}),
 			!dev && terser()
 		],
 

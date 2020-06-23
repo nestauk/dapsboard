@@ -1,5 +1,7 @@
 <script context='module'>
+	import { getCompletions } from 'app/tsservices';
 	import * as _ from 'lamb';
+	// eslint-disable-next-line node/no-extraneous-import
 	import {capitalise} from 'svizzle/utils/string-string';
 
 	import DATASETS from 'app/data/datasets.json';
@@ -16,7 +18,7 @@
 	import {
 		getEndpointURL,
 		getSchema,
-		capitalize
+		IS_BROWSER
 	} from 'app/utils';
 
 	const aggregations = {};
@@ -61,7 +63,7 @@
 			aggregations: new Set(aggsByType[esType]),
 			datasets: new Set(
 				Object.keys(datasets)
-					.filter(dsName => datasets[dsName].types.has(esType))
+				.filter(dsName => datasets[dsName].types.has(esType))
 			),
 			fields: new Set()
 		}
@@ -71,12 +73,12 @@
 	for (let field of fieldNames) {
 		const _datasets = new Set(
 			Object.keys(datasets)
-				.filter(dsName => datasets[dsName].fields.has(field))
+			.filter(dsName => datasets[dsName].fields.has(field))
 		)
 		const _types = new Set(
 			Object.keys(datasets)
-				.filter(dsName => datasets[dsName].fields.has(field))
-				.map(dsName => getESType(getSchema(DATASETS[datasets[dsName].index])[field]))
+			.filter(dsName => datasets[dsName].fields.has(field))
+			.map(dsName => getESType(getSchema(DATASETS[datasets[dsName].index])[field]))
 		);
 		const _aggregations = new Set();
 		for (let esType of _types) {
@@ -97,15 +99,15 @@
 		aggregations[agg] = {
 			types: new Set(
 				Object.keys(types)
-					.filter(esType => types[esType].aggregations.has(agg))
+				.filter(esType => types[esType].aggregations.has(agg))
 			),
 			datasets: new Set(
 				Object.keys(datasets)
-					.filter(dsName => datasets[dsName].aggregations.has(agg))
+				.filter(dsName => datasets[dsName].aggregations.has(agg))
 			),
 			fields: new Set(
 				Object.keys(fields)
-					.filter(field => fields[field].aggregations.has(agg))
+				.filter(field => fields[field].aggregations.has(agg))
 			)
 		}
 	}
@@ -114,15 +116,15 @@
 		aggregations[agg] = {
 			types: new Set(
 				Object.keys(types)
-					.filter(esType => types[esType].aggregations.has(agg))
+				.filter(esType => types[esType].aggregations.has(agg))
 			),
 			datasets: new Set(
 				Object.keys(datasets)
-					.filter(dsName => datasets[dsName].aggregations.has(agg))
+				.filter(dsName => datasets[dsName].aggregations.has(agg))
 			),
 			fields: new Set(
 				Object.keys(fields)
-					.filter(field => fields[field].aggregations.has(agg))
+				.filter(field => fields[field].aggregations.has(agg))
 			)
 		}
 	}
@@ -141,9 +143,10 @@
 		dataset: undefined,
 		axes: _.fromPairs(AXIS_NAMES.map(name =>
 			[name, {
-				aggregation: undefined,
-				type: undefined,
-				field: undefined
+				aggregation: null,
+				type: null,
+				field: null,
+				output: null
 			}]
 		))
 	};
@@ -180,9 +183,10 @@
 
 	function resetAxis (axis) {
 		queryConfig.axes[axis] = {
-			aggregation: undefined,
-			type: undefined,
-			field: undefined
+			aggregation: null,
+			type: null,
+			field: null,
+			output: null
 		};
 	}
 
@@ -193,11 +197,9 @@
 		}
 	}
 
-	function isMissing (objects, key, value) {
-		return objects.some(obj => Boolean(obj) && !obj[key].has(value))
-	}
+	const isMissing = (key, value) => obj => Boolean(obj) && !obj[key].has(value);
 
-	function computeLists (config) {
+	async function computeLists (config) {
 		const typeDicts = types[selectedAxisConfig.type];
 		const fieldDicts = fields[selectedAxisConfig.field];
 		const datasetDicts = config.dataset && datasets[DATASETS[config.dataset].id];
@@ -206,30 +208,30 @@
 		bucketOptions = Object.keys(bucketLabels).map(agg => ({
 			text: bucketLabels[agg],
 			value: agg,
-			disabled: isMissing([typeDicts, datasetDicts, fieldDicts], 'aggregations', agg)
+			disabled: [typeDicts, datasetDicts, fieldDicts].some(isMissing('aggregations', agg))
 		}));
 		aggregatorOptions = Object.keys(metricLabels).map(agg => ({
 			text: metricLabels[agg],
 			value: agg,
-			disabled: isMissing([typeDicts, datasetDicts, fieldDicts], 'aggregations', agg)
+			disabled: [typeDicts, datasetDicts, fieldDicts].some(isMissing('aggregations', agg))
 		}));
 		typeOptions = Object.keys(types).map(type => ({
 			text: type,
 			value: type,
 			disabled: false,
-			effaced: isMissing([aggDicts, datasetDicts, fieldDicts], 'types', type)
+			effaced: [aggDicts, datasetDicts, fieldDicts].some(isMissing('types', type))
 		}));
 		datasetOptions = DATASETS.map((dataset, index) => ({
 			text: dataset.id,
 			value: index,
-			disabled: isMissing([typeDicts, fieldDicts, aggDicts], 'datasets', dataset.id)
+			disabled: [typeDicts, fieldDicts, aggDicts].some(isMissing('datasets', dataset.id))
 		}));
 		fieldOptions = fieldNames.map(field => ({
 			text: field,
 			value: field,
 			disabled:
 				!config.dataset
-				|| isMissing([typeDicts, datasetDicts, aggDicts], 'fields', field)
+				|| [typeDicts, datasetDicts, aggDicts].some(isMissing('fields', field))
 		}));
 
 		cleanRequestBody();
@@ -242,18 +244,20 @@
 			active = false;
 			const currentName = AXIS_NAMES[activeAxes++];
 			const current = config.axes[currentName];
-			if (current.aggregation !== undefined && current.field !== undefined) {
+			current.output = null;
+			if (Boolean(current.aggregation) && Boolean(current.field)) {
 				if (activeAxes < AXIS_NAMES.length) {
 					active = true;
 				}
 				if (config.dataset) {
 					readyForRequest = true;
 					const fieldInfo = getSchema(DATASETS[config.dataset])[current.field];
-					currentTemplate.aggs = {
+					current.output = {
 						[currentName]: {
 							[current.aggregation]: buildAggregation(current.aggregation, current.field, fieldInfo)
 						}
 					};
+					currentTemplate.aggs = {...current.output};
 					currentTemplate = currentTemplate.aggs[currentName];
 				}
 			}
@@ -268,6 +272,17 @@
 		});
 		axisOptions = axisOptions;
 		responsePromise = Promise.resolve(undefined);
+
+		if (IS_BROWSER && window.ts && selectedAxisConfig.output) {
+			const ds = DATASETS[config.dataset].id;
+			const code = `
+				const selection: Aggs<${ds}, '${selectedAxisConfig.field}'> = ${JSON.stringify(selectedAxisConfig.output)};
+			`;
+			console.log(code);
+			const fullCode = await request('GET', 'dsl/datasets.ts', {type:'text'}) + code;
+			const output = getCompletions(fullCode, fullCode.lastIndexOf('{') + 1);
+			console.log(output);
+		}
 	}
 
 	const cache = {};
@@ -279,10 +294,10 @@
 			if (cacheKey in cache) {
 				responsePromise = Promise.resolve(cache[cacheKey]);
 			} else {
-				responsePromise = request(fetch, 'POST', url, {data: parsedQuery});
+				responsePromise = request('POST', url, {data: parsedQuery});
 				responsePromise.then(json => {
 					cache[cacheKey] = json;
-				})
+				});
 			}
 		}
 	}
