@@ -5,9 +5,11 @@ import fs from 'fs';
 
 import { createServicesHost } from 'app/tsservices/serviceshost';
 
-const LIBDTS = fs.readFileSync('src/node_modules/app/tsservices/lib.d.ts').toString();
-const srcname = "datasets.ts";
-const src = `${fs.readFileSync(path.resolve('static/dsl', srcname))}
+const srcname = 'datasets.ts';
+const STATIC_DSL_PATH = path.resolve(__dirname, '../../static/dsl', srcname);
+const LIBDTS_PATH = path.resolve(__dirname, '../node_modules/app/tsservices/lib.d.ts');
+const LIBDTS = fs.readFileSync(LIBDTS_PATH).toString();
+const src = `${fs.readFileSync(STATIC_DSL_PATH, srcname))}
 
 const selection: Aggs<eurito_cordis_v1, 'cost_total_project'> = {"primary":{"histogram":{"field":"cost_total_project"}}};
 `;
