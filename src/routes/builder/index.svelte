@@ -132,6 +132,10 @@
 
 <script>
 	import JSONValue from 'app/components/JSONValue.svelte';
+	import Editor from 'app/components/elementary/Editor.svelte';
+
+	import TabContainer from 'app/components/elementary/TabContainer.svelte';
+	import Tab from 'app/components/elementary/Tab.svelte';
 	import Select from 'app/components/Select.svelte';
 	import SelectMenu from 'app/components/SelectMenu.svelte';
 	import PanelMenu from 'app/components/elementary/PanelMenu.svelte';
@@ -146,6 +150,7 @@
 				aggregation: null,
 				type: null,
 				field: null,
+				input: {},
 				output: null
 			}]
 		))
@@ -181,11 +186,14 @@
 	let showFullResponse = false;
 	let runQueryOnSelect = true;
 
+	let selectedFieldCompletions = [];
+
 	function resetAxis (axis) {
 		queryConfig.axes[axis] = {
 			aggregation: null,
 			type: null,
 			field: null,
+			input: {},
 			output: null
 		};
 	}
@@ -254,7 +262,8 @@
 					const fieldInfo = getSchema(DATASETS[config.dataset])[current.field];
 					current.output = {
 						[currentName]: {
-							[current.aggregation]: buildAggregation(current.aggregation, current.field, fieldInfo)
+							[current.aggregation]: buildAggregation(current.aggregation, current.field, fieldInfo),
+							...current.input
 						}
 					};
 					currentTemplate.aggs = {...current.output};
@@ -280,8 +289,8 @@
 			`;
 			console.log(code);
 			const fullCode = await request('GET', 'dsl/datasets.ts', {type:'text'}) + code;
-			const output = getCompletions(fullCode, fullCode.lastIndexOf('{') + 1);
-			console.log(output);
+			selectedFieldCompletions = getCompletions(fullCode, fullCode.lastIndexOf('{') + 1);
+			console.log(selectedFieldCompletions);
 		}
 	}
 
@@ -375,33 +384,54 @@
 		/>
 	</section>
 
-	<section class='request'>
+	<TabContainer gridArea='request' let:isTitle let:isContent>
+		<Tab id='fields' {isTitle} {isContent}>
+			<header slot='title' class='bold'>Fields</header>
+			{#if selectedAxisConfig.output}
+				{#each selectedFieldCompletions as completion}
+					{#if completion.name !== 'field'}
+						<Editor
+							labelText={completion.name}
+							dataType={completion.displayText}
+							value={selectedAxisConfig.input[completion.name] || selectedAxisConfig.output[selectedAxis][selectedAxisConfig.aggregation][completion.name]}
+							on:change={(e) => {
+								selectedAxisConfig.input[completion.name] = e.detail;
+								computeLists(queryConfig);
+							}}
+						/>
+					{/if}
+				{/each}
+			{/if}
+		</Tab>
+		<Tab id='request' {isTitle} {isContent}>
+			<!--
 			<PanelMenu>
-			<MenuItem>
-				<input
-					bind:checked={runQueryOnSelect}
-					id='runQueryOnSelectID'
-					type='checkbox'
-				>
-				<label
-					class='clickable'
-					for='runQueryOnSelectID'
-				>Run query on select</label>
-			</MenuItem>
-		</PanelMenu>
-
-		<header class='bold'>Request</header>
-		<div class='json'>
-			<JSONValue
-				bind:parsedValue={parsedQuery}
-				editable={true}
-				value={queryTemplate}
-			/>
-		</div>
-		{#if !runQueryOnSelect}
-			<button disabled={!readyForRequest} on:click={doQuery}>Execute</button>
-		{/if}
-	</section>
+				<MenuItem>
+					<input
+						bind:checked={runQueryOnSelect}
+						id='runQueryOnSelectID'
+						type='checkbox'
+					>
+					<label
+						class='clickable'
+						for='runQueryOnSelectID'
+					>Run query on select</label>
+				</MenuItem>
+			</PanelMenu>
+			-->
+			<header slot='title' class='bold'>Request</header>
+			<div class='json'>
+				<JSONValue
+					bind:parsedValue={parsedQuery}
+					editable={true}
+					value={queryTemplate}
+				/>
+			</div>
+			{#if !runQueryOnSelect}
+				<button disabled={!readyForRequest} on:click={doQuery}>Execute</button>
+			{/if}
+		</Tab>
+	</TabContainer>
 
 	<section class='response'>
 		<PanelMenu>
