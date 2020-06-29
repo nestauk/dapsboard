@@ -132,7 +132,7 @@
 
 <script>
 	import JSONValue from 'app/components/JSONValue.svelte';
-	import Editor from 'app/components/elementary/Editor.svelte';
+	import ESField from 'app/components/elementary/ElasticSearchField.svelte';
 
 	import TabContainer from 'app/components/elementary/TabContainer.svelte';
 	import Tab from 'app/components/elementary/Tab.svelte';
@@ -142,6 +142,7 @@
 	import MenuItem from 'app/components/elementary/MenuItem.svelte';
 	import IconDelete from 'app/components/icons/IconDelete.svelte';
 
+	let datasetTypings;
 	const AXIS_NAMES = ['primary', 'secondary', 'tertiary', 'quaternary', 'quinary', 'senary', 'septenary', 'octonary', 'nonary', 'denary'];
 	let queryConfig = {
 		dataset: undefined,
@@ -151,6 +152,7 @@
 				type: null,
 				field: null,
 				input: {},
+				pureOutput: null,
 				output: null
 			}]
 		))
@@ -194,6 +196,7 @@
 			type: null,
 			field: null,
 			input: {},
+			pureOutput: null,
 			output: null
 		};
 	}
@@ -260,10 +263,18 @@
 				if (config.dataset) {
 					readyForRequest = true;
 					const fieldInfo = getSchema(DATASETS[config.dataset])[current.field];
+					const agg = buildAggregation(current.aggregation, current.field, fieldInfo);
+					current.pureOutput = {
+						[currentName]: {
+							[current.aggregation]: agg
+						}
+					};
 					current.output = {
 						[currentName]: {
-							[current.aggregation]: buildAggregation(current.aggregation, current.field, fieldInfo),
-							...current.input
+							[current.aggregation]: {
+								...agg,
+								...current.input
+							}
 						}
 					};
 					currentTemplate.aggs = {...current.output};
@@ -285,10 +296,13 @@
 		if (IS_BROWSER && window.ts && selectedAxisConfig.output) {
 			const ds = DATASETS[config.dataset].id;
 			const code = `
-				const selection: Aggs<${ds}, '${selectedAxisConfig.field}'> = ${JSON.stringify(selectedAxisConfig.output)};
+				const selection: Aggs<${ds}, '${selectedAxisConfig.field}'> = ${JSON.stringify(selectedAxisConfig.pureOutput)};
 			`;
 			console.log(code);
-			const fullCode = await request('GET', 'dsl/datasets.ts', {type:'text'}) + code;
+			if (!datasetTypings) {
+				datasetTypings = await request('GET', 'dsl/datasets.ts', {type:'text'});
+			}
+			const fullCode = datasetTypings + code;
 			selectedFieldCompletions = getCompletions(fullCode, fullCode.lastIndexOf('{') + 1);
 			console.log(selectedFieldCompletions);
 		}
@@ -390,12 +404,20 @@
 			{#if selectedAxisConfig.output}
 				{#each selectedFieldCompletions as completion}
 					{#if completion.name !== 'field'}
-						<Editor
+						<ESField
 							labelText={completion.name}
 							dataType={completion.displayText}
 							value={selectedAxisConfig.input[completion.name] || selectedAxisConfig.output[selectedAxis][selectedAxisConfig.aggregation][completion.name]}
-							on:change={(e) => {
-								selectedAxisConfig.input[completion.name] = e.detail;
+							on:change={e => {
+								const value = e.detail;
+								// TODO For text types, should we distinguish between
+								// empty strings and `null` or `undefined`?
+								if (value !== null) {
+									selectedAxisConfig.input[completion.name] = value;
+								}
+								else {
+									delete selectedAxisConfig.input[completion.name];
+								}
 								computeLists(queryConfig);
 							}}
 						/>
