@@ -136,8 +136,8 @@
 
 	import TabContainer from 'app/components/elementary/TabContainer.svelte';
 	import Tab from 'app/components/elementary/Tab.svelte';
-	import Select from 'app/components/Select.svelte';
-	import SelectMenu from 'app/components/SelectMenu.svelte';
+	import Select from 'app/components/elementary/Select.svelte';
+	import SelectMenu from 'app/components/elementary/SelectMenu.svelte';
 	import PanelMenu from 'app/components/elementary/PanelMenu.svelte';
 	import MenuItem from 'app/components/elementary/MenuItem.svelte';
 	import IconDelete from 'app/components/icons/IconDelete.svelte';
@@ -384,9 +384,9 @@
 		/>
 	</section>
 
-	<TabContainer gridArea='request' let:isTitle let:isContent>
-		<Tab id='fields' {isTitle} {isContent}>
-			<header slot='title' class='bold'>Fields</header>
+	<TabContainer gridArea='request' let:isTitleSlot let:isContentSlot>
+		<Tab id='fields' {isTitleSlot} {isContentSlot}>
+			<header slot='title' class='bold'>Form Fields</header>
 			{#if selectedAxisConfig.output}
 				{#each selectedFieldCompletions as completion}
 					{#if completion.name !== 'field'}
@@ -403,8 +403,8 @@
 				{/each}
 			{/if}
 		</Tab>
-		<Tab id='request' {isTitle} {isContent}>
-			<!--
+		<Tab id='request' {isTitleSlot} {isContentSlot}>
+			<header slot='title' class='bold'>Request</header>
 			<PanelMenu>
 				<MenuItem>
 					<input
@@ -418,8 +418,6 @@
 					>Run query on select</label>
 				</MenuItem>
 			</PanelMenu>
-			-->
-			<header slot='title' class='bold'>Request</header>
 			<div class='json'>
 				<JSONValue
 					bind:parsedValue={parsedQuery}
@@ -481,7 +479,7 @@
 	.types {grid-area: types;}
 	.datasets {grid-area: datasets;}
 	.fields {grid-area: fields;}
-	.request {
+	:global(.request) {
 		border-bottom: 1px solid var(--color-main-lighter);
 		grid-area: request;
 	}
@@ -500,7 +498,7 @@
 	.types,
 	.datasets,
 	.fields,
-	.request,
+	/*.request,*/
 	.response {
 		display: grid;
 		grid-template-areas: "header" "select";
