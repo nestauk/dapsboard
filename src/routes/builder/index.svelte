@@ -558,4 +558,7 @@
 		padding: 0.4em;
 	}
 
+	:global(.request) ul {
+		list-style-type: none;
+	}
 </style>
