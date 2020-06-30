@@ -151,12 +151,17 @@
 				aggregation: null,
 				type: null,
 				field: null,
-				input: {},
-				pureOutput: null,
-				output: null
 			}]
 		))
 	};
+
+	let axisParams = _.fromPairs(AXIS_NAMES.map(name =>
+		[name, {
+			input: {},
+			pureOutput: null,
+			output: null
+		}]
+	));
 
 	let queryTemplate = {};
 	let parsedQuery = queryTemplate;
@@ -190,15 +195,19 @@
 
 	let selectedFieldCompletions = [];
 
+	let selectedRequestTab;
+
 	function resetAxis (axis) {
 		queryConfig.axes[axis] = {
 			aggregation: null,
 			type: null,
-			field: null,
+			field: null
+		};
+		axisParams[axis] = {
 			input: {},
 			pureOutput: null,
 			output: null
-		};
+		}
 	}
 
 	function cleanRequestBody () {
@@ -206,6 +215,9 @@
 		queryTemplate = {
 			size: 0
 		}
+	}
+	function clearParameters () {
+		axisParams[selectedAxis].input = {};
 	}
 
 	const isMissing = (key, value) => obj => Boolean(obj) && !obj[key].has(value);
@@ -254,30 +266,31 @@
 		while (active) {
 			active = false;
 			const currentName = AXIS_NAMES[activeAxes++];
-			const current = config.axes[currentName];
-			current.output = null;
-			if (Boolean(current.aggregation) && Boolean(current.field)) {
+			const currentAxis = config.axes[currentName];
+			const currentParams = axisParams[currentName];
+			currentParams.output = null;
+			if (Boolean(currentAxis.aggregation) && Boolean(currentAxis.field)) {
 				if (activeAxes < AXIS_NAMES.length) {
 					active = true;
 				}
 				if (config.dataset) {
 					readyForRequest = true;
-					const fieldInfo = getSchema(DATASETS[config.dataset])[current.field];
-					const agg = buildAggregation(current.aggregation, current.field, fieldInfo);
-					current.pureOutput = {
+					const fieldInfo = getSchema(DATASETS[config.dataset])[currentAxis.field];
+					const agg = buildAggregation(currentAxis.aggregation, currentAxis.field, fieldInfo);
+					currentParams.pureOutput = {
 						[currentName]: {
-							[current.aggregation]: agg
+							[currentAxis.aggregation]: agg
 						}
 					};
-					current.output = {
+					currentParams.output = {
 						[currentName]: {
-							[current.aggregation]: {
+							[currentAxis.aggregation]: {
 								...agg,
-								...current.input
+								...currentParams.input
 							}
 						}
 					};
-					currentTemplate.aggs = {...current.output};
+					currentTemplate.aggs = {...currentParams.output};
 					currentTemplate = currentTemplate.aggs[currentName];
 				}
 			}
@@ -293,10 +306,10 @@
 		axisOptions = axisOptions;
 		responsePromise = Promise.resolve(undefined);
 
-		if (IS_BROWSER && window.ts && selectedAxisConfig.output) {
+		if (IS_BROWSER && window.ts && axisParams[selectedAxis].output) {
 			const ds = DATASETS[config.dataset].id;
 			const code = `
-				const selection: Aggs<${ds}, '${selectedAxisConfig.field}'> = ${JSON.stringify(selectedAxisConfig.pureOutput)};
+				const selection: Aggs<${ds}, '${selectedAxisConfig.field}'> = ${JSON.stringify(axisParams[selectedAxis].pureOutput)};
 			`;
 			console.log(code);
 			if (!datasetTypings) {
@@ -309,15 +322,15 @@
 	}
 
 	const cache = {};
-	function doQuery () {
+	function doQuery (query) {
 		if (readyForRequest) {
 			const endpoint = getEndpointURL(DATASETS[queryConfig.dataset]);
 			const url = `${endpoint}/_search`;
-			const cacheKey = `${url}/${JSON.stringify(parsedQuery)}`;
+			const cacheKey = `${url}/${JSON.stringify(query)}`;
 			if (cacheKey in cache) {
 				responsePromise = Promise.resolve(cache[cacheKey]);
 			} else {
-				responsePromise = request('POST', url, {data: parsedQuery});
+				responsePromise = request('POST', url, {data: query});
 				responsePromise.then(json => {
 					cache[cacheKey] = json;
 				});
@@ -327,8 +340,12 @@
 
 	$: selectedAxisConfig = queryConfig.axes[selectedAxis];
 	$: !queryConfig.dataset && (selectedAxisConfig.field = null);
+	// eslint-disable-next-line no-unused-expressions, no-sequences
+	$: selectedAxisConfig, queryConfig.dataset, clearParameters();
 	$: computeLists(queryConfig);
-	$: parsedQuery && runQueryOnSelect && doQuery(true);
+	// eslint-disable-next-line no-unused-expressions, no-sequences
+	$: $selectedRequestTab === 'fields' && runQueryOnSelect && doQuery(queryTemplate);
+	$: $selectedRequestTab === 'request' && runQueryOnSelect && doQuery(parsedQuery);
 </script>
 
 <section class="query-builder">
@@ -398,57 +415,63 @@
 		/>
 	</section>
 
-	<TabContainer gridArea='request' let:isTitleSlot let:isContentSlot>
+	<TabContainer className='request' bind:selectedTab={selectedRequestTab} let:isTitleSlot let:isContentSlot>
+		<PanelMenu>
+			<MenuItem>
+				<input
+					bind:checked={runQueryOnSelect}
+					id='runQueryOnSelectID'
+					type='checkbox'
+				>
+				<label
+					class='clickable'
+					for='runQueryOnSelectID'
+				>Run query on select</label>
+			</MenuItem>
+		</PanelMenu>
 		<Tab id='fields' {isTitleSlot} {isContentSlot}>
 			<header slot='title' class='bold'>Form Fields</header>
-			{#if selectedAxisConfig.output}
-				{#each selectedFieldCompletions as completion}
-					{#if completion.name !== 'field'}
-						<ESField
-							labelText={completion.name}
-							dataType={completion.displayText}
-							value={selectedAxisConfig.input[completion.name] || selectedAxisConfig.output[selectedAxis][selectedAxisConfig.aggregation][completion.name]}
-							on:change={e => {
-								const value = e.detail;
-								// TODO For text types, should we distinguish between
-								// empty strings and `null` or `undefined`?
-								if (value !== null) {
-									selectedAxisConfig.input[completion.name] = value;
-								}
-								else {
-									delete selectedAxisConfig.input[completion.name];
-								}
-								computeLists(queryConfig);
-							}}
-						/>
-					{/if}
-				{/each}
+			<ul>
+				{#if axisParams[selectedAxis].output}
+					{#each selectedFieldCompletions as completion}
+						{#if completion.name !== 'field'}
+							<li>
+								<ESField
+									labelText={completion.name}
+									required={completion.required}
+									dataType={completion.displayText}
+									value={axisParams[selectedAxis].input[completion.name] || axisParams[selectedAxis].output[selectedAxis][selectedAxisConfig.aggregation][completion.name]}
+									on:change={e => {
+										const value = e.detail;
+										// TODO For text types, should we distinguish between
+										// empty strings and `null` or `undefined`?
+										if (value !== null) {
+											axisParams[selectedAxis].input[completion.name] = value;
+										}
+										else {
+											delete axisParams[selectedAxis].input[completion.name];
+										}
+										computeLists(queryConfig);
+									}}
+								/>
+							</li>
+						{/if}
+					{/each}
+				{/if}
+			</ul>
+			{#if !runQueryOnSelect}
+				<button disabled={!readyForRequest} on:click={() => doQuery(queryTemplate)}>Execute</button>
 			{/if}
 		</Tab>
 		<Tab id='request' {isTitleSlot} {isContentSlot}>
 			<header slot='title' class='bold'>Request</header>
-			<PanelMenu>
-				<MenuItem>
-					<input
-						bind:checked={runQueryOnSelect}
-						id='runQueryOnSelectID'
-						type='checkbox'
-					>
-					<label
-						class='clickable'
-						for='runQueryOnSelectID'
-					>Run query on select</label>
-				</MenuItem>
-			</PanelMenu>
-			<div class='json'>
-				<JSONValue
-					bind:parsedValue={parsedQuery}
-					editable={true}
-					value={queryTemplate}
-				/>
-			</div>
+			<JSONValue
+				editable={true}
+				value={queryTemplate}
+				bind:parsedValue={parsedQuery}
+			/>
 			{#if !runQueryOnSelect}
-				<button disabled={!readyForRequest} on:click={doQuery}>Execute</button>
+				<button disabled={!readyForRequest} on:click={() => doQuery(parsedQuery)}>Execute</button>
 			{/if}
 		</Tab>
 	</TabContainer>
