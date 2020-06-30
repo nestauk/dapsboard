@@ -316,7 +316,8 @@
 				datasetTypings = await request('GET', 'dsl/datasets.ts', {type:'text'});
 			}
 			const fullCode = datasetTypings + code;
-			selectedFieldCompletions = getCompletions(fullCode, fullCode.lastIndexOf('{') + 1);
+			selectedFieldCompletions = getCompletions(fullCode, fullCode.lastIndexOf('{') + 1)
+			.sort((a, b) => b.required - a.required);
 			console.log(selectedFieldCompletions);
 		}
 	}
