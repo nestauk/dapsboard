@@ -430,7 +430,7 @@
 			</MenuItem>
 		</PanelMenu>
 		<Tab id='fields' {isTitleSlot} {isContentSlot}>
-			<header slot='title' class='bold'>Form Fields</header>
+			<header slot='title' class='bold'>Query Form</header>
 			<ul>
 				{#if axisParams[selectedAxis].output}
 					{#each selectedFieldCompletions as completion}
@@ -460,18 +460,20 @@
 				{/if}
 			</ul>
 			{#if !runQueryOnSelect}
-				<button disabled={!readyForRequest} on:click={() => doQuery(queryTemplate)}>Execute</button>
+				<button disabled={!readyForRequest} on:click={() => doQuery(queryTemplate)}>Run query</button>
+			{:else if readyForRequest}
+				<div>Press Enter or Tab to run the query</div>
 			{/if}
 		</Tab>
 		<Tab id='request' {isTitleSlot} {isContentSlot}>
-			<header slot='title' class='bold'>Request</header>
+			<header slot='title' class='bold'>Query Editor</header>
 			<JSONValue
 				editable={true}
 				value={queryTemplate}
 				bind:parsedValue={parsedQuery}
 			/>
 			{#if !runQueryOnSelect}
-				<button disabled={!readyForRequest} on:click={() => doQuery(parsedQuery)}>Execute</button>
+				<button disabled={!readyForRequest} on:click={() => doQuery(parsedQuery)}>Run query</button>
 			{/if}
 		</Tab>
 	</TabContainer>
