@@ -223,6 +223,8 @@
 	const isMissing = (key, value) => obj => Boolean(obj) && !obj[key].has(value);
 
 	function computeRequestBody (config) {
+		cleanRequestBody();
+
 		let activeAxes = 0;
 		let currentTemplate = queryTemplate;
 		let active = true;
@@ -296,8 +298,6 @@
 				!config.dataset
 				|| [typeDicts, datasetDicts, aggDicts].some(isMissing('fields', field))
 		}));
-
-		cleanRequestBody();
 
 		let activeAxes = computeRequestBody(config);
 
