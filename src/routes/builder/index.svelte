@@ -222,7 +222,7 @@
 
 	const isMissing = (key, value) => obj => Boolean(obj) && !obj[key].has(value);
 
-	function computeRequest (config) {
+	function computeRequestBody (config) {
 		let activeAxes = 0;
 		let currentTemplate = queryTemplate;
 		let active = true;
@@ -299,7 +299,7 @@
 
 		cleanRequestBody();
 
-		let activeAxes = computeRequest(config);
+		let activeAxes = computeRequestBody(config);
 
 		if (typeOptions.some(i => i.effaced && i.value === selectedAxisConfig.type)) {
 			cleanRequestBody();
@@ -437,34 +437,32 @@
 		</PanelMenu>
 		<Tab id='fields' {isTitleSlot} {isContentSlot}>
 			<header slot='title' class='bold'>Query Form</header>
-			<ul>
+			<div class='form-fields'>
 				{#if axisParams[selectedAxis].output}
 					{#each selectedFieldCompletions as completion}
 						{#if completion.name !== 'field'}
-							<li>
-								<ESField
-									labelText={completion.name}
-									required={completion.required}
-									dataType={completion.displayText}
-									value={axisParams[selectedAxis].input[completion.name] || axisParams[selectedAxis].output[selectedAxis][selectedAxisConfig.aggregation][completion.name]}
-									on:change={e => {
-										const value = e.detail;
-										// TODO For text types, should we distinguish between
-										// empty strings and `null` or `undefined`?
-										if (value !== null) {
-											axisParams[selectedAxis].input[completion.name] = value;
-										}
-										else {
-											delete axisParams[selectedAxis].input[completion.name];
-										}
-										computeRequest(queryConfig);
-									}}
-								/>
-							</li>
+							<ESField
+								labelText={completion.name}
+								required={completion.required}
+								dataType={completion.displayText}
+								value={axisParams[selectedAxis].input[completion.name] || axisParams[selectedAxis].output[selectedAxis][selectedAxisConfig.aggregation][completion.name]}
+								on:change={e => {
+									const value = e.detail;
+									// TODO For text types, should we distinguish between
+									// empty strings and `null` or `undefined`?
+									if (value !== null) {
+										axisParams[selectedAxis].input[completion.name] = value;
+									}
+									else {
+										delete axisParams[selectedAxis].input[completion.name];
+									}
+									computeRequestBody(queryConfig);
+								}}
+							/>
 						{/if}
 					{/each}
 				{/if}
-			</ul>
+			</div>
 			{#if !runQueryOnSelect}
 				<button disabled={!readyForRequest} on:click={() => doQuery(queryTemplate)}>Run query</button>
 			{:else if readyForRequest}
@@ -589,7 +587,11 @@
 		padding: 0.4em;
 	}
 
-	:global(.request) ul {
-		list-style-type: none;
+	.form-fields {
+		display: grid;
+		grid-template-columns: min-content auto;
+		grid-column-gap: 0.5em;
+		grid-auto-rows: min-content;
+		align-items: start;
 	}
 </style>
