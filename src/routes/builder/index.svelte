@@ -590,7 +590,7 @@
 	.form-fields {
 		display: grid;
 		grid-template-columns: min-content auto;
-		grid-column-gap: 0.5em;
+		grid-gap: 1em;
 		grid-auto-rows: min-content;
 		align-items: start;
 	}
