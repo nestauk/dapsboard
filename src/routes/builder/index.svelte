@@ -222,6 +222,46 @@
 
 	const isMissing = (key, value) => obj => Boolean(obj) && !obj[key].has(value);
 
+	function computeRequest (config) {
+		let activeAxes = 0;
+		let currentTemplate = queryTemplate;
+		let active = true;
+		readyForRequest = false;
+		while (active) {
+			active = false;
+			const currentName = AXIS_NAMES[activeAxes++];
+			const currentAxis = config.axes[currentName];
+			const currentParams = axisParams[currentName];
+			currentParams.output = null;
+			if (Boolean(currentAxis.aggregation) && Boolean(currentAxis.field)) {
+				if (activeAxes < AXIS_NAMES.length) {
+					active = true;
+				}
+				if (config.dataset) {
+					readyForRequest = true;
+					const fieldInfo = getSchema(DATASETS[config.dataset])[currentAxis.field];
+					const agg = buildAggregation(currentAxis.aggregation, currentAxis.field, fieldInfo);
+					currentParams.pureOutput = {
+						[currentName]: {
+							[currentAxis.aggregation]: agg
+						}
+					};
+					currentParams.output = {
+						[currentName]: {
+							[currentAxis.aggregation]: {
+								...agg,
+								...currentParams.input
+							}
+						}
+					};
+					currentTemplate.aggs = {...currentParams.output};
+					currentTemplate = currentTemplate.aggs[currentName];
+				}
+			}
+		}
+		return activeAxes;
+	}
+
 	async function computeLists (config) {
 		const typeDicts = types[selectedAxisConfig.type];
 		const fieldDicts = fields[selectedAxisConfig.field];
@@ -259,42 +299,7 @@
 
 		cleanRequestBody();
 
-		let activeAxes = 0;
-		let currentTemplate = queryTemplate;
-		let active = true;
-		readyForRequest = false;
-		while (active) {
-			active = false;
-			const currentName = AXIS_NAMES[activeAxes++];
-			const currentAxis = config.axes[currentName];
-			const currentParams = axisParams[currentName];
-			currentParams.output = null;
-			if (Boolean(currentAxis.aggregation) && Boolean(currentAxis.field)) {
-				if (activeAxes < AXIS_NAMES.length) {
-					active = true;
-				}
-				if (config.dataset) {
-					readyForRequest = true;
-					const fieldInfo = getSchema(DATASETS[config.dataset])[currentAxis.field];
-					const agg = buildAggregation(currentAxis.aggregation, currentAxis.field, fieldInfo);
-					currentParams.pureOutput = {
-						[currentName]: {
-							[currentAxis.aggregation]: agg
-						}
-					};
-					currentParams.output = {
-						[currentName]: {
-							[currentAxis.aggregation]: {
-								...agg,
-								...currentParams.input
-							}
-						}
-					};
-					currentTemplate.aggs = {...currentParams.output};
-					currentTemplate = currentTemplate.aggs[currentName];
-				}
-			}
-		}
+		let activeAxes = computeRequest(config);
 
 		if (typeOptions.some(i => i.effaced && i.value === selectedAxisConfig.type)) {
 			cleanRequestBody();
@@ -452,7 +457,7 @@
 										else {
 											delete axisParams[selectedAxis].input[completion.name];
 										}
-										computeLists(queryConfig);
+										computeRequest(queryConfig);
 									}}
 								/>
 							</li>
