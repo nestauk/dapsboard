@@ -478,9 +478,13 @@
 				{/if}
 			</div>
 			{#if !runQueryOnSelect}
-				<button disabled={!readyForRequest} on:click={() => doQuery(queryTemplate)}>Run query</button>
+				<button
+					disabled={!readyForRequest}
+					on:click={() => doQuery(queryTemplate)}
+					class='query-button'
+				>Run query</button>
 			{:else if readyForRequest}
-				<div>Press Enter or Tab to run the query</div>
+				<div class='query-button'>Press Enter or Tab to run the query</div>
 			{/if}
 		</Tab>
 		<Tab id='request' {isTitleSlot} {isContentSlot}>
@@ -491,7 +495,11 @@
 				bind:parsedValue={parsedQuery}
 			/>
 			{#if !runQueryOnSelect}
-				<button disabled={!readyForRequest} on:click={() => doQuery(parsedQuery)}>Run query</button>
+				<button 
+					disabled={!readyForRequest} 
+					on:click={() => doQuery(parsedQuery)}
+					class='query-button'
+				>Run query</button>
 			{/if}
 		</Tab>
 	</TabContainer>
@@ -597,8 +605,9 @@
 		grid-column-gap: 1em;
 	}
 
-	button {
+	.query-button {
 		padding: 0.4em;
+		margin-right: 2em;
 	}
 
 	.form-fields {
