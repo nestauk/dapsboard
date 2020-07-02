@@ -144,6 +144,9 @@
 
 	let datasetTypings;
 	const AXIS_NAMES = ['primary', 'secondary', 'tertiary', 'quaternary', 'quinary', 'senary', 'septenary', 'octonary', 'nonary', 'denary'];
+
+	let resultSize = 0;
+
 	let queryConfig = {
 		dataset: undefined,
 		axes: _.fromPairs(AXIS_NAMES.map(name =>
@@ -213,7 +216,7 @@
 	function cleanRequestBody () {
 		readyForRequest = false;
 		queryTemplate = {
-			size: 0
+			size: resultSize
 		}
 	}
 	function clearParameters () {
@@ -438,6 +441,17 @@
 		<Tab id='fields' {isTitleSlot} {isContentSlot}>
 			<header slot='title' class='bold'>Query Form</header>
 			<div class='form-fields'>
+				<ESField 
+					labelText='result size'
+					required=true
+					dataType='Opaque<number, "integer">'
+					value={resultSize}
+					on:change={e => { 
+						resultSize = e.detail;
+						computeRequestBody(queryConfig);
+					}}
+					
+				/>
 				{#if axisParams[selectedAxis].output}
 					{#each selectedFieldCompletions as completion}
 						{#if completion.name !== 'field'}
