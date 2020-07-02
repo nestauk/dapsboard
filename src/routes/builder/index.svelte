@@ -347,7 +347,6 @@
 				const selection: Aggs<${ds}, '${selectedAxisConfig.field}'> = 
 					${JSON.stringify(selectedParams.pureOutput)};
 			`;
-			console.log(code);
 			if (!datasetTypings) {
 				datasetTypings = await request(
 					'GET',
@@ -360,7 +359,6 @@
 				fullCode,
 				fullCode.lastIndexOf('{') + 1
 			).sort((a, b) => b.required - a.required);
-			console.log(selectedFieldCompletions);
 		}
 	}
 
