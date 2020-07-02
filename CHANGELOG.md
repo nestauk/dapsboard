@@ -1,3 +1,8 @@
+# 0.0.6
+
+- Added type system based on TypeScript
+- Added form generation based on selected dataset, field and aggregation specs
+
 # 0.0.5
 
 - Add the aggregation builder (#21)

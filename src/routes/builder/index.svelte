@@ -132,13 +132,32 @@
 
 <script>
 	import JSONValue from 'app/components/JSONValue.svelte';
-	import Select from 'app/components/Select.svelte';
-	import SelectMenu from 'app/components/SelectMenu.svelte';
+	import ESField from 'app/components/elementary/ElasticSearchField.svelte';
+
+	import TabContainer from 'app/components/elementary/TabContainer.svelte';
+	import Tab from 'app/components/elementary/Tab.svelte';
+	import Select from 'app/components/elementary/Select.svelte';
+	import SelectMenu from 'app/components/elementary/SelectMenu.svelte';
 	import PanelMenu from 'app/components/elementary/PanelMenu.svelte';
 	import MenuItem from 'app/components/elementary/MenuItem.svelte';
 	import IconDelete from 'app/components/icons/IconDelete.svelte';
 
-	const AXIS_NAMES = ['primary', 'secondary', 'tertiary', 'quaternary', 'quinary', 'senary', 'septenary', 'octonary', 'nonary', 'denary'];
+	let datasetTypings;
+	const AXIS_NAMES = [
+		'primary',
+		'secondary',
+		'tertiary',
+		'quaternary',
+		'quinary',
+		'senary',
+		'septenary',
+		'octonary',
+		'nonary',
+		'denary'
+	];
+
+	let resultSize = 0;
+
 	let queryConfig = {
 		dataset: undefined,
 		axes: _.fromPairs(AXIS_NAMES.map(name =>
@@ -146,10 +165,17 @@
 				aggregation: null,
 				type: null,
 				field: null,
-				output: null
 			}]
 		))
 	};
+
+	let axisParams = _.fromPairs(AXIS_NAMES.map(name =>
+		[name, {
+			input: {},
+			pureOutput: null,
+			output: null
+		}]
+	));
 
 	let queryTemplate = {};
 	let parsedQuery = queryTemplate;
@@ -168,6 +194,7 @@
 
 	let [ selectedAxis ] = AXIS_NAMES;
 	let selectedAxisConfig = queryConfig.axes[selectedAxis];
+	let selectedParams;
 
 	let readyForRequest = false;
 
@@ -181,59 +208,37 @@
 	let showFullResponse = false;
 	let runQueryOnSelect = true;
 
+	let selectedFieldCompletions = [];
+
+	let selectedRequestTab;
+
 	function resetAxis (axis) {
 		queryConfig.axes[axis] = {
 			aggregation: null,
 			type: null,
-			field: null,
-			output: null
+			field: null
 		};
+		axisParams[axis] = {
+			input: {},
+			pureOutput: null,
+			output: null
+		}
 	}
 
 	function cleanRequestBody () {
 		readyForRequest = false;
 		queryTemplate = {
-			size: 0
+			size: resultSize
 		}
 	}
+	function clearParameters () {
+		selectedParams.input = {};
+	}
 
-	const isMissing = (key, value) => obj => Boolean(obj) && !obj[key].has(value);
+	const isMissing = (key, value) => obj => Boolean(obj)
+		&& !obj[key].has(value);
 
-	async function computeLists (config) {
-		const typeDicts = types[selectedAxisConfig.type];
-		const fieldDicts = fields[selectedAxisConfig.field];
-		const datasetDicts = config.dataset && datasets[DATASETS[config.dataset].id];
-		const aggDicts = aggregations[selectedAxisConfig.aggregation];
-
-		bucketOptions = Object.keys(bucketLabels).map(agg => ({
-			text: bucketLabels[agg],
-			value: agg,
-			disabled: [typeDicts, datasetDicts, fieldDicts].some(isMissing('aggregations', agg))
-		}));
-		aggregatorOptions = Object.keys(metricLabels).map(agg => ({
-			text: metricLabels[agg],
-			value: agg,
-			disabled: [typeDicts, datasetDicts, fieldDicts].some(isMissing('aggregations', agg))
-		}));
-		typeOptions = Object.keys(types).map(type => ({
-			text: type,
-			value: type,
-			disabled: false,
-			effaced: [aggDicts, datasetDicts, fieldDicts].some(isMissing('types', type))
-		}));
-		datasetOptions = DATASETS.map((dataset, index) => ({
-			text: dataset.id,
-			value: index,
-			disabled: [typeDicts, fieldDicts, aggDicts].some(isMissing('datasets', dataset.id))
-		}));
-		fieldOptions = fieldNames.map(field => ({
-			text: field,
-			value: field,
-			disabled:
-				!config.dataset
-				|| [typeDicts, datasetDicts, aggDicts].some(isMissing('fields', field))
-		}));
-
+	function computeRequestBody (config) {
 		cleanRequestBody();
 
 		let activeAxes = 0;
@@ -243,27 +248,90 @@
 		while (active) {
 			active = false;
 			const currentName = AXIS_NAMES[activeAxes++];
-			const current = config.axes[currentName];
-			current.output = null;
-			if (Boolean(current.aggregation) && Boolean(current.field)) {
+			const currentAxis = config.axes[currentName];
+			const currentParams = axisParams[currentName];
+			currentParams.output = null;
+			if (Boolean(currentAxis.aggregation)
+				&& Boolean(currentAxis.field)
+			) {
 				if (activeAxes < AXIS_NAMES.length) {
 					active = true;
 				}
 				if (config.dataset) {
 					readyForRequest = true;
-					const fieldInfo = getSchema(DATASETS[config.dataset])[current.field];
-					current.output = {
+					const fieldInfo
+						= getSchema(DATASETS[config.dataset])[currentAxis.field];
+					const agg = buildAggregation(
+						currentAxis.aggregation,
+						currentAxis.field,
+						fieldInfo
+					);
+					currentParams.pureOutput = {
 						[currentName]: {
-							[current.aggregation]: buildAggregation(current.aggregation, current.field, fieldInfo)
+							[currentAxis.aggregation]: agg
 						}
 					};
-					currentTemplate.aggs = {...current.output};
+					currentParams.output = {
+						[currentName]: {
+							[currentAxis.aggregation]: {
+								...agg,
+								...currentParams.input
+							}
+						}
+					};
+					currentTemplate.aggs = {...currentParams.output};
 					currentTemplate = currentTemplate.aggs[currentName];
 				}
 			}
 		}
+		return activeAxes;
+	}
 
-		if (typeOptions.some(i => i.effaced && i.value === selectedAxisConfig.type)) {
+	async function computeLists (config) {
+		const typeDicts = types[selectedAxisConfig.type];
+		const fieldDicts = fields[selectedAxisConfig.field];
+		const datasetDicts = config.dataset
+			&& datasets[DATASETS[config.dataset].id];
+		const aggDicts = aggregations[selectedAxisConfig.aggregation];
+
+		bucketOptions = Object.keys(bucketLabels).map(agg => ({
+			text: bucketLabels[agg],
+			value: agg,
+			disabled: [typeDicts, datasetDicts, fieldDicts]
+			.some(isMissing('aggregations', agg))
+		}));
+		aggregatorOptions = Object.keys(metricLabels).map(agg => ({
+			text: metricLabels[agg],
+			value: agg,
+			disabled: [typeDicts, datasetDicts, fieldDicts]
+			.some(isMissing('aggregations', agg))
+		}));
+		typeOptions = Object.keys(types).map(type => ({
+			text: type,
+			value: type,
+			disabled: false,
+			effaced: [aggDicts, datasetDicts, fieldDicts]
+			.some(isMissing('types', type))
+		}));
+		datasetOptions = DATASETS.map((dataset, index) => ({
+			text: dataset.id,
+			value: index,
+			disabled: [typeDicts, fieldDicts, aggDicts]
+			.some(isMissing('datasets', dataset.id))
+		}));
+		fieldOptions = fieldNames.map(field => ({
+			text: field,
+			value: field,
+			disabled:
+				!config.dataset
+				|| [typeDicts, datasetDicts, aggDicts]
+				.some(isMissing('fields', field))
+		}));
+
+		let activeAxes = computeRequestBody(config);
+
+		if (typeOptions.some(i => i.effaced
+			&& i.value === selectedAxisConfig.type)) {
 			cleanRequestBody();
 		}
 
@@ -273,28 +341,55 @@
 		axisOptions = axisOptions;
 		responsePromise = Promise.resolve(undefined);
 
-		if (IS_BROWSER && window.ts && selectedAxisConfig.output) {
+		if (IS_BROWSER && window.ts && selectedParams.output) {
 			const ds = DATASETS[config.dataset].id;
 			const code = `
-				const selection: Aggs<${ds}, '${selectedAxisConfig.field}'> = ${JSON.stringify(selectedAxisConfig.output)};
+				const selection: Aggs<${ds}, '${selectedAxisConfig.field}'> = 
+					${JSON.stringify(selectedParams.pureOutput)};
 			`;
-			console.log(code);
-			const fullCode = await request('GET', 'dsl/datasets.ts', {type:'text'}) + code;
-			const output = getCompletions(fullCode, fullCode.lastIndexOf('{') + 1);
-			console.log(output);
+			if (!datasetTypings) {
+				datasetTypings = await request(
+					'GET',
+					'dsl/datasets.ts',
+					{type:'text'}
+				);
+			}
+			const fullCode = datasetTypings + code;
+			selectedFieldCompletions = getCompletions(
+				fullCode,
+				fullCode.lastIndexOf('{') + 1
+			).sort((a, b) => b.required - a.required);
 		}
 	}
 
+	function getFieldValue (name) {
+		return selectedParams.input[name]
+			|| selectedParams
+			.output[selectedAxis][selectedAxisConfig.aggregation][name];
+	}
+
+	function updateField (name, newValue) {
+		// TODO For text types, should we distinguish between
+		// empty strings and `null` or `undefined`?
+		if (newValue !== null) {
+			selectedParams.input[name] = newValue;
+		}
+		else {
+			delete selectedParams.input[name];
+		}
+		computeRequestBody(queryConfig);
+	}
+
 	const cache = {};
-	function doQuery () {
+	function doQuery (query) {
 		if (readyForRequest) {
 			const endpoint = getEndpointURL(DATASETS[queryConfig.dataset]);
 			const url = `${endpoint}/_search`;
-			const cacheKey = `${url}/${JSON.stringify(parsedQuery)}`;
+			const cacheKey = `${url}/${JSON.stringify(query)}`;
 			if (cacheKey in cache) {
 				responsePromise = Promise.resolve(cache[cacheKey]);
 			} else {
-				responsePromise = request('POST', url, {data: parsedQuery});
+				responsePromise = request('POST', url, {data: query});
 				responsePromise.then(json => {
 					cache[cacheKey] = json;
 				});
@@ -303,9 +398,18 @@
 	}
 
 	$: selectedAxisConfig = queryConfig.axes[selectedAxis];
+	$: selectedParams = axisParams[selectedAxis];
 	$: !queryConfig.dataset && (selectedAxisConfig.field = null);
+	// eslint-disable-next-line no-unused-expressions, no-sequences
+	$: selectedAxisConfig, queryConfig.dataset, clearParameters();
 	$: computeLists(queryConfig);
-	$: parsedQuery && runQueryOnSelect && doQuery(true);
+	// eslint-disable-next-line no-unused-expressions, no-sequences
+	$: $selectedRequestTab === 'fields'
+		&& runQueryOnSelect
+		&& doQuery(queryTemplate);
+	$: $selectedRequestTab === 'request'
+		&& runQueryOnSelect
+		&& doQuery(parsedQuery);
 </script>
 
 <section class="query-builder">
@@ -375,33 +479,100 @@
 		/>
 	</section>
 
-	<section class='request'>
-			<PanelMenu>
-			<MenuItem>
-				<input
-					bind:checked={runQueryOnSelect}
-					id='runQueryOnSelectID'
-					type='checkbox'
-				>
-				<label
-					class='clickable'
-					for='runQueryOnSelectID'
-				>Run query on select</label>
-			</MenuItem>
-		</PanelMenu>
-
-		<header class='bold'>Request</header>
-		<div class='json'>
+	<TabContainer
+		className='request'
+		bind:selectedTab={selectedRequestTab}
+		let:isTitleSlot
+		let:isContentSlot
+	>
+		<Tab id='fields' {isTitleSlot} {isContentSlot}>
+			<header slot='title' class='bold'>Query Form</header>
+			<div class='form-fields'>
+				<ESField 
+					labelText='result size'
+					required=true
+					dataType='Opaque<number, "integer">'
+					value={resultSize}
+					on:change={e => {
+						resultSize = e.detail;
+						computeRequestBody(queryConfig);
+					}}
+					
+				/>
+				{#if selectedParams.output}
+					{#each selectedFieldCompletions as completion}
+						{#if completion.name !== 'field'}
+							<ESField
+								labelText={completion.name}
+								required={completion.required}
+								dataType={completion.displayText}
+								value={getFieldValue(completion.name)}
+								on:change={e => {
+									updateField(completion.name, e.detail);
+								}}
+							/>
+						{/if}
+					{/each}
+				{/if}
+			</div>
+			<div class='query-bottom'>
+				{#if !runQueryOnSelect}
+					<button
+						disabled={!readyForRequest}
+						on:click={() => doQuery(queryTemplate)}
+						class='query-button'
+					>Run query</button>
+				{:else if readyForRequest}
+					<div class='query-button'>
+						Press Enter or Tab to run the query
+					</div>
+				{/if}
+				<PanelMenu position='static' className='query-menu' popup='top'>
+					<MenuItem>
+						<input
+							bind:checked={runQueryOnSelect}
+							id='runQueryOnSelectID'
+							type='checkbox'
+						>
+						<label
+							class='clickable'
+							for='runQueryOnSelectID'
+						>Run query on select</label>
+					</MenuItem>
+				</PanelMenu>
+			</div>
+		</Tab>
+		<Tab id='request' {isTitleSlot} {isContentSlot}>
+			<header slot='title' class='bold'>Query Editor</header>
 			<JSONValue
-				bind:parsedValue={parsedQuery}
 				editable={true}
 				value={queryTemplate}
+				bind:parsedValue={parsedQuery}
 			/>
-		</div>
-		{#if !runQueryOnSelect}
-			<button disabled={!readyForRequest} on:click={doQuery}>Execute</button>
-		{/if}
-	</section>
+			<div class='query-bottom'>
+				{#if !runQueryOnSelect}
+					<button 
+						disabled={!readyForRequest} 
+						on:click={() => doQuery(parsedQuery)}
+						class='query-button'
+					>Run query</button>
+				{/if}
+				<PanelMenu position='static' className='query-menu' popup='top'>
+					<MenuItem>
+						<input
+							bind:checked={runQueryOnSelect}
+							id='runQueryOnSelectID'
+							type='checkbox'
+						>
+						<label
+							class='clickable'
+							for='runQueryOnSelectID'
+						>Run query on select</label>
+					</MenuItem>
+				</PanelMenu>
+			</div>
+		</Tab>
+	</TabContainer>
 
 	<section class='response'>
 		<PanelMenu>
@@ -425,7 +596,9 @@
 					Waiting for response...
 				{:then response}
 					<JSONValue
-						value={showFullResponse ? response : response && response.aggregations}
+						value={showFullResponse
+							? response
+							: response && response.aggregations}
 					/>
 				{:catch error}
 					<JSONValue value={error.jsonMessage} />
@@ -443,17 +616,24 @@
 		grid-template-areas:
 			"axes agreggations types datasets fields request"
 			"axes agreggations types datasets fields response";
-		grid-template-columns: fit-content(100%) fit-content(100%) fit-content(100%) fit-content(100%) fit-content(100%)  1fr;
-		grid-template-rows: 0.5fr 0.5fr;
+		grid-template-columns:
+			fit-content(100%)
+			fit-content(100%)
+			fit-content(100%)
+			fit-content(100%)
+			fit-content(100%)
+			1fr;
+		grid-auto-rows: auto 1fr;
 	}
 	.axes {grid-area: axes;}
 	.agreggations {grid-area: agreggations;}
 	.types {grid-area: types;}
 	.datasets {grid-area: datasets;}
 	.fields {grid-area: fields;}
-	.request {
+	:global(.request) {
 		border-bottom: 1px solid var(--color-main-lighter);
 		grid-area: request;
+		height: fit-content !important;
 	}
 	.response {grid-area: response;}
 
@@ -470,7 +650,6 @@
 	.types,
 	.datasets,
 	.fields,
-	.request,
 	.response {
 		display: grid;
 		grid-template-areas: "header" "select";
@@ -504,8 +683,25 @@
 		grid-column-gap: 1em;
 	}
 
-	button {
+	.query-bottom {
+		display: grid;
+		grid-template-columns: auto min-content;
+		padding-top: 1em;
+	}
+	.query-button {
 		padding: 0.4em;
 	}
 
+	.form-fields {
+		display: grid;
+		grid-template-columns: min-content auto;
+		grid-gap: 1em;
+		grid-auto-rows: min-content;
+		align-items: start;
+	}
+
+	:global(.query-menu) {
+		justify-self: end;
+		padding:0.4em 0 0.4em 1em;
+	}
 </style>
