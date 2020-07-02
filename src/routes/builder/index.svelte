@@ -425,7 +425,7 @@
 	</section>
 
 	<TabContainer className='request' bind:selectedTab={selectedRequestTab} let:isTitleSlot let:isContentSlot>
-		<PanelMenu>
+		<PanelMenu corner='bottom-right'>
 			<MenuItem>
 				<input
 					bind:checked={runQueryOnSelect}
