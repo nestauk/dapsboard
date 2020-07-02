@@ -496,7 +496,7 @@
 				value={queryTemplate}
 				bind:parsedValue={parsedQuery}
 			/>
-			<div>
+			<div class='query-bottom'>
 				{#if !runQueryOnSelect}
 					<button 
 						disabled={!readyForRequest} 
