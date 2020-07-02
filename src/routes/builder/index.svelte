@@ -425,19 +425,6 @@
 	</section>
 
 	<TabContainer className='request' bind:selectedTab={selectedRequestTab} let:isTitleSlot let:isContentSlot>
-		<PanelMenu corner='bottom-right'>
-			<MenuItem>
-				<input
-					bind:checked={runQueryOnSelect}
-					id='runQueryOnSelectID'
-					type='checkbox'
-				>
-				<label
-					class='clickable'
-					for='runQueryOnSelectID'
-				>Run query on select</label>
-			</MenuItem>
-		</PanelMenu>
 		<Tab id='fields' {isTitleSlot} {isContentSlot}>
 			<header slot='title' class='bold'>Query Form</header>
 			<div class='form-fields'>
@@ -477,15 +464,30 @@
 					{/each}
 				{/if}
 			</div>
-			{#if !runQueryOnSelect}
-				<button
-					disabled={!readyForRequest}
-					on:click={() => doQuery(queryTemplate)}
-					class='query-button'
-				>Run query</button>
-			{:else if readyForRequest}
-				<div class='query-button'>Press Enter or Tab to run the query</div>
-			{/if}
+			<div class='query-bottom'>
+				{#if !runQueryOnSelect}
+					<button
+						disabled={!readyForRequest}
+						on:click={() => doQuery(queryTemplate)}
+						class='query-button'
+					>Run query</button>
+				{:else if readyForRequest}
+					<div class='query-button'>Press Enter or Tab to run the query</div>
+				{/if}
+				<PanelMenu position='static' className='query-menu'>
+					<MenuItem>
+						<input
+							bind:checked={runQueryOnSelect}
+							id='runQueryOnSelectID'
+							type='checkbox'
+						>
+						<label
+							class='clickable'
+							for='runQueryOnSelectID'
+						>Run query on select</label>
+					</MenuItem>
+				</PanelMenu>
+			</div>
 		</Tab>
 		<Tab id='request' {isTitleSlot} {isContentSlot}>
 			<header slot='title' class='bold'>Query Editor</header>
@@ -494,13 +496,28 @@
 				value={queryTemplate}
 				bind:parsedValue={parsedQuery}
 			/>
-			{#if !runQueryOnSelect}
-				<button 
-					disabled={!readyForRequest} 
-					on:click={() => doQuery(parsedQuery)}
-					class='query-button'
-				>Run query</button>
-			{/if}
+			<div>
+				{#if !runQueryOnSelect}
+					<button 
+						disabled={!readyForRequest} 
+						on:click={() => doQuery(parsedQuery)}
+						class='query-button'
+					>Run query</button>
+				{/if}
+				<PanelMenu position='static' className='query-menu'>
+					<MenuItem>
+						<input
+							bind:checked={runQueryOnSelect}
+							id='runQueryOnSelectID'
+							type='checkbox'
+						>
+						<label
+							class='clickable'
+							for='runQueryOnSelectID'
+						>Run query on select</label>
+					</MenuItem>
+				</PanelMenu>
+			</div>
 		</Tab>
 	</TabContainer>
 
@@ -605,9 +622,12 @@
 		grid-column-gap: 1em;
 	}
 
+	.query-bottom {
+		display: grid;
+		grid-template-columns: auto min-content;
+	}
 	.query-button {
 		padding: 0.4em;
-		margin-right: 2em;
 	}
 
 	.form-fields {
@@ -616,5 +636,10 @@
 		grid-gap: 1em;
 		grid-auto-rows: min-content;
 		align-items: start;
+	}
+
+	:global(.query-menu) {
+		justify-self: end;
+		padding:0.4em 0 0.4em 1em;
 	}
 </style>
