@@ -143,7 +143,18 @@
 	import IconDelete from 'app/components/icons/IconDelete.svelte';
 
 	let datasetTypings;
-	const AXIS_NAMES = ['primary', 'secondary', 'tertiary', 'quaternary', 'quinary', 'senary', 'septenary', 'octonary', 'nonary', 'denary'];
+	const AXIS_NAMES = [
+		'primary', 
+		'secondary', 
+		'tertiary', 
+		'quaternary', 
+		'quinary', 
+		'senary', 
+		'septenary', 
+		'octonary', 
+		'nonary', 
+		'denary'
+	];
 
 	let resultSize = 0;
 
@@ -183,6 +194,7 @@
 
 	let [ selectedAxis ] = AXIS_NAMES;
 	let selectedAxisConfig = queryConfig.axes[selectedAxis];
+	let selectedParams;
 
 	let readyForRequest = false;
 
@@ -220,10 +232,30 @@
 		}
 	}
 	function clearParameters () {
-		axisParams[selectedAxis].input = {};
+		selectedParams.input = {};
 	}
 
-	const isMissing = (key, value) => obj => Boolean(obj) && !obj[key].has(value);
+	const isMissing = (key, value) => obj => Boolean(obj)
+		&& !obj[key].has(value);
+
+	function getFieldValue(name) {
+		return (selectedParams.input[name] 
+			|| selectedParams
+			.output[selectedAxis][selectedAxisConfig.aggregation][name]);
+	}
+
+	function updateField (name, newValue) {
+		const value = e.detail;
+		// TODO For text types, should we distinguish between
+		// empty strings and `null` or `undefined`?
+		if (value !== null) {
+			selectedParams.input[name] = newValue;
+		}
+		else {
+			delete selectedParams.input[name];
+		}
+		computeRequestBody(queryConfig);
+	}
 
 	function computeRequestBody (config) {
 		cleanRequestBody();
@@ -238,14 +270,20 @@
 			const currentAxis = config.axes[currentName];
 			const currentParams = axisParams[currentName];
 			currentParams.output = null;
-			if (Boolean(currentAxis.aggregation) && Boolean(currentAxis.field)) {
+			if (Boolean(currentAxis.aggregation) 
+				&& Boolean(currentAxis.field)
+			) {
 				if (activeAxes < AXIS_NAMES.length) {
 					active = true;
 				}
 				if (config.dataset) {
 					readyForRequest = true;
 					const fieldInfo = getSchema(DATASETS[config.dataset])[currentAxis.field];
-					const agg = buildAggregation(currentAxis.aggregation, currentAxis.field, fieldInfo);
+					const agg = buildAggregation(
+						currentAxis.aggregation,
+						currentAxis.field,
+						fieldInfo
+					);
 					currentParams.pureOutput = {
 						[currentName]: {
 							[currentAxis.aggregation]: agg
@@ -304,7 +342,8 @@
 
 		let activeAxes = computeRequestBody(config);
 
-		if (typeOptions.some(i => i.effaced && i.value === selectedAxisConfig.type)) {
+		if (typeOptions.some(i => i.effaced 
+			&& i.value === selectedAxisConfig.type)) {
 			cleanRequestBody();
 		}
 
@@ -314,18 +353,25 @@
 		axisOptions = axisOptions;
 		responsePromise = Promise.resolve(undefined);
 
-		if (IS_BROWSER && window.ts && axisParams[selectedAxis].output) {
+		if (IS_BROWSER && window.ts && selectedParams.output) {
 			const ds = DATASETS[config.dataset].id;
 			const code = `
-				const selection: Aggs<${ds}, '${selectedAxisConfig.field}'> = ${JSON.stringify(axisParams[selectedAxis].pureOutput)};
+				const selection: Aggs<${ds}, '${selectedAxisConfig.field}'> = 
+					${JSON.stringify(selectedParams.pureOutput)};
 			`;
 			console.log(code);
 			if (!datasetTypings) {
-				datasetTypings = await request('GET', 'dsl/datasets.ts', {type:'text'});
+				datasetTypings = await request(
+					'GET', 
+					'dsl/datasets.ts', 
+					{type:'text'}
+				);
 			}
 			const fullCode = datasetTypings + code;
-			selectedFieldCompletions = getCompletions(fullCode, fullCode.lastIndexOf('{') + 1)
-			.sort((a, b) => b.required - a.required);
+			selectedFieldCompletions = getCompletions(
+				fullCode, 
+				fullCode.lastIndexOf('{') + 1
+			).sort((a, b) => b.required - a.required);
 			console.log(selectedFieldCompletions);
 		}
 	}
@@ -348,13 +394,18 @@
 	}
 
 	$: selectedAxisConfig = queryConfig.axes[selectedAxis];
+	$: selectedParams = axisParams[selectedAxis];
 	$: !queryConfig.dataset && (selectedAxisConfig.field = null);
 	// eslint-disable-next-line no-unused-expressions, no-sequences
 	$: selectedAxisConfig, queryConfig.dataset, clearParameters();
 	$: computeLists(queryConfig);
 	// eslint-disable-next-line no-unused-expressions, no-sequences
-	$: $selectedRequestTab === 'fields' && runQueryOnSelect && doQuery(queryTemplate);
-	$: $selectedRequestTab === 'request' && runQueryOnSelect && doQuery(parsedQuery);
+	$: $selectedRequestTab === 'fields' 
+		&& runQueryOnSelect 
+		&& doQuery(queryTemplate);
+	$: $selectedRequestTab === 'request' 
+		&& runQueryOnSelect 
+		&& doQuery(parsedQuery);
 </script>
 
 <section class="query-builder">
@@ -424,7 +475,12 @@
 		/>
 	</section>
 
-	<TabContainer className='request' bind:selectedTab={selectedRequestTab} let:isTitleSlot let:isContentSlot>
+	<TabContainer
+		className='request'
+		bind:selectedTab={selectedRequestTab}
+		let:isTitleSlot
+		let:isContentSlot
+	>
 		<Tab id='fields' {isTitleSlot} {isContentSlot}>
 			<header slot='title' class='bold'>Query Form</header>
 			<div class='form-fields'>
@@ -439,25 +495,16 @@
 					}}
 					
 				/>
-				{#if axisParams[selectedAxis].output}
+				{#if selectedParams.output}
 					{#each selectedFieldCompletions as completion}
 						{#if completion.name !== 'field'}
 							<ESField
 								labelText={completion.name}
 								required={completion.required}
 								dataType={completion.displayText}
-								value={axisParams[selectedAxis].input[completion.name] || axisParams[selectedAxis].output[selectedAxis][selectedAxisConfig.aggregation][completion.name]}
+								value={getFieldValue(completion.name)}
 								on:change={e => {
-									const value = e.detail;
-									// TODO For text types, should we distinguish between
-									// empty strings and `null` or `undefined`?
-									if (value !== null) {
-										axisParams[selectedAxis].input[completion.name] = value;
-									}
-									else {
-										delete axisParams[selectedAxis].input[completion.name];
-									}
-									computeRequestBody(queryConfig);
+									updateField(completion.name, e.detail);
 								}}
 							/>
 						{/if}
@@ -472,7 +519,9 @@
 						class='query-button'
 					>Run query</button>
 				{:else if readyForRequest}
-					<div class='query-button'>Press Enter or Tab to run the query</div>
+					<div class='query-button'>
+						Press Enter or Tab to run the query
+					</div>
 				{/if}
 				<PanelMenu position='static' className='query-menu' popup='top'>
 					<MenuItem>
@@ -543,7 +592,9 @@
 					Waiting for response...
 				{:then response}
 					<JSONValue
-						value={showFullResponse ? response : response && response.aggregations}
+						value={showFullResponse 
+							? response : response 
+							&& response.aggregations}
 					/>
 				{:catch error}
 					<JSONValue value={error.jsonMessage} />
@@ -561,7 +612,13 @@
 		grid-template-areas:
 			"axes agreggations types datasets fields request"
 			"axes agreggations types datasets fields response";
-		grid-template-columns: fit-content(100%) fit-content(100%) fit-content(100%) fit-content(100%) fit-content(100%)  1fr;
+		grid-template-columns:
+			fit-content(100%)
+			fit-content(100%)
+			fit-content(100%)
+			fit-content(100%)
+			fit-content(100%)
+			1fr;
 		grid-auto-rows: auto 1fr;
 	}
 	.axes {grid-area: axes;}
@@ -589,7 +646,6 @@
 	.types,
 	.datasets,
 	.fields,
-	/*.request,*/
 	.response {
 		display: grid;
 		grid-template-areas: "header" "select";
