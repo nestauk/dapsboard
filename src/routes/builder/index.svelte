@@ -474,7 +474,7 @@
 				{:else if readyForRequest}
 					<div class='query-button'>Press Enter or Tab to run the query</div>
 				{/if}
-				<PanelMenu position='static' className='query-menu'>
+				<PanelMenu position='static' className='query-menu' popup='top'>
 					<MenuItem>
 						<input
 							bind:checked={runQueryOnSelect}
@@ -504,7 +504,7 @@
 						class='query-button'
 					>Run query</button>
 				{/if}
-				<PanelMenu position='static' className='query-menu'>
+				<PanelMenu position='static' className='query-menu' popup='top'>
 					<MenuItem>
 						<input
 							bind:checked={runQueryOnSelect}
