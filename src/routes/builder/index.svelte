@@ -626,6 +626,7 @@
 	.query-bottom {
 		display: grid;
 		grid-template-columns: auto min-content;
+		padding-top: 1em;
 	}
 	.query-button {
 		padding: 0.4em;
