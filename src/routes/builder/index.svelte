@@ -562,7 +562,6 @@
 			"axes agreggations types datasets fields request"
 			"axes agreggations types datasets fields response";
 		grid-template-columns: fit-content(100%) fit-content(100%) fit-content(100%) fit-content(100%) fit-content(100%)  1fr;
-		grid-template-rows: 0.5fr 0.5fr;
 	}
 	.axes {grid-area: axes;}
 	.agreggations {grid-area: agreggations;}
@@ -572,6 +571,7 @@
 	:global(.request) {
 		border-bottom: 1px solid var(--color-main-lighter);
 		grid-area: request;
+		height: fit-content !important;
 	}
 	.response {grid-area: response;}
 
