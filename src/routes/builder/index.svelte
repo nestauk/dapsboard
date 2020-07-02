@@ -238,25 +238,6 @@
 	const isMissing = (key, value) => obj => Boolean(obj)
 		&& !obj[key].has(value);
 
-	function getFieldValue(name) {
-		return (selectedParams.input[name] 
-			|| selectedParams
-			.output[selectedAxis][selectedAxisConfig.aggregation][name]);
-	}
-
-	function updateField (name, newValue) {
-		const value = e.detail;
-		// TODO For text types, should we distinguish between
-		// empty strings and `null` or `undefined`?
-		if (value !== null) {
-			selectedParams.input[name] = newValue;
-		}
-		else {
-			delete selectedParams.input[name];
-		}
-		computeRequestBody(queryConfig);
-	}
-
 	function computeRequestBody (config) {
 		cleanRequestBody();
 
@@ -381,6 +362,24 @@
 			).sort((a, b) => b.required - a.required);
 			console.log(selectedFieldCompletions);
 		}
+	}
+
+	function getFieldValue (name) {
+		return selectedParams.input[name]
+			|| selectedParams
+			.output[selectedAxis][selectedAxisConfig.aggregation][name];
+	}
+
+	function updateField (name, newValue) {
+		// TODO For text types, should we distinguish between
+		// empty strings and `null` or `undefined`?
+		if (newValue !== null) {
+			selectedParams.input[name] = newValue;
+		}
+		else {
+			delete selectedParams.input[name];
+		}
+		computeRequestBody(queryConfig);
 	}
 
 	const cache = {};
