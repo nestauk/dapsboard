@@ -144,15 +144,15 @@
 
 	let datasetTypings;
 	const AXIS_NAMES = [
-		'primary', 
-		'secondary', 
-		'tertiary', 
-		'quaternary', 
-		'quinary', 
-		'senary', 
-		'septenary', 
-		'octonary', 
-		'nonary', 
+		'primary',
+		'secondary',
+		'tertiary',
+		'quaternary',
+		'quinary',
+		'senary',
+		'septenary',
+		'octonary',
+		'nonary',
 		'denary'
 	];
 
@@ -270,7 +270,7 @@
 			const currentAxis = config.axes[currentName];
 			const currentParams = axisParams[currentName];
 			currentParams.output = null;
-			if (Boolean(currentAxis.aggregation) 
+			if (Boolean(currentAxis.aggregation)
 				&& Boolean(currentAxis.field)
 			) {
 				if (activeAxes < AXIS_NAMES.length) {
@@ -278,7 +278,8 @@
 				}
 				if (config.dataset) {
 					readyForRequest = true;
-					const fieldInfo = getSchema(DATASETS[config.dataset])[currentAxis.field];
+					const fieldInfo
+						= getSchema(DATASETS[config.dataset])[currentAxis.field];
 					const agg = buildAggregation(
 						currentAxis.aggregation,
 						currentAxis.field,
@@ -308,41 +309,47 @@
 	async function computeLists (config) {
 		const typeDicts = types[selectedAxisConfig.type];
 		const fieldDicts = fields[selectedAxisConfig.field];
-		const datasetDicts = config.dataset && datasets[DATASETS[config.dataset].id];
+		const datasetDicts = config.dataset
+			&& datasets[DATASETS[config.dataset].id];
 		const aggDicts = aggregations[selectedAxisConfig.aggregation];
 
 		bucketOptions = Object.keys(bucketLabels).map(agg => ({
 			text: bucketLabels[agg],
 			value: agg,
-			disabled: [typeDicts, datasetDicts, fieldDicts].some(isMissing('aggregations', agg))
+			disabled: [typeDicts, datasetDicts, fieldDicts]
+			.some(isMissing('aggregations', agg))
 		}));
 		aggregatorOptions = Object.keys(metricLabels).map(agg => ({
 			text: metricLabels[agg],
 			value: agg,
-			disabled: [typeDicts, datasetDicts, fieldDicts].some(isMissing('aggregations', agg))
+			disabled: [typeDicts, datasetDicts, fieldDicts]
+			.some(isMissing('aggregations', agg))
 		}));
 		typeOptions = Object.keys(types).map(type => ({
 			text: type,
 			value: type,
 			disabled: false,
-			effaced: [aggDicts, datasetDicts, fieldDicts].some(isMissing('types', type))
+			effaced: [aggDicts, datasetDicts, fieldDicts]
+			.some(isMissing('types', type))
 		}));
 		datasetOptions = DATASETS.map((dataset, index) => ({
 			text: dataset.id,
 			value: index,
-			disabled: [typeDicts, fieldDicts, aggDicts].some(isMissing('datasets', dataset.id))
+			disabled: [typeDicts, fieldDicts, aggDicts]
+			.some(isMissing('datasets', dataset.id))
 		}));
 		fieldOptions = fieldNames.map(field => ({
 			text: field,
 			value: field,
 			disabled:
 				!config.dataset
-				|| [typeDicts, datasetDicts, aggDicts].some(isMissing('fields', field))
+				|| [typeDicts, datasetDicts, aggDicts]
+				.some(isMissing('fields', field))
 		}));
 
 		let activeAxes = computeRequestBody(config);
 
-		if (typeOptions.some(i => i.effaced 
+		if (typeOptions.some(i => i.effaced
 			&& i.value === selectedAxisConfig.type)) {
 			cleanRequestBody();
 		}
@@ -362,14 +369,14 @@
 			console.log(code);
 			if (!datasetTypings) {
 				datasetTypings = await request(
-					'GET', 
-					'dsl/datasets.ts', 
+					'GET',
+					'dsl/datasets.ts',
 					{type:'text'}
 				);
 			}
 			const fullCode = datasetTypings + code;
 			selectedFieldCompletions = getCompletions(
-				fullCode, 
+				fullCode,
 				fullCode.lastIndexOf('{') + 1
 			).sort((a, b) => b.required - a.required);
 			console.log(selectedFieldCompletions);
@@ -400,11 +407,11 @@
 	$: selectedAxisConfig, queryConfig.dataset, clearParameters();
 	$: computeLists(queryConfig);
 	// eslint-disable-next-line no-unused-expressions, no-sequences
-	$: $selectedRequestTab === 'fields' 
-		&& runQueryOnSelect 
+	$: $selectedRequestTab === 'fields'
+		&& runQueryOnSelect
 		&& doQuery(queryTemplate);
-	$: $selectedRequestTab === 'request' 
-		&& runQueryOnSelect 
+	$: $selectedRequestTab === 'request'
+		&& runQueryOnSelect
 		&& doQuery(parsedQuery);
 </script>
 
@@ -489,7 +496,7 @@
 					required=true
 					dataType='Opaque<number, "integer">'
 					value={resultSize}
-					on:change={e => { 
+					on:change={e => {
 						resultSize = e.detail;
 						computeRequestBody(queryConfig);
 					}}
@@ -592,9 +599,9 @@
 					Waiting for response...
 				{:then response}
 					<JSONValue
-						value={showFullResponse 
-							? response : response 
-							&& response.aggregations}
+						value={showFullResponse
+							? response
+							: response && response.aggregations}
 					/>
 				{:catch error}
 					<JSONValue value={error.jsonMessage} />
