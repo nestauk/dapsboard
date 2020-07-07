@@ -411,7 +411,7 @@
 	$: axisChanged(selectedAxis);
 	$: !queryConfig.dataset && (selectedAxisConfig.field = null);
 	// eslint-disable-next-line no-unused-expressions, no-sequences
-	//$: queryConfig[selectedAxis], queryConfig.dataset, clearParameters();
+	// $: queryConfig[selectedAxis], queryConfig.dataset, clearParameters();
 	$: computeLists(queryConfig);
 	// eslint-disable-next-line no-unused-expressions, no-sequences
 	$: $selectedRequestTab === 'fields'
