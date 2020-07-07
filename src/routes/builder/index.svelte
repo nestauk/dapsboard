@@ -212,6 +212,7 @@
 
 	let selectedRequestTab;
 
+	/*
 	function resetAxis (axis) {
 		queryConfig.axes[axis] = {
 			aggregation: null,
@@ -224,6 +225,7 @@
 			output: null
 		}
 	}
+	*/
 
 	function cleanRequestBody () {
 		readyForRequest = false;
