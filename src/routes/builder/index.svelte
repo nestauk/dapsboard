@@ -397,11 +397,15 @@
 		}
 	}
 
-	$: selectedAxisConfig = queryConfig.axes[selectedAxis];
-	$: selectedParams = axisParams[selectedAxis];
+	function axisChanged (newAxis) {
+		selectedAxisConfig = queryConfig.axes[newAxis];
+		selectedParams = axisParams[newAxis];
+	}
+
+	$: axisChanged(selectedAxis);
 	$: !queryConfig.dataset && (selectedAxisConfig.field = null);
 	// eslint-disable-next-line no-unused-expressions, no-sequences
-	$: selectedAxisConfig, queryConfig.dataset, clearParameters();
+	//$: queryConfig[selectedAxis], queryConfig.dataset, clearParameters();
 	$: computeLists(queryConfig);
 	// eslint-disable-next-line no-unused-expressions, no-sequences
 	$: $selectedRequestTab === 'fields'
@@ -441,13 +445,15 @@
 				bind:selectedOption={selectedAxisConfig.aggregation}
 				hideDisabled={hideDisabledAggregations}
 				options={bucketOptions}
-			/>
+				on:selectionChanged={clearParameters}
+				/>
 			<header class='semibold'>Metrics</header>
 			<Select
 				bind:selectedOption={selectedAxisConfig.aggregation}
 				hideDisabled={hideDisabledAggregations}
 				options={aggregatorOptions}
-			/>
+				on:selectionChanged={clearParameters}
+				/>
 		</section>
 	</section>
 
@@ -456,6 +462,7 @@
 		<Select
 			bind:selectedOption={selectedAxisConfig.type}
 			options={typeOptions}
+			on:selectionChanged={clearParameters}
 		/>
 	</section>
 
@@ -466,6 +473,7 @@
 			bind:selectedOption={queryConfig.dataset}
 			hideDisabled={hideDisabledDatasets}
 			options={datasetOptions}
+			on:selectionChanged={clearParameters}
 		/>
 	</section>
 
@@ -476,6 +484,7 @@
 			bind:selectedOption={selectedAxisConfig.field}
 			hideDisabled={hideDisabledFields}
 			options={fieldOptions}
+			on:selectionChanged={clearParameters}
 		/>
 	</section>
 
