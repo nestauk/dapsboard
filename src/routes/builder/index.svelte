@@ -244,6 +244,7 @@
 		let activeAxes = 0;
 		let currentTemplate = queryTemplate;
 		let active = true;
+		let includedInQuery = true;
 		readyForRequest = false;
 		while (active) {
 			active = false;
@@ -257,7 +258,7 @@
 				if (activeAxes < AXIS_NAMES.length) {
 					active = true;
 				}
-				if (config.dataset) {
+				if (config.dataset && includedInQuery) {
 					readyForRequest = true;
 					const fieldInfo
 						= getSchema(DATASETS[config.dataset])[currentAxis.field];
@@ -281,6 +282,9 @@
 					};
 					currentTemplate.aggs = {...currentParams.output};
 					currentTemplate = currentTemplate.aggs[currentName];
+				}
+				if (currentName === selectedAxis) {
+					includedInQuery = false;
 				}
 			}
 		}
@@ -429,7 +433,7 @@
 		>
 			<div class='axis-item'>
 				<div>{option.text}</div>
-				<div on:click={resetAxis(option.value)}>
+				<div >
 					<IconDelete size={14} />
 				</div>
 			</div>
