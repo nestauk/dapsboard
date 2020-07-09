@@ -213,6 +213,7 @@
 	let selectedRequestTab;
 
 	function resetAxis (axis) {
+		selectedAxis = axis;
 		const axesToClear = AXIS_NAMES.slice(AXIS_NAMES.indexOf(axis));
 		axesToClear.forEach(currentAxis => {
 			const currentConfig = queryConfig.axes[currentAxis];
