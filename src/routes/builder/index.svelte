@@ -519,7 +519,7 @@
 					
 				/>
 				{#if selectedParams.output}
-					{#each selectedFieldCompletions as completion}
+					{#each selectedFieldCompletions as completion (`${queryConfig.dataset}-${selectedAxisConfig.field}-${selectedAxisConfig.aggregation}-${completion.name}`)}
 						{#if completion.name !== 'field'}
 							<ESField
 								labelText={completion.name}
