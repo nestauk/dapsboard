@@ -213,15 +213,21 @@
 	let selectedRequestTab;
 
 	function resetAxis (axis) {
-		queryConfig.axes[axis] = {
-			aggregation: null,
-			type: null,
-			field: null
-		};
-		axisParams[axis] = {
-			input: {},
-			pureOutput: null,
-			output: null
+		selectedAxis = axis;
+		const axesToClear = AXIS_NAMES.slice(AXIS_NAMES.indexOf(axis));
+		axesToClear.forEach(currentAxis => {
+			const currentConfig = queryConfig.axes[currentAxis];
+			currentConfig.aggregation = null;
+			currentConfig.type = null;
+			currentConfig.field = null;
+
+			const currentParams = axisParams[currentAxis];
+			currentParams.input = {};
+			currentParams.pureOutput = null;
+			currentParams.output = null;
+		})
+		if (axis === 'primary') {
+			queryConfig.dataset = null;
 		}
 	}
 
@@ -244,6 +250,7 @@
 		let activeAxes = 0;
 		let currentTemplate = queryTemplate;
 		let active = true;
+		let includedInQuery = true;
 		readyForRequest = false;
 		while (active) {
 			active = false;
@@ -257,7 +264,7 @@
 				if (activeAxes < AXIS_NAMES.length) {
 					active = true;
 				}
-				if (config.dataset) {
+				if (config.dataset && includedInQuery) {
 					readyForRequest = true;
 					const fieldInfo
 						= getSchema(DATASETS[config.dataset])[currentAxis.field];
@@ -281,6 +288,9 @@
 					};
 					currentTemplate.aggs = {...currentParams.output};
 					currentTemplate = currentTemplate.aggs[currentName];
+				}
+				if (currentName === selectedAxis) {
+					includedInQuery = false;
 				}
 			}
 		}
@@ -397,13 +407,14 @@
 		}
 	}
 
-	$: selectedAxisConfig = queryConfig.axes[selectedAxis];
-	$: selectedParams = axisParams[selectedAxis];
+	function axisChanged (newAxis) {
+		selectedAxisConfig = queryConfig.axes[newAxis];
+		selectedParams = axisParams[newAxis];
+	}
+
+	$: axisChanged(selectedAxis);
 	$: !queryConfig.dataset && (selectedAxisConfig.field = null);
-	// eslint-disable-next-line no-unused-expressions, no-sequences
-	$: selectedAxisConfig, queryConfig.dataset, clearParameters();
 	$: computeLists(queryConfig);
-	// eslint-disable-next-line no-unused-expressions, no-sequences
 	$: $selectedRequestTab === 'fields'
 		&& runQueryOnSelect
 		&& doQuery(queryTemplate);
@@ -425,7 +436,7 @@
 		>
 			<div class='axis-item'>
 				<div>{option.text}</div>
-				<div on:click={resetAxis(option.value)}>
+				<div on:click={() => resetAxis(option.value)}>
 					<IconDelete size={14} />
 				</div>
 			</div>
@@ -441,12 +452,14 @@
 				bind:selectedOption={selectedAxisConfig.aggregation}
 				hideDisabled={hideDisabledAggregations}
 				options={bucketOptions}
+				on:selectionChanged={clearParameters}
 			/>
 			<header class='semibold'>Metrics</header>
 			<Select
 				bind:selectedOption={selectedAxisConfig.aggregation}
 				hideDisabled={hideDisabledAggregations}
 				options={aggregatorOptions}
+				on:selectionChanged={clearParameters}
 			/>
 		</section>
 	</section>
@@ -456,6 +469,7 @@
 		<Select
 			bind:selectedOption={selectedAxisConfig.type}
 			options={typeOptions}
+			on:selectionChanged={clearParameters}
 		/>
 	</section>
 
@@ -466,6 +480,8 @@
 			bind:selectedOption={queryConfig.dataset}
 			hideDisabled={hideDisabledDatasets}
 			options={datasetOptions}
+			on:selectionChanged={clearParameters}
+			disabled={selectedAxis !== 'primary'}
 		/>
 	</section>
 
@@ -476,6 +492,7 @@
 			bind:selectedOption={selectedAxisConfig.field}
 			hideDisabled={hideDisabledFields}
 			options={fieldOptions}
+			on:selectionChanged={clearParameters}
 		/>
 	</section>
 
@@ -500,7 +517,7 @@
 					
 				/>
 				{#if selectedParams.output}
-					{#each selectedFieldCompletions as completion}
+					{#each selectedFieldCompletions as completion (`${queryConfig.dataset}-${selectedAxisConfig.field}-${selectedAxisConfig.aggregation}-${completion.name}`)}
 						{#if completion.name !== 'field'}
 							<ESField
 								labelText={completion.name}
