@@ -212,20 +212,23 @@
 
 	let selectedRequestTab;
 
-	/*
 	function resetAxis (axis) {
-		queryConfig.axes[axis] = {
-			aggregation: null,
-			type: null,
-			field: null
-		};
-		axisParams[axis] = {
-			input: {},
-			pureOutput: null,
-			output: null
+		const axesToClear = AXIS_NAMES.slice(AXIS_NAMES.indexOf(axis));
+		axesToClear.forEach(currentAxis => {
+			const currentConfig = queryConfig.axes[currentAxis];
+			currentConfig.aggregation = null;
+			currentConfig.type = null;
+			currentConfig.field = null;
+
+			const currentParams = axisParams[currentAxis];
+			currentParams.input = {};
+			currentParams.pureOutput = null;
+			currentParams.output = null;
+		})
+		if (axis === 'primary') {
+			queryConfig.dataset = null;
 		}
 	}
-	*/
 
 	function cleanRequestBody () {
 		readyForRequest = false;
@@ -435,7 +438,7 @@
 		>
 			<div class='axis-item'>
 				<div>{option.text}</div>
-				<div >
+				<div on:click={() => resetAxis(option.value)}>
 					<IconDelete size={14} />
 				</div>
 			</div>
@@ -480,6 +483,7 @@
 			hideDisabled={hideDisabledDatasets}
 			options={datasetOptions}
 			on:selectionChanged={clearParameters}
+			disabled={selectedAxis !== 'primary'}
 		/>
 	</section>
 
