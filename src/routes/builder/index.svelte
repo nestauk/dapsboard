@@ -414,10 +414,7 @@
 
 	$: axisChanged(selectedAxis);
 	$: !queryConfig.dataset && (selectedAxisConfig.field = null);
-	// eslint-disable-next-line no-unused-expressions, no-sequences
-	// $: queryConfig[selectedAxis], queryConfig.dataset, clearParameters();
 	$: computeLists(queryConfig);
-	// eslint-disable-next-line no-unused-expressions, no-sequences
 	$: $selectedRequestTab === 'fields'
 		&& runQueryOnSelect
 		&& doQuery(queryTemplate);
@@ -456,14 +453,14 @@
 				hideDisabled={hideDisabledAggregations}
 				options={bucketOptions}
 				on:selectionChanged={clearParameters}
-				/>
+			/>
 			<header class='semibold'>Metrics</header>
 			<Select
 				bind:selectedOption={selectedAxisConfig.aggregation}
 				hideDisabled={hideDisabledAggregations}
 				options={aggregatorOptions}
 				on:selectionChanged={clearParameters}
-				/>
+			/>
 		</section>
 	</section>
 
