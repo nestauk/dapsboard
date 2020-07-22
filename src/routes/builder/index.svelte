@@ -212,6 +212,32 @@
 
 	let selectedRequestTab;
 
+	const DEFAULT_DOCS = 'Click on a field for docs.';
+	let defaultDocs = DEFAULT_DOCS;
+	let activeDocs = defaultDocs;
+
+	function handleDocs (docs, eventType) {
+		const docsText = docs.map(i => i.text ? i.text : '').join(' ');
+		switch (eventType) {
+			case 'set':
+				defaultDocs = docsText;
+				activeDocs = docsText;
+				break;
+			case 'unset':
+				defaultDocs = DEFAULT_DOCS;
+				activeDocs = defaultDocs;
+				break;
+			case 'display':
+				activeDocs = docsText;
+				break;
+			case 'hide':
+				activeDocs = defaultDocs;
+				break;
+			default:
+				break;
+		}
+	}
+
 	function resetAxis (axis) {
 		selectedAxis = axis;
 		const axesToClear = AXIS_NAMES.slice(AXIS_NAMES.indexOf(axis));
@@ -527,12 +553,16 @@
 								on:change={e => {
 									updateField(completion.name, e.detail);
 								}}
+								on:docs={e => handleDocs(completion.documentation, e.detail)}
 							/>
 						{/if}
 					{/each}
 				{/if}
 			</div>
 			<div class='query-bottom'>
+				<div class='help-text'>
+					{activeDocs}
+				</div>
 				{#if !runQueryOnSelect}
 					<button
 						disabled={!readyForRequest}
@@ -703,15 +733,21 @@
 	.query-bottom {
 		display: grid;
 		grid-template-columns: auto min-content;
+		grid-template-rows: min-content min-content;
 		padding-top: 1em;
 	}
 	.query-button {
 		padding: 0.4em;
 	}
 
+	.help-text {
+		grid-column: 1 / span 2 ;
+		min-height: 2em;
+	}
+
 	.form-fields {
 		display: grid;
-		grid-template-columns: min-content auto;
+		grid-template-columns: min-content auto min-content;
 		grid-gap: 1em;
 		grid-auto-rows: min-content;
 		align-items: start;
@@ -719,6 +755,7 @@
 
 	:global(.query-menu) {
 		justify-self: end;
+		grid-column: 2;
 		padding:0.4em 0 0.4em 1em;
 	}
 </style>
