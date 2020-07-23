@@ -540,7 +540,7 @@
 						resultSize = e.detail;
 						computeRequestBody(queryConfig);
 					}}
-					
+					on:docs={e => handleDocs([{text:'Maximum size of results returned.'}], e.detail)}
 				/>
 				{#if selectedParams.output}
 					{#each selectedFieldCompletions as completion (`${queryConfig.dataset}-${selectedAxisConfig.field}-${selectedAxisConfig.aggregation}-${completion.name}`)}
@@ -734,6 +734,7 @@
 		display: grid;
 		grid-template-columns: auto min-content;
 		grid-template-rows: min-content min-content;
+		grid-row-gap: 0.5em;
 		padding-top: 1em;
 	}
 	.query-button {
@@ -743,11 +744,16 @@
 	.help-text {
 		grid-column: 1 / span 2 ;
 		min-height: 2em;
+		box-shadow: inset 1px 1px 4px rgba(0,0,0,0.125);
+		padding: 0.5em;
+		border-radius: 4px;
+		z-index: 1;
+		background: #fbfbed;
 	}
 
 	.form-fields {
 		display: grid;
-		grid-template-columns: min-content auto min-content;
+		grid-template-columns: min-content auto;
 		grid-gap: 1em;
 		grid-auto-rows: min-content;
 		align-items: start;
