@@ -743,7 +743,7 @@
 
 	.help-text {
 		grid-column: 1 / span 2 ;
-		min-height: 2em;
+		min-height: 6em;
 		box-shadow: inset 1px 1px 4px rgba(0,0,0,0.125);
 		padding: 0.5em;
 		border-radius: 4px;
