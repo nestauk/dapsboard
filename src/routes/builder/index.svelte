@@ -212,6 +212,32 @@
 
 	let selectedRequestTab;
 
+	const DEFAULT_DOCS = 'Click on a field for docs.';
+	let defaultDocs = DEFAULT_DOCS;
+	let activeDocs = defaultDocs;
+
+	function handleDocs (docs, eventType) {
+		const docsText = docs.map(i => i.text ? i.text : '').join(' ');
+		switch (eventType) {
+			case 'set':
+				defaultDocs = docsText;
+				activeDocs = docsText;
+				break;
+			case 'unset':
+				defaultDocs = DEFAULT_DOCS;
+				activeDocs = defaultDocs;
+				break;
+			case 'display':
+				activeDocs = docsText;
+				break;
+			case 'hide':
+				activeDocs = defaultDocs;
+				break;
+			default:
+				break;
+		}
+	}
+
 	function resetAxis (axis) {
 		selectedAxis = axis;
 		const axesToClear = AXIS_NAMES.slice(AXIS_NAMES.indexOf(axis));
@@ -514,7 +540,7 @@
 						resultSize = e.detail;
 						computeRequestBody(queryConfig);
 					}}
-					
+					on:docs={e => handleDocs([{text:'Maximum size of results returned.'}], e.detail)}
 				/>
 				{#if selectedParams.output}
 					{#each selectedFieldCompletions as completion (`${queryConfig.dataset}-${selectedAxisConfig.field}-${selectedAxisConfig.aggregation}-${completion.name}`)}
@@ -527,12 +553,16 @@
 								on:change={e => {
 									updateField(completion.name, e.detail);
 								}}
+								on:docs={e => handleDocs(completion.documentation, e.detail)}
 							/>
 						{/if}
 					{/each}
 				{/if}
 			</div>
 			<div class='query-bottom'>
+				<div class='help-text'>
+					{activeDocs}
+				</div>
 				{#if !runQueryOnSelect}
 					<button
 						disabled={!readyForRequest}
@@ -703,10 +733,22 @@
 	.query-bottom {
 		display: grid;
 		grid-template-columns: auto min-content;
+		grid-template-rows: min-content min-content;
+		grid-row-gap: 0.5em;
 		padding-top: 1em;
 	}
 	.query-button {
 		padding: 0.4em;
+	}
+
+	.help-text {
+		grid-column: 1 / span 2 ;
+		min-height: 6em;
+		box-shadow: inset 1px 1px 4px rgba(0,0,0,0.125);
+		padding: 0.5em;
+		border-radius: 4px;
+		z-index: 1;
+		background: #fbfbed;
 	}
 
 	.form-fields {
@@ -719,6 +761,7 @@
 
 	:global(.query-menu) {
 		justify-self: end;
+		grid-column: 2;
 		padding:0.4em 0 0.4em 1em;
 	}
 </style>
