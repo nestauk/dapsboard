@@ -9,6 +9,7 @@
 		metricLabels,
 		bucketLabels,
 		aggsByType,
+		AGG_DOC_URLS,
 	} from 'app/elasticsearch/config';
 	import {
 		getESType,
@@ -141,6 +142,7 @@
 	import PanelMenu from 'app/components/elementary/PanelMenu.svelte';
 	import MenuItem from 'app/components/elementary/MenuItem.svelte';
 	import IconDelete from 'app/components/icons/IconDelete.svelte';
+	import ExternalLink from 'app/components/ExternalLink.svelte';
 
 	let datasetTypings;
 	const AXIS_NAMES = [
@@ -460,7 +462,7 @@
 			options={axisOptions}
 			unselectable={false}
 		>
-			<div class='axis-item'>
+			<div class='select-item'>
 				<div>{option.text}</div>
 				<div on:click={() => resetAxis(option.value)}>
 					<IconDelete size={14} />
@@ -477,16 +479,32 @@
 			<Select
 				bind:selectedOption={selectedAxisConfig.aggregation}
 				hideDisabled={hideDisabledAggregations}
+				let:option={option}
 				options={bucketOptions}
 				on:selectionChanged={clearParameters}
-			/>
+			>
+				<div 
+					class='select-item'
+				>
+					<div>{option.text}</div>
+					<ExternalLink  href={AGG_DOC_URLS[option.value]} size={14} />
+				</div>
+			</Select>
 			<header class='semibold'>Metrics</header>
 			<Select
 				bind:selectedOption={selectedAxisConfig.aggregation}
 				hideDisabled={hideDisabledAggregations}
+				let:option={option}
 				options={aggregatorOptions}
 				on:selectionChanged={clearParameters}
-			/>
+			>
+			<div 
+				class='select-item'
+			>
+				<div>{option.text}</div>
+					<ExternalLink href={AGG_DOC_URLS[option.value]} size={14} />
+				</div>
+			</Select>
 		</section>
 	</section>
 
@@ -724,7 +742,7 @@
 		height: 100%;
 	}
 
-	.axis-item {
+	.select-item {
 		display: grid;
 		grid-template-columns: 1fr min-content;
 		grid-column-gap: 1em;
