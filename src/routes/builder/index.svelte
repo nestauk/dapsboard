@@ -217,6 +217,9 @@
 	const DEFAULT_DOCS = 'Click on a field for docs.';
 	let defaultDocs = DEFAULT_DOCS;
 	let activeDocs = defaultDocs;
+	
+	let aggCompletions;
+	let aggDocText = '...';
 
 	function handleDocs (docs, eventType) {
 		const docsText = docs.map(i => i.text ? i.text : '').join(' ');
@@ -237,6 +240,13 @@
 				break;
 			default:
 				break;
+		}
+	}
+
+	function setAggDocs (agg) {
+		if (aggCompletions && agg in aggCompletions) {
+			aggDocText = aggCompletions[agg].documentation
+			.map(i => i.text ? i.text : '').join(' ');
 		}
 	}
 
@@ -379,12 +389,7 @@
 		axisOptions = axisOptions;
 		responsePromise = Promise.resolve(undefined);
 
-		if (IS_BROWSER && window.ts && selectedParams.output) {
-			const ds = DATASETS[config.dataset].id;
-			const code = `
-				const selection: Aggs<${ds}, '${selectedAxisConfig.field}'> = 
-					${JSON.stringify(selectedParams.pureOutput)};
-			`;
+		if (IS_BROWSER && window.ts) {
 			if (!datasetTypings) {
 				datasetTypings = await request(
 					'GET',
@@ -392,11 +397,26 @@
 					{type:'text'}
 				);
 			}
-			const fullCode = datasetTypings + code;
-			selectedFieldCompletions = getCompletions(
-				fullCode,
-				fullCode.lastIndexOf('{') + 1
-			).sort((a, b) => b.required - a.required);
+			if (!aggCompletions) {
+				const code = 'const aggs: Aggs<any, any> = { "axisName": { }};';
+				const fullCode = datasetTypings + code;
+				aggCompletions = getCompletions(
+					fullCode,
+					fullCode.lastIndexOf('{') + 1
+				);
+			}
+			if (selectedParams.output) {
+				const ds = DATASETS[config.dataset].id;
+				const code = `
+					const selection: Aggs<${ds}, '${selectedAxisConfig.field}'> = 
+						${JSON.stringify(selectedParams.pureOutput)};
+				`;
+				const fullCode = datasetTypings + code;
+				selectedFieldCompletions = getCompletions(
+					fullCode,
+					fullCode.lastIndexOf('{') + 1
+				).sort((a, b) => b.required - a.required);
+			}
 		}
 	}
 
@@ -485,6 +505,8 @@
 			>
 				<div 
 					class='select-item'
+					on:mouseover={() => setAggDocs(option.value)}
+					on:mouseout={() => setAggDocs(null)}
 				>
 					<div>{option.text}</div>
 					<ExternalLink  href={AGG_DOC_URLS[option.value]} size={14} />
@@ -500,6 +522,8 @@
 			>
 			<div 
 				class='select-item'
+				on:mouseover={() => setAggDocs(option.value)}
+				on:mouseout={() => setAggDocs(null)}
 			>
 				<div>{option.text}</div>
 					<ExternalLink href={AGG_DOC_URLS[option.value]} size={14} />
@@ -672,6 +696,9 @@
 		</div>
 	</section>
 
+	<section class='status-bar'>
+		{aggDocText}
+	</section>
 </section>
 
 <style>
@@ -680,7 +707,8 @@
 		display: grid;
 		grid-template-areas:
 			"axes agreggations types datasets fields request"
-			"axes agreggations types datasets fields response";
+			"axes agreggations types datasets fields response"
+			"statusbar statusbar statusbar statusbar statusbar statusbar";
 		grid-template-columns:
 			fit-content(100%)
 			fit-content(100%)
@@ -725,6 +753,12 @@
 		padding: 1em;
 		position: relative;
 		min-width: 12em;
+	}
+
+	.status-bar {
+		grid-area: statusbar;
+		border-top: 1px solid var(--color-main-lighter);
+		padding: 0.5em;
 	}
 
 	header {
