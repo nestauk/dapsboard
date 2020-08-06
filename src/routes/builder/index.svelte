@@ -5,6 +5,7 @@
 	import {capitalise} from 'svizzle/utils/string-string';
 
 	import DATASETS from 'app/data/datasets.json';
+	import aggCompletions from 'app/data/agg_docs.json';
 	import {
 		metricLabels,
 		bucketLabels,
@@ -218,7 +219,6 @@
 	let defaultDocs = DEFAULT_DOCS;
 	let activeDocs = defaultDocs;
 	
-	let aggCompletions;
 	let aggDocText = '...';
 
 	function handleDocs (docs, eventType) {
@@ -244,9 +244,12 @@
 	}
 
 	function setAggDocs (agg) {
+		if (!agg) {
+			aggDocText = 'Hover over an aggregation for help';
+			return;
+		}
 		if (aggCompletions && agg in aggCompletions) {
-			aggDocText = aggCompletions[agg].documentation
-			.map(i => i.text ? i.text : '').join(' ');
+			aggDocText = aggCompletions[agg];
 		}
 	}
 
@@ -395,14 +398,6 @@
 					'GET',
 					'dsl/datasets.ts',
 					{type:'text'}
-				);
-			}
-			if (!aggCompletions) {
-				const code = 'const aggs: Aggs<any, any> = { "axisName": { }};';
-				const fullCode = datasetTypings + code;
-				aggCompletions = getCompletions(
-					fullCode,
-					fullCode.lastIndexOf('{') + 1
 				);
 			}
 			if (selectedParams.output) {
