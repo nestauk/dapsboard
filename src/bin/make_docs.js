@@ -12,7 +12,6 @@ import {tapMessage} from '@svizzle/dev';
 import {isKeyValue} from '@svizzle/utils';
 
 const TYPEDOC_PATH = path.resolve(__dirname, '../node_modules/app/data/typedoc_out.json');
-
 const DOCS_PATH = path.resolve(__dirname, '../node_modules/app/data/agg_docs.json');
 
 const lookup = _.pipe([
