@@ -8,11 +8,13 @@
 import path from 'path';
 import * as _ from 'lamb';
 import {readJson, saveObj} from '@svizzle/file';
+import {tapMessage} from '@svizzle/dev';
 import {isKeyValue} from '@svizzle/utils';
+
+const TYPEDOC_PATH = path.resolve(__dirname, '../node_modules/app/data/typedoc_out.json');
 
 const DOCS_PATH = path.resolve(__dirname, '../node_modules/app/data/agg_docs.json');
 
-const PATH = path.resolve(__dirname, '../node_modules/app/data/typedoc_out.json');
 const lookup = _.pipe([
 	_.getPath('children.0.children'),
 	_.filterWith(_.anyOf([
@@ -29,6 +31,7 @@ const lookup = _.pipe([
 	_.fromPairs,
 ]);
 
-readJson(PATH, 'utf-8')
+readJson(TYPEDOC_PATH, 'utf-8')
 .then(lookup)
-.then(saveObj(DOCS_PATH, 2));
+.then(saveObj(DOCS_PATH, 2))
+.then(tapMessage('Saved aggregation docs. Exiting.'));
