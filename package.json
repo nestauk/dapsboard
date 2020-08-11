@@ -21,6 +21,7 @@
     "@rollup/plugin-yaml": "^2.1.0",
     "@svizzle/dev": "^0.3.0",
     "@svizzle/file": "^0.7.0",
+    "clipboardy": "^2.3.0",
     "eslint": "^7.1.0",
     "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-node": "^11.1.0",
@@ -40,7 +41,8 @@
     "sapper": "^0.27.12",
     "svelte": "^3.20.1",
     "typedoc": "^0.17.8",
-    "typescript": "3.9.5"
+    "typescript": "3.9.5",
+    "xstate": "^4.11.0"
   },
   "engines": {
     "node": ">=10.0.0"
