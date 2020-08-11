@@ -12,9 +12,9 @@ export const builder_config = {
 			}
 		},
 		"Navigating": {
-			id: "Loading",
+			id: "Navigating",
 			on: {
-				"READY": {
+				"NAVIGATED": {
 					target: "Axis",
 					actions: ['parseParams']
 				}
