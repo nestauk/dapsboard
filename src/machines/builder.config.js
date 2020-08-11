@@ -1,8 +1,3 @@
-const isAxisComplete = () => false;
-const isQueryReady = () => false;
-const isInCache = () => true;
-const isMatching = () => true;
-
 export const builder_config = {
 	id: "Builder",
 	initial: 'Loading',
@@ -48,7 +43,7 @@ export const builder_config = {
 						'': [
 							{
 								target: 'AxisComplete',
-								cond: isAxisComplete,
+								cond: 'isAxisComplete',
 								actions: ['spawnAxis']
 							},
 							{ target: 'AxisIncomplete' }
@@ -74,7 +69,7 @@ export const builder_config = {
 								'': [
 									{
 										target: 'QueryReady',
-										cond: isQueryReady
+										cond: 'isQueryReady'
 									},
 									{ target: 'QueryNotReady' }
 								]
@@ -93,7 +88,7 @@ export const builder_config = {
 										'': [
 											{
 												target: 'Matching',
-												cond: isMatching
+												cond: 'isMatching'
 											},
 											{ target: 'Dirty' }
 										]
@@ -120,7 +115,7 @@ export const builder_config = {
 												'': [
 													{
 														target: '#Matching',
-														cond: isInCache
+														cond: 'isInCache'
 													},
 													{ target: 'Pending' }
 												]
