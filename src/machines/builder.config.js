@@ -16,6 +16,15 @@ export const builder_config = {
 				}
 			}
 		},
+		"Navigating": {
+			id: "Loading",
+			on: {
+				"READY": {
+					target: "Axis",
+					actions: ['parseParams']
+				}
+			}
+		},
 		"Axis": {
 			id: "Axis",
 			initial: "CheckingAxis",
