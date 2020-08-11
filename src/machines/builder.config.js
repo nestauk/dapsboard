@@ -19,6 +19,19 @@ export const builder_config = {
 		"Axis": {
 			id: "Axis",
 			initial: "CheckingAxis",
+			on: {
+				'SELECTION_CHANGED': {
+					target: "Axis.CheckingAxis",
+					actions: ['setURL']
+				},
+				"AXIS_RESET": {
+					target: "Axis.AxisIncomplete",
+					actions: [
+						'deleteChildren',
+						'setURL'
+					]
+				}
+			},
 			states: {
 				"CheckingAxis": {
 					id: "CheckingAxis",
@@ -35,28 +48,14 @@ export const builder_config = {
 				},
 				"AxisIncomplete": {
 					id: "AxisIncomplete",
-					on: {
-						'SELECTION_CHANGED': {
-							target: "CheckingAxis",
-							actions: ['setURL']
-						},
-						"AXIS_RESET": {
-							target: "AxisIncomplete",
-							actions: ['deleteChildren']
-						}
-					}
 				},
 				"AxisComplete": {
 					id: "AxisComplete",
 					initial: "CheckingQuery",
 					on: {
-						'SELECTION_CHANGED': {
-							target: "CheckingAxis",
+						"QUERY_CHANGED": {
+							target: "AxisComplete.CheckingQuery",
 							actions: ['setURL']
-						},
-						"AXIS_RESET": {
-							target: "AxisIncomplete",
-							actions: ['deleteChildren']
 						}
 					},
 					states: {
@@ -68,28 +67,16 @@ export const builder_config = {
 										target: 'QueryReady',
 										cond: isQueryReady
 									},
-									{ target: 'FormEditable' }
+									{ target: 'QueryNotReady' }
 								]
 							}
 						},
-						"FormEditable": {
-							id: "FormEditable",
-							on: {
-								"QUERY_CHANGED": {
-									target: "CheckingQuery",
-									actions: ['setURL']
-								}
-							},
+						"QueryNotReady": {
+							id: "QueryNotReady",
 						},
 						"QueryReady": {
 							id: "QueryReady",
 							initial: "CheckMatching",
-							on: {
-								"QUERY_CHANGED": {
-									target: "CheckingQuery",
-									actions: ['setURL']
-								}
-							},
 							states: {
 								"CheckMatching": {
 									onEntry: ["verifyMatching"],
