@@ -96,14 +96,15 @@ export const builder_config = {
 								},
 								"Dirty": {
 									id: "Dirty",
-									initial: "CheckingCache",
+									initial: "Idle",
 									onEntry: "shareDirty",
 									on: {
 										"QUERY_EXECUTED": {
-											target: "Dirty"
+											target: "Dirty.CheckingCache"
 										}
 									},
 									states: {
+										"Idle": {},
 										"CheckingCache": {
 											onEntry: ["searchInCache"],
 											on: {
