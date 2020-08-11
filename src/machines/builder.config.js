@@ -5,7 +5,7 @@ const isMatching = () => true;
 
 export const builder_config = {
 	id: "Builder",
-	type: "parallel",
+	initial: 'Loading',
 	states: {
 		"Loading": {
 			id: "Loading",
