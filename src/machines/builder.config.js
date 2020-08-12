@@ -1,25 +1,41 @@
 export const builder_config = {
 	id: "Builder",
-	initial: 'Loading',
+	type: "parallel",
 	states: {
-		"Loading": {
-			id: "Loading",
-			on: {
-				"READY": {
-					target: "Axis",
-					actions: ['parseParams']
+		"Configurable": {
+			initial: "Idle",
+			states: {
+				"Idle": {
+					on: {
+						"AUTO_EXEC_TOGGLED": {
+							target: "Idle",
+							actions: ['toggleAutoExecute']
+						}
+					}
 				}
 			}
 		},
-		"Navigating": {
-			id: "Navigating",
-			on: {
-				"NAVIGATED": {
-					target: "Axis",
-					actions: ['parseParams']
-				}
+		"Editing": {
+			initial: 'Loading',
+			states: {
+				"Loading": {
+					on: {
+						"READY": {
+							target: "Axis",
+							actions: ['parseParams']
+						}
+					}
+				},
+				"Navigating": {
+					on: {
+						"NAVIGATED": {
+							target: "Axis",
+							actions: ['parseParams']
+						}
+					}
+				},
+				"Axis": {}
 			}
-		},
-		"Axis": {}
+		}
 	}
 };
