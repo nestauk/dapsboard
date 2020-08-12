@@ -69,7 +69,8 @@
     "start": "node __sapper__/build",
     "test": "run-p --race dev cy:run",
     "unittest": "mocha -r esm --spec src/**/*.spec.js",
-    "copy_builder": "node -r esm src/bin/builder_machine.js"
+    "copy_builder": "node -r esm src/bin/builder_machine.js",
+    "copy_axis": "node -r esm src/bin/axis_machine.js"
   },
   "version": "0.0.6"
 }
