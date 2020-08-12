@@ -1,10 +1,10 @@
-export const editorOptions = {
+export const selectionOptions = {
 	actions: {
 	},
 	guards: {
-		isAutoExecute: () => false,
 		isInCache: () => false,
 		isMatching: () => false,
+		isSelectionComplete: () => false,
 		isQueryReady: () => false
 	}
 };

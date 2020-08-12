@@ -71,7 +71,7 @@
     "unittest": "mocha -r esm --spec src/**/*.spec.js",
     "copy_builder": "node -r esm src/bin/copy_builder_machine.js",
     "copy_builder_tester": "node -r esm src/bin/copy_builder_test_machine.js",
-    "copy_axis": "node -r esm src/bin/copy_axis_machine.js"
+    "copy_selection": "node -r esm src/bin/copy_selection_machine.js"
   },
   "version": "0.0.6"
 }

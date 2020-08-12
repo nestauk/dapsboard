@@ -3,11 +3,11 @@ import { assign } from 'xstate';
 
 export const configurationOptions = {
 	actions: {
-		toggleAxisComplete: assign({
-			axisComplete: ctx => !ctx.axisComplete
+		toggleSelectionComplete: assign({
+			selectionComplete: ctx => !ctx.selectionComplete
 		}),
 	},
 	guards: {
-		isAxisComplete: ctx => ctx.axisComplete
+		isSelectionComplete: ctx => ctx.selectionComplete
 	}
 };

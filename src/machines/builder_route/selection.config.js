@@ -1,13 +1,12 @@
-export const axisConfig = {
-	id: "Axis",
-	initial: "CheckingAxis",
+export const selectionConfig = {
+	initial: "CheckingSelection",
 	on: {
 		SELECTION_CHANGED: {
-			target: "Axis.CheckingAxis",
+			target: "Selecting.CheckingSelection",
 			actions: ['setURL']
 		},
-		AXIS_RESET: {
-			target: "Axis.AxisIncomplete",
+		SELECTION_RESET: {
+			target: "Selecting.SelectionIncomplete",
 			actions: [
 				'deleteNestedAggs',
 				'setURL'
@@ -15,28 +14,24 @@ export const axisConfig = {
 		}
 	},
 	states: {
-		CheckingAxis: {
-			id: "CheckingAxis",
+		CheckingSelection: {
 			on: {
 				'': [
 					{
-						target: 'AxisComplete',
-						cond: 'isAxisComplete',
+						target: 'SelectionComplete',
+						cond: 'isSelectionComplete',
 						actions: ['spawnNestedAgg']
 					},
-					{ target: 'AxisIncomplete' }
+					{ target: 'SelectionIncomplete' }
 				]
 			}
 		},
-		AxisIncomplete: {
-			id: "AxisIncomplete",
-		},
-		AxisComplete: {
-			id: "AxisComplete",
+		SelectionIncomplete: {},
+		SelectionComplete: {
 			initial: "CheckingQuery",
 			on: {
 				QUERY_CHANGED: {
-					target: "AxisComplete.CheckingQuery",
+					target: "SelectionComplete.CheckingQuery",
 					actions: ['setURL']
 				}
 			},
@@ -96,7 +91,6 @@ export const axisConfig = {
 											}
 										]
 									}
-
 								},
 								CheckingCache: {
 									onEntry: ["searchInCache"],

@@ -2,28 +2,46 @@
 import { Machine } from 'xstate';
 
 import { configurationConfig } from './configuration.config';
-import { configurationOptions } from './configuration.options';
-import { editorOptions } from './editor.options';
-import { editorConfig } from './editor.config';
+import { selectionConfig } from './selection.config';
 
 
 export const builderOptions = {
 	actions: {
-		...configurationOptions.actions,
-		...editorOptions.actions
+		...configurationConfig.actions,
+		...selectionConfig.actions
 	},
 	guards: {
-		...configurationOptions.guards,
-		...editorOptions.guards
+		...configurationConfig.guards,
+		...selectionConfig.guards
 	}
 };
 
 export const builderConfig = {
-	id: 'Builder',
-	type: 'parallel',
+	initial: 'Loading',
 	states: {
-		Config: configurationConfig,
-		Editor: editorConfig
+		Loading: {
+			on: {
+				READY: {
+					target: "Interactive",
+					actions: ['parseParams']
+				}
+			}
+		},
+		Navigating: {
+			on: {
+				NAVIGATED: {
+					target: "Interactive",
+					actions: ['parseParams']
+				}
+			}
+		},
+		Interactive: {
+			type: 'parallel',
+			states: {
+				Configuring: configurationConfig,
+				Selecting: selectionConfig,
+			}
+		}
 	}
 };
 

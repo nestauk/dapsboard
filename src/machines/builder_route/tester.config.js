@@ -1,28 +1,20 @@
 // eslint-disable-next-line node/no-unpublished-import
 import { Machine, assign } from 'xstate';
 
-import { configurationConfig } from './configuration.config';
-import { configurationOptions } from './configuration.options';
-import { editorOptions } from './editor.options';
-import { editorConfig } from './editor.config';
+import { builderConfig } from './index.js';
 
 const tester_context = {
 	autoExecute: false,
-	axisComplete: false,
-	matching: false,
 	cached: false,
+	matching: false,
+	selectionComplete: false,
 	queryReady: false
 };
 
 export const testerOptions = {
 	actions: {
-		...configurationOptions.actions,
-		...editorOptions.actions,
 		toggleAutoExecute: assign({
 			autoExecute: ctx => !ctx.autoExecute
-		}),
-		toggleAxisComplete: assign({
-			axisComplete: ctx => !ctx.axisComplete
 		}),
 		toggleCached: assign({
 			cached: ctx => !ctx.cached
@@ -30,23 +22,24 @@ export const testerOptions = {
 		toggleMatching: assign({
 			matching: ctx => !ctx.matching
 		}),
+		toggleSelectionComplete: assign({
+			selectionComplete: ctx => !ctx.selectionComplete
+		}),
 		toggleQueryReady: assign({
 			queryReady: ctx => !ctx.queryReady
 		})
 	},
 	guards: {
-		...configurationOptions.guards,
-		...editorOptions.guards,
 		isAutoExecute: ctx => ctx.autoExecute,
-		isAxisComplete: ctx => ctx.axisComplete,
 		isInCache: ctx => ctx.cached,
 		isMatching: ctx => ctx.matching,
+		isSelectionComplete: ctx => ctx.selectionComplete,
 		isQueryReady: ctx => ctx.queryReady
 	}
 };
 
 export const testerConfig = {
-	id: "Builder",
+	id: "TestingBuilder",
 	type: "parallel",
 	context: tester_context,
 	states: {
@@ -55,9 +48,9 @@ export const testerConfig = {
 			states: {
 				Idle: {
 					on: {
-						AXIS_COMPLETE_TOGGLED: {
+						SELECTION_COMPLETE_TOGGLED: {
 							target: "Idle",
-							actions: "toggleAxisComplete"
+							actions: "toggleSelectionComplete"
 						},
 						QUERY_READY_TOGGLED: {
 							target: "Idle",
@@ -75,8 +68,7 @@ export const testerConfig = {
 				}
 			}
 		},
-		Config: configurationConfig,
-		Editor: editorConfig
+		Builder: builderConfig
 	}
 };
 
