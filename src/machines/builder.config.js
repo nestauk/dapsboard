@@ -31,7 +31,7 @@ export const builder_config = {
 				"AXIS_RESET": {
 					target: "Axis.AxisIncomplete",
 					actions: [
-						'deleteChildren',
+						'deleteChildAxes',
 						'setURL'
 					]
 				}
@@ -44,7 +44,7 @@ export const builder_config = {
 							{
 								target: 'AxisComplete',
 								cond: 'isAxisComplete',
-								actions: ['spawnAxis']
+								actions: ['spawnChildAxis']
 							},
 							{ target: 'AxisIncomplete' }
 						]
@@ -101,7 +101,7 @@ export const builder_config = {
 								"Dirty": {
 									id: "Dirty",
 									initial: "Idle",
-									onEntry: "shareDirty",
+									onEntry: "notifyDirty",
 									on: {
 										"QUERY_EXECUTED": {
 											target: "Dirty.CheckingCache"
@@ -122,7 +122,7 @@ export const builder_config = {
 											}
 										},
 										"Pending": {
-											onEntry: "sharePending",
+											onEntry: "notifyPending",
 											invoke: {
 												id: "Pending",
 												src: "apiRequest",
@@ -136,7 +136,7 @@ export const builder_config = {
 										},
 										"Error": {
 											id: "Error",
-											onEntry: "shareError"
+											onEntry: "notifyError"
 										}
 									}
 								}
