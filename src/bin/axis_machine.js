@@ -1,4 +1,4 @@
-import { builder_config } from '../machines/builder.config';
+import { builder_config } from '../machines/builder_route/builder.config';
 // eslint-disable-next-line node/no-unpublished-import
 import clip from 'clipboardy';
 
