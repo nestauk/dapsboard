@@ -14,7 +14,7 @@ const tester_context = {
 	cached: false
 };
 
-const tester_options = {
+export const tester_options = {
 	guards: {
 		...configuration_options.guards,
 		...editor_options.guards,

@@ -1,5 +1,21 @@
-import { tester_config } from '../machines/builder_route/tester.config';
+import { tester_config, tester_options } from '../machines/builder_route/tester.config';
 // eslint-disable-next-line node/no-unpublished-import
 import clip from 'clipboardy';
 
-clip.write(`Machine(${JSON.stringify(tester_config, null, 2)})`);
+function stringify (obj) {
+	let placeholder = '____PLACEHOLDER____';
+	let fns = [];
+	let json = JSON.stringify(obj, function (key, value) {
+		if (typeof value === 'function') {
+			fns.push(value);
+			return placeholder;
+		}
+		return value;
+	}, 2);
+	json = json.replace(new RegExp(`"${placeholder}"`, 'ug'), function () {
+		return fns.shift();
+	});
+	return json;
+}
+
+clip.write(`Machine(${JSON.stringify(tester_config, null, 2)}, ${stringify(tester_options)})`);
