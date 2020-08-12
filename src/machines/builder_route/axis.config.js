@@ -1,47 +1,47 @@
-export const axis_config = {
+export const axisConfig = {
 	id: "Axis",
 	initial: "CheckingAxis",
 	on: {
-		'SELECTION_CHANGED': {
+		SELECTION_CHANGED: {
 			target: "Axis.CheckingAxis",
 			actions: ['setURL']
 		},
-		"AXIS_RESET": {
+		AXIS_RESET: {
 			target: "Axis.AxisIncomplete",
 			actions: [
-				'deleteChildAxes',
+				'deleteNestedAggs',
 				'setURL'
 			]
 		}
 	},
 	states: {
-		"CheckingAxis": {
+		CheckingAxis: {
 			id: "CheckingAxis",
 			on: {
 				'': [
 					{
 						target: 'AxisComplete',
 						cond: 'isAxisComplete',
-						actions: ['spawnChildAxis']
+						actions: ['spawnNestedAgg']
 					},
 					{ target: 'AxisIncomplete' }
 				]
 			}
 		},
-		"AxisIncomplete": {
+		AxisIncomplete: {
 			id: "AxisIncomplete",
 		},
-		"AxisComplete": {
+		AxisComplete: {
 			id: "AxisComplete",
 			initial: "CheckingQuery",
 			on: {
-				"QUERY_CHANGED": {
+				QUERY_CHANGED: {
 					target: "AxisComplete.CheckingQuery",
 					actions: ['setURL']
 				}
 			},
 			states: {
-				"CheckingQuery": {
+				CheckingQuery: {
 					id: "CheckingQuery",
 					on: {
 						'': [
@@ -53,14 +53,14 @@ export const axis_config = {
 						]
 					}
 				},
-				"QueryNotReady": {
+				QueryNotReady: {
 					id: "QueryNotReady",
 				},
-				"QueryReady": {
+				QueryReady: {
 					id: "QueryReady",
 					initial: "CheckMatching",
 					states: {
-						"CheckMatching": {
+						CheckMatching: {
 							onEntry: ["verifyMatching"],
 							on: {
 								'': [
@@ -72,24 +72,22 @@ export const axis_config = {
 								]
 							}
 						},
-						"Matching": {
+						Matching: {
 							id: "Matching",
 							onEntry: [
-								"notifyMatching",
 								"pushHistory"
 							]
 						},
-						"Dirty": {
+						Dirty: {
 							id: "Dirty",
 							initial: "Idle",
-							onEntry: "notifyDirty",
 							on: {
-								"QUERY_EXECUTED": {
+								QUERY_EXECUTED: {
 									target: "Dirty.CheckingCache"
 								}
 							},
 							states: {
-								"Idle": {
+								Idle: {
 									on: {
 										'': [
 											{
@@ -100,7 +98,7 @@ export const axis_config = {
 									}
 
 								},
-								"CheckingCache": {
+								CheckingCache: {
 									onEntry: ["searchInCache"],
 									on: {
 										'': [
@@ -112,8 +110,7 @@ export const axis_config = {
 										]
 									}
 								},
-								"Pending": {
-									onEntry: "notifyPending",
+								Pending: {
 									invoke: {
 										id: "Pending",
 										src: "apiRequest",
@@ -126,9 +123,8 @@ export const axis_config = {
 										}
 									}
 								},
-								"Error": {
-									id: "Error",
-									onEntry: "notifyError"
+								Error: {
+									id: "Error"
 								}
 							}
 						}

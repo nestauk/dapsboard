@@ -1,9 +1,9 @@
-export const configuration_config = {
+export const configurationConfig = {
 	initial: "Idle",
 	states: {
-		"Idle": {
+		Idle: {
 			on: {
-				"AUTO_EXEC_TOGGLED": {
+				AUTO_EXEC_TOGGLED: {
 					target: "Idle",
 					actions: ['toggleAutoExecute']
 				}

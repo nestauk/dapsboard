@@ -1,10 +1,10 @@
-export const editor_options = {
-	guards: {
-		"isQueryReady": () => false,
-		"isMatching": () => false,
-		"isAutoExecute": () => false,
-		"isInCache": () => false,
-	},
+export const editorOptions = {
 	actions: {
+	},
+	guards: {
+		isAutoExecute: () => false,
+		isInCache: () => false,
+		isMatching: () => false,
+		isQueryReady: () => false
 	}
 };

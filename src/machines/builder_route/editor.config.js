@@ -1,19 +1,19 @@
-import { axis_config } from './axis.config';
+import { axisConfig } from './axis.config';
 
-export const editor_config = {
+export const editorConfig = {
 	initial: 'Loading',
 	states: {
-		"Loading": {
+		Loading: {
 			on: {
-				"READY": {
+				READY: {
 					target: "Axis",
 					actions: ['parseParams']
 				}
 			}
 		},
-		"Navigating": {
+		Navigating: {
 			on: {
-				"NAVIGATED": {
+				NAVIGATED: {
 					target: "Axis",
 					actions: ['parseParams']
 				}
@@ -21,6 +21,6 @@ export const editor_config = {
 		},
 		// TODO The proper name should be `Interactive` and it should probably
 		// house a full machine instance, with its own distinct `id` inside.
-		"Axis": axis_config
+		Axis: axisConfig
 	}
 };

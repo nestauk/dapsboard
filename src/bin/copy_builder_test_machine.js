@@ -1,4 +1,4 @@
-import { tester_config, tester_options } from '../machines/builder_route/tester.config';
+import { testerConfig, testerOptions } from '../machines/builder_route/tester.config';
 // eslint-disable-next-line node/no-unpublished-import
 import clip from 'clipboardy';
 
@@ -18,4 +18,4 @@ function stringify (obj) {
 	return json;
 }
 
-clip.write(`Machine(${JSON.stringify(tester_config, null, 2)}, ${stringify(tester_options)})`);
+clip.write(`Machine(${JSON.stringify(testerConfig, null, 2)}, ${stringify(testerOptions)})`);

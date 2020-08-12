@@ -1,13 +1,13 @@
 // eslint-disable-next-line node/no-unpublished-import
 import { assign } from 'xstate';
 
-export const configuration_options = {
-	guards: {
-		"isAxisComplete": ctx => ctx.axisComplete
-	},
+export const configurationOptions = {
 	actions: {
-		"toggleAxisComplete": assign({
+		toggleAxisComplete: assign({
 			axisComplete: ctx => !ctx.axisComplete
 		}),
+	},
+	guards: {
+		isAxisComplete: ctx => ctx.axisComplete
 	}
 };

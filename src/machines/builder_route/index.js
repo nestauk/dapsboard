@@ -1,30 +1,30 @@
 // eslint-disable-next-line node/no-unpublished-import
 import { Machine } from 'xstate';
 
-import { configuration_config } from './configuration.config';
-import { configuration_options } from './configuration.options';
-import { editor_options } from './editor.options';
-import { editor_config } from './editor.config';
+import { configurationConfig } from './configuration.config';
+import { configurationOptions } from './configuration.options';
+import { editorOptions } from './editor.options';
+import { editorConfig } from './editor.config';
 
 
-export const builder_route_options = {
-	guards: {
-		...configuration_options.guards,
-		...editor_options.guards
-	},
+export const builderOptions = {
 	actions: {
-		...configuration_options.actions,
-		...editor_options.actions
+		...configurationOptions.actions,
+		...editorOptions.actions
+	},
+	guards: {
+		...configurationOptions.guards,
+		...editorOptions.guards
 	}
 };
 
-export const builder_route_config = {
+export const builderConfig = {
 	id: 'Builder',
 	type: 'parallel',
 	states: {
-		Configurable: configuration_config,
-		Editable: editor_config,
-	},
+		Config: configurationConfig,
+		Editor: editorConfig
+	}
 };
 
-export const screen_machine = Machine(builder_route_config, builder_route_options);
+export const BuilderMachine = Machine(builderConfig, builderOptions);
