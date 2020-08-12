@@ -96,7 +96,10 @@ export const builder_config = {
 								},
 								"Matching": {
 									id: "Matching",
-									onEntry: "pushHistory"
+									onEntry: [
+										"notifyMatching",
+										"pushHistory"
+									]
 								},
 								"Dirty": {
 									id: "Dirty",
@@ -108,7 +111,17 @@ export const builder_config = {
 										}
 									},
 									states: {
-										"Idle": {},
+										"Idle": {
+											on: {
+												'': [
+													{
+														target: 'CheckingCache',
+														cond: 'isAutoExecute'
+													}
+												]
+											}
+
+										},
 										"CheckingCache": {
 											onEntry: ["searchInCache"],
 											on: {
@@ -127,7 +140,8 @@ export const builder_config = {
 												id: "Pending",
 												src: "apiRequest",
 												onDone: {
-													target: "#Matching"
+													target: "#Matching",
+													actions: ['storeInCache']
 												},
 												onError: {
 													target: "#Error",
