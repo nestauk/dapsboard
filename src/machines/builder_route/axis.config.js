@@ -1,4 +1,4 @@
-export const builder_config = {
+export const axis_config = {
 	id: "Axis",
 	initial: "CheckingAxis",
 	on: {
