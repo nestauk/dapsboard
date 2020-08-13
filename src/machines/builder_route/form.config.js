@@ -1,12 +1,12 @@
 export const selectionConfig = {
-	initial: "CheckingSelection",
+	initial: 'CheckingSelection',
 	on: {
 		SELECTION_CHANGED: {
-			target: "Form.CheckingSelection",
+			target: 'Form.CheckingSelection',
 			actions: ['setURL']
 		},
 		SELECTION_RESET: {
-			target: "Form.SelectionIncomplete",
+			target: 'Form.SelectionIncomplete',
 			actions: [
 				'deleteNestedForms',
 				'setURL'
@@ -28,16 +28,16 @@ export const selectionConfig = {
 		},
 		SelectionIncomplete: {},
 		SelectionComplete: {
-			initial: "CheckingQuery",
+			initial: 'CheckingQuery',
 			on: {
 				QUERY_CHANGED: {
-					target: "SelectionComplete.CheckingQuery",
+					target: 'SelectionComplete.CheckingQuery',
 					actions: ['setURL']
 				}
 			},
 			states: {
 				CheckingQuery: {
-					id: "CheckingQuery",
+					id: 'CheckingQuery',
 					on: {
 						'': [
 							{
@@ -49,14 +49,14 @@ export const selectionConfig = {
 					}
 				},
 				QueryNotReady: {
-					id: "QueryNotReady",
+					id: 'QueryNotReady',
 				},
 				QueryReady: {
-					id: "QueryReady",
-					initial: "CheckMatching",
+					id: 'QueryReady',
+					initial: 'CheckMatching',
 					states: {
 						CheckMatching: {
-							onEntry: ["verifyMatching"],
+							onEntry: ['verifyMatching'],
 							on: {
 								'': [
 									{
@@ -68,17 +68,17 @@ export const selectionConfig = {
 							}
 						},
 						Matching: {
-							id: "Matching",
+							id: 'Matching',
 							onEntry: [
-								"pushHistory"
+								'pushHistory'
 							]
 						},
 						Dirty: {
-							id: "Dirty",
-							initial: "Idle",
+							id: 'Dirty',
+							initial: 'Idle',
 							on: {
 								QUERY_EXECUTED: {
-									target: "Dirty.CheckingCache"
+									target: 'Dirty.CheckingCache'
 								}
 							},
 							states: {
@@ -93,7 +93,7 @@ export const selectionConfig = {
 									}
 								},
 								CheckingCache: {
-									onEntry: ["searchInCache"],
+									onEntry: ['searchInCache'],
 									on: {
 										'': [
 											{
@@ -106,19 +106,19 @@ export const selectionConfig = {
 								},
 								Pending: {
 									invoke: {
-										id: "Pending",
-										src: "apiRequest",
+										id: 'Pending',
+										src: 'apiRequest',
 										onDone: {
-											target: "#Matching",
+											target: '#Matching',
 											actions: ['storeInCache']
 										},
 										onError: {
-											target: "#Error",
+											target: '#Error',
 										}
 									}
 								},
 								Error: {
-									id: "Error"
+									id: 'Error'
 								}
 							}
 						}

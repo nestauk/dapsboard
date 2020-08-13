@@ -23,7 +23,7 @@ export const builderConfig = {
 		Loading: {
 			on: {
 				READY: {
-					target: "Interactive",
+					target: 'Interactive',
 					actions: ['parseParams']
 				}
 			}
@@ -31,7 +31,7 @@ export const builderConfig = {
 		Navigating: {
 			on: {
 				NAVIGATED: {
-					target: "Interactive",
+					target: 'Interactive',
 					actions: ['parseParams']
 				}
 			}

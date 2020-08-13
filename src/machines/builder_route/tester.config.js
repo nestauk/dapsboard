@@ -59,30 +59,30 @@ export const testerOptions = {
 };
 
 export const testerConfig = {
-	id: "TestingBuilder",
-	type: "parallel",
+	id: 'TestingBuilder',
+	type: 'parallel',
 	context: tester_context,
 	states: {
 		GuardsConfig: {
-			initial: "Idle",
+			initial: 'Idle',
 			states: {
 				Idle: {
 					on: {
 						SELECTION_COMPLETE_TOGGLED: {
-							target: "Idle",
-							actions: "toggleSelectionComplete"
+							target: 'Idle',
+							actions: 'toggleSelectionComplete'
 						},
 						QUERY_READY_TOGGLED: {
-							target: "Idle",
-							actions: "toggleQueryReady"
+							target: 'Idle',
+							actions: 'toggleQueryReady'
 						},
 						MATCHING_TOGGLED: {
-							target: "Idle",
-							actions: "toggleMatching"
+							target: 'Idle',
+							actions: 'toggleMatching'
 						},
 						CACHED_TOGGLED: {
-							target: "Idle",
-							actions: "toggleCached"
+							target: 'Idle',
+							actions: 'toggleCached'
 						}
 					}
 				}
