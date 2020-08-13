@@ -56,7 +56,6 @@ export const selectionConfig = {
 					initial: 'CheckMatching',
 					states: {
 						CheckMatching: {
-							onEntry: ['verifyMatching'],
 							on: {
 								'': [
 									{

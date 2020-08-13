@@ -4,7 +4,6 @@ import { Machine } from 'xstate';
 import { configurationConfig } from './formconfig.config';
 import { selectionConfig } from './form.config';
 
-
 export const builderOptions = {
 	actions: {
 		...configurationConfig.actions,
@@ -19,6 +18,11 @@ export const builderOptions = {
 export const builderConfig = {
 	id: 'Route',
 	initial: 'Loading',
+	on: {
+		ROUTE_CHANGED: {
+			target: 'Route.Navigating'
+		}
+	},
 	states: {
 		Loading: {
 			on: {
