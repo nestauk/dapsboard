@@ -69,9 +69,9 @@
     "start": "node __sapper__/build",
     "test": "run-p --race dev cy:run",
     "unittest": "mocha -r esm --spec src/**/*.spec.js",
-    "copy_builder": "node -r esm src/bin/copy_builder_machine.js",
-    "copy_builder_tester": "node -r esm src/bin/copy_builder_test_machine.js",
-    "copy_selection": "node -r esm src/bin/copy_selection_machine.js"
+    "copy_route": "node -r esm src/bin/copy_route_machine.js",
+    "copy_route_tester": "node -r esm src/bin/copy_route_test_machine.js",
+    "copy_form": "node -r esm src/bin/copy_form_machine.js"
   },
   "version": "0.0.6"
 }

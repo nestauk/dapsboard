@@ -1,4 +1,4 @@
-import { selectionConfig } from '../machines/builder_route/selection.config';
+import { selectionConfig } from '../machines/builder_route/form.config';
 // eslint-disable-next-line node/no-unpublished-import
 import clip from 'clipboardy';
 
