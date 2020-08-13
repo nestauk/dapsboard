@@ -1,8 +1,8 @@
 // eslint-disable-next-line node/no-unpublished-import
 import { Machine } from 'xstate';
 
-import { configurationConfig } from './configuration.config';
-import { selectionConfig } from './selection.config';
+import { configurationConfig } from './formconfig.config';
+import { selectionConfig } from './form.config';
 
 
 export const builderOptions = {
@@ -17,6 +17,7 @@ export const builderOptions = {
 };
 
 export const builderConfig = {
+	id: 'Route',
 	initial: 'Loading',
 	states: {
 		Loading: {
@@ -38,8 +39,8 @@ export const builderConfig = {
 		Interactive: {
 			type: 'parallel',
 			states: {
-				Configuring: configurationConfig,
-				Selecting: selectionConfig,
+				FormConfig: configurationConfig,
+				Form: selectionConfig,
 			}
 		}
 	}

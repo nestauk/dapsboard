@@ -6,8 +6,13 @@ import { builderConfig } from './index.js';
 const tester_context = {
 	autoExecute: false,
 	cached: false,
+	hideDisabledAxes: true,
+	hideDisabledAggs: false,
+	hideDisabledDatasets: false,
+	hideDisabledItems: true,
 	matching: false,
 	selectionComplete: false,
+	showFullResponse: false,
 	queryReady: false
 };
 
@@ -18,6 +23,21 @@ export const testerOptions = {
 		}),
 		toggleCached: assign({
 			cached: ctx => !ctx.cached
+		}),
+		toggleHideDisabledAxes: assign({
+			hideDisabledAxes: ctx => !ctx.hideDisabledAxes
+		}),
+		toggleHideDisabledAggs: assign({
+			hideDisabledAggs: ctx => !ctx.hideDisabledAggs
+		}),
+		toggleHideDisabledDatasets: assign({
+			hideDisabledDatasets: ctx => !ctx.hideDisabledDatasets
+		}),
+		toggleHideDisabledItems: assign({
+			hideDisabledItems: ctx => !ctx.hideDisabledItems
+		}),
+		toggleShowFullResponse: assign({
+			showFullResponse: ctx => !ctx.showFullResponse
 		}),
 		toggleMatching: assign({
 			matching: ctx => !ctx.matching
@@ -43,7 +63,7 @@ export const testerConfig = {
 	type: "parallel",
 	context: tester_context,
 	states: {
-		Testing: {
+		GuardsConfig: {
 			initial: "Idle",
 			states: {
 				Idle: {
@@ -68,7 +88,7 @@ export const testerConfig = {
 				}
 			}
 		},
-		Builder: builderConfig
+		Route: builderConfig
 	}
 };
 

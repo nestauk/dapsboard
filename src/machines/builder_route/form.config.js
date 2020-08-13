@@ -2,13 +2,13 @@ export const selectionConfig = {
 	initial: "CheckingSelection",
 	on: {
 		SELECTION_CHANGED: {
-			target: "Selecting.CheckingSelection",
+			target: "Form.CheckingSelection",
 			actions: ['setURL']
 		},
 		SELECTION_RESET: {
-			target: "Selecting.SelectionIncomplete",
+			target: "Form.SelectionIncomplete",
 			actions: [
-				'deleteNestedAggs',
+				'deleteNestedForms',
 				'setURL'
 			]
 		}
@@ -20,7 +20,7 @@ export const selectionConfig = {
 					{
 						target: 'SelectionComplete',
 						cond: 'isSelectionComplete',
-						actions: ['spawnNestedAgg']
+						actions: ['spawnNestedForm']
 					},
 					{ target: 'SelectionIncomplete' }
 				]
