@@ -3,7 +3,10 @@ export const selectionConfig = {
 	on: {
 		SELECTION_CHANGED: {
 			target: 'Form.CheckingSelection',
-			actions: ['setURL']
+			actions: [
+				'computeLists',
+				'setURL'
+			]
 		},
 		SELECTION_RESET: {
 			target: 'Form.SelectionIncomplete',
@@ -20,7 +23,10 @@ export const selectionConfig = {
 					{
 						target: 'SelectionComplete',
 						cond: 'isSelectionComplete',
-						actions: ['spawnNestedForm']
+						actions: [
+							'prepareForm',
+							'spawnNestedForm'
+						]
 					},
 					{ target: 'SelectionIncomplete' }
 				]

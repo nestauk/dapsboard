@@ -3,11 +3,25 @@ import { assign } from 'xstate';
 
 export const configurationOptions = {
 	actions: {
-		toggleSelectionComplete: assign({
-			selectionComplete: ctx => !ctx.selectionComplete
+		toggleAutoExecute: assign({
+			autoExecute: ctx => !ctx.autoExecute
 		}),
+		toggleHideDisabledAxes: assign({
+			hideDisabledAxes: ctx => !ctx.hideDisabledAxes
+		}),
+		toggleHideDisabledAggs: assign({
+			hideDisabledAggs: ctx => !ctx.hideDisabledAggs
+		}),
+		toggleHideDisabledDatasets: assign({
+			hideDisabledDatasets: ctx => !ctx.hideDisabledDatasets
+		}),
+		toggleHideDisabledItems: assign({
+			hideDisabledItems: ctx => !ctx.hideDisabledItems
+		}),
+		toggleShowFullResponse: assign({
+			showFullResponse: ctx => !ctx.showFullResponse
+		})
 	},
 	guards: {
-		isSelectionComplete: ctx => ctx.selectionComplete
 	}
 };
