@@ -4,18 +4,7 @@ import { Machine } from 'xstate';
 import { configurationConfig } from './formconfig.config';
 import { selectionConfig } from './form.config';
 
-export const builderOptions = {
-	actions: {
-		...configurationConfig.actions,
-		...selectionConfig.actions
-	},
-	guards: {
-		...configurationConfig.guards,
-		...selectionConfig.guards
-	}
-};
-
-export const builderConfig = {
+export const routeConfig = {
 	id: 'Route',
 	initial: 'Loading',
 	on: {
@@ -50,4 +39,15 @@ export const builderConfig = {
 	}
 };
 
-export const BuilderMachine = Machine(builderConfig, builderOptions);
+export const routeOptions = {
+	actions: {
+		...configurationConfig.actions,
+		...selectionConfig.actions
+	},
+	guards: {
+		...configurationConfig.guards,
+		...selectionConfig.guards
+	}
+};
+
+export const BuilderMachine = Machine(routeConfig, routeOptions);
