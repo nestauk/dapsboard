@@ -1,7 +1,7 @@
 // eslint-disable-next-line node/no-unpublished-import
 import { Machine, assign } from 'xstate';
 
-import { builderConfig } from './index.js';
+import { routeConfig } from './route.js';
 
 const tester_context = {
 	autoExecute: false,
@@ -88,7 +88,7 @@ export const testerConfig = {
 				}
 			}
 		},
-		Route: builderConfig
+		Route: routeConfig
 	}
 };
 
