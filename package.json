@@ -21,6 +21,7 @@
     "@rollup/plugin-yaml": "^2.1.0",
     "@svizzle/dev": "^0.3.0",
     "@svizzle/file": "^0.7.0",
+    "clipboardy": "^2.3.0",
     "eslint": "^7.1.0",
     "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-node": "^11.1.0",
@@ -40,7 +41,8 @@
     "sapper": "^0.27.12",
     "svelte": "^3.20.1",
     "typedoc": "^0.17.8",
-    "typescript": "3.9.5"
+    "typescript": "3.9.5",
+    "xstate": "^4.11.0"
   },
   "engines": {
     "node": ">=10.0.0"
@@ -66,7 +68,10 @@
     "mkdirdsl": "mkdirp ./static/dsl",
     "start": "node __sapper__/build",
     "test": "run-p --race dev cy:run",
-    "unittest": "mocha -r esm --spec src/**/*.spec.js"
+    "unittest": "mocha -r esm --spec src/**/*.spec.js",
+    "copy_route": "node -r esm src/bin/copy_route_machine.js",
+    "copy_route_tester": "node -r esm src/bin/copy_route_test_machine.js",
+    "copy_form": "node -r esm src/bin/copy_form_machine.js"
   },
   "version": "0.0.6"
 }
