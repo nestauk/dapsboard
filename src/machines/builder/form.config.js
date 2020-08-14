@@ -38,7 +38,10 @@ export const selectionConfig = {
 			on: {
 				QUERY_CHANGED: {
 					target: 'SelectionComplete.CheckingQuery',
-					actions: ['setURL']
+					actions: [
+						'computeRequest',
+						'setURL'
+					]
 				}
 			},
 			states: {
