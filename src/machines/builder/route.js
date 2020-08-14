@@ -3,7 +3,7 @@ import { Machine } from 'xstate';
 
 import { configurationConfig } from './formconfig.config';
 import { selectionConfig } from './form.config';
-import { messageConfig } from './message.config';
+import { docsConfig } from './docs.config';
 
 export const routeConfig = {
 	id: 'Route',
@@ -34,8 +34,7 @@ export const routeConfig = {
 			type: 'parallel',
 			states: {
 				FormConfig: configurationConfig,
-				FieldDocs: messageConfig,
-				AggDocs: messageConfig,
+				Docs: docsConfig,
 				Form: selectionConfig,
 			}
 		}
