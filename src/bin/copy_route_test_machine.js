@@ -1,6 +1,6 @@
 // eslint-disable-next-line node/no-extraneous-import
 import { stringifyObj } from 'svizzle/utils/obj-string'
-import { testerConfig, testerOptions } from '../machines/builder/tester.config';
+import { testerConfig, testerOptions } from 'app/machines/builder/tester.config';
 // eslint-disable-next-line node/no-unpublished-import
 import clip from 'clipboardy';
 
