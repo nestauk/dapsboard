@@ -556,7 +556,7 @@
 		<header class='bold'>Datasets</header>
 		<Select
 			bind:selectedOption={queryConfig.dataset}
-			hideDisabled={hideDisabledDatasets}
+			hideDisabled={$hideDisabledDatasets}
 			options={datasetOptions}
 			on:selectionChanged={clearParameters}
 			disabled={$selectedAxis !== 'primary'}
