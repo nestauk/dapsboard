@@ -20,7 +20,8 @@
 	import {
 		getEndpointURL,
 		getSchema,
-		IS_BROWSER
+		IS_BROWSER,
+		createMachina
 	} from 'app/utils';
 
 	const aggregations = {};
@@ -145,6 +146,10 @@
 	import IconDelete from 'app/components/icons/IconDelete.svelte';
 	import ExternalLink from 'app/components/ExternalLink.svelte';
 
+	// eslint-disable-next-line node/no-unpublished-import
+	import { writable } from 'svelte/store';
+	import { routeConfig, routeOptions } from 'app/machines/builder/route';
+
 	let datasetTypings;
 	const AXIS_NAMES = [
 		'primary',
@@ -180,6 +185,28 @@
 		}]
 	));
 
+	const { machine: routeMachine, contextStores: {
+		runQueryOnSelect,
+		hideDisabledForms,
+		hideDisabledAggregations,
+		hideDisabledDatasets,
+		hideDisabledFields,
+		selectedAxis,
+		selectedRequestTab,
+		showFullResponse
+	}} = createMachina(routeConfig, routeOptions, {
+		runQueryOnSelect: writable(false),
+		hideDisabledForms: writable(true),
+		hideDisabledAggregations: writable(false),
+		hideDisabledDatasets: writable(false),
+		hideDisabledFields: writable(true),
+		selectedAxis: writable(AXIS_NAMES[0]),
+		selectedRequestTab: writable(null),
+		showFullResponse: writable(false)
+	});
+
+	routeMachine.send("READY");
+
 	let queryTemplate = {};
 	let parsedQuery = queryTemplate;
 
@@ -195,25 +222,14 @@
 	let datasetOptions = [];
 	let fieldOptions = [];
 
-	let [ selectedAxis ] = AXIS_NAMES;
-	let selectedAxisConfig = queryConfig.axes[selectedAxis];
+	let selectedAxisConfig = queryConfig.axes[$selectedAxis];
 	let selectedParams;
 
 	let readyForRequest = false;
 
 	let responsePromise;
 
-	let hideDisabledAxes = true;
-	let hideDisabledDatasets = false;
-	let hideDisabledAggregations = false;
-	let hideDisabledFields = true;
-
-	let showFullResponse = false;
-	let runQueryOnSelect = true;
-
 	let selectedFieldCompletions = [];
-
-	let selectedRequestTab;
 
 	const DEFAULT_DOCS = 'Click on a field for docs.';
 	let defaultDocs = DEFAULT_DOCS;
@@ -254,7 +270,7 @@
 	}
 
 	function resetAxis (axis) {
-		selectedAxis = axis;
+		selectedAxis.set(axis);
 		const axesToClear = AXIS_NAMES.slice(AXIS_NAMES.indexOf(axis));
 		axesToClear.forEach(currentAxis => {
 			const currentConfig = queryConfig.axes[currentAxis];
@@ -330,7 +346,7 @@
 					currentTemplate.aggs = {...currentParams.output};
 					currentTemplate = currentTemplate.aggs[currentName];
 				}
-				if (currentName === selectedAxis) {
+				if (currentName === $selectedAxis) {
 					includedInQuery = false;
 				}
 			}
@@ -418,7 +434,7 @@
 	function getFieldValue (name) {
 		return selectedParams.input[name]
 			|| selectedParams
-			.output[selectedAxis][selectedAxisConfig.aggregation][name];
+			.output[$selectedAxis][selectedAxisConfig.aggregation][name];
 	}
 
 	function updateField (name, newValue) {
@@ -455,7 +471,7 @@
 		selectedParams = axisParams[newAxis];
 	}
 
-	$: axisChanged(selectedAxis);
+	$: axisChanged($selectedAxis);
 	$: !queryConfig.dataset && (selectedAxisConfig.field = null);
 	$: computeLists(queryConfig);
 	$: $selectedRequestTab === 'fields'
@@ -468,11 +484,11 @@
 
 <section class="query-builder">
 	<section class='axes'>
-		<SelectMenu bind:hideDisabled={hideDisabledAxes} />
+		<SelectMenu on:hideDisabledChanged={e => routeMachine.send('HIDE_DISABLED_FORMS_TOGGLED', e.detail)} />
 		<header class='bold'>Axes</header>
 		<Select
-			bind:selectedOption={selectedAxis}
-			hideDisabled={hideDisabledAxes}
+			bind:selectedOption={$selectedAxis}
+			hideDisabled={$hideDisabledForms}
 			let:option={option}
 			options={axisOptions}
 			unselectable={false}
@@ -487,13 +503,13 @@
 	</section>
 
 	<section class='agreggations'>
-		<SelectMenu bind:hideDisabled={hideDisabledAggregations} />
+		<SelectMenu on:hideDisabledChanged={e => routeMachine.send('HIDE_DISABLED_AGGS_TOGGLED', e.detail)} />
 		<header class='bold'>Aggregations</header>
 		<section>
 			<header class='semibold'>Bucketing</header>
 			<Select
 				bind:selectedOption={selectedAxisConfig.aggregation}
-				hideDisabled={hideDisabledAggregations}
+				hideDisabled={$hideDisabledAggregations}
 				let:option={option}
 				options={bucketOptions}
 				on:selectionChanged={clearParameters}
@@ -510,7 +526,7 @@
 			<header class='semibold'>Metrics</header>
 			<Select
 				bind:selectedOption={selectedAxisConfig.aggregation}
-				hideDisabled={hideDisabledAggregations}
+				hideDisabled={$hideDisabledAggregations}
 				let:option={option}
 				options={aggregatorOptions}
 				on:selectionChanged={clearParameters}
@@ -537,19 +553,19 @@
 	</section>
 
 	<section class='datasets'>
-		<SelectMenu bind:hideDisabled={hideDisabledDatasets} />
+		<SelectMenu on:hideDisabledChanged={e => routeMachine.send('HIDE_DISABLED_DSETS_TOGGLED', e.detail)} />
 		<header class='bold'>Datasets</header>
 		<Select
 			bind:selectedOption={queryConfig.dataset}
 			hideDisabled={hideDisabledDatasets}
 			options={datasetOptions}
 			on:selectionChanged={clearParameters}
-			disabled={selectedAxis !== 'primary'}
+			disabled={$selectedAxis !== 'primary'}
 		/>
 	</section>
 
 	<section class='fields'>
-		<SelectMenu bind:hideDisabled={hideDisabledFields} />
+		<SelectMenu on:hideDisabledChanged={e => routeMachine.send('HIDE_DISABLED_FIELDS_TOGGLED', e.detail)} />
 		<header class='bold'>Fields</header>
 		<Select
 			bind:selectedOption={selectedAxisConfig.field}
@@ -561,7 +577,7 @@
 
 	<TabContainer
 		className='request'
-		bind:selectedTab={selectedRequestTab}
+		bind:selectedTab={$selectedRequestTab}
 		let:isTitleSlot
 		let:isContentSlot
 	>
@@ -614,7 +630,12 @@
 				<PanelMenu position='static' className='query-menu' popup='top'>
 					<MenuItem>
 						<input
-							bind:checked={runQueryOnSelect}
+							bind:checked={$runQueryOnSelect}
+							on:change={e =>
+								routeMachine.send(
+									'AUTO_EXEC_TOGGLED',
+									e.target.checked)
+							}
 							id='runQueryOnSelectID'
 							type='checkbox'
 						>
@@ -644,7 +665,12 @@
 				<PanelMenu position='static' className='query-menu' popup='top'>
 					<MenuItem>
 						<input
-							bind:checked={runQueryOnSelect}
+							bind:checked={$runQueryOnSelect}
+							on:change={e =>
+								routeMachine.send(
+									'AUTO_EXEC_TOGGLED',
+									e.target.checked)
+							}
 							id='runQueryOnSelectID'
 							type='checkbox'
 						>
@@ -662,7 +688,12 @@
 		<PanelMenu>
 			<MenuItem>
 				<input
-					bind:checked={showFullResponse}
+					checked={$showFullResponse}
+					on:change={e =>
+						routeMachine.send(
+							'SHOW_FULL_RESPONSE_TOGGLED',
+							e.target.checked)
+					}
 					id='showFullResponseID'
 					type='checkbox'
 				>
