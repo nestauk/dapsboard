@@ -20,8 +20,7 @@
 	import {
 		getEndpointURL,
 		getSchema,
-		IS_BROWSER,
-		createMachina
+		IS_BROWSER
 	} from 'app/utils';
 
 	const aggregations = {};
@@ -146,9 +145,8 @@
 	import IconDelete from 'app/components/icons/IconDelete.svelte';
 	import ExternalLink from 'app/components/ExternalLink.svelte';
 
-	// eslint-disable-next-line node/no-unpublished-import
-	import { writable } from 'svelte/store';
-	import { routeConfig, routeOptions } from 'app/machines/builder/route';
+	import { createBuilderMachine } from 'app/machines/builder/route';
+	import { onMount } from 'svelte';
 
 	let datasetTypings;
 	const AXIS_NAMES = [
@@ -186,6 +184,7 @@
 	));
 
 	const { machine: routeMachine, contextStores: {
+		// config
 		runQueryOnSelect,
 		hideDisabledForms,
 		hideDisabledAggregations,
@@ -193,19 +192,11 @@
 		hideDisabledFields,
 		selectedAxis,
 		selectedRequestTab,
-		showFullResponse
-	}} = createMachina(routeConfig, routeOptions, {
-		runQueryOnSelect: writable(false),
-		hideDisabledForms: writable(true),
-		hideDisabledAggregations: writable(false),
-		hideDisabledDatasets: writable(false),
-		hideDisabledFields: writable(true),
-		selectedAxis: writable(AXIS_NAMES[0]),
-		selectedRequestTab: writable(null),
-		showFullResponse: writable(false)
-	});
-
-	routeMachine.send("READY");
+		showFullResponse,
+		// docs
+		activeDocs,
+		aggDocText,
+	}} = createBuilderMachine();
 
 	let queryTemplate = {};
 	let parsedQuery = queryTemplate;
@@ -231,41 +222,43 @@
 
 	let selectedFieldCompletions = [];
 
-	const DEFAULT_DOCS = 'Click on a field for docs.';
-	let defaultDocs = DEFAULT_DOCS;
-	let activeDocs = defaultDocs;
+	let clickedFieldDocs;
+	let hoveredFieldDocs;
 	
-	let aggDocText = '...';
-
 	function handleDocs (docs, eventType) {
 		const docsText = docs.map(i => i.text ? i.text : '').join(' ');
 		switch (eventType) {
 			case 'set':
-				defaultDocs = docsText;
-				activeDocs = docsText;
+				clickedFieldDocs = docsText;
 				break;
 			case 'unset':
-				defaultDocs = DEFAULT_DOCS;
-				activeDocs = defaultDocs;
+				clickedFieldDocs = null;
 				break;
 			case 'display':
-				activeDocs = docsText;
+				hoveredFieldDocs = docsText;
 				break;
 			case 'hide':
-				activeDocs = defaultDocs;
+				hoveredFieldDocs = null;
 				break;
 			default:
 				break;
 		}
+		const fieldDocs = hoveredFieldDocs || clickedFieldDocs;
+		if (fieldDocs) {
+			routeMachine.send('FIELD_DOC_SHOWN', {docstring:fieldDocs});
+		}
+		else {
+			routeMachine.send('FIELD_DOC_DEFAULT');
+		}
 	}
 
 	function setAggDocs (agg) {
-		if (!agg) {
-			aggDocText = 'Hover over an aggregation for help';
-			return;
-		}
 		if (aggCompletions && agg in aggCompletions) {
-			aggDocText = aggCompletions[agg];
+			routeMachine.send('AGG_DOC_SHOWN', {
+				docstring:aggCompletions[agg]
+			});
+		} else {
+			routeMachine.send('AGG_DOC_DEFAULT');
 		}
 	}
 
@@ -471,6 +464,12 @@
 		selectedParams = axisParams[newAxis];
 	}
 
+	onMount(() => {
+		routeMachine.send("READY");
+		routeMachine.send("FIELD_DOC_DEFAULT");
+		routeMachine.send("AGG_DOC_DEFAULT");
+	});
+
 	$: axisChanged($selectedAxis);
 	$: !queryConfig.dataset && (selectedAxisConfig.field = null);
 	$: computeLists(queryConfig);
@@ -614,7 +613,7 @@
 			</div>
 			<div class='query-bottom'>
 				<div class='help-text'>
-					{activeDocs}
+					{$activeDocs}
 				</div>
 				{#if !runQueryOnSelect}
 					<button
@@ -723,7 +722,7 @@
 	</section>
 
 	<section class='status-bar'>
-		{aggDocText}
+		{$aggDocText}
 	</section>
 </section>
 
