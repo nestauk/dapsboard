@@ -569,7 +569,7 @@
 		<header class='bold'>Fields</header>
 		<Select
 			bind:selectedOption={selectedAxisConfig.field}
-			hideDisabled={hideDisabledFields}
+			hideDisabled={$hideDisabledFields}
 			options={fieldOptions}
 			on:selectionChanged={clearParameters}
 		/>
