@@ -30,28 +30,17 @@
 		showFullResponse,
 		resultSize,
 		forms,
+		dataset,
 		// docs
 		activeDocs,
 		aggDocText,
-		// selectors
-		aggregatorOptions,
-		typeOptions,
-		bucketOptions,
-		datasetOptions,
-		fieldOptions,
-		// query
-		activeQuery,
-		parsedQuery,
-		readyForRequest,
-		activeSelection,
-		selectedFieldCompletions,
-		activeParams,
-		response,
 	}} = createBuilderMachine();
 
 	let clickedFieldDocs;
 	let hoveredFieldDocs;
-	
+	let formMachine;
+	$: formMachine = $selectedForm && $selectedForm.machine
+
 	function handleDocs (docs, eventType) {
 		const docsText = docs.map(i => i.text ? i.text : '').join(' ');
 		switch (eventType) {
@@ -90,8 +79,8 @@
 	}
 
 	function getFieldValue (name) {
-		if ($activeParams) {
-			return $activeParams[name];
+		if ($formMachine.context.params) {
+			return $formMachine.context.params[name];
 			// || $selectedParams
 			// .output[$selectedForm.value][$activeSelection.aggregation][name];
 		}
@@ -103,8 +92,6 @@
 		routeMachine.send("FIELD_DOC_DEFAULT");
 		routeMachine.send("AGG_DOC_DEFAULT");
 	});
-	let activeFormMachine;
-	$: activeFormMachine = $selectedForm && $selectedForm.machine
 </script>
 
 <section class="query-builder">
@@ -152,10 +139,10 @@
 		<section>
 			<header class='semibold'>Bucketing</header>
 			<Select
-				selectedOption={$activeSelection.aggregation}
+				selectedOption={$formMachine.context.aggregation}
 				hideDisabled={$hideDisabledAggregations}
-				options={$bucketOptions}
-				on:selectionChanged={e => $selectedForm.machine.send(
+				options={$formMachine.context.bucketOptions}
+				on:selectionChanged={e => formMachine.send(
 					'SELECTION_CHANGED',
 					{selection: {aggregation: e.detail}}
 				)}
@@ -172,9 +159,9 @@
 			</Select>
 			<header class='semibold'>Metrics</header>
 			<Select
-				selectedOption={$activeSelection.aggregation}
+				selectedOption={$formMachine.context.aggregation}
 				hideDisabled={$hideDisabledAggregations}
-				options={$aggregatorOptions}
+				options={$formMachine.context.aggregatorOptions}
 				on:selectionChanged={e => $selectedForm.machine.send(
 					'SELECTION_CHANGED',
 					{selection: {aggregation: e.detail}}
@@ -196,8 +183,8 @@
 	<section class='types'>
 		<header class='bold'>Types</header>
 		<Select
-			selectedOption={$activeSelection.type}
-			options={$typeOptions}
+			selectedOption={$formMachine.context.type}
+			options={$formMachine.context.typeOptions}
 			on:selectionChanged={e => $selectedForm.machine.send(
 				'SELECTION_CHANGED',
 				{selection: {type: e.detail}}
@@ -215,9 +202,9 @@
 		/>
 		<header class='bold'>Datasets</header>
 		<Select
-			selectedOption={$activeSelection.dataset}
+			selectedOption={$dataset}
 			hideDisabled={$hideDisabledDatasets}
-			options={$datasetOptions}
+			options={$formMachine.context.datasetOptions}
 			on:selectionChanged={e => $selectedForm.machine.send(
 				'SELECTION_CHANGED',
 				{activeSelection: {dataset: e.detail}}
@@ -236,9 +223,9 @@
 		/>
 		<header class='bold'>Fields</header>
 		<Select
-			selectedOption={$activeSelection.field}
+			selectedOption={$formMachine.context.field}
 			hideDisabled={$hideDisabledFields}
-			options={$fieldOptions}
+			options={$formMachine.context.fieldOptions}
 			on:selectionChanged={e => $selectedForm.machine.send(
 				'SELECTION_CHANGED',
 				{selection: {field: e.detail}}
@@ -269,9 +256,9 @@
 						e.detail
 					)}
 				/>
-				{#each $selectedFieldCompletions as completion (
-					`${$activeSelection.dataset}-${$activeSelection.field}-`
-					+ `${$activeSelection.aggregation}-${completion.name}`
+				{#each $formMachine.context.completions as completion (
+					`${$dataset}-${$formMachine.context.field}-`
+					+ `${$formMachine.context.aggregation}-${completion.name}`
 				)}
 					{#if completion.name !== 'field'}
 						<ESField
@@ -297,13 +284,13 @@
 				</div>
 				{#if !$runQueryOnSelect}
 					<button
-						disabled={!$readyForRequest}
+						disabled={!$formMachine.context.readyForRequest}
 						on:click={() => $selectedForm.machine.send(
 							'QUERY_EXECUTED'
 						)}
 						class='query-button'
 					>Run query</button>
-				{:else if readyForRequest}
+				{:else if $formMachine.context.readyForRequest}
 					<div class='query-button'>
 						Press Enter or Tab to run the query
 					</div>
@@ -332,13 +319,13 @@
 			<header slot='title' class='bold'>Query Editor</header>
 			<JSONValue
 				editable={true}
-				value={$activeQuery}
-				bind:parsedValue={$parsedQuery}
+				value={$formMachine.context.computedQuery}
+				bind:parsedValue={$formMachine.context.parsedQuery}
 			/>
 			<div class='query-bottom'>
 				{#if !$runQueryOnSelect}
 					<button 
-						disabled={!$readyForRequest} 
+						disabled={!$formMachine.context.readyForRequest} 
 						on:click={() => $selectedForm.machine.send(
 							'QUERY_EXECUTED'
 						)}
@@ -389,8 +376,8 @@
 
 		<header class='bold'>Response</header>
 		<div class='json'>
-			{#if $activeFormMachine}
-			{#if $activeFormMachine.matches({
+			{#if $formMachine}
+			{#if $formMachine.matches({
 				SelectionComplete: {
 					QueryReady: {
 						Dirty: "Pending"
@@ -399,15 +386,15 @@
 			})}
 				Waiting for response...
 			{/if}
-			{#if $activeFormMachine.matches({
+			{#if $formMachine.matches({
 				SelectionComplete: {
 					QueryReady: "Matching"
 				}
 			})}
 				<JSONValue
 					value={$showFullResponse
-						? $response
-						: $response.aggregations}
+						? $formMachine.context.response
+						: $formMachine.context.response.aggregations}
 				/>
 
 			{/if}
