@@ -104,7 +104,7 @@
 		routeMachine.send("AGG_DOC_DEFAULT");
 	});
 	let activeFormMachine;
-	$: activeFormMachine = $selectedForm.machine
+	$: activeFormMachine = $selectedForm && $selectedForm.machine
 </script>
 
 <section class="query-builder">
@@ -118,7 +118,7 @@
 		/>
 		<header class='bold'>Axes</header>
 		<Select
-			selectedOption={$selectedForm.value}
+			selectedOption={$selectedForm && $selectedForm.value}
 			hideDisabled={$hideDisabledForms}
 			options={$forms}
 			unselectable={false}
@@ -131,8 +131,8 @@
 			<div class='select-item'>
 				<div>{option.text}</div>
 				<div on:click={() => routeMachine.send(
-					'SELECTION_RESET',
-					option.value
+					'FORM_RESET',
+					{ formId: option.value }
 				)}>
 					<IconDelete size={14} />
 				</div>
@@ -222,7 +222,7 @@
 				'SELECTION_CHANGED',
 				{activeSelection: {dataset: e.detail}}
 			)}
-			disabled={$selectedForm.value !== 0}
+			disabled={$selectedForm && $selectedForm.value !== 0}
 		/>
 	</section>
 
