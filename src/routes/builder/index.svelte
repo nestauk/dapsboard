@@ -1,6 +1,8 @@
 <script>
 	// eslint-disable-next-line node/no-unpublished-import
 	import { onMount } from 'svelte';
+	// eslint-disable-next-line node/no-unpublished-import
+	import { readable } from 'svelte/store';
 	import JSONValue from 'app/components/JSONValue.svelte';
 	import ESField from 'app/components/elementary/ElasticSearchField.svelte';
 
@@ -39,7 +41,39 @@
 	let clickedFieldDocs;
 	let hoveredFieldDocs;
 	let formMachine;
-	$: formMachine = $selectedForm && $selectedForm.machine
+	let formContext;
+	
+	let params;
+	let selection = readable({
+		aggregation: null,
+		type: null,
+		field: null,
+	});
+	let bucketOptions = readable([]);
+	let aggregatorOptions = readable([]);
+	let typeOptions = readable([]);
+	let datasetOptions = readable([]);
+	let fieldOptions = readable([]);
+	let completions = readable([]);
+	let readyForRequest;
+	let computedQuery;
+	let parsedQuery;
+	let response;
+
+	$: formMachine = $selectedForm && $selectedForm.machine;
+	$: formContext = $formMachine && $formMachine.context;
+	$: params = formContext && formContext.params;
+	$: selection = formContext && formContext.selection;
+	$: bucketOptions = formContext && formContext.bucketOptions;
+	$: aggregatorOptions = formContext && formContext.aggregatorOptions;
+	$: typeOptions = formContext && formContext.typeOptions;
+	$: datasetOptions = formContext && formContext.datasetOptions;
+	$: fieldOptions = formContext && formContext.fieldOptions;
+	$: completions = formContext && formContext.completions;
+	$: readyForRequest = formContext && formContext.readyForRequest;
+	$: computedQuery = formContext && formContext.computedQuery;
+	$: parsedQuery = formContext && formContext.parsedQuery;
+	$: response = formContext && formContext.response;
 
 	function handleDocs (docs, eventType) {
 		const docsText = docs.map(i => i.text ? i.text : '').join(' ');
@@ -79,8 +113,8 @@
 	}
 
 	function getFieldValue (name) {
-		if ($formMachine.context.params) {
-			return $formMachine.context.params[name];
+		if ($params) {
+			return $params[name];
 			// || $selectedParams
 			// .output[$selectedForm.value][$activeSelection.aggregation][name];
 		}
@@ -117,10 +151,19 @@
 		>
 			<div class='select-item'>
 				<div>{option.text}</div>
-				<div on:click={() => routeMachine.send(
-					'FORM_RESET',
-					{ formId: option.value }
-				)}>
+				<div on:click={() => {
+					const payload = {
+						selection: {
+							aggregation: null,
+							type: null,
+							field: null
+						},
+					};
+					if (option.value === 0) {
+						payload.dataset = null;
+					}
+					option.machine.send('SELECTION_CHANGED', payload);
+				}}>
 					<IconDelete size={14} />
 				</div>
 			</div>
@@ -139,9 +182,9 @@
 		<section>
 			<header class='semibold'>Bucketing</header>
 			<Select
-				selectedOption={$formMachine.context.aggregation}
+				selectedOption={$selection.aggregation}
 				hideDisabled={$hideDisabledAggregations}
-				options={$formMachine.context.bucketOptions}
+				options={$bucketOptions}
 				on:selectionChanged={e => formMachine.send(
 					'SELECTION_CHANGED',
 					{selection: {aggregation: e.detail}}
@@ -159,9 +202,9 @@
 			</Select>
 			<header class='semibold'>Metrics</header>
 			<Select
-				selectedOption={$formMachine.context.aggregation}
+				selectedOption={$selection.aggregation}
 				hideDisabled={$hideDisabledAggregations}
-				options={$formMachine.context.aggregatorOptions}
+				options={$aggregatorOptions}
 				on:selectionChanged={e => $selectedForm.machine.send(
 					'SELECTION_CHANGED',
 					{selection: {aggregation: e.detail}}
@@ -183,8 +226,8 @@
 	<section class='types'>
 		<header class='bold'>Types</header>
 		<Select
-			selectedOption={$formMachine.context.type}
-			options={$formMachine.context.typeOptions}
+			selectedOption={$selection.type}
+			options={$typeOptions}
 			on:selectionChanged={e => $selectedForm.machine.send(
 				'SELECTION_CHANGED',
 				{selection: {type: e.detail}}
@@ -204,10 +247,10 @@
 		<Select
 			selectedOption={$dataset}
 			hideDisabled={$hideDisabledDatasets}
-			options={$formMachine.context.datasetOptions}
+			options={$datasetOptions}
 			on:selectionChanged={e => $selectedForm.machine.send(
 				'SELECTION_CHANGED',
-				{activeSelection: {dataset: e.detail}}
+				{dataset: e.detail}
 			)}
 			disabled={$selectedForm && $selectedForm.value !== 0}
 		/>
@@ -223,9 +266,9 @@
 		/>
 		<header class='bold'>Fields</header>
 		<Select
-			selectedOption={$formMachine.context.field}
+			selectedOption={$selection.field}
 			hideDisabled={$hideDisabledFields}
-			options={$formMachine.context.fieldOptions}
+			options={$fieldOptions}
 			on:selectionChanged={e => $selectedForm.machine.send(
 				'SELECTION_CHANGED',
 				{selection: {field: e.detail}}
@@ -256,9 +299,9 @@
 						e.detail
 					)}
 				/>
-				{#each $formMachine.context.completions as completion (
-					`${$dataset}-${$formMachine.context.field}-`
-					+ `${$formMachine.context.aggregation}-${completion.name}`
+				{#each $completions as completion (
+					`${$dataset}-${$selection.field}-`
+					+ `${$selection.aggregation}-${completion.name}`
 				)}
 					{#if completion.name !== 'field'}
 						<ESField
@@ -284,13 +327,13 @@
 				</div>
 				{#if !$runQueryOnSelect}
 					<button
-						disabled={!$formMachine.context.readyForRequest}
+						disabled={!$readyForRequest}
 						on:click={() => $selectedForm.machine.send(
 							'QUERY_EXECUTED'
 						)}
 						class='query-button'
 					>Run query</button>
-				{:else if $formMachine.context.readyForRequest}
+				{:else if $readyForRequest}
 					<div class='query-button'>
 						Press Enter or Tab to run the query
 					</div>
@@ -319,13 +362,13 @@
 			<header slot='title' class='bold'>Query Editor</header>
 			<JSONValue
 				editable={true}
-				value={$formMachine.context.computedQuery}
-				bind:parsedValue={$formMachine.context.parsedQuery}
+				value={$computedQuery}
+				bind:parsedValue={$parsedQuery}
 			/>
 			<div class='query-bottom'>
 				{#if !$runQueryOnSelect}
 					<button 
-						disabled={!$formMachine.context.readyForRequest} 
+						disabled={!$readyForRequest} 
 						on:click={() => $selectedForm.machine.send(
 							'QUERY_EXECUTED'
 						)}
@@ -393,8 +436,8 @@
 			})}
 				<JSONValue
 					value={$showFullResponse
-						? $formMachine.context.response
-						: $formMachine.context.response.aggregations}
+						? $response
+						: $response.aggregations}
 				/>
 
 			{/if}
