@@ -109,18 +109,11 @@
 	}
 
 	function getFieldValue (name) {
-		if ($params) {
-			return $params[name];
-			// || $selectedParams
-			// .output[$selectedForm.value][$activeSelection.aggregation][name];
-		}
-		return null;
+		return $params && $params[name] || null;
 	}
 
 	onMount(() => {
 		routeMachine.send("READY");
-		routeMachine.send("FIELD_DOC_DEFAULT");
-		routeMachine.send("AGG_DOC_DEFAULT");
 	});
 </script>
 
