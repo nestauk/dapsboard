@@ -42,7 +42,7 @@
 	let hoveredFieldDocs;
 	let formMachine;
 	let formContext;
-	
+
 	let params;
 	let selection = readable({
 		aggregation: null,
