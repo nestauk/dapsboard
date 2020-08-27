@@ -19,4 +19,4 @@ clip.write(`Machine(${JSON.stringify({
 		showFullResponse: false,
 		queryReady: false
 	}
-}, 2)}, ${stringifyObj(testerOptions)})`);
+}, null, 2)}, ${stringifyObj(testerOptions)})`);
