@@ -56,7 +56,6 @@
 	let fieldOptions = readable([]);
 	let completions = readable([]);
 	let computedQuery;
-	let parsedQuery;
 	let response;
 
 	$: formMachine = $selectedForm && $selectedForm.machine;
@@ -70,7 +69,6 @@
 	$: fieldOptions = formContext && formContext.fieldOptions;
 	$: completions = formContext && formContext.completions;
 	$: computedQuery = formContext && formContext.computedQuery;
-	$: parsedQuery = formContext && formContext.parsedQuery;
 	$: response = formContext && formContext.response;
 
 	function handleDocs (docs, eventType) {
@@ -375,7 +373,10 @@
 			<JSONValue
 				editable={true}
 				value={$computedQuery}
-				bind:parsedValue={$parsedQuery}
+				on:change={event => formMachine.send(
+					'JSON_EDIT',
+					{json: event.detail}
+				)}
 			/>
 			<div class='query-bottom'>
 				{#if !$runQueryOnSelect}
