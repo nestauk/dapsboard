@@ -278,7 +278,11 @@
 
 	<TabContainer
 		className='request'
-		bind:selectedTab={$selectedRequestTab}
+		selectedTab={$selectedRequestTab}
+		on:change={e => routeMachine.send(
+			'REQUEST_TAB_SELECTED',
+			{selectedRequestTab: e.detail}
+		)}
 		let:isTitleSlot
 		let:isContentSlot
 	>
