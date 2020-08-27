@@ -55,7 +55,6 @@
 	let datasetOptions = readable([]);
 	let fieldOptions = readable([]);
 	let completions = readable([]);
-	let readyForRequest;
 	let computedQuery;
 	let parsedQuery;
 	let response;
@@ -70,7 +69,6 @@
 	$: datasetOptions = formContext && formContext.datasetOptions;
 	$: fieldOptions = formContext && formContext.fieldOptions;
 	$: completions = formContext && formContext.completions;
-	$: readyForRequest = formContext && formContext.readyForRequest;
 	$: computedQuery = formContext && formContext.computedQuery;
 	$: parsedQuery = formContext && formContext.parsedQuery;
 	$: response = formContext && formContext.response;
@@ -331,13 +329,23 @@
 				</div>
 				{#if !$runQueryOnSelect}
 					<button
-						disabled={!$readyForRequest}
+						disabled={
+							!$formMachine.matches({
+								SelectionComplete: {
+									QueryReady: "Dirty"
+								}
+							})
+						}
 						on:click={() => $selectedForm.machine.send(
 							'QUERY_EXECUTED'
 						)}
 						class='query-button'
 					>Run query</button>
-				{:else if $readyForRequest}
+				{:else if $formMachine && $formMachine.matches({
+					SelectionComplete: {
+						QueryReady: "Dirty"
+					}
+				})}
 					<div class='query-button'>
 						Press Enter or Tab to run the query
 					</div>
@@ -372,7 +380,13 @@
 			<div class='query-bottom'>
 				{#if !$runQueryOnSelect}
 					<button 
-						disabled={!$readyForRequest} 
+						disabled={
+							!$formMachine.matches({
+								SelectionComplete: {
+									QueryReady: "Dirty"
+								}
+							})
+						}
 						on:click={() => $selectedForm.machine.send(
 							'QUERY_EXECUTED'
 						)}
@@ -409,7 +423,8 @@
 					on:change={e =>
 						routeMachine.send(
 							'SHOW_FULL_RESPONSE_TOGGLED',
-							e.target.checked)
+							e.target.checked
+						)
 					}
 					id='showFullResponseID'
 					type='checkbox'
@@ -441,7 +456,8 @@
 				<JSONValue
 					value={$showFullResponse
 						? $response
-						: $response.aggregations}
+						: $response.aggregations
+					}
 				/>
 
 			{/if}
