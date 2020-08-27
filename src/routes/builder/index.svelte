@@ -50,7 +50,7 @@
 		field: null,
 	});
 	let bucketOptions = readable([]);
-	let aggregatorOptions = readable([]);
+	let metricOptions = readable([]);
 	let typeOptions = readable([]);
 	let datasetOptions = readable([]);
 	let fieldOptions = readable([]);
@@ -63,7 +63,7 @@
 	$: params = formContext && formContext.params;
 	$: selection = formContext && formContext.selection;
 	$: bucketOptions = formContext && formContext.bucketOptions;
-	$: aggregatorOptions = formContext && formContext.aggregatorOptions;
+	$: metricOptions = formContext && formContext.metricOptions;
 	$: typeOptions = formContext && formContext.typeOptions;
 	$: datasetOptions = formContext && formContext.datasetOptions;
 	$: fieldOptions = formContext && formContext.fieldOptions;
@@ -193,7 +193,7 @@
 			<Select
 				selectedOption={$selection.aggregation}
 				hideDisabled={$hideDisabledAggregations}
-				options={$aggregatorOptions}
+				options={$metricOptions}
 				on:selectionChanged={e => $selectedForm.machine.send(
 					'SELECTION_CHANGED',
 					{selection: {aggregation: e.detail}}
