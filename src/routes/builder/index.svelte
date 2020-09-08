@@ -133,8 +133,12 @@
 			event.query = rison.decode(encodedQuery);
 		}
 		const tsCompiler = document.getElementById('tsCompiler');
-		tsCompiler.onload = () => {
+		if (window.ts) {
 			routeMachine.send("READY", event);
+		} else {
+			tsCompiler.onload = () => {
+				routeMachine.send("READY", event);
+			}
 		}
 	});
 </script>
