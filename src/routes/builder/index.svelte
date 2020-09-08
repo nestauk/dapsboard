@@ -1,4 +1,6 @@
 <script>
+	import { stores } from '@sapper/app';
+
 	// eslint-disable-next-line node/no-unpublished-import
 	import { onMount } from 'svelte';
 	// eslint-disable-next-line node/no-unpublished-import
@@ -116,31 +118,37 @@
 		return $params && $params[name] || null;
 	}
 
-	onMount(async () => {
-		const datasetTypings = await request(
-			'GET',
-			'dsl/datasets.ts',
-			{type:'text'}
-		);
-		const urlParams = new URL(document.location).searchParams;
-		const encodedQuery = urlParams.get('q');
-		const event = {
-			dataset: urlParams.get('dataset'),
-			query: null,
-			datasetTypings,
-		}
-		if (encodedQuery) {
-			event.query = rison.decode(encodedQuery);
-		}
-		const tsCompiler = document.getElementById('tsCompiler');
-		if (window.ts) {
-			routeMachine.send("READY", event);
-		} else {
-			tsCompiler.onload = () => {
-				routeMachine.send("READY", event);
+	const { page } = stores();
+	onMount(() => {
+		let eventName = 'READY';
+		page.subscribe(async ({params: pageParams}) => {
+			const datasetTypings = await request(
+				'GET',
+				'dsl/datasets.ts',
+				{type:'text'}
+			);
+			const urlParams = new URL(document.location).searchParams;
+			const encodedQuery = urlParams.get('q');
+			const event = {
+				dataset: urlParams.get('dataset'),
+				query: null,
+				datasetTypings,
 			}
-		}
+			if (encodedQuery) {
+				event.query = rison.decode(encodedQuery);
+			}
+			if (window.ts) {
+				routeMachine.send(eventName, event);
+			} else {
+				const tsCompiler = document.getElementById('tsCompiler');
+				tsCompiler.onload = () => {
+					routeMachine.send(eventName, event);
+				}
+			}
+			eventName = 'ROUTE_CHANGED';
+		});
 	});
+
 </script>
 
 <section class="query-builder">
