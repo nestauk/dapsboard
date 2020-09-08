@@ -3,6 +3,9 @@
 	import { onMount } from 'svelte';
 	// eslint-disable-next-line node/no-unpublished-import
 	import { readable } from 'svelte/store';
+	// eslint-disable-next-line node/no-unpublished-import
+	import rison from 'rison-esm';
+
 	import JSONValue from 'app/components/JSONValue.svelte';
 	import ESField from 'app/components/elementary/ElasticSearchField.svelte';
 
@@ -19,6 +22,7 @@
 
 	import { AGG_DOC_URLS } from 'app/elasticsearch/config';
 	import aggCompletions from 'app/data/agg_docs.json';
+	import { request } from 'app/net';
 
 	const { machine: routeMachine, contextStores: {
 		// config
@@ -112,8 +116,26 @@
 		return $params && $params[name] || null;
 	}
 
-	onMount(() => {
-		routeMachine.send("READY");
+	onMount(async () => {
+		const datasetTypings = await request(
+			'GET',
+			'dsl/datasets.ts',
+			{type:'text'}
+		);
+		const urlParams = new URL(document.location).searchParams;
+		const encodedQuery = urlParams.get('q');
+		const event = {
+			dataset: urlParams.get('dataset'),
+			query: null,
+			datasetTypings,
+		}
+		if (encodedQuery) {
+			event.query = rison.decode(encodedQuery);
+		}
+		const tsCompiler = document.getElementById('tsCompiler');
+		tsCompiler.onload = () => {
+			routeMachine.send("READY", event);
+		}
 	});
 </script>
 
