@@ -118,15 +118,15 @@
 		return $params && $params[name] || null;
 	}
 
-	const { page } = stores();
-	onMount(() => {
-		let eventName = 'READY';
-		page.subscribe(async ({params: pageParams}) => {
-			const datasetTypings = await request(
-				'GET',
-				'dsl/datasets.ts',
-				{type:'text'}
-			);
+	onMount(async () => {
+		console.log('mounted');
+		const datasetTypings = await request(
+			'GET',
+			'dsl/datasets.ts',
+			{type:'text'}
+		);
+		const loadPage = eventName => () => {
+			console.log(eventName, document.location.search);
 			const urlParams = new URL(document.location).searchParams;
 			const encodedQuery = urlParams.get('q');
 			const event = {
@@ -145,8 +145,11 @@
 					routeMachine.send(eventName, event);
 				}
 			}
-			eventName = 'ROUTE_CHANGED';
-		});
+		}
+		loadPage('READY')();
+		const pageReloader = loadPage('ROUTE_CHANGED');
+		addEventListener('popstate', pageReloader);
+		return () => removeEventListener('popstate', pageReloader);
 	});
 
 </script>
