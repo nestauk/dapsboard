@@ -1,6 +1,4 @@
 <script>
-	import { stores } from '@sapper/app';
-
 	// eslint-disable-next-line node/no-unpublished-import
 	import { onMount } from 'svelte';
 	// eslint-disable-next-line node/no-unpublished-import
@@ -119,14 +117,12 @@
 	}
 
 	onMount(async () => {
-		console.log('mounted');
 		const datasetTypings = await request(
 			'GET',
 			'dsl/datasets.ts',
 			{type:'text'}
 		);
-		const loadPage = eventName => () => {
-			console.log(eventName, document.location.search);
+		const loadPage = eventType => () => {
 			const urlParams = new URL(document.location).searchParams;
 			const encodedQuery = urlParams.get('q');
 			const event = {
@@ -138,11 +134,11 @@
 				event.query = rison.decode(encodedQuery);
 			}
 			if (window.ts) {
-				routeMachine.send(eventName, event);
+				routeMachine.send(eventType, event);
 			} else {
 				const tsCompiler = document.getElementById('tsCompiler');
 				tsCompiler.onload = () => {
-					routeMachine.send(eventName, event);
+					routeMachine.send(eventType, event);
 				}
 			}
 		}
