@@ -150,6 +150,10 @@
 
 </script>
 
+<svelte:head>
+	<script src="https://cdn.jsdelivr.net/gh/microsoft/TypeScript@3.9.5/lib/typescriptServices.js" async id='tsCompiler'></script>
+</svelte:head>
+
 <section class="query-builder">
 	<section class='axes'>
 		<SelectMenu 
