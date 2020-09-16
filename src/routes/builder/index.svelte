@@ -1,10 +1,13 @@
 <script>
 	// eslint-disable-next-line node/no-unpublished-import
+	import * as _ from 'lamb';
+	// eslint-disable-next-line node/no-unpublished-import
 	import { onMount } from 'svelte';
 	// eslint-disable-next-line node/no-unpublished-import
 	import { readable } from 'svelte/store';
 	// eslint-disable-next-line node/no-unpublished-import
 	import rison from 'rison-esm';
+	import { stores } from '@sapper/app';
 
 	import JSONValue from 'app/components/JSONValue.svelte';
 	import ESField from 'app/components/elementary/ElasticSearchField.svelte';
@@ -47,7 +50,7 @@
 	let formMachine;
 	let formContext;
 
-	let params;
+	let formParams;
 	let selection = readable({
 		aggregation: null,
 		type: null,
@@ -64,7 +67,7 @@
 
 	$: formMachine = $selectedForm && $selectedForm.machine;
 	$: formContext = $formMachine && $formMachine.context;
-	$: params = formContext && formContext.params;
+	$: formParams = formContext && formContext.params;
 	$: selection = formContext && formContext.selection;
 	$: bucketOptions = formContext && formContext.bucketOptions;
 	$: metricOptions = formContext && formContext.metricOptions;
@@ -113,25 +116,22 @@
 	}
 
 	function getFieldValue (name) {
-		return $params && $params[name] || null;
+		return $formParams && $formParams[name] || null;
 	}
 
+	const { page } = stores();
+	let eventType = 'READY'
 	onMount(async () => {
 		const datasetTypings = await request(
 			'GET',
 			'dsl/datasets.ts',
 			{type:'text'}
 		);
-		const loadPage = eventType => () => {
-			const urlParams = new URL(document.location).searchParams;
-			const encodedQuery = urlParams.get('q');
+		const loadPage = ({params}) => {
+			console.log('page changed', eventType, params);
 			const event = {
-				dataset: urlParams.get('dataset'),
-				query: null,
+				query: params.q && rison.decode(params.q),
 				datasetTypings,
-			}
-			if (encodedQuery) {
-				event.query = rison.decode(encodedQuery);
 			}
 			if (window.ts) {
 				routeMachine.send(eventType, event);
@@ -141,17 +141,29 @@
 					routeMachine.send(eventType, event);
 				}
 			}
-		}
-		loadPage('READY')();
-		const pageReloader = loadPage('ROUTE_CHANGED');
+			eventType = 'ROUTE_CHANGED';
+		};
+
+		const pageReloader = () => {
+			const urlParams = new URL(document.location).searchParams;
+			loadPage({
+				params: _.fromPairs(Array.from(urlParams.entries()))
+			});
+		};
 		addEventListener('popstate', pageReloader);
-		return () => removeEventListener('popstate', pageReloader);
+		const unsubscribe = page.subscribe(pageReloader);
+		pageReloader();
+
+		return () => {
+			removeEventListener('popstate', pageReloader);
+			unsubscribe && unsubscribe();
+		};
 	});
 
 </script>
 
 <svelte:head>
-	<script src="https://cdn.jsdelivr.net/gh/microsoft/TypeScript@3.9.5/lib/typescriptServices.js" async id='tsCompiler'></script>
+	<script src="https://cdn.jsdelivr.net/gh/microsoft/TypeScript@3.9.5/lib/typescriptServices.js" id='tsCompiler'></script>
 </svelte:head>
 
 <section class="query-builder">
@@ -170,7 +182,7 @@
 			options={$forms}
 			unselectable={false}
 			on:selectionChanged={e => routeMachine.send(
-				'FORM_SELECTED',
+				'FORM_SELECTED', 'EDITED',
 				{form: $forms.find(f => f.value === e.detail)}
 			)}
 			let:option={option}
@@ -189,6 +201,7 @@
 						payload.dataset = null;
 					}
 					option.machine.send('SELECTION_CHANGED', payload);
+					routeMachine.send('EDITED');
 				}}>
 					<IconDelete size={14} />
 				</div>
@@ -211,10 +224,13 @@
 				selectedOption={$selection.aggregation}
 				hideDisabled={$hideDisabledAggregations}
 				options={$bucketOptions}
-				on:selectionChanged={e => formMachine.send(
-					'SELECTION_CHANGED',
-					{selection: {aggregation: e.detail}}
-				)}
+				on:selectionChanged={e => {
+					formMachine.send(
+						'SELECTION_CHANGED',
+						{selection: {aggregation: e.detail}}
+					);
+					routeMachine.send('EDITED');
+				}}
 				let:option={option}
 			>
 				<div 
@@ -231,10 +247,13 @@
 				selectedOption={$selection.aggregation}
 				hideDisabled={$hideDisabledAggregations}
 				options={$metricOptions}
-				on:selectionChanged={e => $selectedForm.machine.send(
-					'SELECTION_CHANGED',
-					{selection: {aggregation: e.detail}}
-				)}
+				on:selectionChanged={e => {
+					$selectedForm.machine.send(
+						'SELECTION_CHANGED',
+						{selection: {aggregation: e.detail}}
+					);
+					routeMachine.send('EDITED');
+				}}
 				let:option={option}
 			>
 			<div 
@@ -254,30 +273,39 @@
 		<Select
 			selectedOption={$selection.type}
 			options={$typeOptions}
-			on:selectionChanged={e => $selectedForm.machine.send(
-				'SELECTION_CHANGED',
-				{selection: {type: e.detail}}
-			)}
+			on:selectionChanged={e => {
+				$selectedForm.machine.send(
+					'SELECTION_CHANGED',
+					{selection: {type: e.detail}}
+				)
+				routeMachine.send('EDITED');
+			}}
 		/>
 	</section>
 
 	<section class='datasets'>
 		<SelectMenu 
 			hideDisabled={$hideDisabledDatasets}
-			on:hideDisabledChanged={e => routeMachine.send(
-				'HIDE_DISABLED_DSETS_TOGGLED',
-				e.detail
-			)}
+			on:hideDisabledChanged={e => {
+				routeMachine.send(
+					'HIDE_DISABLED_DSETS_TOGGLED',
+					e.detail
+				)
+				routeMachine.send('EDITED');
+			}}
 		/>
 		<header class='bold'>Datasets</header>
 		<Select
 			selectedOption={$dataset}
 			hideDisabled={$hideDisabledDatasets}
 			options={$datasetOptions}
-			on:selectionChanged={e => $selectedForm.machine.send(
-				'SELECTION_CHANGED',
-				{dataset: e.detail}
-			)}
+			on:selectionChanged={e => {
+				$selectedForm.machine.send(
+					'SELECTION_CHANGED',
+					{dataset: e.detail}
+				)
+				routeMachine.send('EDITED');
+			}}
 			disabled={$selectedForm && $selectedForm.value !== 0}
 		/>
 	</section>
@@ -295,10 +323,13 @@
 			selectedOption={$selection.field}
 			hideDisabled={$hideDisabledFields}
 			options={$fieldOptions}
-			on:selectionChanged={e => $selectedForm.machine.send(
-				'SELECTION_CHANGED',
-				{selection: {field: e.detail}}
-			)}
+			on:selectionChanged={e => {
+				$selectedForm.machine.send(
+					'SELECTION_CHANGED',
+					{selection: {field: e.detail}}
+				)
+				routeMachine.send('EDITED');
+			}}
 		/>
 	</section>
 
@@ -364,9 +395,12 @@
 								}
 							})
 						}
-						on:click={() => $selectedForm.machine.send(
-							'QUERY_EXECUTED'
-						)}
+						on:click={() => {
+							$selectedForm.machine.send(
+								'QUERY_EXECUTED'
+							);
+							// routeMachine.send('REQUESTED');
+						}}
 						class='query-button'
 					>Run query</button>
 				{:else if $formMachine && $formMachine.matches({
@@ -418,9 +452,12 @@
 								}
 							})
 						}
-						on:click={() => $selectedForm.machine.send(
-							'QUERY_EXECUTED'
-						)}
+						on:click={() => {
+							$selectedForm.machine.send(
+								'QUERY_EXECUTED'
+							);
+							// routeMachine.send('REQUESTED');
+						}}
 						class='query-button'
 					>Run query</button>
 				{/if}
