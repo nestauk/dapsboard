@@ -120,7 +120,7 @@
 	}
 
 	const { page } = stores();
-	let eventType = 'READY'
+	let eventType = 'READY';
 	onMount(async () => {
 		const datasetTypings = await request(
 			'GET',
@@ -135,13 +135,14 @@
 			}
 			if (window.ts) {
 				routeMachine.send(eventType, event);
+				eventType = 'ROUTE_CHANGED';
 			} else {
 				const tsCompiler = document.getElementById('tsCompiler');
 				tsCompiler.onload = () => {
 					routeMachine.send(eventType, event);
+					eventType = 'ROUTE_CHANGED';
 				}
 			}
-			eventType = 'ROUTE_CHANGED';
 		};
 
 		const pageReloader = () => {
@@ -152,7 +153,6 @@
 		};
 		addEventListener('popstate', pageReloader);
 		const unsubscribe = page.subscribe(pageReloader);
-		pageReloader();
 
 		return () => {
 			removeEventListener('popstate', pageReloader);
