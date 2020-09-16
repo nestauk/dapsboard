@@ -128,7 +128,7 @@
 			{type:'text'}
 		);
 		const loadPage = ({params}) => {
-			console.log('page changed', eventType, params);
+			// console.log('page changed', eventType, params);
 			const event = {
 				query: params.q && rison.decode(params.q),
 				datasetTypings,
