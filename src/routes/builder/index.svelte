@@ -351,10 +351,13 @@
 					required=true
 					dataType='Opaque<number, "integer">'
 					value={$resultSize}
-					on:change={e => $selectedForm.machine.send(
-						'QUERY_CHANGED',
-						{resultSize: e.detail}
-					)}
+					on:change={e => {
+						$selectedForm.machine.send(
+							'QUERY_CHANGED',
+							{resultSize: e.detail}
+						);
+						routeMachine.send('EDITED');
+					}}
 					on:docs={e => handleDocs(
 						[{text:'Maximum size of results returned.'}],
 						e.detail
@@ -370,10 +373,13 @@
 							required={completion.required}
 							dataType={completion.displayText}
 							value={getFieldValue(completion.name)}
-							on:change={e => $selectedForm.machine.send(
-								'QUERY_CHANGED',
-								{params:{[completion.name]: e.detail}}
-							)}
+							on:change={e => {
+								$selectedForm.machine.send(
+									'QUERY_CHANGED',
+									{params:{[completion.name]: e.detail}}
+								);
+								routeMachine.send('EDITED');
+							}}
 							on:docs={e => handleDocs(
 								completion.documentation,
 								e.detail)
