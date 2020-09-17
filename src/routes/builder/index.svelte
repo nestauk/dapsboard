@@ -78,6 +78,8 @@
 	$: computedQuery = formContext && formContext.computedQuery;
 	$: response = formContext && formContext.response;
 
+	$: console.log('Saved: ', $routeMachine.matches({Interactive: {History: 'Saved'}}));
+
 	function handleDocs (docs, eventType) {
 		const docsText = docs.map(i => i.text ? i.text : '').join(' ');
 		switch (eventType) {
@@ -132,14 +134,20 @@
 			const event = {
 				query: params.q && rison.decode(params.q),
 				datasetTypings,
-			}
+			};
 			if (window.ts) {
 				routeMachine.send(eventType, event);
+				if (!event.query) {
+					routeMachine.send('REQUESTED');
+				}
 				eventType = 'ROUTE_CHANGED';
 			} else {
 				const tsCompiler = document.getElementById('tsCompiler');
 				tsCompiler.onload = () => {
 					routeMachine.send(eventType, event);
+					if (!event.query) {
+						routeMachine.send('REQUESTED');
+					}
 					eventType = 'ROUTE_CHANGED';
 				}
 			}
@@ -201,7 +209,7 @@
 						payload.dataset = null;
 					}
 					option.machine.send('SELECTION_CHANGED', payload);
-					routeMachine.send('EDITED');
+					// routeMachine.send('EDITED');
 				}}>
 					<IconDelete size={14} />
 				</div>
@@ -229,7 +237,7 @@
 						'SELECTION_CHANGED',
 						{selection: {aggregation: e.detail}}
 					);
-					routeMachine.send('EDITED');
+					// routeMachine.send('EDITED');
 				}}
 				let:option={option}
 			>
@@ -252,7 +260,7 @@
 						'SELECTION_CHANGED',
 						{selection: {aggregation: e.detail}}
 					);
-					routeMachine.send('EDITED');
+					// routeMachine.send('EDITED');
 				}}
 				let:option={option}
 			>
@@ -278,7 +286,7 @@
 					'SELECTION_CHANGED',
 					{selection: {type: e.detail}}
 				)
-				routeMachine.send('EDITED');
+				// routeMachine.send('EDITED');
 			}}
 		/>
 	</section>
@@ -291,7 +299,7 @@
 					'HIDE_DISABLED_DSETS_TOGGLED',
 					e.detail
 				)
-				routeMachine.send('EDITED');
+				// routeMachine.send('EDITED');
 			}}
 		/>
 		<header class='bold'>Datasets</header>
@@ -304,7 +312,7 @@
 					'SELECTION_CHANGED',
 					{dataset: e.detail}
 				)
-				routeMachine.send('EDITED');
+				// routeMachine.send('EDITED');
 			}}
 			disabled={$selectedForm && $selectedForm.value !== 0}
 		/>
@@ -328,7 +336,7 @@
 					'SELECTION_CHANGED',
 					{selection: {field: e.detail}}
 				)
-				routeMachine.send('EDITED');
+				// routeMachine.send('EDITED');
 			}}
 		/>
 	</section>
@@ -356,7 +364,7 @@
 							'QUERY_CHANGED',
 							{resultSize: e.detail}
 						);
-						routeMachine.send('EDITED');
+						// routeMachine.send('EDITED');
 					}}
 					on:docs={e => handleDocs(
 						[{text:'Maximum size of results returned.'}],
@@ -378,7 +386,7 @@
 									'QUERY_CHANGED',
 									{params:{[completion.name]: e.detail}}
 								);
-								routeMachine.send('EDITED');
+								// routeMachine.send('EDITED');
 							}}
 							on:docs={e => handleDocs(
 								completion.documentation,
@@ -542,6 +550,9 @@
 	<section class='status-bar'>
 		{$aggDocText}
 	</section>
+	<div style='position: fixed; top: 0, left: 0; background: #004; color: white;'>
+		History: {$routeMachine.value.Interactive && $routeMachine.value.Interactive.History }
+	</div>
 </section>
 
 <style>
