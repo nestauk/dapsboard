@@ -189,10 +189,13 @@
 			hideDisabled={$hideDisabledForms}
 			options={$forms}
 			unselectable={false}
-			on:selectionChanged={e => routeMachine.send(
-				'FORM_SELECTED', 'EDITED',
-				{form: $forms.find(f => f.value === e.detail)}
-			)}
+			on:selectionChanged={e => {
+				routeMachine.send(
+					'FORM_SELECTED',
+					{form: $forms.find(f => f.value === e.detail)}
+				);
+				routeMachine.send('EDITED');
+			}}
 			let:option={option}
 		>
 			<div class='select-item'>
