@@ -4,7 +4,7 @@
 	// eslint-disable-next-line node/no-unpublished-import
 	import { onMount } from 'svelte';
 	// eslint-disable-next-line node/no-unpublished-import
-	import { readable, get } from 'svelte/store';
+	import { readable } from 'svelte/store';
 	// eslint-disable-next-line node/no-unpublished-import
 	import rison from 'rison-esm';
 	import { stores } from '@sapper/app';
@@ -22,6 +22,7 @@
 	import ExternalLink from 'app/components/ExternalLink.svelte';
 
 	import { createBuilderMachine } from 'app/machines/builder/route';
+	import { parseParams } from 'app/machines/builder/_options';
 
 	import { AGG_DOC_URLS } from 'app/elasticsearch/config';
 	import aggCompletions from 'app/data/agg_docs.json';
@@ -85,8 +86,6 @@
 	$: computedQuery = formContext && formContext.computedQuery;
 	$: response = formContext && formContext.response;
 
-	$: console.log('Saved: ', $routeMachine.matches({Interactive: {History: 'Saved'}}));
-
 	function handleDocs (docs, eventType) {
 		const docsText = docs.map(i => i.text ? i.text : '').join(' ');
 		switch (eventType) {
@@ -128,51 +127,6 @@
 		return $formParams && $formParams[name] || null;
 	}
 
-	// eslint-disable-next-line node/no-unpublished-import
-	import { isObjNotEmpty } from '@svizzle/utils';
-	// eslint-disable-next-line node/no-extraneous-import
-	import { capitalise } from 'svizzle/utils/string-string';
-
-	export function parseParams (event) {
-		// console.log('parsing: ', event);
-		// ctx.isUserInteraction.set(false);
-		console.log('Parsing params')
-		routeMachine.send('TYPINGS_CHANGED', {
-			datasetTypings: event.datasetTypings
-		});
-		routeMachine.send('FORM_ADDED');
-		routeMachine.send('FORM_SELECTED');
-		if (event.query) {
-			const q = event.query;
-			routeMachine.send('DATASET_CHANGED', {dataset: q.dataset});
-			routeMachine.send('RESULT_SIZE_CHANGED', {resultSize: q.size});
-			q.forms.forEach(a => {
-				const forms2 = get($routeMachine.context.forms);
-				const newForm = forms2[forms2.length - 1];
-				routeMachine.send('FORM_SELECTED', {form: newForm})
-				newForm.text = capitalise(a.name);
-				newForm.machine.send('RENAME', {
-					name: a.name
-				});
-				newForm.machine.send('SELECTION_CHANGED', {
-					selection: a.selection
-				});
-				if (!_.isNil(a.params) && isObjNotEmpty(a.params)) {
-					newForm.machine.send('QUERY_CHANGED',{
-						params: a.params
-					});
-				}
-			});
-			const form = get($routeMachine.context.forms).find(f => f.id === q.form);
-			if (!_.isNil(form)) {
-				routeMachine.send('FORM_SELECTED', {form});
-			}
-		}
-		// ctx.isUserInteraction.set(true);
-		console.log('Done parsing params')
-	}
-
-
 	const { page } = stores();
 	let eventType = 'READY';
 	onMount(async () => {
@@ -182,7 +136,6 @@
 			{type:'text'}
 		);
 		const loadPage = ({params}) => {
-			// console.log('page changed', eventType, params);
 			const event = {
 				query: params.q && rison.decode(params.q),
 				datasetTypings,
@@ -192,7 +145,7 @@
 				if (!event.query) {
 					routeMachine.send('REQUESTED');
 				}
-				parseParams(event);
+				parseParams(routeMachine, event);
 				eventType = 'ROUTE_CHANGED';
 			} else {
 				const tsCompiler = document.getElementById('tsCompiler');
@@ -201,7 +154,7 @@
 					if (!event.query) {
 						routeMachine.send('REQUESTED');
 					}
-					parseParams(event);
+					parseParams(routeMachine, event);
 					eventType = 'ROUTE_CHANGED';
 				}
 			}
@@ -607,9 +560,6 @@
 	<section class='status-bar'>
 		{$aggDocText}
 	</section>
-	<div style='position: fixed; top: 0, left: 0; background: #004; color: white;'>
-		History: {$routeMachine.value.Interactive && $routeMachine.value.Interactive.History }
-	</div>
 </section>
 
 <style>
