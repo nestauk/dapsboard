@@ -27,6 +27,13 @@
 	import aggCompletions from 'app/data/agg_docs.json';
 	import { request } from 'app/net';
 
+	import { inspect } from "@xstate/inspect";
+
+	inspect({
+		url: "https://statecharts.io/inspect",
+		iframe: false
+	});
+
 	const { machine: routeMachine, contextStores: {
 		// config
 		runQueryOnSelect,
