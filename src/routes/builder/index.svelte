@@ -4,7 +4,7 @@
 	// eslint-disable-next-line node/no-unpublished-import
 	import { onMount } from 'svelte';
 	// eslint-disable-next-line node/no-unpublished-import
-	import { readable } from 'svelte/store';
+	import { readable, get } from 'svelte/store';
 	// eslint-disable-next-line node/no-unpublished-import
 	import rison from 'rison-esm';
 	import { stores } from '@sapper/app';
@@ -128,6 +128,51 @@
 		return $formParams && $formParams[name] || null;
 	}
 
+	// eslint-disable-next-line node/no-unpublished-import
+	import { isObjNotEmpty } from '@svizzle/utils';
+	// eslint-disable-next-line node/no-extraneous-import
+	import { capitalise } from 'svizzle/utils/string-string';
+
+	export function parseParams (event) {
+		// console.log('parsing: ', event);
+		// ctx.isUserInteraction.set(false);
+		console.log('Parsing params')
+		routeMachine.send('TYPINGS_CHANGED', {
+			datasetTypings: event.datasetTypings
+		});
+		routeMachine.send('FORM_ADDED');
+		routeMachine.send('FORM_SELECTED');
+		if (event.query) {
+			const q = event.query;
+			routeMachine.send('DATASET_CHANGED', {dataset: q.dataset});
+			routeMachine.send('RESULT_SIZE_CHANGED', {resultSize: q.size});
+			q.forms.forEach(a => {
+				const forms2 = get($routeMachine.context.forms);
+				const newForm = forms2[forms2.length - 1];
+				routeMachine.send('FORM_SELECTED', {form: newForm})
+				newForm.text = capitalise(a.name);
+				newForm.machine.send('RENAME', {
+					name: a.name
+				});
+				newForm.machine.send('SELECTION_CHANGED', {
+					selection: a.selection
+				});
+				if (!_.isNil(a.params) && isObjNotEmpty(a.params)) {
+					newForm.machine.send('QUERY_CHANGED',{
+						params: a.params
+					});
+				}
+			});
+			const form = get($routeMachine.context.forms).find(f => f.id === q.form);
+			if (!_.isNil(form)) {
+				routeMachine.send('FORM_SELECTED', {form});
+			}
+		}
+		// ctx.isUserInteraction.set(true);
+		console.log('Done parsing params')
+	}
+
+
 	const { page } = stores();
 	let eventType = 'READY';
 	onMount(async () => {
@@ -143,18 +188,20 @@
 				datasetTypings,
 			};
 			if (window.ts) {
-				routeMachine.send(eventType, event);
+				routeMachine.send(eventType);
 				if (!event.query) {
 					routeMachine.send('REQUESTED');
 				}
+				parseParams(event);
 				eventType = 'ROUTE_CHANGED';
 			} else {
 				const tsCompiler = document.getElementById('tsCompiler');
 				tsCompiler.onload = () => {
-					routeMachine.send(eventType, event);
+					routeMachine.send(eventType);
 					if (!event.query) {
 						routeMachine.send('REQUESTED');
 					}
+					parseParams(event);
 					eventType = 'ROUTE_CHANGED';
 				}
 			}
