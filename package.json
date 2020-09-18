@@ -62,6 +62,7 @@
     "chmod": "chmod u+x ./src/bin/*",
     "deploy": "npm run makedata && npm run makejsondocs && npm run export",
     "dev": "sapper dev",
+    "devinspect": "export INSPECT=true && sapper dev",
     "export": "export SAPPER_EXPORT=true && sapper export --legacy",
     "lint": "eslint rollup.config.js 'src/**/*.{js,svelte}'",
     "makedata": "npm run mkdirdata && npm run mkdirdsl && npm run chmod && node -r esm ./src/bin/make_data.js",

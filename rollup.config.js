@@ -20,6 +20,7 @@ import pkg from './package.json';
 
 const mode = process.env.NODE_ENV;
 const isExported = process.env.SAPPER_EXPORT;
+const inspect = process.env.INSPECT;
 const dev = mode === 'development';
 const legacy = Boolean(process.env.SAPPER_LEGACY_BUILD);
 
@@ -35,7 +36,8 @@ export default {
 			replace({
 				'process.browser': true,
 				'process.env.NODE_ENV': JSON.stringify(mode),
-				'process.env.SAPPER_EXPORT': JSON.stringify(isExported)
+				'process.env.SAPPER_EXPORT': JSON.stringify(isExported),
+				'process.env.INSPECT': JSON.stringify(inspect)
 			}),
 			svelte({
 				dev,
@@ -87,7 +89,8 @@ export default {
 			replace({
 				'process.browser': false,
 				'process.env.NODE_ENV': JSON.stringify(mode),
-				'process.env.SAPPER_EXPORT': JSON.stringify(isExported)
+				'process.env.SAPPER_EXPORT': JSON.stringify(isExported),
+				'process.env.INSPECT': JSON.stringify(inspect)
 			}),
 			svelte({
 				generate: 'ssr',
@@ -128,7 +131,8 @@ export default {
 			replace({
 				'process.browser': true,
 				'process.env.NODE_ENV': JSON.stringify(mode),
-				'process.env.SAPPER_EXPORT': JSON.stringify(isExported)
+				'process.env.SAPPER_EXPORT': JSON.stringify(isExported),
+				'process.env.INSPECT': JSON.stringify(inspect)
 			}),
 			commonjs(),
 			json(),
