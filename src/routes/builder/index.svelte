@@ -145,7 +145,7 @@
 			if (window.ts) {
 				routeMachine.send(eventType);
 				if (!event.query) {
-					routeMachine.send('REQUESTED');
+					routeMachine.send('COMMITTED');
 				}
 				parseParams(routeMachine, event);
 				eventType = 'ROUTE_CHANGED';
@@ -154,7 +154,7 @@
 				tsCompiler.onload = () => {
 					routeMachine.send(eventType);
 					if (!event.query) {
-						routeMachine.send('REQUESTED');
+						routeMachine.send('COMMITTED');
 					}
 					parseParams(routeMachine, event);
 					eventType = 'ROUTE_CHANGED';
