@@ -221,7 +221,6 @@
 						payload.dataset = null;
 					}
 					option.machine.send('SELECTION_CHANGED', payload);
-					// routeMachine.send('EDITED');
 				}}>
 					<IconDelete size={14} />
 				</div>
@@ -244,13 +243,10 @@
 				selectedOption={$selection.aggregation}
 				hideDisabled={$hideDisabledAggregations}
 				options={$bucketOptions}
-				on:selectionChanged={e => {
-					formMachine.send(
-						'SELECTION_CHANGED',
-						{selection: {aggregation: e.detail}}
-					);
-					// routeMachine.send('EDITED');
-				}}
+				on:selectionChanged={e => formMachine.send(
+					'SELECTION_CHANGED',
+					{selection: {aggregation: e.detail}}
+				)}
 				let:option={option}
 			>
 				<div 
@@ -267,13 +263,10 @@
 				selectedOption={$selection.aggregation}
 				hideDisabled={$hideDisabledAggregations}
 				options={$metricOptions}
-				on:selectionChanged={e => {
-					$selectedForm.machine.send(
-						'SELECTION_CHANGED',
-						{selection: {aggregation: e.detail}}
-					);
-					// routeMachine.send('EDITED');
-				}}
+				on:selectionChanged={e => $selectedForm.machine.send(
+					'SELECTION_CHANGED',
+					{selection: {aggregation: e.detail}}
+				)}
 				let:option={option}
 			>
 			<div 
@@ -293,39 +286,30 @@
 		<Select
 			selectedOption={$selection.type}
 			options={$typeOptions}
-			on:selectionChanged={e => {
-				$selectedForm.machine.send(
-					'SELECTION_CHANGED',
-					{selection: {type: e.detail}}
-				)
-				// routeMachine.send('EDITED');
-			}}
+			on:selectionChanged={e => $selectedForm.machine.send(
+				'SELECTION_CHANGED',
+				{selection: {type: e.detail}}
+			)}
 		/>
 	</section>
 
 	<section class='datasets'>
 		<SelectMenu 
 			hideDisabled={$hideDisabledDatasets}
-			on:hideDisabledChanged={e => {
-				routeMachine.send(
-					'HIDE_DISABLED_DSETS_TOGGLED',
-					e.detail
-				)
-				// routeMachine.send('EDITED');
-			}}
+			on:hideDisabledChanged={e => routeMachine.send(
+				'HIDE_DISABLED_DSETS_TOGGLED',
+				e.detail
+			)}
 		/>
 		<header class='bold'>Datasets</header>
 		<Select
 			selectedOption={$dataset}
 			hideDisabled={$hideDisabledDatasets}
 			options={$datasetOptions}
-			on:selectionChanged={e => {
-				$selectedForm.machine.send(
-					'SELECTION_CHANGED',
-					{dataset: e.detail}
-				)
-				// routeMachine.send('EDITED');
-			}}
+			on:selectionChanged={e => $selectedForm.machine.send(
+				'SELECTION_CHANGED',
+				{dataset: e.detail}
+			)}
 			disabled={$selectedForm && $selectedForm.value !== 0}
 		/>
 	</section>
@@ -343,13 +327,10 @@
 			selectedOption={$selection.field}
 			hideDisabled={$hideDisabledFields}
 			options={$fieldOptions}
-			on:selectionChanged={e => {
-				$selectedForm.machine.send(
-					'SELECTION_CHANGED',
-					{selection: {field: e.detail}}
-				)
-				// routeMachine.send('EDITED');
-			}}
+			on:selectionChanged={e => $selectedForm.machine.send(
+				'SELECTION_CHANGED',
+				{selection: {field: e.detail}}
+			)}
 		/>
 	</section>
 
@@ -371,13 +352,10 @@
 					required=true
 					dataType='Opaque<number, "integer">'
 					value={$resultSize}
-					on:change={e => {
-						$selectedForm.machine.send(
-							'QUERY_CHANGED',
-							{resultSize: e.detail}
-						);
-						// routeMachine.send('EDITED');
-					}}
+					on:change={e => $selectedForm.machine.send(
+						'QUERY_CHANGED',
+						{resultSize: e.detail}
+					)}
 					on:docs={e => handleDocs(
 						[{text:'Maximum size of results returned.'}],
 						e.detail
@@ -393,13 +371,10 @@
 							required={completion.required}
 							dataType={completion.displayText}
 							value={getFieldValue(completion.name)}
-							on:change={e => {
-								$selectedForm.machine.send(
-									'QUERY_CHANGED',
-									{params:{[completion.name]: e.detail}}
-								);
-								// routeMachine.send('EDITED');
-							}}
+							on:change={e => $selectedForm.machine.send(
+								'QUERY_CHANGED',
+								{params:{[completion.name]: e.detail}}
+							)}
 							on:docs={e => handleDocs(
 								completion.documentation,
 								e.detail)
@@ -421,12 +396,9 @@
 								}
 							})
 						}
-						on:click={() => {
-							$selectedForm.machine.send(
-								'QUERY_EXECUTED'
-							);
-							// routeMachine.send('REQUESTED');
-						}}
+						on:click={() => $selectedForm.machine.send(
+							'QUERY_EXECUTED'
+						)}
 						class='query-button'
 					>Run query</button>
 				{:else if $formMachine && $formMachine.matches({
@@ -442,11 +414,10 @@
 					<MenuItem>
 						<input
 							checked={$runQueryOnSelect}
-							on:change={e =>
-								routeMachine.send(
-									'AUTO_EXEC_TOGGLED',
-									e.target.checked)
-							}
+							on:change={e => routeMachine.send(
+								'AUTO_EXEC_TOGGLED',
+								e.target.checked
+							)}
 							id='runQueryOnSelectID'
 							type='checkbox'
 						>
@@ -478,12 +449,9 @@
 								}
 							})
 						}
-						on:click={() => {
-							$selectedForm.machine.send(
-								'QUERY_EXECUTED'
-							);
-							// routeMachine.send('REQUESTED');
-						}}
+						on:click={() => $selectedForm.machine.send(
+							'QUERY_EXECUTED'
+						)}	
 						class='query-button'
 					>Run query</button>
 				{/if}
@@ -491,11 +459,10 @@
 					<MenuItem>
 						<input
 							checked={$runQueryOnSelect}
-							on:change={e =>
-								routeMachine.send(
-									'AUTO_EXEC_TOGGLED',
-									e.target.checked)
-							}
+							on:change={e => routeMachine.send(
+								'AUTO_EXEC_TOGGLED',
+								e.target.checked
+							)}
 							id='runQueryOnSelectID'
 							type='checkbox'
 						>
@@ -514,12 +481,10 @@
 			<MenuItem>
 				<input
 					checked={$showFullResponse}
-					on:change={e =>
-						routeMachine.send(
-							'SHOW_FULL_RESPONSE_TOGGLED',
-							e.target.checked
-						)
-					}
+					on:change={e => routeMachine.send(
+						'SHOW_FULL_RESPONSE_TOGGLED',
+						e.target.checked
+					)}
 					id='showFullResponseID'
 					type='checkbox'
 				>
