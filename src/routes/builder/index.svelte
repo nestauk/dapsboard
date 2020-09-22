@@ -144,9 +144,6 @@
 			};
 			if (window.ts) {
 				routeMachine.send(eventType);
-				if (!event.query) {
-					routeMachine.send('COMMITTED');
-				}
 				parseParams(routeMachine, event);
 				eventType = 'ROUTE_CHANGED';
 			} else {
@@ -198,13 +195,10 @@
 			hideDisabled={$hideDisabledForms}
 			options={$forms}
 			unselectable={false}
-			on:selectionChanged={e => {
-				routeMachine.send(
-					'FORM_SELECTED',
-					{form: $forms.find(f => f.value === e.detail)}
-				);
-				routeMachine.send('EDITED');
-			}}
+			on:selectionChanged={e => routeMachine.send(
+				'FORM_SELECTED',
+				{form: $forms.find(f => f.value === e.detail)}
+			)}
 			let:option={option}
 		>
 			<div class='select-item'>
