@@ -28,15 +28,6 @@
 	import aggCompletions from 'app/data/agg_docs.json';
 	import { request } from 'app/net';
 
-	import { inspect } from "@xstate/inspect";
-
-	if (process.env.INSPECT === 'true') {
-		inspect({
-			url: "https://statecharts.io/inspect",
-			iframe: false
-		});
-	}
-
 	const { machine: routeMachine, contextStores: {
 		// config
 		runQueryOnSelect,
@@ -167,6 +158,15 @@
 		};
 		addEventListener('popstate', pageReloader);
 		const unsubscribe = page.subscribe(pageReloader);
+
+		if (process.env.INSPECT === 'true') {
+			import('@xstate/inspect').then( module =>
+				module.inspect({
+					url: "https://statecharts.io/inspect",
+					iframe: false
+				})
+			);
+		}
 
 		return () => {
 			removeEventListener('popstate', pageReloader);
