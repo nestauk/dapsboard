@@ -1,11 +1,8 @@
 <script>
-	// eslint-disable-next-line node/no-unpublished-import
+	/* eslint-disable node/no-unpublished-import */
 	import * as _ from 'lamb';
-	// eslint-disable-next-line node/no-unpublished-import
 	import { onMount } from 'svelte';
-	// eslint-disable-next-line node/no-unpublished-import
 	import { readable } from 'svelte/store';
-	// eslint-disable-next-line node/no-unpublished-import
 	import rison from 'rison-esm';
 	import { stores } from '@sapper/app';
 
