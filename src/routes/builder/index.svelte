@@ -1,8 +1,11 @@
 <script>
-	// eslint-disable-next-line node/no-unpublished-import
+	/* eslint-disable node/no-unpublished-import */
+	import * as _ from 'lamb';
 	import { onMount } from 'svelte';
-	// eslint-disable-next-line node/no-unpublished-import
 	import { readable } from 'svelte/store';
+	import rison from 'rison-esm';
+	import { stores } from '@sapper/app';
+
 	import JSONValue from 'app/components/JSONValue.svelte';
 	import ESField from 'app/components/elementary/ElasticSearchField.svelte';
 
@@ -16,9 +19,11 @@
 	import ExternalLink from 'app/components/ExternalLink.svelte';
 
 	import { createBuilderMachine } from 'app/machines/builder/route';
+	import { parseParams } from 'app/machines/builder/_options';
 
 	import { AGG_DOC_URLS } from 'app/elasticsearch/config';
 	import aggCompletions from 'app/data/agg_docs.json';
+	import { request } from 'app/net';
 
 	const { machine: routeMachine, contextStores: {
 		// config
@@ -43,7 +48,7 @@
 	let formMachine;
 	let formContext;
 
-	let params;
+	let formParams;
 	let selection = readable({
 		aggregation: null,
 		type: null,
@@ -60,7 +65,7 @@
 
 	$: formMachine = $selectedForm && $selectedForm.machine;
 	$: formContext = $formMachine && $formMachine.context;
-	$: params = formContext && formContext.params;
+	$: formParams = formContext && formContext.params;
 	$: selection = formContext && formContext.selection;
 	$: bucketOptions = formContext && formContext.bucketOptions;
 	$: metricOptions = formContext && formContext.metricOptions;
@@ -109,13 +114,68 @@
 	}
 
 	function getFieldValue (name) {
-		return $params && $params[name] || null;
+		return $formParams && $formParams[name] || null;
 	}
 
-	onMount(() => {
-		routeMachine.send("READY");
+	const { page } = stores();
+	let eventType = 'READY';
+	onMount(async () => {
+		const datasetTypings = await request(
+			'GET',
+			'dsl/datasets.ts',
+			{type:'text'}
+		);
+		const loadPage = ({params}) => {
+			const event = {
+				query: params.q && rison.decode(params.q),
+				datasetTypings,
+			};
+			if (window.ts) {
+				routeMachine.send(eventType);
+				parseParams(routeMachine, event);
+				eventType = 'ROUTE_CHANGED';
+			} else {
+				const tsCompiler = document.getElementById('tsCompiler');
+				tsCompiler.onload = () => {
+					routeMachine.send(eventType);
+					if (!event.query) {
+						routeMachine.send('COMMITTED');
+					}
+					parseParams(routeMachine, event);
+					eventType = 'ROUTE_CHANGED';
+				}
+			}
+		};
+
+		const pageReloader = () => {
+			const urlParams = new URL(document.location).searchParams;
+			loadPage({
+				params: _.fromPairs(Array.from(urlParams.entries()))
+			});
+		};
+		addEventListener('popstate', pageReloader);
+		const unsubscribe = page.subscribe(pageReloader);
+
+		if (process.env.INSPECT === 'true') {
+			import('@xstate/inspect').then( module =>
+				module.inspect({
+					url: "https://statecharts.io/inspect",
+					iframe: false
+				})
+			);
+		}
+
+		return () => {
+			removeEventListener('popstate', pageReloader);
+			unsubscribe && unsubscribe();
+		};
 	});
+
 </script>
+
+<svelte:head>
+	<script src="https://cdn.jsdelivr.net/gh/microsoft/TypeScript@3.9.5/lib/typescriptServices.js" id='tsCompiler'></script>
+</svelte:head>
 
 <section class="query-builder">
 	<section class='axes'>
@@ -345,11 +405,10 @@
 					<MenuItem>
 						<input
 							checked={$runQueryOnSelect}
-							on:change={e =>
-								routeMachine.send(
-									'AUTO_EXEC_TOGGLED',
-									e.target.checked)
-							}
+							on:change={e => routeMachine.send(
+								'AUTO_EXEC_TOGGLED',
+								e.target.checked
+							)}
 							id='runQueryOnSelectID'
 							type='checkbox'
 						>
@@ -383,7 +442,7 @@
 						}
 						on:click={() => $selectedForm.machine.send(
 							'QUERY_EXECUTED'
-						)}
+						)}	
 						class='query-button'
 					>Run query</button>
 				{/if}
@@ -391,11 +450,10 @@
 					<MenuItem>
 						<input
 							checked={$runQueryOnSelect}
-							on:change={e =>
-								routeMachine.send(
-									'AUTO_EXEC_TOGGLED',
-									e.target.checked)
-							}
+							on:change={e => routeMachine.send(
+								'AUTO_EXEC_TOGGLED',
+								e.target.checked
+							)}
 							id='runQueryOnSelectID'
 							type='checkbox'
 						>
@@ -414,12 +472,10 @@
 			<MenuItem>
 				<input
 					checked={$showFullResponse}
-					on:change={e =>
-						routeMachine.send(
-							'SHOW_FULL_RESPONSE_TOGGLED',
-							e.target.checked
-						)
-					}
+					on:change={e => routeMachine.send(
+						'SHOW_FULL_RESPONSE_TOGGLED',
+						e.target.checked
+					)}
 					id='showFullResponseID'
 					type='checkbox'
 				>
