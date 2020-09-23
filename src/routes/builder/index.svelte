@@ -62,6 +62,7 @@
 	let completions = readable([]);
 	let computedQuery;
 	let response;
+	let responseHighlighted = true;
 
 	$: formMachine = $selectedForm && $selectedForm.machine;
 	$: formContext = $formMachine && $formMachine.context;
@@ -484,6 +485,17 @@
 					for='showFullResponseID'
 				>Show full response</label>
 			</MenuItem>
+			<MenuItem>
+				<input
+					bind:checked={responseHighlighted}
+					id='highlightedID'
+					type='checkbox'
+				>
+				<label
+					class='clickable'
+					for='highlightedID'
+				>Syntax highlighting</label>
+			</MenuItem>
 		</PanelMenu>
 
 		<header class='bold'>Response</header>
@@ -508,6 +520,7 @@
 						? $response
 						: $response.aggregations
 					}
+					highlighted={responseHighlighted}
 				/>
 
 			{/if}
