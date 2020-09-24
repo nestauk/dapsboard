@@ -158,7 +158,7 @@
 		const unsubscribe = page.subscribe(pageReloader);
 
 		if (process.env.INSPECT === 'true') {
-			import('@xstate/inspect').then( module =>
+			import('@xstate/inspect').then(module =>
 				module.inspect({
 					url: "https://statecharts.io/inspect",
 					iframe: false
@@ -180,7 +180,7 @@
 
 <section class="query-builder">
 	<section class='axes'>
-		<SelectMenu 
+		<SelectMenu
 			hideDisabled={$hideDisabledForms}
 			on:hideDisabledChanged={e => routeMachine.send(
 				'HIDE_DISABLED_FORMS_TOGGLED',
@@ -221,7 +221,7 @@
 	</section>
 
 	<section class='agreggations'>
-		<SelectMenu 
+		<SelectMenu
 			hideDisabled={$hideDisabledAggregations}
 			on:hideDisabledChanged={e => routeMachine.send(
 				'HIDE_DISABLED_AGGS_TOGGLED',
@@ -241,7 +241,7 @@
 				)}
 				let:option={option}
 			>
-				<div 
+				<div
 					class='select-item'
 					on:mouseover={() => setAggDocs(option.value)}
 					on:mouseout={() => setAggDocs(null)}
@@ -261,8 +261,8 @@
 				)}
 				let:option={option}
 			>
-			<div 
-				class='select-item' 
+			<div
+				class='select-item'
 				on:mouseover={() => setAggDocs(option.value)}
 				on:mouseout={() => setAggDocs(null)}
 			>
@@ -286,7 +286,7 @@
 	</section>
 
 	<section class='datasets'>
-		<SelectMenu 
+		<SelectMenu
 			hideDisabled={$hideDisabledDatasets}
 			on:hideDisabledChanged={e => routeMachine.send(
 				'HIDE_DISABLED_DSETS_TOGGLED',
@@ -307,7 +307,7 @@
 	</section>
 
 	<section class='fields'>
-		<SelectMenu 
+		<SelectMenu
 			hideDisabled={$hideDisabledFields}
 			on:hideDisabledChanged={e => routeMachine.send(
 				'HIDE_DISABLED_FIELDS_TOGGLED',
@@ -433,7 +433,7 @@
 			/>
 			<div class='query-bottom'>
 				{#if !$runQueryOnSelect}
-					<button 
+					<button
 						disabled={
 							!$formMachine.matches({
 								SelectionComplete: {
@@ -443,7 +443,7 @@
 						}
 						on:click={() => $selectedForm.machine.send(
 							'QUERY_EXECUTED'
-						)}	
+						)}
 						class='query-button'
 					>Run query</button>
 				{/if}

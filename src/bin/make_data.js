@@ -22,7 +22,7 @@ const TYPINGS_PATH = path.resolve(__dirname, '../../static/dsl/datasets.ts');
 const DATASETS_PATH = path.resolve(__dirname, '../node_modules/app/data/datasets.json');
 const ROUTES_PATH = path.resolve(__dirname, '../node_modules/app/data/routes.json');
 const SIDEBAR_PATH = path.resolve(__dirname, '../node_modules/app/data/sidebar.json');
-const SPECS_DIR = path.resolve(__dirname, '../../specs');
+const INDICES_SPECS_DIR = path.resolve(__dirname, '../../specs/indices');
 
 const isYamlFile = name => path.parse(name).ext === '.yaml';
 
@@ -33,7 +33,7 @@ const makeLabel = string => getPathName(string).replace(/_/gu, ' ');
 const makeProject = string => getPathName(string).split('_')[0];
 const makeSource = string => getPathName(string).split('_')[1];
 const makeVersion = string => getPathName(string).split('_')[2].replace('v', '');
-const resolveSchema = string => path.resolve(SPECS_DIR, string);
+const resolveSchema = string => path.resolve(INDICES_SPECS_DIR, string);
 
 const makeSchemaObj = applyFnMap({
 	dataset: makeDatasetName,
@@ -49,7 +49,7 @@ const save = (data, dest) => saveObj(dest, 2)(data).then(tapMessage(`Saved ${des
 const saveStr = (data, dest) => saveString(dest)(data).then(tapMessage(`Saved ${dest}`));
 
 const process = async () => {
-	const refs = await readDir(SPECS_DIR)
+	const refs = await readDir(INDICES_SPECS_DIR)
 	.then(_.pipe([_.filterWith(isYamlFile), _.mapWith(makeSchemaObj)]));
 
 	const datasets = await Promise.all(

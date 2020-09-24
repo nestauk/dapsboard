@@ -1,0 +1,1 @@
+/builder?q=(dataset:eurito_crunchbase_v1,form:primary,forms:!((name:primary,selection:(aggregation:min,field:cost_of_funding,type:float)),(name:secondary)),size:0)

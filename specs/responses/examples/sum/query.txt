@@ -1,0 +1,1 @@
+/builder?q=(dataset:eurito_patstat_v0,form:primary,forms:!((name:primary,selection:(aggregation:sum,field:count_citations_patent,type:integer))),size:0)

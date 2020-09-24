@@ -1,0 +1,86 @@
+{
+	"doc_count_error_upper_bound": 5949,
+	"sum_other_doc_count": 2704253,
+	"buckets": [
+		{
+			"key": "",
+			"doc_count": 967649
+		},
+		{
+			"key": "Humans",
+			"doc_count": 115416
+		},
+		{
+			"key": "Animals",
+			"doc_count": 77388
+		},
+		{
+			"key": "Goals",
+			"doc_count": 50954
+		},
+		{
+			"key": "Mice",
+			"doc_count": 31962
+		},
+		{
+			"key": "Female",
+			"doc_count": 23720
+		},
+		{
+			"key": "United States",
+			"doc_count": 17385
+		},
+		{
+			"key": "Male",
+			"doc_count": 15240
+		},
+		{
+			"key": "Rats",
+			"doc_count": 14940
+		},
+		{
+			"key": "Child",
+			"doc_count": 14118
+		},
+		{
+			"key": "DNA",
+			"doc_count": 13309
+		},
+		{
+			"key": "Brain",
+			"doc_count": 12787
+		},
+		{
+			"key": "Mutation",
+			"doc_count": 10901
+		},
+		{
+			"key": "Public Health",
+			"doc_count": 10590
+		},
+		{
+			"key": "Phenotype",
+			"doc_count": 10449
+		},
+		{
+			"key": "Neoplasms",
+			"doc_count": 10443
+		},
+		{
+			"key": "RNA, Messenger",
+			"doc_count": 9693
+		},
+		{
+			"key": "Signal Transduction",
+			"doc_count": 8605
+		},
+		{
+			"key": "Adult",
+			"doc_count": 8596
+		},
+		{
+			"key": "Models, Animal",
+			"doc_count": 8412
+		}
+	]
+}

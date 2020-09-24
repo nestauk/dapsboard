@@ -1,0 +1,1 @@
+/builder?q=(dataset:mosaic_nih_v7,form:primary,forms:!((name:primary,params:(interval:1),selection:(aggregation:histogram,field:year_fiscal_funding,type:integer)),(name:secondary)),size:0)
