@@ -158,12 +158,11 @@
 		const unsubscribe = page.subscribe(pageReloader);
 
 		if (process.env.INSPECT === 'true') {
-			import('@xstate/inspect').then(module =>
-				module.inspect({
-					url: "https://statecharts.io/inspect",
-					iframe: false
-				})
-			);
+			const module = await import('@xstate/inspect');
+			module.inspect({
+				url: "https://statecharts.io/inspect",
+				iframe: false
+			});
 		}
 
 		return () => {
