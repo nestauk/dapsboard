@@ -19,7 +19,7 @@
 	import ExternalLink from 'app/components/ExternalLink.svelte';
 
 	import { createBuilderMachine } from 'app/machines/builder/route';
-	import { parseParams } from 'app/machines/builder/_options';
+	import { parseParams } from 'app/machines/builder/formediting.options';
 
 	import { AGG_DOC_URLS } from 'app/elasticsearch/config';
 	import aggCompletions from 'app/data/agg_docs.json';
