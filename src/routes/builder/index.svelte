@@ -590,16 +590,13 @@
 		font-size: 1.1em;
 		margin: .5em 0;
 	}
-	section > section > section > header {
-		font-size: 1em;
-	}
 	.json {
 		grid-area: select;
 		overflow: auto;
 		height: 100%;
 	}
 
-	:global(.select-item) {
+	.select-item {
 		display: grid;
 		grid-template-columns: 1fr min-content;
 		grid-column-gap: 1em;
