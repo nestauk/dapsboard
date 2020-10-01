@@ -80,9 +80,9 @@
 	$: computedQuery = formContext && formContext.computedQuery;
 	$: response = formContext && formContext.response;
 
-	const aggSelectionChanged = e => routeMachine.send(
-		'HIDE_DISABLED_AGGS_TOGGLED',
-		e.detail
+	const aggSelectionChanged = e => $selectedForm.machine.send(
+		'SELECTION_CHANGED',
+		{selection: {aggregation: e.detail}}
 	);
 
 	function handleDocs (docs, eventType) {
@@ -243,7 +243,7 @@
 				hideDisabled={$hideDisabledAggregations}
 				options={$bucketOptions}
 				{setAggDocs}
-				selectionChangeHandler={aggSelectionChanged}
+				selectionChangedHandler={aggSelectionChanged}
 			/>
 			<AggSelector
 				title="Bucketing (nested)"
@@ -251,7 +251,7 @@
 				hideDisabled={$hideDisabledAggregations}
 				options={$nestedBucketOptions}
 				{setAggDocs}
-				selectionChangeHandler={aggSelectionChanged}
+				selectionChangedHandler={aggSelectionChanged}
 			/>
 			<AggSelector
 				title="Metric"
@@ -259,7 +259,7 @@
 				hideDisabled={$hideDisabledAggregations}
 				options={$metricOptions}
 				{setAggDocs}
-				selectionChangeHandler={aggSelectionChanged}
+				selectionChangedHandler={aggSelectionChanged}
 			/>
 		</section>
 	</section>
