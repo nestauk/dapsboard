@@ -13,15 +13,14 @@
 	import Tab from 'app/components/elementary/Tab.svelte';
 	import Select from 'app/components/elementary/Select.svelte';
 	import SelectMenu from 'app/components/elementary/SelectMenu.svelte';
+	import AggSelector from 'app/components/AggSelector.svelte';
 	import PanelMenu from 'app/components/elementary/PanelMenu.svelte';
 	import MenuItem from 'app/components/elementary/MenuItem.svelte';
 	import IconDelete from 'app/components/icons/IconDelete.svelte';
-	import ExternalLink from 'app/components/ExternalLink.svelte';
 
 	import { createBuilderMachine } from 'app/machines/builder/route';
 	import { parseParams } from 'app/machines/builder/formediting.options';
 
-	import { AGG_DOC_URLS } from 'app/elasticsearch/config';
 	import aggCompletions from 'app/data/agg_docs.json';
 	import { request } from 'app/net';
 
@@ -54,7 +53,9 @@
 		type: null,
 		field: null,
 	});
+	// let topBucketOptions = readable([]);
 	let bucketOptions = readable([]);
+	let nestedBucketOptions = readable([]);
 	let metricOptions = readable([]);
 	let typeOptions = readable([]);
 	let datasetOptions = readable([]);
@@ -68,7 +69,9 @@
 	$: formContext = $formMachine && $formMachine.context;
 	$: formParams = formContext && formContext.params;
 	$: selection = formContext && formContext.selection;
+	// $: topBucketOptions = formContext && formContext.topBucketOptions;
 	$: bucketOptions = formContext && formContext.bucketOptions;
+	$: nestedBucketOptions = formContext && formContext.nestedBucketOptions;
 	$: metricOptions = formContext && formContext.metricOptions;
 	$: typeOptions = formContext && formContext.typeOptions;
 	$: datasetOptions = formContext && formContext.datasetOptions;
@@ -76,6 +79,11 @@
 	$: completions = formContext && formContext.completions;
 	$: computedQuery = formContext && formContext.computedQuery;
 	$: response = formContext && formContext.response;
+
+	const aggSelectionChanged = e => $selectedForm.machine.send(
+		'SELECTION_CHANGED',
+		{selection: {aggregation: e.detail}}
+	);
 
 	function handleDocs (docs, eventType) {
 		const docsText = docs.map(i => i.text ? i.text : '').join(' ');
@@ -229,46 +237,30 @@
 		/>
 		<header class='bold'>Aggregations</header>
 		<section>
-			<header class='semibold'>Bucketing</header>
-			<Select
+			<AggSelector
+				title="Bucketing"
 				selectedOption={$selection.aggregation}
 				hideDisabled={$hideDisabledAggregations}
 				options={$bucketOptions}
-				on:selectionChanged={e => formMachine.send(
-					'SELECTION_CHANGED',
-					{selection: {aggregation: e.detail}}
-				)}
-				let:option={option}
-			>
-				<div
-					class='select-item'
-					on:mouseover={() => setAggDocs(option.value)}
-					on:mouseout={() => setAggDocs(null)}
-				>
-					<div>{option.text}</div>
-					<ExternalLink  href={AGG_DOC_URLS[option.value]} size={14} />
-				</div>
-			</Select>
-			<header class='semibold'>Metrics</header>
-			<Select
+				{setAggDocs}
+				selectionChangedHandler={aggSelectionChanged}
+			/>
+			<AggSelector
+				title="Bucketing (nested)"
+				selectedOption={$selection.aggregation}
+				hideDisabled={$hideDisabledAggregations}
+				options={$nestedBucketOptions}
+				{setAggDocs}
+				selectionChangedHandler={aggSelectionChanged}
+			/>
+			<AggSelector
+				title="Metric"
 				selectedOption={$selection.aggregation}
 				hideDisabled={$hideDisabledAggregations}
 				options={$metricOptions}
-				on:selectionChanged={e => $selectedForm.machine.send(
-					'SELECTION_CHANGED',
-					{selection: {aggregation: e.detail}}
-				)}
-				let:option={option}
-			>
-			<div
-				class='select-item'
-				on:mouseover={() => setAggDocs(option.value)}
-				on:mouseout={() => setAggDocs(null)}
-			>
-				<div>{option.text}</div>
-					<ExternalLink href={AGG_DOC_URLS[option.value]} size={14} />
-				</div>
-			</Select>
+				{setAggDocs}
+				selectionChangedHandler={aggSelectionChanged}
+			/>
 		</section>
 	</section>
 
@@ -597,9 +589,6 @@
 		font-weight: bold;
 		font-size: 1.1em;
 		margin: .5em 0;
-	}
-	section > section > section > header {
-		font-size: 1em;
 	}
 	.json {
 		grid-area: select;
