@@ -57,7 +57,7 @@ const process = async () => {
 			readFile(obj.filepath, 'utf-8')
 			.then(yaml.safeLoad)
 			.then(spec => ({
-				..._.skip(obj, ['filepath']),
+				..._.skipIn(obj, ['filepath']),
 				spec
 			}))
 		)
