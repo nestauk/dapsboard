@@ -47,6 +47,7 @@
 	let formMachine;
 	let formContext;
 
+	let defaultValues;
 	let formParams;
 	let selection = readable({
 		aggregation: null,
@@ -67,6 +68,7 @@
 
 	$: formMachine = $selectedForm && $selectedForm.machine;
 	$: formContext = $formMachine && $formMachine.context;
+	$: defaultValues = formContext && formContext.defaultValues;
 	$: formParams = formContext && formContext.params;
 	$: selection = formContext && formContext.selection;
 	// $: topBucketOptions = formContext && formContext.topBucketOptions;
@@ -124,6 +126,10 @@
 
 	function getFieldValue (name) {
 		return $formParams && $formParams[name] || null;
+	}
+
+	function getDefaultValue (name) {
+		return $defaultValues && $defaultValues[name] || undefined;
 	}
 
 	const { page } = stores();
@@ -354,6 +360,7 @@
 							required={completion.required}
 							dataType={completion.displayText}
 							value={getFieldValue(completion.name)}
+							defaultValue={getDefaultValue(completion.name)}
 							on:change={e => $selectedForm.machine.send(
 								'QUERY_CHANGED',
 								{params:{[completion.name]: e.detail}}
