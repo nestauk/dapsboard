@@ -56,8 +56,10 @@
 	});
 	// let topBucketOptions = readable([]);
 	let bucketOptions = readable([]);
+	let bucketMultiFieldOptions = readable([]);
 	let nestedBucketOptions = readable([]);
 	let metricOptions = readable([]);
+	let metricMultiFieldOptions = readable([]);
 	let typeOptions = readable([]);
 	let datasetOptions = readable([]);
 	let fieldOptions = readable([]);
@@ -73,8 +75,10 @@
 	$: selection = formContext && formContext.selection;
 	// $: topBucketOptions = formContext && formContext.topBucketOptions;
 	$: bucketOptions = formContext && formContext.bucketOptions;
+	$: bucketMultiFieldOptions = formContext && formContext.bucketMultiFieldOptions;
 	$: nestedBucketOptions = formContext && formContext.nestedBucketOptions;
 	$: metricOptions = formContext && formContext.metricOptions;
+	$: metricMultiFieldOptions = formContext && formContext.metricMultiFieldOptions;
 	$: typeOptions = formContext && formContext.typeOptions;
 	$: datasetOptions = formContext && formContext.datasetOptions;
 	$: fieldOptions = formContext && formContext.fieldOptions;
@@ -252,6 +256,14 @@
 				selectionChangedHandler={aggSelectionChanged}
 			/>
 			<AggSelector
+				title="Bucketing (multi-field)"
+				selectedOption={$selection.aggregation}
+				hideDisabled={$hideDisabledAggregations}
+				options={$bucketMultiFieldOptions}
+				{setAggDocs}
+				selectionChangedHandler={aggSelectionChanged}
+			/>
+			<AggSelector
 				title="Bucketing (nested)"
 				selectedOption={$selection.aggregation}
 				hideDisabled={$hideDisabledAggregations}
@@ -264,6 +276,14 @@
 				selectedOption={$selection.aggregation}
 				hideDisabled={$hideDisabledAggregations}
 				options={$metricOptions}
+				{setAggDocs}
+				selectionChangedHandler={aggSelectionChanged}
+			/>
+			<AggSelector
+				title="Metric (multi-field)"
+				selectedOption={$selection.aggregation}
+				hideDisabled={$hideDisabledAggregations}
+				options={$metricMultiFieldOptions}
 				{setAggDocs}
 				selectionChangedHandler={aggSelectionChanged}
 			/>
@@ -578,6 +598,7 @@
 		grid-template-areas: "header" "select";
 		grid-template-rows: min-content auto min-content;
 		overflow: hidden;
+		overflow-y: auto;
 		box-sizing: border-box;
 		height: 100%;
 		padding: 1em;
