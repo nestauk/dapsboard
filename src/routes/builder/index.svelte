@@ -542,6 +542,19 @@
 				/>
 
 			{/if}
+			{#if $formMachine.matches({
+				SelectionComplete: {
+					QueryReady: {
+						Dirty: 'Error'
+					}
+				}
+			})}
+				<JSONValue
+					value={$response}
+					highlighted={responseHighlighted}
+					isErrorValue={true}
+				/>
+			{/if}
 			{/if}
 		</div>
 	</section>
