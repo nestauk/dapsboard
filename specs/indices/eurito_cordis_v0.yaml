@@ -9,31 +9,74 @@ dataset:
   provider_name: DAPS (Nesta)
   provider_url: https://github.com/nestauk/nesta
   schema:
-    cost_ecFunding_project: integer
-    cost_total_project: integer
-    date_ended_project: Date_YYYYMMDD_dash
-    date_started_project: Date_YYYYMMDD_dash
-    metric_novelty_project: float
+    cost_ecFunding_project:
+      alias: cost_ecFunding
+      data_type: integer
+      entity: Project
+      facet: funding
+    cost_total_project:
+      alias: cost_total
+      data_type: integer
+      entity: Project
+      facet: funding
+    date_ended_project:
+      alias: date_ended
+      entity: Project
+      facet: time
+      type: Date_YYYYMMDD_dash
+    date_started_project:
+      alias: date_started
+      entity: Project
+      facet: time
+      type: Date_YYYYMMDD_dash
+    metric_novelty_project:
+      alias: novelty
+      data_type: float
+      entity: Project
+      facet: metrics
     name_framework_project:
+      alias: framework_name
       data_type: string
+      entity: Project
       es_type: ES_text
     status_of_project:
+      alias: status
       data_type: string
+      entity: Project
       es_type: ES_keyword
     terms_tokens_entity:
+      alias: tokens
       data_type: string[]
+      entity: Project
       es_type: ES_keyword[]
+      facet: domain
     textBody_description_project:
+      alias: description
       data_type: string
+      entity: Project
       es_type: ES_text
+      facet: domain
     title_of_project:
+      alias: title
       data_type: string
+      entity: Project
       es_type: ES_text
+      facet: domain
     type_of_entity:
+      alias: null
       data_type: string
+      entity: null
       es_type: ES_keyword
     url_of_project:
+      alias: url
       data_type: URL
+      entity: Project
       es_type: ES_text
-    year_of_project: integer
+    year_of_project:
+      alias: year
+      data_type: integer
+      entity: Project
+      facet: time
+  entities:
+    - Project
   version: 0

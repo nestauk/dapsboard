@@ -16,67 +16,134 @@ dataset:
   provider_name: DAPS (Nesta)
   provider_url: https://github.com/nestauk/nesta
   schema:
-    booleanFlag_multinational_article: boolean
-    count_citations_article: integer
-    date_created_article: date # FIXME no format
+    booleanFlag_multinational_article:
+      alias: is_multinational
+      data_type: boolean
+      entity: Article
+    count_citations_article:
+      alias: citations_count
+      data_type: integer
+      entity: Article
+      facet: metrics
+    date_created_article:
+      alias: date_created
+      entity: Article
+      facet: time
+      type: date # FIXME no format
     id_digitalObjectIdentifier_article:
+      alias: id
       data_type: string
+      entity: Article
       es_type: ES_keyword
     json_category_article:
-      type: object[]
+      alias: category
+      data_type: object[]
+      entity: ArxivCategory
       shape:
         ancestors:
-          data_type: string
-          es_type: ES_keyword
-        level: integer
-        order: integer
+          data_type: string[]
+          es_type: ES_keyword[]
+        level:
+          data_type: integer
+        order:
+          data_type: integer
         value:
           data_type: string
           es_type: ES_keyword
     json_fieldOfStudy_article:
-      type: object[]
+      alias: fieldOfStudy
+      data_type: object[]
+      entity: MAGfieldOfStudy
       shape:
         ancestors:
-          data_type: string
-          es_type: ES_keyword
-        level: integer
-        order: integer
+          data_type: string[]
+          es_type: ES_keyword[]
+        level:
+          data_type: integer
+        order:
+          data_type: integer
         value:
           data_type: string
           es_type: ES_keyword
-    json_location_article:
-      type: object[]
+    json_location_article: # TODO in what sense "location"? Is this MAG?
+      alias: locationTag
+      entity: ArticleLocation
       shape:
         ancestors:
-          data_type: string
-          es_type: ES_keyword
-        level: integer
-        order: integer
+          data_type: string[]
+          es_type: ES_keyword[]
+        level:
+          data_type: integer
+        order:
+          data_type: integer
         value:
           data_type: string
           es_type: ES_keyword
-    metric_citations_article: float
-    metric_novelty_article: float
+      data_type: object[]
+    metric_citations_article:
+      alias: citations
+      data_type: float
+      entity: Article
+      facet: metrics
+    metric_novelty_article:
+      alias: novelty
+      data_type: float
+      entity: Article
+      facet: metrics
     terms_authors_article:
+      alias: authors
       data_type: string[]
+      entity: Author
       es_type: ES_text_w_keyword[]
     terms_institutes_article:
+      alias: name
       data_type: string[]
+      entity: Institute
       es_type: ES_text_w_keyword[]
     terms_tokens_article:
+      alias: tokens
       data_type: string[]
+      entity: Article
       es_type: ES_keyword[]
+      facet: domain
     textBody_abstract_article:
+      alias: abstract
       data_type: string
+      entity: Article
       es_type: ES_text_w_keyword
+      facet: domain
     title_of_article:
+      alias: title
       data_type: string
+      entity: Article
       es_type: ES_text_w_keyword
+      facet: domain
     type_of_entity:
+      alias: null
       data_type: string
+      entity: null
       es_type: ES_text_w_keyword
     url_of_article:
+      alias: url
       data_type: URL
+      entity: Article
       es_type: ES_text_w_keyword
-    year_of_article: integer
+    year_of_article:
+      alias: year
+      data_type: integer
+      entity: Article
+      facet: time
+  entities:
+    - Article
+    - ArticleLocation
+    - ArxivCategory
+    - Author
+    - Institute
+    - MAGfieldOfStudy
+  relationships:
+    - Article,ABOUT,ArticleLocation
+    - Article,ABOUT,ArxivCategory
+    - Article,ABOUT,MAGfieldOfStudy
+    - Author,AUTHORED,Article
+    - Institute,PUBLISHED,Article
   version: 4

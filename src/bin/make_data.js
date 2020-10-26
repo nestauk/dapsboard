@@ -53,11 +53,11 @@ const process = async () => {
 	.then(_.pipe([_.filterWith(isYamlFile), _.mapWith(makeSchemaObj)]));
 
 	const datasets = await Promise.all(
-		refs.map(obj =>
-			readFile(obj.filepath, 'utf-8')
+		refs.map(ref =>
+			readFile(ref.filepath, 'utf-8')
 			.then(yaml.safeLoad)
 			.then(spec => ({
-				..._.skipIn(obj, ['filepath']),
+				..._.skipIn(ref, ['filepath']),
 				spec
 			}))
 		)

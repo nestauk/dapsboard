@@ -9,114 +9,245 @@ dataset:
   provider_name: DAPS (Nesta)
   provider_url: https://github.com/nestauk/nesta
   schema:
-    _cost_usd2018_organisation: float
+    _cost_usd2018_organisation:
+      alias: cost
+      data_type: float
+      entity: Company
     _terms_sdg_summary:
+      alias: SDG_labels
       data_type: string[]
+      entity: Company
       es_type: ES_keyword[]
     address_of_organisation:
+      alias: address
       data_type: string
+      entity: Company
       es_type: ES_keyword
-    booleanFlag_health_organisation: boolean
-    coordinate_of_city: ES_geo_point_obj
-    cost_of_funding: float
+    booleanFlag_health_organisation:
+      alias: is_health
+      data_type: boolean
+      entity: Company
+    coordinate_of_city:
+      alias: coordinate
+      entity: City
+      es_type: ES_geo_point_obj
+      shape:
+        lat: float
+        lon: float
+    cost_of_funding:
+      alias: cost
+      data_type: float
+      entity: FundingRound
     count_employee_organisation:
+      alias: count_employees
       data_type: string
+      entity: Company
       es_type: ES_keyword
-    count_rounds_funding: integer
+      facet: metrics
+    count_rounds_funding:
+      alias: count_rounds
+      data_type: integer
+      entity: FundingRound
     currency_of_funding:
+      alias: currency
       data_type: string
+      entity: FundingRound
       es_type: ES_keyword
-    date_birth_organisation: Date_YYYYMMDD_dash
-    date_death_organisation: Date_YYYYMMDD_dash
-    date_last_funding: Date_YYYYMMDD_dash
-    datetime_updated_organisation: Date_YYYYMMDD_dash_time
+    date_birth_organisation:
+      alias: date_birth
+      data_type: Date_YYYYMMDD_dash
+      entity: Company
+      facet: time
+    date_death_organisation:
+      alias: date_death
+      data_type: Date_YYYYMMDD_dash
+      entity: Company
+      facet: time
+    date_last_funding:
+      alias: date_last_round
+      data_type: Date_YYYYMMDD_dash
+      entity: FundingRound
+      facet: time
+    date_updated_organisation:
+      alias: date_updated
+      data_type: Date_YYYYMMDD_dash_time
+      entity: Company
+      facet: time
     id_continent_organisation:
+      alias: id
       data_type: string
+      entity: Continent
       es_type: ES_keyword
     id_iso2_country:
+      alias: id_iso2
       data_type: string
+      entity: Country
       es_type: ES_keyword
     id_iso3_country:
+      alias: id_iso3
       data_type: string
+      entity: Country
       es_type: ES_keyword
-    id_isoNumeric_country: integer
+    id_isoNumeric_country:
+      alias: id_numeric
+      data_type: integer
+      entity: Country
     id_of_continent:
+      alias: id
       data_type: string
+      entity: Continent
       es_type: ES_keyword
     id_parent_organisation:
+      alias: id_parent
       data_type: string
+      entity: Company
       es_type: ES_keyword
     id_state_organisation:
+      alias: id
       data_type: string
+      entity: State
       es_type: ES_keyword
     name_of_organisation:
+      alias: name
       data_type: string
+      entity: Company
       es_type: ES_text
     placeName_city_organisation:
+      alias: name
       data_type: string
+      entity: City
       es_type: ES_text_w_keyword
     placeName_continent_organisation:
+      alias: name
       data_type: string
+      entity: Continent
       es_type: ES_text_w_keyword
     placeName_country_organisation:
+      alias: name
       data_type: string
+      entity: Country
       es_type: ES_text_w_keyword
     placeName_region_organisation:
+      alias: name
       data_type: string
+      entity: Region
       es_type: ES_text_w_keyword
     placeName_state_organisation:
+      alias: name
       data_type: string
+      entity: State
       es_type: ES_text_w_keyword
-    rank_rhodonite_organisation: float
+    rank_rhodonite_organisation:
+      alias: rank_rhodonite
+      data_type: float
+      entity: Company
+      facet: metrics
     status_of_organisation:
+      alias: status
       data_type: string
+      entity: Company
       es_type: ES_keyword
     terms_alias_organisation:
+      alias: aliases
       data_type: string[]
+      entity: Company
       es_type: ES_keyword[]
     terms_category_organisation:
+      alias: categories
       data_type: string[]
+      entity: Company
       es_type: ES_keyword[]
+      facet: domain
     terms_mesh_description:
+      alias: MeSH_labels
       data_type: string[]
+      entity: Company
       es_type: ES_text_w_keyword[]
+      facet: domain
     terms_of_countryTags:
+      alias: country_tags
       data_type: string[]
+      entity: Company
       es_type: ES_keyword[]
+      facet: domain
     terms_of_funders:
+      alias: name
       data_type: string[]
+      entity: Funder
       es_type: ES_text_w_keyword[]
     terms_roles_organisation:
+      alias: roles
       data_type: string[]
+      entity: Company
       es_type: ES_text_w_keyword[]
     terms_subcategory_organisation:
+      alias: subcategories
       data_type: string[]
+      entity: Company
       es_type: ES_text_w_keyword[]
+      facet: domain
     textBody_descriptive_organisation:
+      alias: description
       data_type: string
+      entity: Company
       es_type: ES_text
+      facet: domain
     textBody_summary_organisation:
+      alias: abstract
       data_type: string
+      entity: Company
       es_type: ES_text
+      facet: domain
     type_of_entity:
+      alias: null
       data_type: string
+      entity: null
       es_type: ES_keyword
     type_of_organisation:
+      alias: type
       data_type: string
+      entity: Company
       es_type: ES_keyword
     url_crunchBase_organisation:
+      alias: url_source
       data_type: URL
+      entity: Company
       es_type: ES_keyword
     url_facebook_organisation:
+      alias: url_facebook
       data_type: URL
+      entity: Company
       es_type: ES_keyword
     url_linkedIn_organisation:
+      alias: url_linkedIn
       data_type: URL
+      entity: Company
       es_type: ES_keyword
     url_of_organisation:
+      alias: url
       data_type: URL
+      entity: Company
       es_type: ES_keyword
     url_twitter_organisation:
+      alias: url_twitter
       data_type: URL
+      entity: Company
       es_type: ES_keyword
+  entities:
+    - City
+    - Company
+    - Continent
+    - Country
+    - Funder
+    - FundingRound
+    - Region
+    - State
+  relationships:
+    - Company,RECEIVES,FundingRound
+    - FundingRound,PAYS,Funder
+    - Company,IN,City
+    - City,IN,Region
+    - Region,IN,State
+    - Region,IN,Country
+    - Country,IN,Continent
   version: 4

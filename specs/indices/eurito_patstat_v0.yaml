@@ -9,43 +9,103 @@ dataset:
   provider_name: DAPS (Nesta)
   provider_url: https://github.com/nestauk/nesta
   schema:
-    booleanFlag_autotranslated_entity: boolean
-    booleanFlag_eu_patent: boolean
-    count_citations_patent: integer
-    date_of_patent: Date_YYYYMMDD_dash
-    metric_novelty_patent: float
+    booleanFlag_autotranslated_entity:
+      alias: is_autotranslated
+      data_type: boolean
+      entity: Patent
+    booleanFlag_eu_patent:
+      alias: is_EU
+      data_type: boolean
+      entity: Patent
+    count_citations_patent:
+      alias: count_citations
+      data_type: integer
+      entity: Patent
+      facet: metrics
+    date_of_patent:
+      alias: date
+      entity: Patent
+      facet: time
+      type: Date_YYYYMMDD_dash
+    metric_novelty_patent:
+      alias: novelty
+      data_type: float
+      entity: Patent
+      facet: metrics
     terms_authCountry_patent:
-      data_type: string[]
+      alias: authority_countries
+      entity: Country
       es_type: ES_text_w_keyword[]
+      data_type: string[]
     terms_ipc_patent:
+      alias: IPC_terms
       data_type: string[]
+      entity: Patent
       es_type: ES_text_w_keyword[]
+      facet: domain
     terms_iso2lang_entity:
+      alias: iso2_languages
       data_type: string[]
+      entity: Language
       es_type: ES_text_w_keyword[]
     terms_nace2_patent:
+      alias: NACE2_terms
       data_type: string[]
+      entity: Patent
       es_type: ES_text_w_keyword[]
+      facet: domain
     terms_personCountry_patent:
+      alias: person_countries
       data_type: string[]
+      entity: Country
       es_type: ES_text_w_keyword[]
     terms_personNuts_patent:
+      alias: person_NUTSs
       data_type: string[]
+      entity: GeoRegionNUTS # what level?
       es_type: ES_text_w_keyword[]
     terms_techFieldNumber_patent:
+      alias: techField_numbers
       data_type: string[]
+      entity: Patent
       es_type: ES_text_w_keyword[]
+      facet: domain
     terms_tokens_entity:
+      alias: tokens
       data_type: string[]
+      entity: Patent
       es_type: ES_keyword[]
+      facet: domain
     textBody_abstract_patent:
+      alias: abstract
       data_type: string
+      entity: Patent
       es_type: ES_text
+      facet: domain
     title_of_patent:
+      alias: title
       data_type: string
+      entity: Patent
       es_type: ES_text
+      facet: domain
     type_of_entity:
+      alias: null
       data_type: string
+      entity: null
       es_type: ES_keyword
-    year_of_patent: integer
+    year_of_patent:
+      alias: year
+      data_type: integer
+      entity: Patent
+  entities:
+    - Patent
+    - Language
+    - GeoRegionNUTS
+    - Country
+  relationships:
+    - GeoRegionNUTS,IN,Country
+    - Patent,ISSUED_BY_PERSON_IN,Country
+    - Patent,ISSUED_BY_PERSON_IN,GeoRegionNUTS
+    - Patent,ISSUED_TO_AUTHORITY_IN,Country
+    - Patent,WRITTEN_IN,Language
   version: 0
