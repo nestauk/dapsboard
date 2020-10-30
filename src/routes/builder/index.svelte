@@ -129,11 +129,11 @@
 	}
 
 	function getFieldValue (name) {
-		return $formParams && $formParams[name] || null;
+		return $formParams && $formParams[name];
 	}
 
 	function getDefaultValue (name) {
-		return $defaultValues && $defaultValues[name] || undefined;
+		return $defaultValues && $defaultValues[name];
 	}
 
 	const { page } = stores();
