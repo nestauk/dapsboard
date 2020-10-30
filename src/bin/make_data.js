@@ -13,7 +13,8 @@ import {readDir, readFile, saveObj, saveString} from '@svizzle/file';
 import {tapMessage} from '@svizzle/dev';
 import {applyFnMap} from '@svizzle/utils';
 
-import {indexById, makeDatasetBySource, generateTypingsForAll} from 'app/utils';
+import {indexById} from 'app/utils/generic';
+import {makeDatasetBySource, generateTypingsForAll} from 'app/utils';
 
 const ESTYPINGS_PATH = path.resolve(__dirname, '../node_modules/app/elasticsearch/typings/es.ts');
 const DSLTYPINGS_PATH = path.resolve(__dirname, '../node_modules/app/elasticsearch/typings/dsl.ts');

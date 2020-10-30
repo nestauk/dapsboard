@@ -54,6 +54,10 @@ a {
 	color: inherit;
 }
 
+a.undecor {
+	text-decoration: none;
+}
+
 .semibold {
   font-family: 'Open Sans SemiBold', sans-serif;
 }
@@ -72,10 +76,15 @@ a {
 	--color-selected: lightseagreen;
 	--color-grey-70: rgb(70, 70, 70);
 	--color-link: var(--color-main);
-  --color-link-ext: rgb(16, 174, 249);
+	--color-link-ext: var(--color-blue);
+	--color-blue: rgb(104, 192, 255);
+	--color-blue-lighter: rgb(171, 220, 255);
+	--color-blue-pale: rgb(224, 242, 255);
+	--color-blue-darker: rgb(25, 159, 255);
 	--color-background: var(--color-main-lighter);
 	--dim-fontsize-light: 200;
 	--dim-header-height: 3rem;
 	--dim-main-height: calc(100% - var(--dim-header-height));
 	--dim-padding: 1rem;
+	--dim-sidebarWidth: 300px;
 }

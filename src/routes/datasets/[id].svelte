@@ -18,7 +18,8 @@
 		constructQuery
 	} from 'app/elasticsearch';
 	import { request } from 'app/net';
-	import { IS_BROWSER, getEndpointURL, getSchema } from 'app/utils';
+	import { getEndpointURL, getSchema } from 'app/utils/domain';
+	import { IS_BROWSER } from 'app/utils/generic';
 
 	export let id;
 	export let dataset;
