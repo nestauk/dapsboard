@@ -109,9 +109,9 @@ dataset:
       entity: Group
       facet: metrics
     terms_iso2lang_entity:
-      alias: iso2_languages
+      alias: id_iso2
       data_type: string[]
-      entity: Group
+      entity: Language
       es_type: ES_keyword[]
     terms_mesh_group:
       alias: MeSH_labels
@@ -152,10 +152,12 @@ dataset:
     - Continent
     - Country
     - Group
+    - Language
     - State
   relationships:
     - City,IN,State
     - Country,IN,Continent
     - Group,IN,City
+    - Group,DESCRIBED_WITH,Language
     - State,IN,Country
   version: 3

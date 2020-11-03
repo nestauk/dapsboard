@@ -3,9 +3,9 @@ source:
   provider_url: https://www.epo.org/searching-for-patents/business/patstat.html
 dataset:
   api_type: ElasticSearch
-  api_version: 6.8
-  config_url: https://github.com/nestauk/nesta/blob/dev_20200522/nesta/core/orms/patstat-eu_es_config.json
-  endpoint_url: https://search-eurito-dev-vq22tw6otqjpdh47u75bh2g7ba.eu-west-2.es.amazonaws.com/patstat_v1
+  api_version: 7.4
+  config_url: https://github.com/nestauk/nesta/blob/20201103/nesta/core/schemas/tier_1/mappings/datasets/patstat_mapping.json
+  endpoint_url: https://search-general-wvbdcvn3kmpz6lvjo2nkx36pbu.eu-west-2.es.amazonaws.com/patstat_v0
   provider_name: DAPS (Nesta)
   provider_url: https://github.com/nestauk/nesta
   schema:
@@ -44,7 +44,7 @@ dataset:
       es_type: ES_text_w_keyword[]
       facet: domain
     terms_iso2lang_entity:
-      alias: iso2_languages
+      alias: id_iso2
       data_type: string[]
       entity: Language
       es_type: ES_text_w_keyword[]
@@ -108,4 +108,4 @@ dataset:
     - Patent,ISSUED_BY_PERSON_IN,GeoRegionNUTS
     - Patent,ISSUED_TO_AUTHORITY_IN,Country
     - Patent,WRITTEN_IN,Language
-  version: 1
+  version: 0

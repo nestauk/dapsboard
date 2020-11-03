@@ -3,32 +3,23 @@ source:
   provider_url: https://www.crunchbase.com/
 dataset:
   api_type: ElasticSearch
-  api_version: 6.8
-  config_url: https://github.com/nestauk/nesta/blob/dev_20200522/nesta/core/orms/crunchbase-eu_es_config.json
-  endpoint_url: https://search-eurito-dev-vq22tw6otqjpdh47u75bh2g7ba.eu-west-2.es.amazonaws.com/companies_v1
+  api_version: 7.4
+  config_url: https://github.com/nestauk/nesta/blob/20201103/nesta/core/schemas/tier_1/mappings/datasets/companies_mapping.json
+  endpoint_url: https://search-general-wvbdcvn3kmpz6lvjo2nkx36pbu.eu-west-2.es.amazonaws.com/companies_v0
   provider_name: DAPS (Nesta)
   provider_url: https://github.com/nestauk/nesta
   schema:
-    _cost_usd2018_organisation:
-      alias: cost
-      data_type: float
-      entity: Company
-    _terms_sdg_summary:
-      alias: SDG_labels
-      data_type: string[]
-      entity: Company
-      es_type: ES_keyword[]
     address_of_organisation:
       alias: address
       data_type: string
       entity: Company
       es_type: ES_keyword
-    booleanFlag_eu_organisation:
-      alias: is_EU
+    booleanFlag_autotranslated_entity:
+      alias: is_autotranslated
       data_type: boolean
       entity: Company
-    booleanFlag_health_organisation:
-      alias: is_health
+    booleanFlag_eu_organisation:
+      alias: is_EU
       data_type: boolean
       entity: Company
     coordinate_of_city:
@@ -38,7 +29,7 @@ dataset:
       shape:
         lat: float
         lon: float
-    cost_of_funding:
+    cost_usd_funding:
       alias: cost
       data_type: float
       entity: FundingRound
@@ -48,22 +39,21 @@ dataset:
       entity: Company
       es_type: ES_keyword
       facet: metrics
+    count_exits_funding:
+      alias: count_exits
+      data_type: integer
+      entity: FundingRound
     count_rounds_funding:
       alias: count_rounds
       data_type: integer
       entity: FundingRound
-    currency_of_funding:
-      alias: currency
-      data_type: string
-      entity: FundingRound
-      es_type: ES_keyword
     date_birth_organisation:
       alias: date_birth
       data_type: Date_YYYYMMDD_dash
       entity: Company
       facet: time
-    date_death_organisation:
-      alias: date_death
+    date_closed_organisation:
+      alias: date_closed
       data_type: Date_YYYYMMDD_dash
       entity: Company
       facet: time
@@ -111,11 +101,6 @@ dataset:
       data_type: string
       entity: State
       es_type: ES_keyword
-    metric_novelty_organisation:
-      alias: novelty
-      data_type: float
-      entity: Company
-      facet: metrics
     name_of_organisation:
       alias: name
       data_type: string
@@ -146,11 +131,6 @@ dataset:
       data_type: string
       entity: State
       es_type: ES_text_w_keyword
-    rank_rhodonite_organisation:
-      alias: rank_rhodonite
-      data_type: float
-      entity: Company
-      facet: metrics
     status_of_organisation:
       alias: status
       data_type: string
@@ -160,15 +140,9 @@ dataset:
       alias: aliases
       data_type: string[]
       entity: Company
-      es_type: ES_keyword[]
+      es_type: ES_text_w_keyword[]
     terms_category_organisation:
       alias: categories
-      data_type: string[]
-      entity: Company
-      es_type: ES_keyword[]
-      facet: domain
-    terms_mesh_description:
-      alias: MeSH_labels
       data_type: string[]
       entity: Company
       es_type: ES_text_w_keyword[]
@@ -177,9 +151,14 @@ dataset:
       alias: country_tags
       data_type: string[]
       entity: Company
-      es_type: ES_keyword[]
+      es_type: ES_text_w_keyword[]
       facet: domain
-    terms_of_funders:
+    terms_iso2lang_entity:
+      alias: iso2_id
+      data_type: string[]
+      entity: Language
+      es_type: ES_text_w_keyword[]
+    terms_names_funders:
       alias: name
       data_type: string[]
       entity: Funder
@@ -199,7 +178,7 @@ dataset:
       alias: tokens
       data_type: string[]
       entity: Company
-      es_type: ES_keyword[]
+      es_type: ES_text_w_keyword[]
       facet: domain
     textBody_descriptive_organisation:
       alias: description
@@ -255,14 +234,16 @@ dataset:
     - Country
     - Funder
     - FundingRound
+    - Language
     - Region
     - State
   relationships:
-    - Company,RECEIVES,FundingRound
-    - FundingRound,PAYS,Funder
-    - Company,IN,City
     - City,IN,Region
-    - Region,IN,State
-    - Region,IN,Country
+    - Company,DESCRIBED_WITH,Language
+    - Company,IN,City
+    - Company,RECEIVES,FundingRound
     - Country,IN,Continent
-  version: 1
+    - FundingRound,PAYS,Funder
+    - Region,IN,Country
+    - Region,IN,State
+  version: 0

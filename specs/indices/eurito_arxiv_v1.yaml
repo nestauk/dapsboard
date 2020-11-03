@@ -10,7 +10,7 @@ source:
     provider_url: https://www.grid.ac/
 dataset:
   api_type: ElasticSearch
-  api_version: 6.4
+  api_version: 6.8
   config_url: https://github.com/nestauk/nesta/blob/dev_20200522/nesta/core/orms/arxiv-eu_es_config.json
   endpoint_url: https://search-eurito-dev-vq22tw6otqjpdh47u75bh2g7ba.eu-west-2.es.amazonaws.com/arxiv_v1
   provider_name: DAPS (Nesta)
@@ -97,7 +97,7 @@ dataset:
       entity: GeoRegionNUTS3
       es_type: ES_text_w_keyword[]
     terms_regions_article:
-      alias: regions
+      alias: id
       data_type: string[]
       entity: GeoRegion
       es_type: ES_text_w_keyword[]

@@ -3,7 +3,7 @@ source:
   provider_url: https://www.crunchbase.com/
 dataset:
   api_type: ElasticSearch
-  api_version: 6.4
+  api_version: 6.8
   config_url: https://github.com/nestauk/nesta/blob/0.4/nesta/core/orms/crunchbase-eu_es_config.json
   endpoint_url: https://search-eurito-dev-vq22tw6otqjpdh47u75bh2g7ba.eu-west-2.es.amazonaws.com/companies_v0
   provider_name: DAPS (Nesta)

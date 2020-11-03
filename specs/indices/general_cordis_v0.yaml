@@ -3,9 +3,9 @@ source:
   provider_url: https://cordis.europa.eu/home_en.html
 dataset:
   api_type: ElasticSearch
-  api_version: 6.8
-  config_url: https://github.com/nestauk/nesta/blob/dev_20200504/nesta/core/orms/cordis-eu_es_config.json
-  endpoint_url: https://search-eurito-dev-vq22tw6otqjpdh47u75bh2g7ba.eu-west-2.es.amazonaws.com/cordis_v0
+  api_version: 7.4
+  config_url: https://github.com/nestauk/nesta/blob/20201103/nesta/core/schemas/tier_1/mappings/datasets/cordis_mapping.json
+  endpoint_url: https://search-general-wvbdcvn3kmpz6lvjo2nkx36pbu.eu-west-2.es.amazonaws.com/cordis_v0
   provider_name: DAPS (Nesta)
   provider_url: https://github.com/nestauk/nesta
   schema:
@@ -38,7 +38,7 @@ dataset:
       alias: framework_name
       data_type: string
       entity: Project
-      es_type: ES_text
+      es_type: ES_text_w_keyword
     status_of_project:
       alias: status
       data_type: string
@@ -54,13 +54,13 @@ dataset:
       alias: description
       data_type: string
       entity: Project
-      es_type: ES_text
+      es_type: ES_text_w_keyword
       facet: domain
     title_of_project:
       alias: title
       data_type: string
       entity: Project
-      es_type: ES_text
+      es_type: ES_text_w_keyword
       facet: domain
     type_of_entity:
       alias: null
@@ -71,7 +71,7 @@ dataset:
       alias: url
       data_type: URL
       entity: Project
-      es_type: ES_text
+      es_type: ES_text_w_keyword
     year_of_project:
       alias: year
       data_type: integer

@@ -10,9 +10,9 @@ source:
     provider_url: https://www.grid.ac/
 dataset:
   api_type: ElasticSearch
-  api_version: 6.8
-  config_url: https://github.com/nestauk/nesta/blob/0.4/nesta/core/orms/arxiv-eu_es_config.json
-  endpoint_url: https://search-eurito-dev-vq22tw6otqjpdh47u75bh2g7ba.eu-west-2.es.amazonaws.com/arxiv_v0
+  api_version: 7.4
+  config_url: https://github.com/nestauk/nesta/blob/20201103/nesta/core/schemas/tier_1/mappings/datasets/arxiv_mapping.json
+  endpoint_url: https://search-general-wvbdcvn3kmpz6lvjo2nkx36pbu.eu-west-2.es.amazonaws.com/arxiv_v0
   provider_name: DAPS (Nesta)
   provider_url: https://github.com/nestauk/nesta
   schema:
@@ -34,15 +34,15 @@ dataset:
       entity: Article
       facet: time
       type: Date_YYYYMMDD_dash
-    id_digitalObjectIdentifier_article:
-      alias: id
-      data_type: string
-      entity: Article
-      es_type: ES_keyword
     json_fieldsOfStudy_article:
       alias: fieldOfStudy
       data_type: object[]
       entity: MAGfieldOfStudy
+      shape:
+        nodes:
+          data_type: string[][]
+        level:
+          data_type: integer[][]
     metric_novelty_article:
       alias: novelty
       data_type: float
@@ -54,7 +54,7 @@ dataset:
       entity: Author
       es_type: ES_text_w_keyword[]
     terms_category_article:
-      alias: category
+      alias: categories
       data_type: string[]
       entity: Article
       es_type: ES_text_w_keyword[]
@@ -105,19 +105,19 @@ dataset:
       alias: tokens
       data_type: string[]
       entity: Article
-      es_type: ES_keyword[]
+      es_type: ES_text_w_keyword[]
       facet: domain
     textBody_abstract_article:
       alias: abstract
       data_type: string
       entity: Article
-      es_type: ES_text
+      es_type: ES_text_w_keyword
       facet: domain
     title_of_article:
       alias: title
       data_type: string
       entity: Article
-      es_type: ES_text
+      es_type: ES_text_w_keyword
       facet: domain
     type_of_entity:
       alias: null
@@ -128,7 +128,7 @@ dataset:
       alias: url
       data_type: URL
       entity: Article
-      es_type: ES_text
+      es_type: ES_text_w_keyword
     year_of_article:
       alias: year
       data_type: integer
@@ -147,10 +147,10 @@ dataset:
   relationships:
     - Article,ABOUT,MAGfieldOfStudy
     - Author,AUTHORED,Article
-    - Institute,PUBLISHED,Article
+    - Institute,IN,GeoRegion
     - Institute,IN,GeoRegionNUTS0
     - Institute,IN,GeoRegionNUTS1
     - Institute,IN,GeoRegionNUTS2
     - Institute,IN,GeoRegionNUTS3
-    - Institute,IN,GeoRegion
+    - Institute,PUBLISHED,Article
   version: 0
