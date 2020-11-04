@@ -11,8 +11,8 @@ source:
 dataset:
   api_type: ElasticSearch
   api_version: 7.4
-  config_url: https://github.com/nestauk/nesta/blob/dev_20200522/nesta/core/orms/arxiv-eu_es_config.json
-  endpoint_url: https://search-arxlive-t2brq66muzxag44zwmrcfrlmq4.eu-west-2.es.amazonaws.com/arxiv_v4
+  config_url: https://github.com/nestauk/nesta/blob/20201103/nesta/core/schemas/tier_1/mappings/datasets/arxiv_mapping.json
+  endpoint_url: https://search-arxlive-t2brq66muzxag44zwmrcfrlmq4.eu-west-2.es.amazonaws.com/arxiv_v6
   provider_name: DAPS (Nesta)
   provider_url: https://github.com/nestauk/nesta
   schema:

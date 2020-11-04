@@ -10,7 +10,7 @@ source:
     provider_url: https://www.grid.ac/
 dataset:
   api_type: ElasticSearch
-  api_version: 6.4
+  api_version: 7.4
   config_url: https://github.com/nestauk/nesta/blob/0.4/nesta/core/orms/arxiv_es_config.json
   endpoint_url: https://search-arxlive-t2brq66muzxag44zwmrcfrlmq4.eu-west-2.es.amazonaws.com/arxiv_v3
   provider_name: DAPS (Nesta)
