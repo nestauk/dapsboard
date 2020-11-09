@@ -387,8 +387,8 @@
 							)}
 							on:docs={e => handleDocs(
 								completion.documentation,
-								e.detail)
-							}
+								e.detail
+							)}
 						/>
 					{/if}
 				{/each}
