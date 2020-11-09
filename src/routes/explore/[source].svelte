@@ -3,21 +3,45 @@
 		params: {source},
 		query: {project, version, fieldsString}
 	}) {
-		return {source, project, version, fieldsString}
+		return {project, source, version, fieldsString}
 	}
 </script>
 
 <svelte:head>
-	<title>Board – {source}:{project}@{version}</title>
+	<title>Board - {source}:{project}@{version}</title>
 </svelte:head>
 
 <script>
-	export let fieldsString;
+	import {createExploreMachine} from 'app/machines/explore/route';
+	import {
+		resetSources,
+		selectedDataset,
+		selectedDatasetFields,
+		selectSource,
+		sources
+	} from 'app/stores/exploreStores';
+
 	export let project;
 	export let source;
 	export let version;
 
-	$: fields = fieldsString && fieldsString.split(',') || [];
+	const {contextStores: {
+		selectedFields
+	}} = createExploreMachine();
+
+	$: if (source) {
+		selectSource(source);
+	} else {
+		resetSources();
+	}
+
+	$: console.log(project, source, version);
+	$: console.log('$sources', $sources);
+	$: console.log('$selectedDataset', $selectedDataset);
+	$: console.log('$selectedDatasetFields', $selectedDatasetFields);
+
+	// $: console.log('$selectedFields', $selectedFields);
+	// $: fields = fieldsString && fieldsString.split(',') || [];
 </script>
 
 <section class='layout'>
@@ -29,10 +53,14 @@
 		</p>
 	</section>
 	<section class='selection'>
-		TODO: selection
+		<ul>
+			{#each $selectedDatasetFields as field}
+				<li>{field}</li>
+			{/each}
+		</ul>
 	</section>
 	<section class='contentheader'>
-		<p>Selected fields: {fields.join(' by ')}</p>
+		<p>Selected fields: {$selectedFields.join(' by ')}</p>
 	</section>
 	<section class='results'>
 		TODO: Results
@@ -70,6 +98,10 @@
 	.selection {
 		grid-area: sidebar2;
 		background-color: yellow;
+	}
+
+	.selection li {
+		padding: 1rem;
 	}
 
 	.contentheader {
