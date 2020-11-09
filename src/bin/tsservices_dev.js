@@ -1,4 +1,3 @@
-// eslint-disable-next-line node/no-unpublished-import
 import * as ts from "typescript";
 import path from 'path';
 import fs from 'fs';

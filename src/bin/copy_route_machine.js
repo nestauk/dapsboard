@@ -1,4 +1,3 @@
-// eslint-disable-next-line node/no-unpublished-import
 import clip from 'clipboardy';
 // eslint-disable-next-line node/no-extraneous-import
 import { stringifyObj } from 'svizzle/utils/obj-string'

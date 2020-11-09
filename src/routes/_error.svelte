@@ -2,7 +2,7 @@
 	export let status;
 	export let error;
 
-	/* eslint-disable no-process-env */
+	// eslint-disable no-process-env
 	const dev = process.env.NODE_ENV === 'development';
 </script>
 

@@ -18,9 +18,9 @@ overrides:
     processor: svelte3/svelte3
     rules:
       brace-style: off
+      import/no-unresolved: off # svelte components not found
       no-invalid-this: off
       no-new: off
-      import/no-unresolved: off # svelte components not found
       node/no-missing-import: off # svelte components not found
 parser: babel-eslint
 parserOptions:
@@ -29,18 +29,6 @@ parserOptions:
 plugins:
   - svelte3
 rules:
-  node/no-unsupported-features/es-syntax: off
-  node/no-missing-import:
-    - error
-    - tryExtensions:
-      - .js
-      - .json
-      - .node
-      - .mjs # @sapper/server.mjs
-  node/no-extraneous-import:
-    - error
-    - allowModules:
-      - 'app'
   accessor-pairs: error
   array-bracket-newline: off
   array-bracket-spacing: off
@@ -213,6 +201,19 @@ rules:
   no-void: error
   no-warning-comments: off
   no-whitespace-before-property: error
+  node/no-extraneous-import:
+    - error
+    - allowModules:
+      - 'app'
+  node/no-missing-import:
+    - error
+    - tryExtensions:
+      - .js
+      - .json
+      - .node
+      - .mjs # @sapper/server.mjs
+  node/no-unpublished-import: off # import { writable } from 'svelte/store';
+  node/no-unsupported-features/es-syntax: off
   nonblock-statement-body-position: error
   object-curly-newline: error
   object-curly-spacing: off

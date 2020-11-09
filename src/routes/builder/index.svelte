@@ -1,5 +1,4 @@
 <script>
-	/* eslint-disable node/no-unpublished-import */
 	import * as _ from 'lamb';
 	import { onMount } from 'svelte';
 	import { readable } from 'svelte/store';
