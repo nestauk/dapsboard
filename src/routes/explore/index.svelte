@@ -5,8 +5,8 @@
 </script>
 
 <script>
-	import IconChevronsDown from 'app/components/icons/IconChevronDown.svelte';
-	import IconChevronsUp from 'app/components/icons/IconChevronUp.svelte';
+	import IconChevronDown from 'app/components/icons/IconChevronDown.svelte';
+	import IconChevronUp from 'app/components/icons/IconChevronUp.svelte';
 	import IconChevronRight from 'app/components/icons/IconChevronRight.svelte';
 
 	import {
@@ -16,16 +16,20 @@
 		selectSource,
 		toggleSource,
 	} from 'app/stores/exploreStores';
+	import {makeExploreQuery} from 'app/utils/exploreUtils';
+
+	const makeHrefBoard = ({fields, source, project, version}) =>
+		`explore/${source}?${makeExploreQuery({fields, project, version})}`;
 
 	const hrefMenu = (source, {project, version}) =>
-		`explore?source=${source}&project=${project}&version=${version}`;
+		`explore?source=${source}&${makeExploreQuery({project, version})}`;
 
 	export let source;
 	export let project;
 	export let version;
 
 	$: hrefBoard = project && source && version
-		&& `explore/${source}?project=${project}&version=${version}`;
+		&& makeHrefBoard({project, source, version});
 
 	$: if (source) {
 		selectSource(source);
@@ -73,9 +77,9 @@
 								on:click={toggleSource(source)}
 							>
 								{#if isExpanded}
-									<IconChevronsUp />
+									<IconChevronUp />
 								{:else}
-									<IconChevronsDown />
+									<IconChevronDown />
 								{/if}
 							</div>
 						{/if}
@@ -221,7 +225,7 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		padding: 0.5rem;
+		padding: 0.25rem;
 	}
 	.button p {
 		margin-right: 0.5rem;

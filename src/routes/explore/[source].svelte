@@ -1,24 +1,93 @@
-<script context='module'>
-	export function preload ({
-		params: {source},
-		query: {project, version, fieldsString}
-	}) {
-		return {source, project, version, fieldsString}
+<script>
+	import * as _ from 'lamb';
+	import {onMount} from 'svelte';
+
+	import {stores} from '@sapper/app';
+
+	import IconChevronDown from 'app/components/icons/IconChevronDown.svelte';
+	import IconChevronUp from 'app/components/icons/IconChevronUp.svelte';
+
+	// eslint-disable-next-line node/no-extraneous-import
+	import {createExploreMachine} from 'app/machines/explore/route';
+	import {
+		resetSources,
+		selectedDatasetFields,
+		selectSource,
+	} from 'app/stores/exploreStores';
+	import {makeDepthByField} from 'app/utils/exploreUtils';
+
+	const {page} = stores();
+
+	const fontSize = 16;
+	const depthFontSize = 0.8 * fontSize;
+	const lineHeight = 3 * fontSize;
+	const halfLineHeight = lineHeight / 2;
+	const radius = halfLineHeight / 2;
+	const padding = halfLineHeight / 2;
+
+	const {machine, contextStores: {
+		isNextFieldDisabled,
+		isPrevFieldDisabled,
+		selectedFields,
+	}} = createExploreMachine();
+
+	$: ({params: {source}, query: {project, version, fields}} = $page);
+
+	let width = 0;
+
+	$: if (source) {
+		selectSource(source);
+	} else {
+		resetSources();
 	}
+	$: project && source && version && machine.send('DATASET_UPDATED', {project, source, version});
+
+	$: selectionHeader = $selectedFields && $selectedFields.join(' by ') || '';
+	$: depthByField = makeDepthByField($selectedFields);
+	$: lockedFields = _.init($selectedFields);
+	$: sidebar = $selectedDatasetFields
+		&& $selectedDatasetFields.map((field, index) => ({
+			depth: depthByField[field],
+			field,
+			locked: lockedFields.includes(field),
+			selected: $selectedFields.includes(field),
+			y: index * lineHeight,
+		}));
+	$: height = $selectedDatasetFields
+		&& $selectedDatasetFields.length * lineHeight || 0;
+	$: depthCx = width - padding - radius;
+	$: nameX = depthCx - radius - padding;
+
+	onMount(() => {
+		const pageReloader = () => {
+			machine.send('SELECTED_FIELDS', {
+				fields: fields && fields.length > 0
+					? fields.split(',')
+					: $selectedDatasetFields
+						? [$selectedDatasetFields[0]]
+						: []
+			});
+		};
+
+		addEventListener('popstate', pageReloader);
+		const unsubscribe = page.subscribe(pageReloader);
+
+		return () => {
+			removeEventListener('popstate', pageReloader);
+			unsubscribe && unsubscribe();
+		};
+	});
+
+
+	const clickedField = field => machine.send('SELECTED_FIELDS', {fields: [field]});
+	const clickedFieldCounter = field => machine.send('CLICKED_FIELD_COUNTER', {field});
+	const clickedNextField = () => machine.send('SELECTED_NEXT_FIELD');
+	const clickedPrevField = () => machine.send('SELECTED_PREVIOUS_FIELD');
 </script>
 
 <svelte:head>
-	<title>Board – {source}:{project}@{version}</title>
+	<title>Explore - {source}:{project}@{version}, {selectionHeader}</title>
 </svelte:head>
-
-<script>
-	export let fieldsString;
-	export let project;
-	export let source;
-	export let version;
-
-	$: fields = fieldsString && fieldsString.split(',') || [];
-</script>
 
 <section class='layout'>
 	<section class='navheader'>
@@ -28,11 +97,69 @@
 			<span>{version}</span>
 		</p>
 	</section>
-	<section class='selection'>
-		TODO: selection
+	<section
+		bind:clientWidth={width}
+		class='selection'
+	>
+		<svg {height} {width}>
+			{#if sidebar}
+				{#each sidebar as {depth, field, locked, selected, y}}
+					<g
+						transform='translate(0,{y})'
+						class:locked
+						class:selected
+					>
+						<rect
+							height={lineHeight}
+							{width}
+						/>
+						<text
+							class='fieldname unselectable'
+							font-size={fontSize}
+							on:click={clickedField(field)}
+							x={nameX}
+							y={halfLineHeight}
+						>{field}</text>
+						<circle
+							r={radius}
+							cx={depthCx}
+							cy={halfLineHeight}
+							on:click={clickedFieldCounter(field)}
+						/>
+						{#if depth}
+							<text
+								class='depth unselectable'
+								font-size={depthFontSize}
+								x={depthCx}
+								y={halfLineHeight}
+							>{depth}</text>
+						{/if}
+					</g>
+				{/each}
+			{/if}
+		</svg>
+	</section>
+	<section class='controls'>
+		<!-- TODO Button component -->
+		<div
+			class:clickable={!$isNextFieldDisabled}
+			class:disabled={$isNextFieldDisabled}
+			class='button fieldnav'
+			on:click={!$isNextFieldDisabled && clickedNextField}
+		>
+			<IconChevronDown stroke='white' />
+		</div>
+		<div
+			class:clickable={!$isPrevFieldDisabled}
+			class:disabled={$isPrevFieldDisabled}
+			class='button fieldnav'
+			on:click={!$isPrevFieldDisabled && clickedPrevField}
+		>
+			<IconChevronUp stroke='white' />
+		</div>
 	</section>
 	<section class='contentheader'>
-		<p>Selected fields: {fields.join(' by ')}</p>
+		<p>{selectionHeader}</p>
 	</section>
 	<section class='results'>
 		TODO: Results
@@ -41,19 +168,16 @@
 
 <style>
 	.layout {
-		height: 100%;
-		width: 100%;
-
-		--dim-headerHeight: 2rem;
-	}
-
-	.layout {
+		--dim-headerHeight: 3rem;
 		display: grid;
 		grid-template-columns: var(--dim-sidebarWidth) calc(100% - var(--dim-sidebarWidth));
-		grid-template-rows: var(--dim-headerHeight) calc(100% - var(--dim-headerHeight));
+		grid-template-rows: var(--dim-headerHeight) calc(100% - 2 * var(--dim-headerHeight)) var(--dim-headerHeight);
 		grid-template-areas:
 			"sidebar1 content1"
 			"sidebar2 content2"
+			"sidebar3 content2";
+		height: 100%;
+		width: 100%;
 	}
 
 	.navheader {
@@ -62,29 +186,99 @@
 		border-right: 1px solid var(--color-main-lighter);
 		display: flex;
 		font-weight: var(--dim-fontsize-light);
-		justify-content: space-between;
-		width: 100%;
 		grid-area: sidebar1;
-		background-color: orange;
-	}
-	.selection {
-		grid-area: sidebar2;
-		background-color: yellow;
+		justify-content: space-between;
+		padding: 1rem;
+		width: 100%;
 	}
 
+	/* selection */
+
+	.selection {
+		grid-area: sidebar2;
+		overflow-y: auto;
+		border-right: 1px solid var(--color-main-lighter);
+	}
+	.selection rect {
+		fill: none;
+	}
+	.selection text {
+		stroke: none;
+		dominant-baseline: central;
+	}
+	.selection text.fieldname {
+		text-anchor: end;
+		cursor: pointer;
+	}
+	.selection text.depth {
+		text-anchor: middle;
+		pointer-events: none;
+	}
+	.selection circle {
+		cursor: pointer;
+		fill: white;
+		stroke: black;
+	}
+	.selection .selected text {
+		fill: orange;
+		font-family: 'Open Sans SemiBold';
+		font-weight: bold;
+	}
+	.selection .selected circle {
+		stroke: orange;
+		stroke-width: 2;
+	}
+	.selection .locked rect {
+		fill: orange;
+	}
+	.selection .locked text.fieldname {
+		fill: white;
+	}
+	.selection .locked text.depth {
+		fill: orange;
+	}
+
+	/* controls */
+	.controls {
+		grid-area: sidebar3;
+		border-right: 1px solid var(--color-main-lighter);
+		border-top: 1px solid var(--color-main-lighter);
+		/* box-shadow: var(--box-shadow); */
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.button {
+		width: 30px;
+		height: 30px;
+		border-radius: 5px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		margin-right: 15px;
+	}
+
+	.button.fieldnav {
+		background-color: rgb(232, 126, 250);
+	}
+	.button.fieldnav.disabled {
+		background-color: rgb(245, 189, 255);
+	}
+
+	/* content */
 	.contentheader {
 		align-items: center;
 		border-bottom: 1px solid lightgrey;
-		border-right: 1px solid var(--color-main-lighter);
 		display: flex;
 		font-weight: var(--dim-fontsize-light);
-		justify-content: space-between;
-		width: 100%;
 		grid-area: content1;
-		background-color: cyan;
+		justify-content: space-between;
+		padding: 1rem;
+		width: 100%;
 	}
 	.results {
 		grid-area: content2;
-		background-color: palegoldenrod;
+		padding: 1rem;
 	}
 </style>

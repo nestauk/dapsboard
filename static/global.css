@@ -70,6 +70,11 @@ a.undecor {
 	cursor: pointer;
 }
 
+.unselectable {
+	-moz-user-select: none;
+	-webkit-user-select: none;
+}
+
 :root {
 	--color-main-lighter: rgb(180, 180, 180);
 	--color-main: rgb(40, 40, 40);
@@ -86,5 +91,5 @@ a.undecor {
 	--dim-header-height: 3rem;
 	--dim-main-height: calc(100% - var(--dim-header-height));
 	--dim-padding: 1rem;
-	--dim-sidebarWidth: 300px;
+	--dim-sidebarWidth: 350px;
 }
