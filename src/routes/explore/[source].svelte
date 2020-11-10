@@ -1,9 +1,14 @@
 <script context='module'>
 	export function preload ({
 		params: {source},
-		query: {project, version, fieldsString}
+		query: {project, version, fields}
 	}) {
-		return {project, source, version, fieldsString}
+		return {
+			fields: fields && fields.split(',') || [],
+			project,
+			source,
+			version,
+		}
 	}
 </script>
 
@@ -12,20 +17,23 @@
 </svelte:head>
 
 <script>
+	import {hrefBoard} from 'app/utils/exploreUtils';
 	import {createExploreMachine} from 'app/machines/explore/route';
 	import {
 		resetSources,
-		selectedDataset,
 		selectedDatasetFields,
 		selectSource,
-		sources
 	} from 'app/stores/exploreStores';
+
+	const fontSize = 18;
+	const lineHeight = 3 * fontSize;
 
 	export let project;
 	export let source;
 	export let version;
+	export let fields;
 
-	const {contextStores: {
+	const {machine, contextStores: {
 		selectedFields
 	}} = createExploreMachine();
 
@@ -35,13 +43,15 @@
 		resetSources();
 	}
 
-	$: console.log(project, source, version);
-	$: console.log('$sources', $sources);
-	$: console.log('$selectedDataset', $selectedDataset);
-	$: console.log('$selectedDatasetFields', $selectedDatasetFields);
-
-	// $: console.log('$selectedFields', $selectedFields);
-	// $: fields = fieldsString && fieldsString.split(',') || [];
+	$: fields = fields.length > 0 ? fields : [$selectedDatasetFields[0]];
+	$: machine.send('SELECTED_FIELDS', {fields});
+	$: selectionHeader = $selectedFields && $selectedFields.join(' by ') || '';
+	$: sidebar = $selectedDatasetFields && $selectedDatasetFields.map((field, index) => ({
+		field,
+		y: (index + 0.5) * lineHeight,
+		x:  0.5 * lineHeight
+	}));
+	$: height = $selectedDatasetFields.length * lineHeight;
 </script>
 
 <section class='layout'>
@@ -53,14 +63,24 @@
 		</p>
 	</section>
 	<section class='selection'>
-		<ul>
-			{#each $selectedDatasetFields as field}
-				<li>{field}</li>
-			{/each}
-		</ul>
+		<svg {height}>
+			<g>
+				{#each sidebar as {field, x, y}, index}
+					<a href={hrefBoard({project, source, version, fields: field})}>
+						<g class:selected={$selectedFields.includes(field)}>
+							<rect
+								height={lineHeight}
+								y={index * lineHeight}
+							/>
+							<text {x} {y}>{field}</text>
+						</g>
+					</a>
+				{/each}
+			</g>
+		</svg>
 	</section>
 	<section class='contentheader'>
-		<p>Selected fields: {$selectedFields.join(' by ')}</p>
+		<p>{selectionHeader}</p>
 	</section>
 	<section class='results'>
 		TODO: Results
@@ -69,19 +89,15 @@
 
 <style>
 	.layout {
-		height: 100%;
-		width: 100%;
-
-		--dim-headerHeight: 2rem;
-	}
-
-	.layout {
+		--dim-headerHeight: 3rem;
 		display: grid;
 		grid-template-columns: var(--dim-sidebarWidth) calc(100% - var(--dim-sidebarWidth));
 		grid-template-rows: var(--dim-headerHeight) calc(100% - var(--dim-headerHeight));
 		grid-template-areas:
 			"sidebar1 content1"
-			"sidebar2 content2"
+			"sidebar2 content2";
+		height: 100%;
+		width: 100%;
 	}
 
 	.navheader {
@@ -90,33 +106,51 @@
 		border-right: 1px solid var(--color-main-lighter);
 		display: flex;
 		font-weight: var(--dim-fontsize-light);
-		justify-content: space-between;
-		width: 100%;
 		grid-area: sidebar1;
-		background-color: orange;
-	}
-	.selection {
-		grid-area: sidebar2;
-		background-color: yellow;
+		justify-content: space-between;
+		padding: 1rem;
+		width: 100%;
 	}
 
-	.selection li {
-		padding: 1rem;
+	svg {
+		width: 100%;
+	}
+	.selection {
+		border-right: 1px solid var(--color-main-lighter);
+		grid-area: sidebar2;
+		overflow-y: auto;
+	}
+
+	.selection rect {
+		fill: white;
+		width: 100%;
+	}
+	.selection text {
+		dominant-baseline: middle;
+		stroke: none;
+	}
+
+	.selection .selected rect {
+		fill: var(--color-grey-70);
+	}
+	.selection .selected text {
+		fill: white;
+		font-family: 'Open Sans SemiBold';
+		font-weight: bold;
 	}
 
 	.contentheader {
 		align-items: center;
 		border-bottom: 1px solid lightgrey;
-		border-right: 1px solid var(--color-main-lighter);
 		display: flex;
 		font-weight: var(--dim-fontsize-light);
-		justify-content: space-between;
-		width: 100%;
 		grid-area: content1;
-		background-color: cyan;
+		justify-content: space-between;
+		padding: 1rem;
+		width: 100%;
 	}
 	.results {
 		grid-area: content2;
-		background-color: palegoldenrod;
+		padding: 1rem;
 	}
 </style>
