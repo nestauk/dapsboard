@@ -12,11 +12,10 @@
 	}
 </script>
 
-<svelte:head>
-	<title>Board - {source}:{project}@{version}</title>
-</svelte:head>
-
 <script>
+	import * as _ from 'lamb';
+
+	// eslint-disable-next-line node/no-extraneous-import
 	import {hrefBoard} from 'app/utils/exploreUtils';
 	import {createExploreMachine} from 'app/machines/explore/route';
 	import {
@@ -25,17 +24,29 @@
 		selectSource,
 	} from 'app/stores/exploreStores';
 
-	const fontSize = 18;
-	const lineHeight = 3 * fontSize;
+	const makeDepthByField = _.pipe([
+		_.mapWith((x, i) => [x, i + 1]),
+		_.fromPairs,
+	]);
+	const makeLockedDepthByField = _.pipe([_.init, makeDepthByField]);
 
-	export let project;
-	export let source;
-	export let version;
-	export let fields;
+	const fontSize = 16;
+	const depthFontSize = 0.8 * fontSize;
+	const lineHeight = 3 * fontSize;
+	const halfLineHeight = lineHeight / 2;
+	const radius = halfLineHeight / 2;
+	const padding = halfLineHeight / 2;
 
 	const {machine, contextStores: {
 		selectedFields
 	}} = createExploreMachine();
+
+	export let fields;
+	export let project;
+	export let source;
+	export let version;
+
+	let width = 0;
 
 	$: if (source) {
 		selectSource(source);
@@ -46,13 +57,25 @@
 	$: fields = fields.length > 0 ? fields : [$selectedDatasetFields[0]];
 	$: machine.send('SELECTED_FIELDS', {fields});
 	$: selectionHeader = $selectedFields && $selectedFields.join(' by ') || '';
-	$: sidebar = $selectedDatasetFields && $selectedDatasetFields.map((field, index) => ({
-		field,
-		y: (index + 0.5) * lineHeight,
-		x:  0.5 * lineHeight
-	}));
-	$: height = $selectedDatasetFields.length * lineHeight;
+	$: depthByField = makeDepthByField($selectedFields);
+	$: lockedDepthByField = makeLockedDepthByField($selectedFields);
+	$: sidebar = $selectedDatasetFields
+		&& $selectedDatasetFields.map((field, index) => ({
+			depth: depthByField[field],
+			field,
+			locked: lockedDepthByField[field],
+			selected: $selectedFields.includes(field),
+			y: index * lineHeight,
+		}));
+	$: height = $selectedDatasetFields
+		&& $selectedDatasetFields.length * lineHeight || 0;
+	$: depthCx = width - padding - radius;
+	$: nameX = depthCx - radius - padding;
 </script>
+
+<svelte:head>
+	<title>Explore - {source}:{project}@{version}, {selectionHeader}</title>
+</svelte:head>
 
 <section class='layout'>
 	<section class='navheader'>
@@ -62,21 +85,47 @@
 			<span>{version}</span>
 		</p>
 	</section>
-	<section class='selection'>
+	<section
+		bind:clientWidth={width}
+		class='selection'
+	>
 		<svg {height}>
-			<g>
-				{#each sidebar as {field, x, y}, index}
-					<a href={hrefBoard({project, source, version, fields: field})}>
-						<g class:selected={$selectedFields.includes(field)}>
-							<rect
-								height={lineHeight}
-								y={index * lineHeight}
-							/>
-							<text {x} {y}>{field}</text>
-						</g>
-					</a>
+			{#if sidebar}
+				{#each sidebar as {depth, field, selected, y}}
+					<g
+						transform='translate(0,{y})'
+						class:locked={false}
+					>
+						<rect
+							height={lineHeight}
+							{width}
+						/>
+						<a href={hrefBoard({project, source, version, fields: field})}>
+							<text
+								class:selected
+								class='fieldname'
+								font-size={fontSize}
+								x={nameX}
+								y={halfLineHeight}
+							>{field}</text>
+						</a>
+						<circle
+							r={radius}
+							cx={depthCx}
+							cy={halfLineHeight}
+						/>
+						{#if depth}
+							<text
+								class:selected
+								class='depth'
+								font-size={depthFontSize}
+								x={depthCx}
+								y={halfLineHeight}
+							>{depth}</text>
+						{/if}
+					</g>
 				{/each}
-			</g>
+			{/if}
 		</svg>
 	</section>
 	<section class='contentheader'>
@@ -122,21 +171,33 @@
 	}
 
 	.selection rect {
-		fill: white;
-		width: 100%;
+		fill: none;
 	}
 	.selection text {
-		dominant-baseline: middle;
 		stroke: none;
+		dominant-baseline: central;
 	}
-
-	.selection .selected rect {
-		fill: var(--color-grey-70);
+	.selection text.fieldname {
+		text-anchor: end;
 	}
-	.selection .selected text {
-		fill: white;
+	.selection text.depth {
+		text-anchor: middle;
+	}
+	.selection text.selected {
+		fill: orange;
 		font-family: 'Open Sans SemiBold';
 		font-weight: bold;
+	}
+
+	.selection circle {
+		fill-opacity: 0;
+		stroke: black;
+	}
+	.selection circle.selected {
+		stroke: orange;
+	}
+	.selection.locked text {
+		fill: white;
 	}
 
 	.contentheader {
