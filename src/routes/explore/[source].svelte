@@ -15,6 +15,9 @@
 <script>
 	import * as _ from 'lamb';
 
+	import IconChevronDown from 'app/components/icons/IconChevronDown.svelte';
+	import IconChevronUp from 'app/components/icons/IconChevronUp.svelte';
+
 	// eslint-disable-next-line node/no-extraneous-import
 	import {hrefBoard} from 'app/utils/exploreUtils';
 	import {createExploreMachine} from 'app/machines/explore/route';
@@ -37,7 +40,9 @@
 	const padding = halfLineHeight / 2;
 
 	const {machine, contextStores: {
-		selectedFields
+		isNextFieldDisabled,
+		isPrevFieldDisabled,
+		selectedFields,
 	}} = createExploreMachine();
 
 	export let fields;
@@ -52,8 +57,13 @@
 	} else {
 		resetSources();
 	}
-	$: fields = fields.length > 0 ? fields : [$selectedDatasetFields[0]];
-	$: machine.send('SELECTED_FIELDS', {fields});
+	$: fields = fields && fields.length > 0
+		? fields
+		: $selectedDatasetFields
+			? [$selectedDatasetFields[0]]
+			: [];
+	$: fields && fields.length > 0 && machine.send('SELECTED_FIELDS', {fields});
+
 	$: selectionHeader = $selectedFields && $selectedFields.join(' by ') || '';
 	$: depthByField = makeDepthByField($selectedFields);
 	$: lockedFields = _.init($selectedFields);
@@ -69,6 +79,10 @@
 		&& $selectedDatasetFields.length * lineHeight || 0;
 	$: depthCx = width - padding - radius;
 	$: nameX = depthCx - radius - padding;
+
+	const clickedFieldCounter = field => machine.send('CLICKED_FIELD_COUNTER', {field});
+	const clickedNextField = () => machine.send('SELECTED_NEXT_FIELD');
+	const clickedPrevField = () => machine.send('SELECTED_PREVIOUS_FIELD');
 </script>
 
 <svelte:head>
@@ -87,7 +101,7 @@
 		bind:clientWidth={width}
 		class='selection'
 	>
-		<svg {height}>
+		<svg {height} {width}>
 			{#if sidebar}
 				{#each sidebar as {depth, field, locked, selected, y}}
 					<g
@@ -111,7 +125,7 @@
 							r={radius}
 							cx={depthCx}
 							cy={halfLineHeight}
-							on:click={machine.send('CLICKED_FIELD_COUNTER', {field})}
+							on:click={clickedFieldCounter(field)}
 						/>
 						{#if depth}
 							<text
@@ -126,6 +140,25 @@
 			{/if}
 		</svg>
 	</section>
+	<section class='controls'>
+		<!-- TODO Button component -->
+		<div
+			class:clickable={!$isNextFieldDisabled}
+			class:disabled={$isNextFieldDisabled}
+			class='button fieldnav'
+			on:click={!$isNextFieldDisabled && clickedNextField}
+		>
+			<IconChevronDown stroke='white' />
+		</div>
+		<div
+			class:clickable={!$isPrevFieldDisabled}
+			class:disabled={$isPrevFieldDisabled}
+			class='button fieldnav'
+			on:click={!$isPrevFieldDisabled && clickedPrevField}
+		>
+			<IconChevronUp stroke='white' />
+		</div>
+	</section>
 	<section class='contentheader'>
 		<p>{selectionHeader}</p>
 	</section>
@@ -139,10 +172,11 @@
 		--dim-headerHeight: 3rem;
 		display: grid;
 		grid-template-columns: var(--dim-sidebarWidth) calc(100% - var(--dim-sidebarWidth));
-		grid-template-rows: var(--dim-headerHeight) calc(100% - var(--dim-headerHeight));
+		grid-template-rows: var(--dim-headerHeight) calc(100% - 2 * var(--dim-headerHeight)) var(--dim-headerHeight);
 		grid-template-areas:
 			"sidebar1 content1"
-			"sidebar2 content2";
+			"sidebar2 content2"
+			"sidebar3 content2";
 		height: 100%;
 		width: 100%;
 	}
@@ -159,15 +193,13 @@
 		width: 100%;
 	}
 
-	svg {
-		width: 100%;
-	}
+	/* selection */
+
 	.selection {
-		border-right: 1px solid var(--color-main-lighter);
 		grid-area: sidebar2;
 		overflow-y: auto;
+		border-right: 1px solid var(--color-main-lighter);
 	}
-
 	.selection rect {
 		fill: none;
 	}
@@ -207,6 +239,35 @@
 		fill: orange;
 	}
 
+	/* controls */
+	.controls {
+		grid-area: sidebar3;
+		border-right: 1px solid var(--color-main-lighter);
+		border-top: 1px solid var(--color-main-lighter);
+		/* box-shadow: var(--box-shadow); */
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.button {
+		width: 30px;
+		height: 30px;
+		border-radius: 5px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		margin-right: 15px;
+	}
+
+	.button.fieldnav {
+		background-color: rgb(232, 126, 250);
+	}
+	.button.fieldnav.disabled {
+		background-color: rgb(245, 189, 255);
+	}
+
+	/* content */
 	.contentheader {
 		align-items: center;
 		border-bottom: 1px solid lightgrey;

@@ -5,8 +5,8 @@
 </script>
 
 <script>
-	import IconChevronsDown from 'app/components/icons/IconChevronDown.svelte';
-	import IconChevronsUp from 'app/components/icons/IconChevronUp.svelte';
+	import IconChevronDown from 'app/components/icons/IconChevronDown.svelte';
+	import IconChevronUp from 'app/components/icons/IconChevronUp.svelte';
 	import IconChevronRight from 'app/components/icons/IconChevronRight.svelte';
 
 	import {
@@ -73,9 +73,9 @@
 								on:click={toggleSource(source)}
 							>
 								{#if isExpanded}
-									<IconChevronsUp />
+									<IconChevronUp />
 								{:else}
-									<IconChevronsDown />
+									<IconChevronDown />
 								{/if}
 							</div>
 						{/if}
@@ -221,7 +221,7 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		padding: 0.5rem;
+		padding: 0.25rem;
 	}
 	.button p {
 		margin-right: 0.5rem;
