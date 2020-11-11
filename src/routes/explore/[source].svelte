@@ -28,7 +28,6 @@
 		_.mapWith((x, i) => [x, i + 1]),
 		_.fromPairs,
 	]);
-	const makeLockedDepthByField = _.pipe([_.init, makeDepthByField]);
 
 	const fontSize = 16;
 	const depthFontSize = 0.8 * fontSize;
@@ -53,17 +52,16 @@
 	} else {
 		resetSources();
 	}
-
 	$: fields = fields.length > 0 ? fields : [$selectedDatasetFields[0]];
 	$: machine.send('SELECTED_FIELDS', {fields});
 	$: selectionHeader = $selectedFields && $selectedFields.join(' by ') || '';
 	$: depthByField = makeDepthByField($selectedFields);
-	$: lockedDepthByField = makeLockedDepthByField($selectedFields);
+	$: lockedFields = _.init($selectedFields);
 	$: sidebar = $selectedDatasetFields
 		&& $selectedDatasetFields.map((field, index) => ({
 			depth: depthByField[field],
 			field,
-			locked: lockedDepthByField[field],
+			locked: lockedFields.includes(field),
 			selected: $selectedFields.includes(field),
 			y: index * lineHeight,
 		}));
@@ -91,10 +89,11 @@
 	>
 		<svg {height}>
 			{#if sidebar}
-				{#each sidebar as {depth, field, selected, y}}
+				{#each sidebar as {depth, field, locked, selected, y}}
 					<g
 						transform='translate(0,{y})'
-						class:locked={false}
+						class:locked
+						class:selected
 					>
 						<rect
 							height={lineHeight}
@@ -102,8 +101,7 @@
 						/>
 						<a href={hrefBoard({project, source, version, fields: field})}>
 							<text
-								class:selected
-								class='fieldname'
+								class='fieldname unselectable'
 								font-size={fontSize}
 								x={nameX}
 								y={halfLineHeight}
@@ -113,11 +111,11 @@
 							r={radius}
 							cx={depthCx}
 							cy={halfLineHeight}
+							on:click={machine.send('CLICKED_FIELD_COUNTER', {field})}
 						/>
 						{#if depth}
 							<text
-								class:selected
-								class='depth'
+								class='depth unselectable'
 								font-size={depthFontSize}
 								x={depthCx}
 								y={halfLineHeight}
@@ -179,25 +177,34 @@
 	}
 	.selection text.fieldname {
 		text-anchor: end;
+		cursor: pointer;
 	}
 	.selection text.depth {
 		text-anchor: middle;
+		pointer-events: none;
 	}
-	.selection text.selected {
+	.selection circle {
+		cursor: pointer;
+		fill: white;
+		stroke: black;
+	}
+	.selection .selected text {
 		fill: orange;
 		font-family: 'Open Sans SemiBold';
 		font-weight: bold;
 	}
-
-	.selection circle {
-		fill-opacity: 0;
-		stroke: black;
-	}
-	.selection circle.selected {
+	.selection .selected circle {
 		stroke: orange;
+		stroke-width: 2;
 	}
-	.selection.locked text {
+	.selection .locked rect {
+		fill: orange;
+	}
+	.selection .locked text.fieldname {
 		fill: white;
+	}
+	.selection .locked text.depth {
+		fill: orange;
 	}
 
 	.contentheader {

@@ -70,6 +70,11 @@ a.undecor {
 	cursor: pointer;
 }
 
+.unselectable {
+	-moz-user-select: none;
+	-webkit-user-select: none;
+}
+
 :root {
 	--color-main-lighter: rgb(180, 180, 180);
 	--color-main: rgb(40, 40, 40);
