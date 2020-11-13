@@ -16,16 +16,17 @@
 		selectSource,
 		toggleSource,
 	} from 'app/stores/exploreStores';
+	import {makeExploreQuery} from 'app/utils/exploreUtils';
 
 	const hrefMenu = (source, {project, version}) =>
-		`explore?source=${source}&project=${project}&version=${version}`;
+		`explore?source=${source}&${makeExploreQuery({project, version})}`;
 
 	export let source;
 	export let project;
 	export let version;
 
 	$: hrefBoard = project && source && version
-		&& `explore/${source}?project=${project}&version=${version}`;
+		&& `explore/${source}?${makeExploreQuery({project, version})}`;
 
 	$: if (source) {
 		selectSource(source);

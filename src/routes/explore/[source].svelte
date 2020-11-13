@@ -1,36 +1,22 @@
-<script context='module'>
-	export function preload ({
-		params: {source},
-		query: {project, version, fields}
-	}) {
-		return {
-			fields: fields && fields.split(',') || [],
-			project,
-			source,
-			version,
-		}
-	}
-</script>
-
 <script>
 	import * as _ from 'lamb';
+	import {onMount} from 'svelte';
+
+	import {stores} from '@sapper/app';
 
 	import IconChevronDown from 'app/components/icons/IconChevronDown.svelte';
 	import IconChevronUp from 'app/components/icons/IconChevronUp.svelte';
 
 	// eslint-disable-next-line node/no-extraneous-import
-	import {hrefBoard} from 'app/utils/exploreUtils';
 	import {createExploreMachine} from 'app/machines/explore/route';
 	import {
 		resetSources,
 		selectedDatasetFields,
 		selectSource,
 	} from 'app/stores/exploreStores';
+	import {makeDepthByField} from 'app/utils/exploreUtils';
 
-	const makeDepthByField = _.pipe([
-		_.mapWith((x, i) => [x, i + 1]),
-		_.fromPairs,
-	]);
+	const {page} = stores();
 
 	const fontSize = 16;
 	const depthFontSize = 0.8 * fontSize;
@@ -45,10 +31,7 @@
 		selectedFields,
 	}} = createExploreMachine();
 
-	export let fields;
-	export let project;
-	export let source;
-	export let version;
+	$: ({params: {source}, query: {project, version, fields}} = $page);
 
 	let width = 0;
 
@@ -57,12 +40,7 @@
 	} else {
 		resetSources();
 	}
-	$: fields = fields && fields.length > 0
-		? fields
-		: $selectedDatasetFields
-			? [$selectedDatasetFields[0]]
-			: [];
-	$: fields && fields.length > 0 && machine.send('SELECTED_FIELDS', {fields});
+	$: project && source && version && machine.send('DATASET_UPDATED', {project, source, version});
 
 	$: selectionHeader = $selectedFields && $selectedFields.join(' by ') || '';
 	$: depthByField = makeDepthByField($selectedFields);
@@ -80,6 +58,28 @@
 	$: depthCx = width - padding - radius;
 	$: nameX = depthCx - radius - padding;
 
+	onMount(() => {
+		const pageReloader = () => {
+			machine.send('SELECTED_FIELDS', {
+				fields: fields && fields.length > 0
+					? fields.split(',')
+					: $selectedDatasetFields
+						? [$selectedDatasetFields[0]]
+						: []
+			});
+		};
+
+		addEventListener('popstate', pageReloader);
+		const unsubscribe = page.subscribe(pageReloader);
+
+		return () => {
+			removeEventListener('popstate', pageReloader);
+			unsubscribe && unsubscribe();
+		};
+	});
+
+
+	const clickedField = field => machine.send('SELECTED_FIELDS', {fields: [field]});
 	const clickedFieldCounter = field => machine.send('CLICKED_FIELD_COUNTER', {field});
 	const clickedNextField = () => machine.send('SELECTED_NEXT_FIELD');
 	const clickedPrevField = () => machine.send('SELECTED_PREVIOUS_FIELD');
@@ -113,14 +113,13 @@
 							height={lineHeight}
 							{width}
 						/>
-						<a href={hrefBoard({project, source, version, fields: field})}>
-							<text
-								class='fieldname unselectable'
-								font-size={fontSize}
-								x={nameX}
-								y={halfLineHeight}
-							>{field}</text>
-						</a>
+						<text
+							class='fieldname unselectable'
+							font-size={fontSize}
+							on:click={clickedField(field)}
+							x={nameX}
+							y={halfLineHeight}
+						>{field}</text>
 						<circle
 							r={radius}
 							cx={depthCx}
