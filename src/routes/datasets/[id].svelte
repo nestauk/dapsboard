@@ -18,7 +18,7 @@
 		constructQuery
 	} from 'app/elasticsearch';
 	import { request } from 'app/net';
-	import { getEndpointURL, getSchema } from 'app/utils/domain';
+	import { getSchema, getSearchURL } from 'app/utils/domain';
 	import { IS_BROWSER } from 'app/utils/generic';
 
 	export let id;
@@ -27,8 +27,7 @@
 	let responsePromise;
 
 	function doQuery (data) {
-		const endpoint = getEndpointURL(dataset);
-		const url = `${endpoint}/_search`;
+		const url = getSearchURL(dataset);
 
 		return IS_BROWSER && request('POST', url, {data});
 	}

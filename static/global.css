@@ -92,4 +92,5 @@ a.undecor {
 	--dim-main-height: calc(100% - var(--dim-header-height));
 	--dim-padding: 1rem;
 	--dim-sidebarWidth: 350px;
+	--json-tree-font-size: 18px;
 }

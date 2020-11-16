@@ -1,6 +1,7 @@
 <script>
 	import * as _ from 'lamb';
 	import {onMount} from 'svelte';
+	import JSONTree from 'svelte-json-tree';
 
 	import {stores} from '@sapper/app';
 
@@ -29,6 +30,7 @@
 		isNextFieldDisabled,
 		isPrevFieldDisabled,
 		selectedFields,
+		currentResult,
 	}} = createExploreMachine();
 
 	$: ({params: {source}, query: {project, version, fields}} = $page);
@@ -80,7 +82,7 @@
 
 
 	const clickedField = field => machine.send('SELECTED_FIELDS', {fields: [field]});
-	const clickedFieldCounter = field => machine.send('CLICKED_FIELD_COUNTER', {field});
+	const clickedFieldCounter = field => machine.send('TOGGLED_FIELD_COUNTER', {field});
 	const clickedNextField = () => machine.send('SELECTED_NEXT_FIELD');
 	const clickedPrevField = () => machine.send('SELECTED_PREVIOUS_FIELD');
 </script>
@@ -162,7 +164,9 @@
 		<p>{selectionHeader}</p>
 	</section>
 	<section class='results'>
-		TODO: Results
+		{#if $currentResult}
+			<JSONTree value={$currentResult} />
+		{/if}
 	</section>
 </section>
 

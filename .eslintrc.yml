@@ -226,6 +226,10 @@ rules:
   operator-linebreak:
     - error
     - before
+    -
+      overrides:
+        '=': after
+        '?:': ignore
   padded-blocks: off
   padding-line-between-statements: error
   prefer-arrow-callback: off
