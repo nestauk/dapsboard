@@ -20,7 +20,7 @@
 	import { createBuilderMachine } from 'app/machines/builder/route';
 	import { parseParams } from 'app/machines/builder/formediting.options';
 
-	import aggCompletions from 'app/data/agg_docs.json';
+	import aggCompletions from 'app/elasticsearch/typings/agg_docs.json';
 
 	const { machine: routeMachine, contextStores: {
 		// config
