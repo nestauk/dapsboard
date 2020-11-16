@@ -138,35 +138,17 @@
 	const { page } = stores();
 	let eventType = 'READY';
 	onMount(async () => {
-		const datasetTypings = await request(
-			'GET',
-			'dsl/datasets.ts',
-			{type:'text'}
-		);
 		const loadPage = ({params}) => {
 			const event = {
 				query: params.q && rison.decode(params.q),
-				datasetTypings,
 			};
-			if (window.ts) {
-				routeMachine.send(eventType);
-				parseParams(routeMachine, event);
-				eventType = 'ROUTE_CHANGED';
-			} else {
-				const tsCompiler = document.getElementById('tsCompiler');
-				tsCompiler.onload = () => {
-					routeMachine.send(eventType);
-					if (!event.query) {
-						routeMachine.send('COMMITTED');
-					}
-					parseParams(routeMachine, event);
-					eventType = 'ROUTE_CHANGED';
-				}
-			}
+			routeMachine.send(eventType);
+			parseParams(routeMachine, event);
+			eventType = 'ROUTE_CHANGED';
 		};
 
 		const pageReloader = () => {
-			const urlParams = new URL(document.location).searchParams;
+			const urlParams = new URL(document.location.toString()).searchParams;
 			loadPage({
 				params: _.fromPairs(Array.from(urlParams.entries()))
 			});
@@ -187,12 +169,7 @@
 			unsubscribe && unsubscribe();
 		};
 	});
-
 </script>
-
-<svelte:head>
-	<script src="https://cdn.jsdelivr.net/gh/microsoft/TypeScript@3.9.5/lib/typescriptServices.js" id='tsCompiler'></script>
-</svelte:head>
 
 <section class="query-builder">
 	<section class='axes'>
@@ -226,7 +203,7 @@
 						},
 					};
 					if (option.value === 0) {
-						payload.dataset = null;
+						payload['dataset'] = null;
 					}
 					option.machine.send('SELECTION_CHANGED', payload);
 				}}>
@@ -358,7 +335,7 @@
 				<ESField
 					labelText='result size'
 					required=true
-					dataType='Opaque<number, "integer">'
+					dataType='integer'
 					value={$resultSize}
 					on:change={e => $selectedForm.machine.send(
 						'QUERY_CHANGED',
@@ -378,6 +355,7 @@
 							labelText={completion.name}
 							required={completion.required}
 							dataType={completion.displayText}
+							typeObject={completion.dataType}
 							value={getFieldValue(completion.name)}
 							defaultValue={getDefaultValue(completion.name)}
 							on:change={e => $selectedForm.machine.send(
