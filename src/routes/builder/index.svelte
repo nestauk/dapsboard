@@ -21,7 +21,6 @@
 	import { parseParams } from 'app/machines/builder/formediting.options';
 
 	import aggCompletions from 'app/data/agg_docs.json';
-	import { request } from 'app/net';
 
 	const { machine: routeMachine, contextStores: {
 		// config
@@ -203,7 +202,7 @@
 						},
 					};
 					if (option.value === 0) {
-						payload['dataset'] = null;
+						payload.dataset = null;
 					}
 					option.machine.send('SELECTION_CHANGED', payload);
 				}}>
