@@ -9,7 +9,7 @@ import path from 'path';
 
 import * as _ from 'lamb';
 import yaml from 'js-yaml';
-import {readDir, readFile, saveObj /* , saveString */} from '@svizzle/file';
+import {readDir, readFile, saveObj} from '@svizzle/file';
 import {tapMessage} from '@svizzle/dev';
 import {applyFnMap} from '@svizzle/utils';
 
@@ -43,7 +43,6 @@ const makeSchemaObj = applyFnMap({
 });
 
 const save = (data, dest) => saveObj(dest, 2)(data).then(tapMessage(`Saved ${dest}`));
-// const saveStr = (data, dest) => saveString(dest)(data).then(tapMessage(`Saved ${dest}`));
 
 const process = async () => {
 	const refs = await readDir(INDICES_SPECS_DIR)
