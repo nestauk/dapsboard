@@ -335,6 +335,7 @@
 					labelText='result size'
 					required=true
 					dataType='integer'
+					typeObject='integer'
 					value={$resultSize}
 					on:change={e => $selectedForm.machine.send(
 						'QUERY_CHANGED',
@@ -354,7 +355,7 @@
 							labelText={completion.name}
 							required={completion.required}
 							dataType={completion.displayText}
-							typeObject={completion.dataType}
+							typeObject={completion.type}
 							value={getFieldValue(completion.name)}
 							defaultValue={getDefaultValue(completion.name)}
 							on:change={e => $selectedForm.machine.send(
