@@ -20,8 +20,7 @@
 	import { createBuilderMachine } from 'app/machines/builder/route';
 	import { parseParams } from 'app/machines/builder/formediting.options';
 
-	import aggCompletions from 'app/data/agg_docs.json';
-	import { request } from 'app/net';
+	import aggCompletions from 'app/elasticsearch/typings/agg_docs.json';
 
 	const { machine: routeMachine, contextStores: {
 		// config
@@ -138,35 +137,17 @@
 	const { page } = stores();
 	let eventType = 'READY';
 	onMount(async () => {
-		const datasetTypings = await request(
-			'GET',
-			'dsl/datasets.ts',
-			{type:'text'}
-		);
 		const loadPage = ({params}) => {
 			const event = {
 				query: params.q && rison.decode(params.q),
-				datasetTypings,
 			};
-			if (window.ts) {
-				routeMachine.send(eventType);
-				parseParams(routeMachine, event);
-				eventType = 'ROUTE_CHANGED';
-			} else {
-				const tsCompiler = document.getElementById('tsCompiler');
-				tsCompiler.onload = () => {
-					routeMachine.send(eventType);
-					if (!event.query) {
-						routeMachine.send('COMMITTED');
-					}
-					parseParams(routeMachine, event);
-					eventType = 'ROUTE_CHANGED';
-				}
-			}
+			routeMachine.send(eventType);
+			parseParams(routeMachine, event);
+			eventType = 'ROUTE_CHANGED';
 		};
 
 		const pageReloader = () => {
-			const urlParams = new URL(document.location).searchParams;
+			const urlParams = new URL(document.location.toString()).searchParams;
 			loadPage({
 				params: _.fromPairs(Array.from(urlParams.entries()))
 			});
@@ -187,12 +168,7 @@
 			unsubscribe && unsubscribe();
 		};
 	});
-
 </script>
-
-<svelte:head>
-	<script src="https://cdn.jsdelivr.net/gh/microsoft/TypeScript@3.9.5/lib/typescriptServices.js" id='tsCompiler'></script>
-</svelte:head>
 
 <section class="query-builder">
 	<section class='axes'>
@@ -358,7 +334,8 @@
 				<ESField
 					labelText='result size'
 					required=true
-					dataType='Opaque<number, "integer">'
+					dataType='integer'
+					typeObject='integer'
 					value={$resultSize}
 					on:change={e => $selectedForm.machine.send(
 						'QUERY_CHANGED',
@@ -378,6 +355,7 @@
 							labelText={completion.name}
 							required={completion.required}
 							dataType={completion.displayText}
+							typeObject={completion.type}
 							value={getFieldValue(completion.name)}
 							defaultValue={getDefaultValue(completion.name)}
 							on:change={e => $selectedForm.machine.send(

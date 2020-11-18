@@ -9,16 +9,12 @@ import path from 'path';
 
 import * as _ from 'lamb';
 import yaml from 'js-yaml';
-import {readDir, readFile, saveObj, saveString} from '@svizzle/file';
+import {readDir, readFile, saveObj} from '@svizzle/file';
 import {tapMessage} from '@svizzle/dev';
 import {applyFnMap} from '@svizzle/utils';
 
 import {indexById} from 'app/utils/generic';
-import {makeDatasetBySource, generateTypingsForAll} from 'app/utils';
-
-const ESTYPINGS_PATH = path.resolve(__dirname, '../node_modules/app/elasticsearch/typings/es.ts');
-const DSLTYPINGS_PATH = path.resolve(__dirname, '../node_modules/app/elasticsearch/typings/dsl.ts');
-const TYPINGS_PATH = path.resolve(__dirname, '../../static/dsl/datasets.ts');
+import {makeDatasetBySource} from 'app/utils';
 
 const DATASETS_PATH = path.resolve(__dirname, '../node_modules/app/data/datasets.json');
 const ROUTES_PATH = path.resolve(__dirname, '../node_modules/app/data/routes.json');
@@ -47,7 +43,6 @@ const makeSchemaObj = applyFnMap({
 });
 
 const save = (data, dest) => saveObj(dest, 2)(data).then(tapMessage(`Saved ${dest}`));
-const saveStr = (data, dest) => saveString(dest)(data).then(tapMessage(`Saved ${dest}`));
 
 const process = async () => {
 	const refs = await readDir(INDICES_SPECS_DIR)
@@ -64,13 +59,9 @@ const process = async () => {
 		)
 	);
 
-	const esTypes = await readFile(ESTYPINGS_PATH, 'utf-8')
-	const dslTypes = await readFile(DSLTYPINGS_PATH, 'utf-8')
-
 	await save(datasets, DATASETS_PATH);
 	await save(indexById(datasets), ROUTES_PATH);
 	await save(makeDatasetBySource(datasets), SIDEBAR_PATH);
-	await saveStr(dslTypes + esTypes + generateTypingsForAll(datasets).join('\n'), TYPINGS_PATH);
 }
 
 process().then(tapMessage('Done'));
