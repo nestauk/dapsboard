@@ -20,7 +20,7 @@
 	import { createBuilderMachine } from 'app/machines/builder/route';
 	import { parseParams } from 'app/machines/builder/formediting.options';
 
-	import aggCompletions from 'app/elasticsearch/typings/agg_docs.json';
+	import {getAggDocs} from 'app/elasticsearch';
 
 	const { machine: routeMachine, contextStores: {
 		// config
@@ -116,10 +116,9 @@
 	}
 
 	function setAggDocs (agg) {
-		if (aggCompletions && agg in aggCompletions) {
-			routeMachine.send('AGG_DOC_SHOWN', {
-				docstring: aggCompletions[agg]
-			});
+		const docstring = getAggDocs(agg);
+		if (docstring) {
+			routeMachine.send('AGG_DOC_SHOWN', {docstring});
 		} else {
 			routeMachine.send('AGG_DOC_DEFAULT');
 		}
