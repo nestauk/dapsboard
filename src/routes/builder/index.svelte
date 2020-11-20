@@ -341,7 +341,7 @@
 						{resultSize: e.detail}
 					)}
 					on:docs={e => handleDocs(
-						[{text:'Maximum size of results returned.'}],
+						'Maximum size of results returned.',
 						e.detail
 					)}
 				/>
