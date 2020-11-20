@@ -20,7 +20,7 @@
 	import { createBuilderMachine } from 'app/machines/builder/route';
 	import { parseParams } from 'app/machines/builder/formediting.options';
 
-	import {getAggDocs} from 'app/elasticsearch';
+	import {getAggDocs} from 'app/elasticsearch/utils/docs';
 
 	const { machine: routeMachine, contextStores: {
 		// config

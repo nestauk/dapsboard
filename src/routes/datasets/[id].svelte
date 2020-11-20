@@ -14,12 +14,10 @@
 <script>
 	import JSONTree from 'svelte-json-tree';
 
-	import {
-		constructQuery
-	} from 'app/elasticsearch';
-	import { request } from 'app/net';
-	import { getSchema, getSearchURL } from 'app/utils/domain';
-	import { IS_BROWSER } from 'app/utils/generic';
+	import {constructQuery} from 'app/elasticsearch/utils/aggQuery';
+	import {IS_BROWSER} from 'app/utils/generic';
+	import {request} from 'app/utils/net';
+	import {getSchema, getSearchURL} from 'app/utils/specs';
 
 	export let id;
 	export let dataset;

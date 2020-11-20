@@ -13,7 +13,7 @@ import {readDir, readFile, saveObj} from '@svizzle/file';
 import {tapMessage} from '@svizzle/dev';
 import {applyFnMap} from '@svizzle/utils';
 
-import {makeDatasetBySource} from 'app/utils';
+import {makeDatasetBySource} from 'app/utils/specs';
 import {indexById} from 'app/utils/generic';
 
 const DATASETS_PATH = path.resolve(__dirname, '../node_modules/app/data/datasets.json');
