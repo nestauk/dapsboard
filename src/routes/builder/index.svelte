@@ -90,16 +90,15 @@
 	);
 
 	function handleDocs (docs, eventType) {
-		const docsText = docs.map(i => i.text ? i.text : '').join(' ');
 		switch (eventType) {
 			case 'set':
-				clickedFieldDocs = docsText;
+				clickedFieldDocs = docs;
 				break;
 			case 'unset':
 				clickedFieldDocs = null;
 				break;
 			case 'display':
-				hoveredFieldDocs = docsText;
+				hoveredFieldDocs = docs;
 				break;
 			case 'hide':
 				hoveredFieldDocs = null;
