@@ -66,23 +66,23 @@
 	let response;
 	let responseHighlighted = true;
 
-	$: formMachine = $selectedForm && $selectedForm.machine;
-	$: formContext = $formMachine && $formMachine.context;
-	$: defaultValues = formContext && formContext.defaultValues;
-	$: formParams = formContext && formContext.params;
-	$: selection = formContext && formContext.selection;
-	// $: topBucketOptions = formContext && formContext.topBucketOptions;
-	$: bucketOptions = formContext && formContext.bucketOptions;
-	$: bucketMultiFieldOptions = formContext && formContext.bucketMultiFieldOptions;
-	$: nestedBucketOptions = formContext && formContext.nestedBucketOptions;
-	$: metricOptions = formContext && formContext.metricOptions;
-	$: metricMultiFieldOptions = formContext && formContext.metricMultiFieldOptions;
-	$: typeOptions = formContext && formContext.typeOptions;
-	$: datasetOptions = formContext && formContext.datasetOptions;
-	$: fieldOptions = formContext && formContext.fieldOptions;
-	$: completions = formContext && formContext.completions;
-	$: computedQuery = formContext && formContext.computedQuery;
-	$: response = formContext && formContext.response;
+	// $: topBucketOptions = formContext?.topBucketOptions;
+	$: formMachine = $selectedForm?.machine;
+	$: formContext = $formMachine?.context;
+	$: defaultValues = formContext?.defaultValues;
+	$: formParams = formContext?.params;
+	$: selection = formContext?.selection;
+	$: bucketOptions = formContext?.bucketOptions;
+	$: bucketMultiFieldOptions = formContext?.bucketMultiFieldOptions;
+	$: nestedBucketOptions = formContext?.nestedBucketOptions;
+	$: metricOptions = formContext?.metricOptions;
+	$: metricMultiFieldOptions = formContext?.metricMultiFieldOptions;
+	$: typeOptions = formContext?.typeOptions;
+	$: datasetOptions = formContext?.datasetOptions;
+	$: fieldOptions = formContext?.fieldOptions;
+	$: completions = formContext?.completions;
+	$: computedQuery = formContext?.computedQuery;
+	$: response = formContext?.response;
 
 	const aggSelectionChanged = e => $selectedForm.machine.send(
 		'SELECTION_CHANGED',
@@ -125,11 +125,11 @@
 	}
 
 	function getFieldValue (name) {
-		return $formParams && $formParams[name];
+		return $formParams?.[name];
 	}
 
 	function getDefaultValue (name) {
-		return $defaultValues && $defaultValues[name];
+		return $defaultValues?.[name];
 	}
 
 	const { page } = stores();
@@ -163,7 +163,7 @@
 
 		return () => {
 			removeEventListener('popstate', pageReloader);
-			unsubscribe && unsubscribe();
+			unsubscribe?.();
 		};
 	});
 </script>
@@ -179,7 +179,7 @@
 		/>
 		<header class='bold'>Axes</header>
 		<Select
-			selectedOption={$selectedForm && $selectedForm.value}
+			selectedOption={$selectedForm?.value}
 			hideDisabled={$hideDisabledForms}
 			options={$forms}
 			unselectable={false}
@@ -292,7 +292,7 @@
 				'SELECTION_CHANGED',
 				{dataset: e.detail}
 			)}
-			disabled={$selectedForm && $selectedForm.value !== 0}
+			disabled={$selectedForm?.value !== 0}
 		/>
 	</section>
 
@@ -386,7 +386,7 @@
 						)}
 						class='query-button'
 					>Run query</button>
-				{:else if $formMachine && $formMachine.matches({
+				{:else if $formMachine?.matches({
 					SelectionComplete: {
 						QueryReady: "Dirty"
 					}

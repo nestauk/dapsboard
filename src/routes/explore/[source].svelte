@@ -44,7 +44,7 @@
 	}
 	$: project && source && version && machine.send('DATASET_UPDATED', {project, source, version});
 
-	$: selectionHeader = $selectedFields && $selectedFields.join(' by ') || '';
+	$: selectionHeader = $selectedFields?.join(' by ') || '';
 	$: depthByField = makeDepthByField($selectedFields);
 	$: lockedFields = _.init($selectedFields);
 	$: sidebar = $selectedDatasetFields
@@ -63,7 +63,7 @@
 	onMount(() => {
 		const pageReloader = () => {
 			machine.send('SELECTED_FIELDS', {
-				fields: fields && fields.length > 0
+				fields: fields?.length > 0
 					? fields.split(',')
 					: $selectedDatasetFields
 						? [$selectedDatasetFields[0]]
@@ -76,7 +76,7 @@
 
 		return () => {
 			removeEventListener('popstate', pageReloader);
-			unsubscribe && unsubscribe();
+			unsubscribe?.();
 		};
 	});
 
