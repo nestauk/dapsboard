@@ -44,7 +44,7 @@ const makeSchemaObj = applyFnMap({
 
 const save = (data, dest) => saveObj(dest, 2)(data).then(tapMessage(`Saved ${dest}`));
 
-const process = async () => {
+const run = async () => {
 	const refs = await readDir(INDICES_SPECS_DIR)
 	.then(_.pipe([_.filterWith(isYamlFile), _.mapWith(makeSchemaObj)]));
 
@@ -64,4 +64,4 @@ const process = async () => {
 	await save(makeDatasetBySource(datasets), SIDEBAR_PATH);
 }
 
-process().then(tapMessage('Done'));
+run().then(tapMessage('Done'));
