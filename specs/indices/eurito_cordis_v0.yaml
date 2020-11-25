@@ -43,7 +43,7 @@ dataset:
       alias: status
       data_type: string
       entity: Project
-      es_type: ES_keyword
+      es_type: ES_text_w_keyword[]
     terms_tokens_entity:
       alias: tokens
       data_type: string[]

@@ -123,7 +123,7 @@ dataset:
       alias: null
       data_type: string
       entity: null
-      es_type: ES_keyword
+      es_type: ES_text_w_keyword
     url_of_article:
       alias: url
       data_type: URL
