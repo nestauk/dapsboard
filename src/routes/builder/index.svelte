@@ -116,8 +116,8 @@
 	}
 
 	function setAggDocs (agg) {
-		const docstring = getAggDocs(agg);
-		if (docstring) {
+		if (agg) {
+			const docstring = getAggDocs(agg);
 			routeMachine.send('AGG_DOC_SHOWN', {docstring});
 		} else {
 			routeMachine.send('AGG_DOC_DEFAULT');
