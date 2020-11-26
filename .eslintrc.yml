@@ -205,6 +205,7 @@ rules:
     - error
     - allowModules:
       - 'app'
+      - 'svizzle'
   node/no-missing-import:
     - error
     - tryExtensions:

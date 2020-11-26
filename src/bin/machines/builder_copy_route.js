@@ -1,7 +1,6 @@
 import clip from 'clipboardy';
 import {stringify} from '@svizzle/utils';
 
-// eslint-disable-next-line node/no-extraneous-import
 import {stringifyObj} from 'svizzle/utils/obj-string';
 
 import {builderTesterConfig} from 'app/machines/builder/tester.config';

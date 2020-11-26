@@ -7,8 +7,6 @@
 
 	import IconChevronDown from 'app/components/icons/IconChevronDown.svelte';
 	import IconChevronUp from 'app/components/icons/IconChevronUp.svelte';
-
-	// eslint-disable-next-line node/no-extraneous-import
 	import {createExploreMachine} from 'app/machines/explore/route';
 	import {
 		resetSources,
