@@ -173,13 +173,6 @@
 
 <section class="query-builder">
 	<section class='axes'>
-		<SelectMenu
-			hideDisabled={$hideDisabledForms}
-			on:hideDisabledChanged={e => routeMachine.send(
-				'HIDE_DISABLED_FORMS_TOGGLED',
-				e.detail
-			)}
-		/>
 		<header class='bold'>Axes</header>
 		<Select
 			selectedOption={$selectedForm?.value}
