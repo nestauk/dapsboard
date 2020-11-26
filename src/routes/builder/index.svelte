@@ -4,7 +4,9 @@
 	import { readable } from 'svelte/store';
 	import rison from 'rison-esm';
 	import { stores } from '@sapper/app';
+	import ROUTES from 'app/data/routes';
 
+	import ExternalLink from 'app/components/ExternalLink.svelte';
 	import JSONValue from 'app/components/JSONValue.svelte';
 	import ESField from 'app/components/elementary/ElasticSearchField.svelte';
 
@@ -21,6 +23,7 @@
 	import { parseParams } from 'app/machines/builder/formediting.options';
 
 	import {getAggDocs} from 'app/elasticsearch/utils/docs';
+	import {getSearchURL} from 'app/utils/specs';
 
 	const { machine: routeMachine, contextStores: {
 		// config
@@ -293,7 +296,13 @@
 				{dataset: e.detail}
 			)}
 			disabled={$selectedForm?.value !== 0}
-		/>
+			let:option={option}
+		>
+			<div class='select-item'>
+				<div>{option.text}</div>
+				<ExternalLink href={getSearchURL(ROUTES[option.text])} size={14}/>
+			</div>
+		</Select>
 	</section>
 
 	<section class='fields'>
