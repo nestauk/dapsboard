@@ -122,7 +122,9 @@
 			: $response.aggregations;
 		await navigator.clipboard.writeText(JSON.stringify(value, null, 2));
 		responseCopied = true;
-		setTimeout(() => responseCopied = false, 5000);
+		setTimeout(() => {
+			responseCopied = false;
+		}, 5000);
 	}
 
 	const aggSelectionChanged = e => $selectedForm.machine.send(
