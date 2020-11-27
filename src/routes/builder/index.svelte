@@ -70,9 +70,7 @@
 	let computedQuery;
 	let response;
 	let responseHighlighted = true;
-	let isResponsePending;
-	let isResponseMatching;
-	let isResponseError;
+	let responseStatus;
 	let responseCopied = false;
 
 	// $: topBucketOptions = formContext?.topBucketOptions;
@@ -92,29 +90,7 @@
 	$: completions = formContext?.completions;
 	$: computedQuery = formContext?.computedQuery;
 	$: response = formContext?.response;
-	$: {
-		if ($formMachine) {
-			isResponsePending = $formMachine.matches({
-				SelectionComplete: {
-					QueryReady: {
-						Dirty: "Pending"
-					}
-				}
-			});
-			isResponseMatching = $formMachine?.matches({
-				SelectionComplete: {
-					QueryReady: "Matching"
-				}
-			});
-			isResponseError = $formMachine?.matches({
-				SelectionComplete: {
-					QueryReady: {
-						Dirty: 'Error'
-					}
-				}
-			});
-		}
-	}
+	$: responseStatus = formContext?.responseStatus;
 
 	async function handleCopyResponse () {
 		const value = $showFullResponse
@@ -124,7 +100,7 @@
 		responseCopied = true;
 		setTimeout(() => {
 			responseCopied = false;
-		}, 5000);
+		}, 1500);
 	}
 
 	const aggSelectionChanged = e => $selectedForm.machine.send(
@@ -534,10 +510,13 @@
 		</PanelMenu>
 		<header class='bold clickable'>
 			Response
-			{#if isResponseMatching || isResponseError}
+			{#if $responseStatus?.matching || $responseStatus?.error}
 				<div
 					class='panel-tools'
-					title={`Copy ${isResponseMatching ? 'response' : 'error'} to clipboard`}
+					title={`Copy ${$responseStatus.matching
+						? 'response'
+						: 'error'
+					} to clipboard`}
 					on:click={handleCopyResponse}
 				>
 					{#if !responseCopied}
@@ -549,9 +528,9 @@
 			{/if}
 		</header>
 		<div class='json'>
-			{#if isResponsePending}
+			{#if $responseStatus?.pending}
 				Waiting for response...
-			{:else if isResponseMatching}
+			{:else if $responseStatus?.matching}
 				<JSONValue
 					value={$showFullResponse
 						? $response
@@ -559,7 +538,7 @@
 					}
 					highlighted={responseHighlighted}
 				/>
-			{:else if isResponseError}
+			{:else if $responseStatus?.error}
 				<JSONValue
 					value={$response}
 					highlighted={responseHighlighted}
