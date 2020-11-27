@@ -68,6 +68,9 @@
 	let computedQuery;
 	let response;
 	let responseHighlighted = true;
+	let isResponsePending;
+	let isResponseMatching;
+	let isResponseError;
 
 	// $: topBucketOptions = formContext?.topBucketOptions;
 	$: formMachine = $selectedForm?.machine;
@@ -86,6 +89,37 @@
 	$: completions = formContext?.completions;
 	$: computedQuery = formContext?.computedQuery;
 	$: response = formContext?.response;
+	$: {
+		if ($formMachine) {
+			isResponsePending = $formMachine.matches({
+				SelectionComplete: {
+					QueryReady: {
+						Dirty: "Pending"
+					}
+				}
+			});
+			isResponseMatching = $formMachine?.matches({
+				SelectionComplete: {
+					QueryReady: "Matching"
+				}
+			});
+			isResponseError = $formMachine?.matches({
+				SelectionComplete: {
+					QueryReady: {
+						Dirty: 'Error'
+					}
+				}
+			});
+		}
+	}
+
+	
+	function handleCopyResponse () {
+		const value = $showFullResponse
+			? $response
+			: $response.aggregations;
+		navigator.clipboard.writeText(JSON.stringify(value, null, 2));
+	}
 
 	const aggSelectionChanged = e => $selectedForm.machine.send(
 		'SELECTION_CHANGED',
@@ -492,24 +526,16 @@
 				>Syntax highlighting</label>
 			</MenuItem>
 		</PanelMenu>
-
-		<header class='bold'>Response</header>
-		<div class='json'>
-			{#if $formMachine}
-			{#if $formMachine.matches({
-				SelectionComplete: {
-					QueryReady: {
-						Dirty: "Pending"
-					}
-				}
-			})}
-				Waiting for response...
+		<header class='bold'>
+			Response
+			{#if isResponseMatching}
+				<button on:click={handleCopyResponse}>Copy</button>
 			{/if}
-			{#if $formMachine.matches({
-				SelectionComplete: {
-					QueryReady: "Matching"
-				}
-			})}
+		</header>
+		<div class='json'>
+			{#if isResponsePending}
+				Waiting for response...
+			{:else if isResponseMatching}
 				<JSONValue
 					value={$showFullResponse
 						? $response
@@ -517,25 +543,16 @@
 					}
 					highlighted={responseHighlighted}
 				/>
-
-			{/if}
-			{#if $formMachine.matches({
-				SelectionComplete: {
-					QueryReady: {
-						Dirty: 'Error'
-					}
-				}
-			})}
+			{:else if isResponseError}
 				<JSONValue
 					value={$response}
 					highlighted={responseHighlighted}
 					isErrorValue={true}
 				/>
 			{/if}
-			{/if}
 		</div>
 	</section>
-
+ 
 	<section class='status-bar'>
 		{$aggDocText}
 	</section>
