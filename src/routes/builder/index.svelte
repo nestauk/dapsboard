@@ -18,6 +18,7 @@
 	import PanelMenu from 'app/components/elementary/PanelMenu.svelte';
 	import MenuItem from 'app/components/elementary/MenuItem.svelte';
 	import IconDelete from 'app/components/icons/IconDelete.svelte';
+	import IconClipboard from 'app/components/icons/IconClipboard.svelte';
 
 	import { createBuilderMachine } from 'app/machines/builder/route';
 	import { parseParams } from 'app/machines/builder/formediting.options';
@@ -113,7 +114,6 @@
 		}
 	}
 
-	
 	function handleCopyResponse () {
 		const value = $showFullResponse
 			? $response
@@ -529,7 +529,9 @@
 		<header class='bold'>
 			Response
 			{#if isResponseMatching}
-				<button on:click={handleCopyResponse}>Copy</button>
+				<div on:click={handleCopyResponse} class='panel-tools' title="Copy response to clipboard">
+					<IconClipboard size={14}/>
+				</div>
 			{/if}
 		</header>
 		<div class='json'>
@@ -670,5 +672,9 @@
 		justify-self: end;
 		grid-column: 2;
 		padding:0.4em 0 0.4em 1em;
+	}
+
+	.panel-tools {
+		display: inline-block;
 	}
 </style>
