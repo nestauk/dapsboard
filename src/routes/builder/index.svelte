@@ -19,6 +19,7 @@
 	import MenuItem from 'app/components/elementary/MenuItem.svelte';
 	import IconDelete from 'app/components/icons/IconDelete.svelte';
 	import IconClipboard from 'app/components/icons/IconClipboard.svelte';
+	import IconCheck from 'app/components/icons/IconCheck.svelte';
 
 	import { createBuilderMachine } from 'app/machines/builder/route';
 	import { parseParams } from 'app/machines/builder/formediting.options';
@@ -72,6 +73,7 @@
 	let isResponsePending;
 	let isResponseMatching;
 	let isResponseError;
+	let responseCopied = false;
 
 	// $: topBucketOptions = formContext?.topBucketOptions;
 	$: formMachine = $selectedForm?.machine;
@@ -114,11 +116,13 @@
 		}
 	}
 
-	function handleCopyResponse () {
+	async function handleCopyResponse () {
 		const value = $showFullResponse
 			? $response
 			: $response.aggregations;
-		navigator.clipboard.writeText(JSON.stringify(value, null, 2));
+		await navigator.clipboard.writeText(JSON.stringify(value, null, 2));
+		responseCopied = true;
+		setTimeout(() => responseCopied = false, 5000);
 	}
 
 	const aggSelectionChanged = e => $selectedForm.machine.send(
@@ -526,11 +530,19 @@
 				>Syntax highlighting</label>
 			</MenuItem>
 		</PanelMenu>
-		<header class='bold'>
+		<header class='bold clickable'>
 			Response
-			{#if isResponseMatching}
-				<div on:click={handleCopyResponse} class='panel-tools' title="Copy response to clipboard">
-					<IconClipboard size={14}/>
+			{#if isResponseMatching || isResponseError}
+				<div
+					class='panel-tools'
+					title={`Copy ${isResponseMatching ? 'response' : 'error'} to clipboard`}
+					on:click={handleCopyResponse}
+				>
+					{#if !responseCopied}
+						<IconClipboard size={14}/>
+					{:else}
+						<IconCheck size={14} stroke='green'/>
+					{/if}
 				</div>
 			{/if}
 		</header>
@@ -554,7 +566,7 @@
 			{/if}
 		</div>
 	</section>
- 
+
 	<section class='status-bar'>
 		{$aggDocText}
 	</section>
