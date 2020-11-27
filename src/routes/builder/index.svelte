@@ -18,6 +18,8 @@
 	import PanelMenu from 'app/components/elementary/PanelMenu.svelte';
 	import MenuItem from 'app/components/elementary/MenuItem.svelte';
 	import IconDelete from 'app/components/icons/IconDelete.svelte';
+	import IconClipboard from 'app/components/icons/IconClipboard.svelte';
+	import IconCheck from 'app/components/icons/IconCheck.svelte';
 
 	import { createBuilderMachine } from 'app/machines/builder/route';
 	import { parseParams } from 'app/machines/builder/formediting.options';
@@ -68,6 +70,8 @@
 	let computedQuery;
 	let response;
 	let responseHighlighted = true;
+	let responseStatus;
+	let responseCopied = false;
 
 	// $: topBucketOptions = formContext?.topBucketOptions;
 	$: formMachine = $selectedForm?.machine;
@@ -86,6 +90,18 @@
 	$: completions = formContext?.completions;
 	$: computedQuery = formContext?.computedQuery;
 	$: response = formContext?.response;
+	$: responseStatus = formContext?.responseStatus;
+
+	async function handleCopyResponse () {
+		const value = $showFullResponse
+			? $response
+			: $response.aggregations;
+		await navigator.clipboard.writeText(JSON.stringify(value, null, 2));
+		responseCopied = true;
+		setTimeout(() => {
+			responseCopied = false;
+		}, 1500);
+	}
 
 	const aggSelectionChanged = e => $selectedForm.machine.send(
 		'SELECTION_CHANGED',
@@ -492,24 +508,29 @@
 				>Syntax highlighting</label>
 			</MenuItem>
 		</PanelMenu>
-
-		<header class='bold'>Response</header>
-		<div class='json'>
-			{#if $formMachine}
-			{#if $formMachine.matches({
-				SelectionComplete: {
-					QueryReady: {
-						Dirty: "Pending"
-					}
-				}
-			})}
-				Waiting for response...
+		<header class='bold response-header'>
+			<div>Response</div>
+			{#if $responseStatus?.matching || $responseStatus?.error}
+				<div
+					class='panel-tools clickable'
+					title={`Copy ${$responseStatus.matching
+						? 'response'
+						: 'error'
+					} to clipboard`}
+					on:click={handleCopyResponse}
+				>
+					{#if !responseCopied}
+						<IconClipboard size={14}/>
+					{:else}
+						<IconCheck size={14} stroke='green'/>
+					{/if}
+				</div>
 			{/if}
-			{#if $formMachine.matches({
-				SelectionComplete: {
-					QueryReady: "Matching"
-				}
-			})}
+		</header>
+		<div class='json'>
+			{#if $responseStatus?.pending}
+				Waiting for response...
+			{:else if $responseStatus?.matching}
 				<JSONValue
 					value={$showFullResponse
 						? $response
@@ -517,21 +538,12 @@
 					}
 					highlighted={responseHighlighted}
 				/>
-
-			{/if}
-			{#if $formMachine.matches({
-				SelectionComplete: {
-					QueryReady: {
-						Dirty: 'Error'
-					}
-				}
-			})}
+			{:else if $responseStatus?.error}
 				<JSONValue
 					value={$response}
 					highlighted={responseHighlighted}
 					isErrorValue={true}
 				/>
-			{/if}
 			{/if}
 		</div>
 	</section>
@@ -653,5 +665,15 @@
 		justify-self: end;
 		grid-column: 2;
 		padding:0.4em 0 0.4em 1em;
+	}
+
+	.response-header {
+		display: grid;
+		grid-template-columns: 1fr min-content;
+	}
+	.panel-tools {
+		display: inline-block;
+		margin-right: 24px;
+		margin-top: 2px;
 	}
 </style>
