@@ -508,11 +508,11 @@
 				>Syntax highlighting</label>
 			</MenuItem>
 		</PanelMenu>
-		<header class='bold clickable'>
-			Response
+		<header class='bold response-header'>
+			<div>Response</div>
 			{#if $responseStatus?.matching || $responseStatus?.error}
 				<div
-					class='panel-tools'
+					class='panel-tools clickable'
 					title={`Copy ${$responseStatus.matching
 						? 'response'
 						: 'error'
@@ -667,7 +667,13 @@
 		padding:0.4em 0 0.4em 1em;
 	}
 
+	.response-header {
+		display: grid;
+		grid-template-columns: 1fr min-content;
+	}
 	.panel-tools {
 		display: inline-block;
+		margin-right: 24px;
+		margin-top: 2px;
 	}
 </style>
