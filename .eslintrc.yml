@@ -206,6 +206,7 @@ rules:
     - allowModules:
       - 'app'
       - 'svizzle'
+      - 'test_assets'
   node/no-missing-import:
     - error
     - tryExtensions:

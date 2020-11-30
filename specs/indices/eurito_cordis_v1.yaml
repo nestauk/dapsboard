@@ -11,12 +11,12 @@ dataset:
   schema:
     cost_ecFunding_project:
       alias: cost_ecFunding
-      data_type: integer
+      type: integer
       entity: Project
       facet: funding
     cost_total_project:
       alias: cost_total
-      data_type: integer
+      type: integer
       entity: Project
       facet: funding
     date_ended_project:
@@ -31,50 +31,43 @@ dataset:
       type: Date_YYYYMMDD_dash
     metric_novelty_project:
       alias: novelty
-      data_type: float
+      type: float
       entity: Project
       facet: metrics
     name_framework_project:
       alias: framework_name
-      data_type: string
       entity: Project
-      es_type: ES_text_w_keyword
+      type: ES_text_w_keyword
     status_of_project:
       alias: status
-      data_type: string
       entity: Project
-      es_type: ES_keyword
+      type: ES_keyword
     terms_tokens_entity:
       alias: tokens
-      data_type: string[]
       entity: Project
-      es_type: ES_keyword[]
+      type: ES_keyword[]
       facet: domain
     textBody_description_project:
       alias: description
-      data_type: string
       entity: Project
-      es_type: ES_text_w_keyword
+      type: ES_text_w_keyword
       facet: domain
     title_of_project:
       alias: title
-      data_type: string
       entity: Project
-      es_type: ES_text_w_keyword
+      type: ES_text_w_keyword
       facet: domain
     type_of_entity:
       alias: null
-      data_type: string
       entity: null
-      es_type: ES_keyword
+      type: ES_keyword
     url_of_project:
       alias: url
-      data_type: URL
       entity: Project
-      es_type: ES_text_w_keyword
+      type: ES_text_w_keyword
     year_of_project:
       alias: year
-      data_type: integer
+      type: integer
       entity: Project
       facet: time
   entities:

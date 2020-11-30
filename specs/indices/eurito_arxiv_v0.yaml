@@ -18,15 +18,15 @@ dataset:
   schema:
     booleanFlag_eu_article:
       alias: is_EU
-      data_type: boolean
+      type: boolean
       entity: Article
     booleanFlag_multinational_article:
       alias: is_multinational
-      data_type: boolean
+      type: boolean
       entity: Article
     count_citations_article:
       alias: citations_count
-      data_type: integer
+      type: integer
       entity: Article
       facet: metrics
     date_created_article:
@@ -36,102 +36,86 @@ dataset:
       type: Date_YYYYMMDD_dash
     id_digitalObjectIdentifier_article:
       alias: id
-      data_type: string
       entity: Article
-      es_type: ES_keyword
+      type: ES_keyword
     json_fieldsOfStudy_article:
       alias: fieldOfStudy
-      data_type: object[]
+      type: object[]
       entity: MAGfieldOfStudy
     metric_novelty_article:
       alias: novelty
-      data_type: float
+      type: float
       entity: Article
       facet: metrics
     terms_authors_article:
       alias: authors
-      data_type: string[]
       entity: Author
-      es_type: ES_text_w_keyword[]
+      type: ES_text_w_keyword[]
     terms_category_article:
       alias: category
-      data_type: string[]
       entity: Article
-      es_type: ES_text_w_keyword[]
+      type: ES_text_w_keyword[]
       facet: domain
     terms_countries_article:
       alias: countries
-      data_type: string[]
       entity: Article
-      es_type: ES_text_w_keyword[]
+      type: ES_text_w_keyword[]
       facet: domain
     terms_fieldsOfStudy_article:
       alias: fieldsOfStudy
-      data_type: string[]
       entity: Article
-      es_type: ES_text_w_keyword[]
+      type: ES_text_w_keyword[]
       facet: domain
     terms_institutes_article:
       alias: name
-      data_type: string[]
       entity: Institute
-      es_type: ES_text_w_keyword[]
+      type: ES_text_w_keyword[]
     terms_nuts0_article:
       alias: id
-      data_type: string[]
       entity: GeoRegionNUTS0
-      es_type: ES_text_w_keyword[]
+      type: ES_text_w_keyword[]
     terms_nuts1_article:
       alias: id
-      data_type: string[]
       entity: GeoRegionNUTS1
-      es_type: ES_text_w_keyword[]
+      type: ES_text_w_keyword[]
     terms_nuts2_article:
       alias: id
-      data_type: string[]
       entity: GeoRegionNUTS2
-      es_type: ES_text_w_keyword[]
+      type: ES_text_w_keyword[]
     terms_nuts3_article:
       alias: id
-      data_type: string[]
       entity: GeoRegionNUTS3
-      es_type: ES_text_w_keyword[]
+      type: ES_text_w_keyword[]
     terms_regions_article:
       alias: id
-      data_type: string[]
       entity: GeoRegion
-      es_type: ES_text_w_keyword[]
+      type: ES_text_w_keyword[]
     terms_tokens_entity:
       alias: tokens
-      data_type: string[]
       entity: Article
-      es_type: ES_keyword[]
+      type: ES_keyword[]
       facet: domain
     textBody_abstract_article:
       alias: abstract
-      data_type: string
       entity: Article
-      es_type: ES_text
+      type: ES_text
       facet: domain
     title_of_article:
       alias: title
-      data_type: string
       entity: Article
-      es_type: ES_text
+      type: ES_text
       facet: domain
     type_of_entity:
       alias: null
-      data_type: string
       entity: null
-      es_type: ES_keyword
+      type: ES_keyword
     url_of_article:
       alias: url
-      data_type: URL
+      type: ES_text
       entity: Article
-      es_type: ES_text
     year_of_article:
       alias: year
-      data_type: integer
+      type: integer
       entity: Article
       facet: time
   entities:

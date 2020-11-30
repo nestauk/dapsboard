@@ -11,36 +11,32 @@ dataset:
   schema:
     _id_state_group:
       alias: id
-      data_type: string
       entity: State
-      es_type: ES_keyword
+      type: ES_keyword
     _placeName_state_group:
       alias: name
-      data_type: string
       entity: State
-      es_type: ES_text_w_keyword
+      type: ES_text_w_keyword
     _terms_memberOrigin_group:
       alias: members_origins
-      data_type: string[]
       entity: Group
-      es_type: ES_text_w_keyword[]
+      type: ES_text_w_keyword[]
     _terms_sdg_description:
       alias: SDG_labels
-      data_type: string[]
       entity: Group
-      es_type: ES_keyword[]
+      type: ES_keyword[]
       facet: domain
     booleanFlag_autotranslated_entity:
       alias: is_autotranslated
-      data_type: boolean
+      type: boolean
       entity: Group
     coordinate_of_group:
       alias: coordinate
       entity: Group
-      es_type: ES_geo_point_obj
+      type: ES_geo_point_obj
     count_member_group:
       alias: count_member
-      data_type: integer
+      type: integer
       entity: Group
       facet: metrics
     date_start_group:
@@ -51,102 +47,85 @@ dataset:
     id_continent_group:
       alias: id
       entity: Continent
-      data_type: string
-      es_type: ES_keyword
+      type: ES_keyword
     id_country_group:
       alias: id
       entity: Country
-      data_type: string
-      es_type: ES_keyword
+      type: ES_keyword
     id_iso2_country:
       alias: id_iso2
       entity: Country
-      data_type: string
-      es_type: ES_keyword
+      type: ES_keyword
     id_iso3_country:
       alias: id_iso3
       entity: Country
-      data_type: string
-      es_type: ES_keyword
+      type: ES_keyword
     id_isoNumeric_country:
       alias: id_numeric
       entity: Country
-      data_type: integer
+      type: integer
     id_of_group:
       alias: id
-      data_type: string
       entity: Group
-      es_type: ES_keyword
+      type: ES_keyword
     name_of_category:
       alias: category
-      data_type: string
       entity: Group
-      es_type: ES_text_w_keyword
+      type: ES_text_w_keyword
       facet: domain
     name_of_group:
       alias: name
-      data_type: string
       entity: Group
-      es_type: ES_text_w_keyword
+      type: ES_text_w_keyword
     placeName_city_group:
       alias: name
       entity: City
-      data_type: string
-      es_type: ES_text_w_keyword
+      type: ES_text_w_keyword
     placeName_continent_group:
       alias: name
-      data_type: string
       entity: Continent
-      es_type: ES_text_w_keyword
+      type: ES_text_w_keyword
     placeName_country_group:
       alias: name
-      data_type: string
       entity: Continent
-      es_type: ES_text_w_keyword
+      type: ES_text_w_keyword
     rank_rhodonite_group:
       alias: novelty
-      data_type: float
+      type: float
       entity: Group
       facet: metrics
     terms_iso2lang_entity:
       alias: iso2_id
-      data_type: string[]
       entity: Language
-      es_type: ES_text_w_keyword[]
+      type: ES_text_w_keyword[]
     terms_mesh_group:
       alias: MeSH_labels
       entity: Group
-      data_type: string[]
-      es_type: ES_text_w_keyword[]
+      type: ES_text_w_keyword[]
       facet: domain
     terms_of_countryTags:
       alias: country_tags
-      data_type: string[]
       entity: Group
-      es_type: ES_keyword[]
+      type: ES_keyword[]
       facet: domain
     terms_topics_group:
       alias: topics
-      data_type: string[]
       entity: Group
-      es_type: ES_text_w_keyword[]
+      type: ES_text_w_keyword[]
       facet: domain
     textBody_descriptive_group:
       alias: description
-      data_type: string
       entity: Group
-      es_type: ES_text_w_keyword
+      type: ES_text_w_keyword
       facet: domain
     type_of_entity:
       alias: null
-      data_type: string
       entity: null
-      es_type: ES_keyword
+      type: ES_keyword
     url_of_group:
       alias: url_source
-      data_type: URL
       entity: Group
-      es_type: ES_text_w_keyword
+      type: ES_text_w_keyword
   entities:
     - City
     - Continent

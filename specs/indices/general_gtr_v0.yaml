@@ -12,109 +12,92 @@ dataset:
     coordinate_institutes_project:
       alias: coordinate
       entity: Institute
-      es_type: ES_geo_point_obj
+      type: ES_geo_point_obj
     json_funding_project:
       alias: category
-      data_type: object[]
+      type: object[]
       entity: FundingRound
       shape:
         amount:
-          data_type: integer
+          type: integer
         category:
-          data_type: string
-          es_type: ES_keyword
+          type: ES_keyword
         currencyCode:
-          data_type: string
-          es_type: ES_keyword
+          type: ES_keyword
         end_date:
-          data_type: Date_YYYYMMDD_dash
+          type: Date_YYYYMMDD_dash
         start_date:
-          data_type: Date_YYYYMMDD_dash
+          type: Date_YYYYMMDD_dash
     json_outcomes_project:
       alias: outcomes
-      data_type: object
+      type: object
       entity: Project
     name_leadOrgDepartment_project:
       alias: lead_org_department
-      data_type: string
-      es_type: ES_text_w_keyword
+      type: ES_text_w_keyword
       entity: Project
     name_of_funder:
       alias: name
-      data_type: string
       entity: Funder
-      es_type: ES_text_w_keyword[]
+      type: ES_text_w_keyword[]
     status_of_project:
       alias: status
-      data_type: string
       entity: Project
-      es_type: ES_keyword
+      type: ES_keyword
     terms_continent_project:
       alias: id_iso2
-      data_type: string
       entity: Continent
-      es_type: ES_keyword
+      type: ES_keyword
     terms_countries_project:
       alias: name
-      data_type: string
       entity: Country
-      es_type: ES_keyword
+      type: ES_keyword
     terms_instituteIds_project:
       alias: id
-      data_type: string
       entity: Institute
-      es_type: ES_text_w_keyword[]
+      type: ES_text_w_keyword[]
     terms_iso2_project:
       alias: id_iso2
-      data_type: string
       entity: Country
-      es_type: ES_keyword
+      type: ES_keyword
     terms_tokens_entity:
       alias: tokens
-      data_type: string[]
       entity: Project
-      es_type: ES_text_w_keyword[]
+      type: ES_text_w_keyword[]
       facet: domain
     terms_topics_project:
       alias: topics
-      data_type: string[]
       entity: Project
-      es_type: ES_text_w_keyword[]
+      type: ES_text_w_keyword[]
       facet: domain
     textBody_abstract_project:
       alias: abstract
-      data_type: string
       entity: Project
-      es_type: ES_text_w_keyword
+      type: ES_text_w_keyword
       facet: domain
     textBody_potentialImpact_project:
       alias: potential_impact
-      data_type: string
       entity: Project
-      es_type: ES_text_w_keyword
+      type: ES_text_w_keyword
       facet: domain
     textBody_techAbstract_project:
       alias: tech_abstract
-      data_type: string
       entity: Project
-      es_type: ES_text_w_keyword
+      type: ES_text_w_keyword
       facet: domain
     title_of_project:
       alias: title
-      data_type: string
       entity: Project
-      es_type: ES_text_w_keyword
+      type: ES_text_w_keyword
       facet: domain
     type_category_funding:
       alias: category
-      data_type: string
       entity: FundingRound
-      es_type: ES_keyword
+      type: ES_keyword
     type_of_entity:
       alias: null
-      data_type: string
       entity: null
-      es_type: ES_text_w_keyword
+      type: ES_text_w_keyword
   entities:
     - Continent
     - Country
