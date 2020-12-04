@@ -8,7 +8,7 @@
 
 	import ExternalLink from 'app/components/ExternalLink.svelte';
 	import JSONValue from 'app/components/JSONValue.svelte';
-	import ESField from 'app/components/elementary/ElasticSearchField.svelte';
+	import TypedField from 'app/components/elementary/TypedField.svelte';
 
 	import TabContainer from 'app/components/elementary/TabContainer.svelte';
 	import Tab from 'app/components/elementary/Tab.svelte';
@@ -50,7 +50,6 @@
 	let formMachine;
 	let formContext;
 
-	let defaultValues;
 	let formParams;
 	let selection = readable({
 		aggregation: null,
@@ -76,7 +75,6 @@
 	// $: topBucketOptions = formContext?.topBucketOptions;
 	$: formMachine = $selectedForm?.machine;
 	$: formContext = $formMachine?.context;
-	$: defaultValues = formContext?.defaultValues;
 	$: formParams = formContext?.params;
 	$: selection = formContext?.selection;
 	$: bucketOptions = formContext?.bucketOptions;
@@ -145,10 +143,6 @@
 
 	function getFieldValue (name) {
 		return $formParams?.[name];
-	}
-
-	function getDefaultValue (name) {
-		return $defaultValues?.[name];
 	}
 
 	const { page } = stores();
@@ -347,11 +341,11 @@
 		<Tab id='fields' {isTitleSlot} {isContentSlot}>
 			<header slot='title' class='bold'>Query Form</header>
 			<div class='form-fields'>
-				<ESField
+				<TypedField
 					labelText='result size'
 					required=true
 					dataType='integer'
-					typeObject='integer'
+					typeObject={{__type:'integer'}}
 					value={$resultSize}
 					on:change={e => $selectedForm.machine.send(
 						'QUERY_CHANGED',
@@ -366,14 +360,13 @@
 					`${$dataset}-${$selection.field}-`
 					+ `${$selection.aggregation}-${completion.name}`
 				)}
-					{#if completion.name !== 'field'}
-						<ESField
+					{#if !['field', '__shape'].includes(completion.name)}
+						<TypedField
 							labelText={completion.name}
 							required={completion.required}
 							dataType={completion.displayText}
 							typeObject={completion.type}
 							value={getFieldValue(completion.name)}
-							defaultValue={getDefaultValue(completion.name)}
 							on:change={e => $selectedForm.machine.send(
 								'QUERY_CHANGED',
 								{params:{[completion.name]: e.detail}}
