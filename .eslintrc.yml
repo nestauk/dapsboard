@@ -205,6 +205,7 @@ rules:
     - error
     - allowModules:
       - 'app'
+      - 'elasticsearch'
       - 'svizzle'
       - 'test_assets'
   node/no-missing-import:
@@ -237,7 +238,7 @@ rules:
   prefer-arrow-callback: off
   prefer-const: off
   prefer-destructuring: error
-  prefer-named-capture-group: error
+  prefer-named-capture-group: off
   prefer-numeric-literals: error
   prefer-object-spread: error
   prefer-promise-reject-errors: error

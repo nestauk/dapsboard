@@ -59,7 +59,7 @@
 		display: flex;
 		align-items: center;
 		padding-left: 0.5rem;
-    margin-bottom: 0.5rem;
+		margin-bottom: 0.5rem;
 	}
 
 	.container > nav ul {

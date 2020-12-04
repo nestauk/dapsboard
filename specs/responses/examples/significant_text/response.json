@@ -1,0 +1,44 @@
+{
+	"primary": {
+		"doc_count": 1153445,
+		"bg_count": 4814301,
+		"buckets": [
+			{
+				"key": "North America",
+				"doc_count": 503375,
+				"score": 0.7828902342051492,
+				"bg_count": 751990
+			},
+			{
+				"key": "Europe",
+				"doc_count": 1247,
+				"score": 0.0018404593616494103,
+				"bg_count": 1926
+			},
+			{
+				"key": "Africa",
+				"doc_count": 1371,
+				"score": 0.0018383789135547142,
+				"bg_count": 2247
+			},
+			{
+				"key": "Asia",
+				"doc_count": 673,
+				"score": 0.0010554951306756097,
+				"bg_count": 1000
+			},
+			{
+				"key": "South America",
+				"doc_count": 344,
+				"score": 0.0005051579977119143,
+				"bg_count": 533
+			},
+			{
+				"key": "Oceania",
+				"doc_count": 311,
+				"score": 0.00041798335359491114,
+				"bg_count": 509
+			}
+		]
+	}
+}
