@@ -208,6 +208,7 @@ rules:
       - 'elasticsearch'
       - 'svizzle'
       - 'test_assets'
+      - 'types'
   node/no-missing-import:
     - error
     - tryExtensions:

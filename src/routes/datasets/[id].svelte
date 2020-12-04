@@ -14,7 +14,7 @@
 <script>
 	import JSONTree from 'svelte-json-tree';
 
-	import {constructQuery} from 'app/elasticsearch/utils/aggQuery';
+	import {constructQuery} from 'elasticsearch/utils/aggQuery';
 	import {IS_BROWSER} from 'app/utils/generic';
 	import {request} from 'app/utils/net';
 	import {getSchema, getSearchURL} from 'app/utils/specs';

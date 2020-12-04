@@ -6,7 +6,7 @@
 	import { stores } from '@sapper/app';
 	import ROUTES from 'app/data/routes';
 
-	import { integer } from 'app/elasticsearch/types/genericTypes'
+	import { integer } from 'types'
 
 	import ExternalLink from 'app/components/ExternalLink.svelte';
 	import JSONValue from 'app/components/JSONValue.svelte';
@@ -26,7 +26,7 @@
 	import { createBuilderMachine } from 'app/machines/builder/route';
 	import { parseParams } from 'app/machines/builder/formediting.options';
 
-	import {getAggDocs} from 'app/elasticsearch/utils/docs';
+	import {getAggDocs} from 'elasticsearch/utils/docs';
 	import {getSearchURL} from 'app/utils/specs';
 
 	const { machine: routeMachine, contextStores: {
