@@ -6,6 +6,8 @@
 	import { stores } from '@sapper/app';
 	import ROUTES from 'app/data/routes';
 
+	import { integer } from 'app/elasticsearch/types/genericTypes'
+
 	import ExternalLink from 'app/components/ExternalLink.svelte';
 	import JSONValue from 'app/components/JSONValue.svelte';
 	import TypedField from 'app/components/elementary/TypedField.svelte';
@@ -65,7 +67,7 @@
 	let typeOptions = readable([]);
 	let datasetOptions = readable([]);
 	let fieldOptions = readable([]);
-	let completions = readable([]);
+	let aggParamsInfo = readable([]);
 	let computedQuery;
 	let response;
 	let responseHighlighted = true;
@@ -85,7 +87,7 @@
 	$: typeOptions = formContext?.typeOptions;
 	$: datasetOptions = formContext?.datasetOptions;
 	$: fieldOptions = formContext?.fieldOptions;
-	$: completions = formContext?.completions;
+	$: aggParamsInfo = formContext?.aggParamsInfo;
 	$: computedQuery = formContext?.computedQuery;
 	$: response = formContext?.response;
 	$: responseStatus = formContext?.responseStatus;
@@ -345,7 +347,7 @@
 					labelText='result size'
 					required=true
 					dataType='integer'
-					typeObject={{__type:'integer'}}
+					typeObject={integer}
 					value={$resultSize}
 					on:change={e => $selectedForm.machine.send(
 						'QUERY_CHANGED',
@@ -356,23 +358,23 @@
 						e.detail
 					)}
 				/>
-				{#each $completions as completion (
+				{#each $aggParamsInfo as paramInfo (
 					`${$dataset}-${$selection.field}-`
-					+ `${$selection.aggregation}-${completion.name}`
+					+ `${$selection.aggregation}-${paramInfo.name}`
 				)}
-					{#if !['field', '__shape'].includes(completion.name)}
+					{#if !['field', '__shape'].includes(paramInfo.name)}
 						<TypedField
-							labelText={completion.name}
-							required={completion.required}
-							dataType={completion.displayText}
-							typeObject={completion.type}
-							value={getFieldValue(completion.name)}
+							labelText={paramInfo.name}
+							required={paramInfo.required}
+							dataType={paramInfo.displayText}
+							typeObject={paramInfo.type}
+							value={getFieldValue(paramInfo.name)}
 							on:change={e => $selectedForm.machine.send(
 								'QUERY_CHANGED',
-								{params:{[completion.name]: e.detail}}
+								{params:{[paramInfo.name]: e.detail}}
 							)}
 							on:docs={e => handleDocs(
-								completion.documentation,
+								paramInfo.documentation,
 								e.detail
 							)}
 						/>
