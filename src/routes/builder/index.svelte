@@ -362,7 +362,7 @@
 					`${$dataset}-${$selection.field}-`
 					+ `${$selection.aggregation}-${paramInfo.name}`
 				)}
-					{#if !['field', '__shape'].includes(paramInfo.name)}
+					{#if !['field'].includes(paramInfo.name)}
 						<TypedField
 							labelText={paramInfo.name}
 							required={paramInfo.required}
