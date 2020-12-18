@@ -6,9 +6,11 @@
 	import { stores } from '@sapper/app';
 	import ROUTES from 'app/data/routes';
 
+	import { integer } from 'app/elasticsearch/types/genericTypes'
+
 	import ExternalLink from 'app/components/ExternalLink.svelte';
 	import JSONValue from 'app/components/JSONValue.svelte';
-	import ESField from 'app/components/elementary/ElasticSearchField.svelte';
+	import TypedField from 'app/components/elementary/TypedField.svelte';
 
 	import TabContainer from 'app/components/elementary/TabContainer.svelte';
 	import Tab from 'app/components/elementary/Tab.svelte';
@@ -50,7 +52,6 @@
 	let formMachine;
 	let formContext;
 
-	let defaultValues;
 	let formParams;
 	let selection = readable({
 		aggregation: null,
@@ -66,7 +67,7 @@
 	let typeOptions = readable([]);
 	let datasetOptions = readable([]);
 	let fieldOptions = readable([]);
-	let completions = readable([]);
+	let aggParamsInfo = readable([]);
 	let computedQuery;
 	let response;
 	let responseHighlighted = true;
@@ -76,7 +77,6 @@
 	// $: topBucketOptions = formContext?.topBucketOptions;
 	$: formMachine = $selectedForm?.machine;
 	$: formContext = $formMachine?.context;
-	$: defaultValues = formContext?.defaultValues;
 	$: formParams = formContext?.params;
 	$: selection = formContext?.selection;
 	$: bucketOptions = formContext?.bucketOptions;
@@ -87,7 +87,7 @@
 	$: typeOptions = formContext?.typeOptions;
 	$: datasetOptions = formContext?.datasetOptions;
 	$: fieldOptions = formContext?.fieldOptions;
-	$: completions = formContext?.completions;
+	$: aggParamsInfo = formContext?.aggParamsInfo;
 	$: computedQuery = formContext?.computedQuery;
 	$: response = formContext?.response;
 	$: responseStatus = formContext?.responseStatus;
@@ -145,10 +145,6 @@
 
 	function getFieldValue (name) {
 		return $formParams?.[name];
-	}
-
-	function getDefaultValue (name) {
-		return $defaultValues?.[name];
 	}
 
 	const { page } = stores();
@@ -347,11 +343,11 @@
 		<Tab id='fields' {isTitleSlot} {isContentSlot}>
 			<header slot='title' class='bold'>Query Form</header>
 			<div class='form-fields'>
-				<ESField
+				<TypedField
 					labelText='result size'
 					required=true
 					dataType='integer'
-					typeObject='integer'
+					typeObject={integer}
 					value={$resultSize}
 					on:change={e => $selectedForm.machine.send(
 						'QUERY_CHANGED',
@@ -362,24 +358,23 @@
 						e.detail
 					)}
 				/>
-				{#each $completions as completion (
+				{#each $aggParamsInfo as paramInfo (
 					`${$dataset}-${$selection.field}-`
-					+ `${$selection.aggregation}-${completion.name}`
+					+ `${$selection.aggregation}-${paramInfo.paramId}`
 				)}
-					{#if completion.name !== 'field'}
-						<ESField
-							labelText={completion.name}
-							required={completion.required}
-							dataType={completion.displayText}
-							typeObject={completion.type}
-							value={getFieldValue(completion.name)}
-							defaultValue={getDefaultValue(completion.name)}
+					{#if !['field'].includes(paramInfo.paramId)}
+						<TypedField
+							labelText={paramInfo.paramId}
+							required={paramInfo.required}
+							dataType={paramInfo.displayText}
+							typeObject={paramInfo.type}
+							value={getFieldValue(paramInfo.paramId)}
 							on:change={e => $selectedForm.machine.send(
 								'QUERY_CHANGED',
-								{params:{[completion.name]: e.detail}}
+								{params:{[paramInfo.paramId]: e.detail}}
 							)}
 							on:docs={e => handleDocs(
-								completion.documentation,
+								paramInfo.documentation,
 								e.detail
 							)}
 						/>
