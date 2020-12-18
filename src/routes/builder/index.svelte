@@ -360,18 +360,18 @@
 				/>
 				{#each $aggParamsInfo as paramInfo (
 					`${$dataset}-${$selection.field}-`
-					+ `${$selection.aggregation}-${paramInfo.name}`
+					+ `${$selection.aggregation}-${paramInfo.paramId}`
 				)}
-					{#if !['field'].includes(paramInfo.name)}
+					{#if !['field'].includes(paramInfo.paramId)}
 						<TypedField
-							labelText={paramInfo.name}
+							labelText={paramInfo.paramId}
 							required={paramInfo.required}
 							dataType={paramInfo.displayText}
 							typeObject={paramInfo.type}
-							value={getFieldValue(paramInfo.name)}
+							value={getFieldValue(paramInfo.paramId)}
 							on:change={e => $selectedForm.machine.send(
 								'QUERY_CHANGED',
-								{params:{[paramInfo.name]: e.detail}}
+								{params:{[paramInfo.paramId]: e.detail}}
 							)}
 							on:docs={e => handleDocs(
 								paramInfo.documentation,
