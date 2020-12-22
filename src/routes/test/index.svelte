@@ -47,7 +47,7 @@
 		overflow: hidden;
 	}
 	.response {
-		border-top: 1px solid gray;
+		border-top: 1px solid #DDD;
 		overflow: auto;
 	}
 </style>
