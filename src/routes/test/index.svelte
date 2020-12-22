@@ -5,11 +5,11 @@
 	import DATASETS from 'app/data/routes.json';
 
 	import Search from 'app/components/Search.svelte';
-	import JSONValue from 'app/components/JSONValue.svelte';
+	import JSONTree from 'svelte-json-tree';
 
 	const url = getSearchURL(DATASETS.general_cordis_v0);
 
-	let response = {instructions:'type something above'};
+	let response;
 
 	function computeQuery (query) {
 		return {
@@ -37,7 +37,9 @@
 		<Search on:search={sendSearchRequest}/>
 	</div>
 	<div class='response'>
-		<JSONValue value={response} />
+		{#if response}
+			<JSONTree value={response} />
+		{/if}
 	</div>
 </div>
 
