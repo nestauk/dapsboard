@@ -33,7 +33,9 @@
 </script>
 
 <div class='content'>
-	<Search on:search={sendSearchRequest}/>
+	<div class='search-bar'>
+		<Search on:search={sendSearchRequest}/>
+	</div>
 	<div class='response'>
 		<JSONValue value={response} />
 	</div>
@@ -46,8 +48,11 @@
 		grid-template-rows: min-content 1fr;
 		overflow: hidden;
 	}
+	.search-bar {
+		width: 75%;
+		margin: auto;
+	}
 	.response {
-		border-top: 1px solid #DDD;
 		overflow: auto;
 	}
 </style>
