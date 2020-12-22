@@ -32,6 +32,22 @@
 	}
 </script>
 
-<Search on:search={sendSearchRequest}/>
+<div class='content'>
+	<Search on:search={sendSearchRequest}/>
+	<div class='response'>
+		<JSONValue value={response} />
+	</div>
+</div>
 
-<JSONValue value={response} />
+<style>
+	.content {
+		height: 100%;
+		display: grid;
+		grid-template-rows: min-content 1fr;
+		overflow: hidden;
+	}
+	.response {
+		border-top: 1px solid gray;
+		overflow: auto;
+	}
+</style>
