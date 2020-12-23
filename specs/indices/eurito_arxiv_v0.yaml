@@ -33,14 +33,14 @@ dataset:
       alias: date_created
       entity: Article
       facet: time
-      type: Date_YYYYMMDD_dash
+      type: date_YYYYMMDD_dash
     id_digitalObjectIdentifier_article:
       alias: id
       entity: Article
-      type: ES_keyword
+      type: keyword
     json_fieldsOfStudy_article:
       alias: fieldOfStudy
-      type: object[]
+      type: arrayOfObjects
       entity: MAGfieldOfStudy
     metric_novelty_article:
       alias: novelty
@@ -50,68 +50,68 @@ dataset:
     terms_authors_article:
       alias: authors
       entity: Author
-      type: ES_text_w_keyword[]
+      type: textWithKeywordArray
     terms_category_article:
       alias: category
       entity: Article
-      type: ES_text_w_keyword[]
+      type: textWithKeywordArray
       facet: domain
     terms_countries_article:
       alias: countries
       entity: Article
-      type: ES_text_w_keyword[]
+      type: textWithKeywordArray
       facet: domain
     terms_fieldsOfStudy_article:
       alias: fieldsOfStudy
       entity: Article
-      type: ES_text_w_keyword[]
+      type: textWithKeywordArray
       facet: domain
     terms_institutes_article:
       alias: name
       entity: Institute
-      type: ES_text_w_keyword[]
+      type: textWithKeywordArray
     terms_nuts0_article:
       alias: id
       entity: GeoRegionNUTS0
-      type: ES_text_w_keyword[]
+      type: textWithKeywordArray
     terms_nuts1_article:
       alias: id
       entity: GeoRegionNUTS1
-      type: ES_text_w_keyword[]
+      type: textWithKeywordArray
     terms_nuts2_article:
       alias: id
       entity: GeoRegionNUTS2
-      type: ES_text_w_keyword[]
+      type: textWithKeywordArray
     terms_nuts3_article:
       alias: id
       entity: GeoRegionNUTS3
-      type: ES_text_w_keyword[]
+      type: textWithKeywordArray
     terms_regions_article:
       alias: id
       entity: GeoRegion
-      type: ES_text_w_keyword[]
+      type: textWithKeywordArray
     terms_tokens_entity:
       alias: tokens
       entity: Article
-      type: ES_keyword[]
+      type: keywordArray
       facet: domain
     textBody_abstract_article:
       alias: abstract
       entity: Article
-      type: ES_text
+      type: text
       facet: domain
     title_of_article:
       alias: title
       entity: Article
-      type: ES_text
+      type: text
       facet: domain
     type_of_entity:
       alias: null
       entity: null
-      type: ES_keyword
+      type: keyword
     url_of_article:
       alias: url
-      type: ES_text
+      type: text
       entity: Article
     year_of_article:
       alias: year

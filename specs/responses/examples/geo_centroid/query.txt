@@ -1,1 +1,1 @@
-/builder?q=(dataset:eurito_crunchbase_v0,form:primary,forms:!((name:primary,selection:(aggregation:geo_centroid,field:coordinate_of_city,type:ES_geo_point_obj)),(name:secondary)),size:0)
+/builder?q=(dataset:eurito_crunchbase_v0,form:primary,forms:!((name:primary,selection:(aggregation:geo_centroid,field:coordinate_of_city,type:geoPointObject)),(name:secondary)),size:0)

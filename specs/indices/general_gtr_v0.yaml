@@ -12,92 +12,92 @@ dataset:
     coordinate_institutes_project:
       alias: coordinate
       entity: Institute
-      type: ES_geo_point_obj
+      type: geoPointObject
     json_funding_project:
       alias: category
-      type: object[]
+      type: arrayOfObjects
       entity: FundingRound
       shape:
         amount:
           type: integer
         category:
-          type: ES_keyword
+          type: keyword
         currencyCode:
-          type: ES_keyword
+          type: keyword
         end_date:
-          type: Date_YYYYMMDD_dash
+          type: date_YYYYMMDD_dash
         start_date:
-          type: Date_YYYYMMDD_dash
+          type: date_YYYYMMDD_dash
     json_outcomes_project:
       alias: outcomes
       type: object
       entity: Project
     name_leadOrgDepartment_project:
       alias: lead_org_department
-      type: ES_text_w_keyword
+      type: textWithKeyword
       entity: Project
     name_of_funder:
       alias: name
       entity: Funder
-      type: ES_text_w_keyword[]
+      type: textWithKeywordArray
     status_of_project:
       alias: status
       entity: Project
-      type: ES_keyword
+      type: keyword
     terms_continent_project:
       alias: id_iso2
       entity: Continent
-      type: ES_keyword
+      type: keyword
     terms_countries_project:
       alias: name
       entity: Country
-      type: ES_keyword
+      type: keyword
     terms_instituteIds_project:
       alias: id
       entity: Institute
-      type: ES_text_w_keyword[]
+      type: textWithKeywordArray
     terms_iso2_project:
       alias: id_iso2
       entity: Country
-      type: ES_keyword
+      type: keyword
     terms_tokens_entity:
       alias: tokens
       entity: Project
-      type: ES_text_w_keyword[]
+      type: textWithKeywordArray
       facet: domain
     terms_topics_project:
       alias: topics
       entity: Project
-      type: ES_text_w_keyword[]
+      type: textWithKeywordArray
       facet: domain
     textBody_abstract_project:
       alias: abstract
       entity: Project
-      type: ES_text_w_keyword
+      type: textWithKeyword
       facet: domain
     textBody_potentialImpact_project:
       alias: potential_impact
       entity: Project
-      type: ES_text_w_keyword
+      type: textWithKeyword
       facet: domain
     textBody_techAbstract_project:
       alias: tech_abstract
       entity: Project
-      type: ES_text_w_keyword
+      type: textWithKeyword
       facet: domain
     title_of_project:
       alias: title
       entity: Project
-      type: ES_text_w_keyword
+      type: textWithKeyword
       facet: domain
     type_category_funding:
       alias: category
       entity: FundingRound
-      type: ES_keyword
+      type: keyword
     type_of_entity:
       alias: null
       entity: null
-      type: ES_text_w_keyword
+      type: textWithKeyword
   entities:
     - Continent
     - Country

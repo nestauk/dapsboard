@@ -12,19 +12,19 @@ dataset:
     _id_state_group:
       alias: id
       entity: State
-      type: ES_keyword
+      type: keyword
     _placeName_state_group:
       alias: name
       entity: State
-      type: ES_text_w_keyword
+      type: textWithKeyword
     _terms_memberOrigin_group:
       alias: members_origins
       entity: Group
-      type: ES_text_w_keyword[]
+      type: textWithKeywordArray
     _terms_sdg_description:
       alias: SDG_labels
       entity: Group
-      type: ES_keyword[]
+      type: keywordArray
       facet: domain
     booleanFlag_autotranslated_entity:
       alias: is_autotranslated
@@ -33,7 +33,7 @@ dataset:
     coordinate_of_group:
       alias: coordinate
       entity: Group
-      type: ES_geo_point_obj
+      type: geoPointObject
     count_member_group:
       alias: count_member
       type: integer
@@ -43,23 +43,23 @@ dataset:
       alias: date_start
       entity: Group
       facet: time
-      type: Date_YYYYMMDD_dash
+      type: date_YYYYMMDD_dash
     id_continent_group:
       alias: id
       entity: Continent
-      type: ES_keyword
+      type: keyword
     id_country_group:
       alias: id
       entity: Country
-      type: ES_keyword
+      type: keyword
     id_iso2_country:
       alias: id_iso2
       entity: Country
-      type: ES_keyword
+      type: keyword
     id_iso3_country:
       alias: id_iso3
       entity: Country
-      type: ES_keyword
+      type: keyword
     id_isoNumeric_country:
       alias: id_numeric
       entity: Country
@@ -67,28 +67,28 @@ dataset:
     id_of_group:
       alias: id
       entity: Group
-      type: ES_keyword
+      type: keyword
     name_of_category:
       alias: category
       entity: Group
-      type: ES_text_w_keyword
+      type: textWithKeyword
       facet: domain
     name_of_group:
       alias: name
       entity: Group
-      type: ES_text_w_keyword
+      type: textWithKeyword
     placeName_city_group:
       alias: name
       entity: City
-      type: ES_text_w_keyword
+      type: textWithKeyword
     placeName_continent_group:
       alias: name
       entity: Continent
-      type: ES_text_w_keyword
+      type: textWithKeyword
     placeName_country_group:
       alias: name
       entity: Continent
-      type: ES_text_w_keyword
+      type: textWithKeyword
     rank_rhodonite_group:
       alias: novelty
       type: float
@@ -97,35 +97,35 @@ dataset:
     terms_iso2lang_entity:
       alias: id_iso2
       entity: Language
-      type: ES_keyword[]
+      type: keywordArray
     terms_mesh_group:
       alias: MeSH_labels
       entity: Group
-      type: ES_text_w_keyword[]
+      type: textWithKeywordArray
       facet: domain
     terms_of_countryTags:
       alias: country_tags
       entity: Group
-      type: ES_keyword[]
+      type: keywordArray
       facet: domain
     terms_topics_group:
       alias: topics
       entity: Group
-      type: ES_text_w_keyword[]
+      type: textWithKeywordArray
       facet: domain
     textBody_descriptive_group:
       alias: description
       entity: Group
-      type: ES_text
+      type: text
       facet: domain
     type_of_entity:
       alias: null
       entity: null
-      type: ES_keyword
+      type: keyword
     url_of_group:
       alias: url_source
       entity: Group
-      type: ES_keyword
+      type: keyword
   entities:
     - City
     - Continent

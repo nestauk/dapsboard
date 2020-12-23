@@ -23,12 +23,12 @@ dataset:
       alias: date_ended
       entity: Project
       facet: time
-      type: Date_YYYYMMDD_dash
+      type: date_YYYYMMDD_dash
     date_started_project:
       alias: date_started
       entity: Project
       facet: time
-      type: Date_YYYYMMDD_dash
+      type: date_YYYYMMDD_dash
     metric_novelty_project:
       alias: novelty
       type: float
@@ -37,34 +37,34 @@ dataset:
     name_framework_project:
       alias: framework_name
       entity: Project
-      type: ES_text_w_keyword
+      type: textWithKeyword
     status_of_project:
       alias: status
       entity: Project
-      type: ES_keyword
+      type: keyword
     terms_tokens_entity:
       alias: tokens
       entity: Project
-      type: ES_keyword[]
+      type: keywordArray
       facet: domain
     textBody_description_project:
       alias: description
       entity: Project
-      type: ES_text_w_keyword
+      type: textWithKeyword
       facet: domain
     title_of_project:
       alias: title
       entity: Project
-      type: ES_text_w_keyword
+      type: textWithKeyword
       facet: domain
     type_of_entity:
       alias: null
       entity: null
-      type: ES_keyword
+      type: keyword
     url_of_project:
       alias: url
       entity: Project
-      type: ES_text_w_keyword
+      type: textWithKeyword
     year_of_project:
       alias: year
       type: integer

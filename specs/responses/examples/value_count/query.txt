@@ -1,1 +1,1 @@
-/builder?q=(dataset:mosaic_nih_v7,form:primary,forms:!((name:primary,selection:(aggregation:value_count,field:placeName_country_organisation,type:ES_text_w_keyword)),(name:secondary)),size:0)
+/builder?q=(dataset:mosaic_nih_v7,form:primary,forms:!((name:primary,selection:(aggregation:value_count,field:placeName_country_organisation,type:textWithKeyword)),(name:secondary)),size:0)

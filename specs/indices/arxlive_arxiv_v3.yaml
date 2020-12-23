@@ -33,46 +33,46 @@ dataset:
     id_digitalObjectIdentifier_article:
       alias: id
       entity: Article
-      type: ES_text
+      type: text
     json_category_article:
       alias: category
       entity: ArxivCategory
-      shape:
+      shape: # TODO create a type
         ancestors:
-          type: ES_keyword[]
+          type: keywordArray
         level:
           type: integer
         order:
           type: integer
         value:
-          type: ES_keyword
-      type: object[]
+          type: keyword
+      type: arrayOfObjects
     json_fieldOfStudy_article:
       alias: fieldOfStudy
       entity: MAGfieldOfStudy
       shape:
         ancestors:
-          type: ES_keyword[]
+          type: keywordArray
         level:
           type: integer
         order:
           type: integer
         value:
-          type: ES_keyword
-      type: object[]
+          type: keyword
+      type: arrayOfObjects
     json_location_article: # TODO in what sense "location"? Is this MAG?
       alias: locationTag
       entity: ArticleLocation
       shape:
         ancestors:
-          type: ES_keyword[]
+          type: keywordArray
         level:
           type: integer
         order:
           type: integer
         value:
-          type: ES_keyword
-      type: object[]
+          type: keyword
+      type: arrayOfObjects
     metric_citations_article:
       alias: citations
       entity: Article
@@ -86,34 +86,34 @@ dataset:
     terms_authors_article:
       alias: authors
       entity: Author
-      type: ES_text_w_keyword[]
+      type: textWithKeywordArray
     terms_institutes_article:
       alias: name
       entity: Institute
-      type: ES_text_w_keyword[]
+      type: textWithKeywordArray
     terms_tokens_article:
       alias: tokens
       entity: Article
-      type: ES_keyword[]
+      type: keywordArray
       facet: domain
     textBody_abstract_article:
       alias: abstract
       entity: Article
-      type: ES_text
+      type: text
       facet: domain
     title_of_article:
       alias: title
       entity: Article
-      type: ES_text
+      type: text
       facet: domain
     type_of_entity:
       alias: null
       entity: null
-      type: ES_text_w_keyword[]
+      type: textWithKeywordArray
     url_of_article:
       alias: url
       entity: Article
-      type: ES_text
+      type: text
     year_of_article:
       alias: year
       entity: Article

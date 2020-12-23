@@ -26,7 +26,7 @@ dataset:
       alias: date
       entity: Patent
       facet: time
-      type: Date_YYYYMMDD_dash
+      type: date_YYYYMMDD_dash
     metric_novelty_patent:
       alias: novelty
       type: float
@@ -35,53 +35,53 @@ dataset:
     terms_authCountry_patent:
       alias: authority_countries
       entity: Country
-      type: ES_text_w_keyword[]
+      type: textWithKeywordArray
     terms_ipc_patent:
       alias: IPC_terms
       entity: Patent
-      type: ES_text_w_keyword[]
+      type: textWithKeywordArray
       facet: domain
     terms_iso2lang_entity:
       alias: id_iso2
       entity: Language
-      type: ES_text_w_keyword[]
+      type: textWithKeywordArray
     terms_nace2_patent:
       alias: NACE2_terms
       entity: Patent
-      type: ES_text_w_keyword[]
+      type: textWithKeywordArray
       facet: domain
     terms_personCountry_patent:
       alias: person_countries
       entity: Country
-      type: ES_text_w_keyword[]
+      type: textWithKeywordArray
     terms_personNuts_patent:
       alias: person_NUTSs
       entity: GeoRegionNUTS # what level?
-      type: ES_text_w_keyword[]
+      type: textWithKeywordArray
     terms_techFieldNumber_patent:
       alias: techField_numbers
       entity: Patent
-      type: ES_text_w_keyword[]
+      type: textWithKeywordArray
       facet: domain
     terms_tokens_entity:
       alias: tokens
       entity: Patent
-      type: ES_keyword[]
+      type: keywordArray
       facet: domain
     textBody_abstract_patent:
       alias: abstract
       entity: Patent
-      type: ES_text_w_keyword
+      type: textWithKeyword
       facet: domain
     title_of_patent:
       alias: title
       entity: Patent
-      type: ES_text_w_keyword
+      type: textWithKeyword
       facet: domain
     type_of_entity:
       alias: null
       entity: null
-      type: ES_keyword
+      type: keyword
     year_of_patent:
       alias: year
       type: integer

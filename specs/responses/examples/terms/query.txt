@@ -1,1 +1,1 @@
-/builder?q=(dataset:mosaic_nih_v7,form:primary,forms:!((name:primary,params:(missing:%27%27,size:20),selection:(aggregation:terms,field:terms_mesh_abstract,type:ES_text_w_keyword[])),(name:secondary)),size:0)
+/builder?q=(dataset:mosaic_nih_v7,form:primary,forms:!((name:primary,params:(missing:%27%27,size:20),selection:(aggregation:terms,field:terms_mesh_abstract,type:textWithKeywordArray)),(name:secondary)),size:0)

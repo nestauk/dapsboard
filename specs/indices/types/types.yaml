@@ -5,17 +5,17 @@ Date_YYYYMMDD:
   regex: /\d{8}/gu
   type: Datestring
 
-Date_YYYYMMDD_dash:
+date_YYYYMMDD_dash:
   format: YYYY-MM-DD
   regex: /\d{4}-\d{2}-\d{2}/gu
   type: Datestring
 
-Date_YYYYMMDD_dash_time:
+date_YYYYMMDD_dash_time:
   format: YYYY-MM-DD hh:mm:ss
   regex: /\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/gu
   type: Datestring
 
-Date_YYYYMMDD_dash_T_time:
+date_YYYYMMDD_dash_T_time:
   format: <YYYY-MM-DD>T<hh:mm:ss> # e.g 2010-11-30T00:00:00
   regex: /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/gu
   type: Datestring
