@@ -74,7 +74,8 @@
     "rmsappers": "rimraf __sapper__ src/node_modules/@sapper",
     "start": "node __sapper__/build",
     "test": "run-p --race dev cy:run",
-    "unittest": "mocha -r esm --spec src/**/*.spec.js"
+    "unittests": "mocha -r esm --spec src/**/*.spec.js",
+    "unittest": "mocha -r esm --spec"
   },
   "version": "0.0.6"
 }

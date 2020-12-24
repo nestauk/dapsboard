@@ -78,7 +78,6 @@
 		};
 	});
 
-
 	const clickedField = field => machine.send('SELECTED_FIELDS', {fields: [field]});
 	const clickedFieldCounter = field => machine.send('TOGGLED_FIELD_COUNTER', {field});
 	const clickedNextField = () => machine.send('SELECTED_NEXT_FIELD');
@@ -242,23 +241,23 @@
 
 	/* controls */
 	.controls {
-		grid-area: sidebar3;
+		/* box-shadow: var(--box-shadow); */
+		align-items: center;
 		border-right: 1px solid var(--color-main-lighter);
 		border-top: 1px solid var(--color-main-lighter);
-		/* box-shadow: var(--box-shadow); */
 		display: flex;
-		align-items: center;
+		grid-area: sidebar3;
 		justify-content: center;
 	}
 
 	.button {
-		width: 30px;
-		height: 30px;
+		align-items: center;
 		border-radius: 5px;
 		display: flex;
-		align-items: center;
+		height: 30px;
 		justify-content: center;
 		margin-right: 15px;
+		width: 30px;
 	}
 
 	.button.fieldnav {
@@ -281,6 +280,7 @@
 	}
 	.results {
 		grid-area: content2;
+		overflow-y: auto;
 		padding: 1rem;
 	}
 </style>

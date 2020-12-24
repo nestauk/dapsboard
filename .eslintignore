@@ -2,4 +2,5 @@
 !src/node_modules/elasticsearch
 !src/node_modules/svizzle
 !src/node_modules/test_assets
+!src/node_modules/types
 src/node_modules/@sapper/
