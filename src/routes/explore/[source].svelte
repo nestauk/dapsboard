@@ -5,15 +5,12 @@
 
 	import {stores} from '@sapper/app';
 
+	import IconChevronLeft from 'app/components/icons/IconChevronLeft.svelte';
 	import IconChevronDown from 'app/components/icons/IconChevronDown.svelte';
 	import IconChevronUp from 'app/components/icons/IconChevronUp.svelte';
 	import {createExploreMachine} from 'app/machines/explore/route';
-	import {
-		resetSources,
-		selectedDatasetFields,
-		selectSource,
-	} from 'app/stores/exploreStores';
-	import {makeDepthByField} from 'app/utils/exploreUtils';
+	import {selectedDatasetFields} from 'app/stores/exploreStores';
+	import {makeDepthByField, makeExploreIndexPath} from 'app/utils/exploreUtils';
 
 	const {page} = stores();
 
@@ -36,11 +33,16 @@
 	let width = 0;
 
 	$: if (source) {
-		selectSource(source);
+		machine.send('SELECT_SOURCE', {source});
 	} else {
-		resetSources();
+		machine.send('RESET_SOURCES');
 	}
-	$: project && source && version && machine.send('DATASET_UPDATED', {project, source, version});
+
+	$: hrefBack = project && source && version
+		&& makeExploreIndexPath({project, source, version});
+
+	$: project && source && version
+		&& machine.send('DATASET_UPDATED', {project, source, version});
 
 	$: selectionHeader = $selectedFields?.join(' by ') || '';
 	$: depthByField = makeDepthByField($selectedFields);
@@ -78,8 +80,10 @@
 		};
 	});
 
-	const clickedField = field => machine.send('SELECTED_FIELDS', {fields: [field]});
-	const clickedFieldCounter = field => machine.send('TOGGLED_FIELD_COUNTER', {field});
+	const clickedField = field =>
+		machine.send('SELECTED_FIELDS', {fields: [field]});
+	const clickedFieldCounter = field =>
+		machine.send('TOGGLED_FIELD_COUNTER', {field});
 	const clickedNextField = () => machine.send('SELECTED_NEXT_FIELD');
 	const clickedPrevField = () => machine.send('SELECTED_PREVIOUS_FIELD');
 </script>
@@ -90,6 +94,9 @@
 
 <section class='layout'>
 	<section class='navheader'>
+		<a class='undecor' href={hrefBack}>
+			<IconChevronLeft />
+		</a>
 		<p>
 			<span>{source}</span>
 			<span>{project}</span>
@@ -181,6 +188,8 @@
 		width: 100%;
 	}
 
+	/* sidebar: header */
+
 	.navheader {
 		align-items: center;
 		border-bottom: 1px solid lightgrey;
@@ -193,7 +202,7 @@
 		width: 100%;
 	}
 
-	/* selection */
+	/* sidebar: selection */
 
 	.selection {
 		grid-area: sidebar2;
@@ -239,7 +248,8 @@
 		fill: orange;
 	}
 
-	/* controls */
+	/* sidebar: controls */
+
 	.controls {
 		/* box-shadow: var(--box-shadow); */
 		align-items: center;
@@ -259,7 +269,6 @@
 		margin-right: 15px;
 		width: 30px;
 	}
-
 	.button.fieldnav {
 		background-color: rgb(232, 126, 250);
 	}
@@ -268,6 +277,7 @@
 	}
 
 	/* content */
+
 	.contentheader {
 		align-items: center;
 		border-bottom: 1px solid lightgrey;
@@ -278,6 +288,7 @@
 		padding: 1rem;
 		width: 100%;
 	}
+
 	.results {
 		grid-area: content2;
 		overflow-y: auto;

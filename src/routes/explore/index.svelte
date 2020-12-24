@@ -21,7 +21,7 @@
 	const makeHrefBoard = ({fields, source, project, version}) =>
 		`explore/${source}?${makeExploreQuery({fields, project, version})}`;
 
-	const hrefMenu = (source, {project, version}) =>
+	const hrefMenu = ({project, source, version}) =>
 		`explore?source=${source}&${makeExploreQuery({project, version})}`;
 
 	export let source;
@@ -36,6 +36,8 @@
 	} else {
 		resetSources();
 	}
+
+	$: project && source && version && selectDataset({project, source, version});
 </script>
 
 <svelte:head>
@@ -46,12 +48,12 @@
 	<nav>
 		<ul>
 			{#each $navigator as {
-				activeDataset,
-				activeDatasetIndex,
+				activeDataset: {project, version},
+				activeDatasetId,
 				datasets,
 				isExpanded,
 				isSelected,
-				sourceName,
+				source,
 			}}
 				<li>
 					<!-- source -->
@@ -63,12 +65,12 @@
 						<div class='target'>
 							<a
 								class='undecor'
-								href={hrefMenu(sourceName, activeDataset)}
+								href={hrefMenu({project, source, version})}
 								rel='prefetch'
 							>
 								<div class='ids'>
-									<p>{sourceName}</p>
-									<p>{activeDataset.project} v.{activeDataset.version}</p>
+									<p>{source}</p>
+									<p>{project} v.{version}</p>
 							</a>
 						</div>
 						{#if isSelected}
@@ -89,18 +91,18 @@
 
 					{#if isExpanded}
 						<ul>
-							{#each datasets as dataset, index}
+							{#each datasets as {id, project, version}}
 								<li
 									class='dataset'
-									class:active={index === activeDatasetIndex}
+									class:active={id === activeDatasetId}
 								>
 									<a
 										class='undecor'
-										href={hrefMenu(source, dataset)}
-										on:click={selectDataset(source, index)}
+										href={hrefMenu({project, source, version})}
+										on:click={selectDataset({project, source, version})}
 										rel='prefetch'
 									>
-										<p>{dataset.project} (v. {dataset.version})</p>
+										<p>{project} (v. {version})</p>
 									</a>
 								</li>
 							{/each}
