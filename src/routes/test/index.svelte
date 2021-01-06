@@ -1,17 +1,51 @@
 <script>
 	import {request} from 'utils/net';
-	import {getSearchURL} from 'utils/specs';
-
+	import {getSearchURL, getSchema} from 'utils/specs';
+	import * as _ from 'lamb';
+	import {applyFnMap, makeIsIncluded} from '@svizzle/utils';
+	
 	import DATASETS from 'app/data/routes.json';
 
 	import Search from 'app/components/Search.svelte';
+	import FieldMenu from 'app/components/elementary/FieldMenu.svelte';
 	import JSONTree from 'svelte-json-tree';
 
-	const url = getSearchURL(DATASETS.general_cordis_v0);
+	const dataset = DATASETS.general_cordis_v0;
+	const url = getSearchURL(dataset);
 
 	let response;
+	let fieldCounts;
 
-	function computeQuery (query) {
+	let keywordFieldTypes = [
+		'keyword',
+		'keywordArray',
+		'textWithKeyword',
+		'textWithKeywordArray'
+	];
+
+	const getKeywordFields = _.pipe([
+		_.pairs,
+		_.filterWith(_.pipe([
+			_.getPath('1.type'),
+			makeIsIncluded(keywordFieldTypes)
+		])),
+		_.mapWith(_.getAt(0))
+	]);
+
+	const extractCountInfo = applyFnMap({
+		name: _.getAt(0),
+		count: _.getPath('1.doc_count')
+	});
+
+	const mapResponseToFieldCount = _.pipe([
+		_.getPath('aggregations.messages.buckets'),
+		_.pairs,
+		_.mapWith(extractCountInfo),
+		_.sortWith([_.getKey('count')]),
+		_.reverse
+	])
+
+	function computeSearchQuery (query) {
 		return {
 			query: {
 				term: {
@@ -21,20 +55,61 @@
 		};
 	}
 
-	async function sendSearchRequest (event) {
-		const data = computeQuery(event.detail);
+	function computeFieldForCountQuery (name, term) {
+		return {
+			match : {
+				[name] : term
+			}
+		};
+	}
+
+	function computeCountQuery (searchTerm) {
+		const schema = getSchema(dataset);
+		const keywordFields = getKeywordFields(schema);
+		const filters = keywordFields.map(i => [i, computeFieldForCountQuery(i, searchTerm)]);
+
+		const query = {
+			size: 0,
+			aggs : {
+				messages : {
+					filters : {
+						filters : _.fromPairs(filters)
+					}
+				}
+			}
+		};
+		return query;
+	}
+
+	async function sendRequest (data) {
 		try {
-			response = await request('POST', url, {data});
+			return await request('POST', url, {data});
 		}
 		catch (error) {
-			response = error.jsonMessage;
+			return error.jsonMessage;
 		}
+	}
+
+	async function sendSearchRequest (event) {
+		const data = computeSearchQuery(event.detail);
+		response = await sendRequest(data);
+	}
+
+	async function sendCountRequest (event) {
+		const searchValue = event.detail;
+		const data = computeCountQuery(searchValue);
+		const countResponse = await sendRequest(data);
+		fieldCounts = mapResponseToFieldCount(countResponse);
+		console.log("fieldCounts", fieldCounts);
 	}
 </script>
 
 <div class='content'>
 	<div class='search-bar'>
-		<Search on:search={sendSearchRequest}/>
+		<Search on:search={sendSearchRequest} on:edit={sendCountRequest} />
+		{#if fieldCounts}
+			<FieldMenu {fieldCounts} />
+		{/if}
 	</div>
 	<div class='response'>
 		{#if response}
