@@ -15,6 +15,8 @@
 
 	let response;
 	let fieldCounts;
+	let selectedField;
+	// let searchIsFocused = false;
 
 	let keywordFieldTypes = [
 		'keyword',
@@ -49,7 +51,7 @@
 		return {
 			query: {
 				term: {
-					textBody_description_project: query
+					[selectedField]: query
 				}
 			}
 		};
@@ -102,14 +104,30 @@
 		fieldCounts = mapResponseToFieldCount(countResponse);
 		console.log("fieldCounts", fieldCounts);
 	}
+
+	function fieldSelected (event) {
+		selectedField = event.detail;
+	}
+	/*
+	function handleFocus () {
+		searchIsFocused = true;
+	}
+
+	async function handleBlur () {
+		setTimeout( () => searchIsFocused = false, 10);
+	}*/
 </script>
 
 <div class='content'>
 	<div class='search-bar'>
-		<Search on:search={sendSearchRequest} on:edit={sendCountRequest} />
-		{#if fieldCounts}
-			<FieldMenu {fieldCounts} />
+		{#if selectedField}
+			<label>{selectedField}</label>
 		{/if}
+		<Search
+			on:search={sendSearchRequest}
+			on:edit={sendCountRequest}
+		/>
+		<FieldMenu {fieldCounts} on:fieldSelected={fieldSelected}/>
 	</div>
 	<div class='response'>
 		{#if response}
