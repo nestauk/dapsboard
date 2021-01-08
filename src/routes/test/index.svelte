@@ -14,15 +14,16 @@
 
 	const dataset = DATASETS.general_cordis_v0;
 	const url = getSearchURL(dataset);
+	const SEND_DELAY = 200;
 
 	let response;
 	let fieldCounts;
-	let selectedField;
+	let selectedFieldName;
 	let searchWidget;
 
 	let lastScheduling;
 	let searchValue;
-	// let searchIsFocused = false;
+	let searchIsFocused = false;
 
 	let keywordFieldTypes = [
 		'keyword',
@@ -57,7 +58,7 @@
 		return {
 			query: {
 				term: {
-					[selectedField]: query
+					[selectedFieldName]: query
 				}
 			}
 		};
@@ -98,6 +99,18 @@
 		}
 	}
 
+	let userSelection;
+	function computeSelection (counts) {
+		const exists = counts.some(item => item.name === userSelection);
+		if (!userSelection || !exists) {
+			if (fieldCounts.length > 0) {
+				return fieldCounts[0].name;
+			}
+			return null;
+		}
+		return userSelection;
+	}
+
 	async function sendSearchRequest (event) {
 		const data = computeSearchQuery(event.detail);
 		response = await sendRequest(data);
@@ -106,13 +119,17 @@
 	async function sendCountRequest () {
 		const data = computeCountQuery(searchValue);
 		const countResponse = await sendRequest(data);
-		fieldCounts = mapResponseToFieldCount(countResponse);
+		const fullFieldCounts = mapResponseToFieldCount(countResponse);
+		fieldCounts = fullFieldCounts.filter(field =>
+			field.count > 0 || field.name === userSelection
+		);
+		selectedFieldName = computeSelection(fieldCounts);
 		console.log("fieldCounts", fieldCounts);
 	}
 
 	function sendIfTimeElapsed () {
 		const now = Date.now();
-		if (now - lastScheduling > 200) {
+		if (now - lastScheduling > SEND_DELAY) {
 			sendCountRequest();
 		}
 	}
@@ -120,19 +137,40 @@
 	function scheduleCountRequest (event) {
 		lastScheduling = Date.now();
 		searchValue = event.detail;
-		setTimeout(sendIfTimeElapsed, 200);
+		setTimeout(sendIfTimeElapsed, SEND_DELAY);
 	}
 	function fieldSelected (event) {
-		selectedField = event.detail;
+		userSelection = event.detail;
 	}
-	/*
+	function selectNext () {
+		let index = fieldCounts.findIndex(field =>
+			field.name === selectedFieldName
+		);
+		index++;
+		if (index < fieldCounts.length) {
+			userSelection = fieldCounts[index].name;
+			selectedFieldName = computeSelection(fieldCounts);
+		}
+	}
+	function selectPrevious () {
+		let index = fieldCounts.findIndex(field =>
+			field.name === selectedFieldName
+		);
+		index--;
+		if (index >= 0) {
+			userSelection = fieldCounts[index].name;
+			selectedFieldName = computeSelection(fieldCounts);
+		}
+	}
+
 	function handleFocus () {
 		searchIsFocused = true;
 	}
 
-	async function handleBlur () {
-		setTimeout( () => searchIsFocused = false, 10);
-	}*/
+	function handleBlur () {
+		searchIsFocused = false;
+	}
+
 	onMount(() => {
 		window.onload = () => {
 			searchWidget.focus();
@@ -142,15 +180,27 @@
 
 <div class='content'>
 	<div class='search-bar'>
-		{#if selectedField}
-			<label>{selectedField}</label>
+		{#if selectedFieldName}
+			<label>{selectedFieldName}</label>
 		{/if}
 		<Search
 			bind:this={searchWidget}
 			on:search={sendSearchRequest}
 			on:edit={scheduleCountRequest}
+			on:focus={handleFocus}
+			on:blur={handleBlur}
+			on:downArrow={selectNext}
+			on:upArrow={selectPrevious}
 		/>
-		<FieldMenu {fieldCounts} on:fieldSelected={fieldSelected}/>
+		{#if searchIsFocused}
+			<div class='popdown'>
+				<FieldMenu
+					{fieldCounts}
+					{selectedFieldName}
+					on:fieldSelected={fieldSelected}
+				/>
+			</div>
+		{/if}
 	</div>
 	<div class='response'>
 		{#if response}
@@ -172,5 +222,9 @@
 	}
 	.response {
 		overflow: auto;
+	}
+
+	.popdown {
+		position: absolute;
 	}
 </style>
