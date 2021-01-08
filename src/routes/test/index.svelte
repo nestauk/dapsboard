@@ -1,4 +1,6 @@
 <script>
+	import { onMount } from 'svelte';
+
 	import {request} from 'utils/net';
 	import {getSearchURL, getSchema} from 'utils/specs';
 	import * as _ from 'lamb';
@@ -16,6 +18,10 @@
 	let response;
 	let fieldCounts;
 	let selectedField;
+	let searchWidget;
+
+	let lastScheduling;
+	let searchValue;
 	// let searchIsFocused = false;
 
 	let keywordFieldTypes = [
@@ -97,14 +103,25 @@
 		response = await sendRequest(data);
 	}
 
-	async function sendCountRequest (event) {
-		const searchValue = event.detail;
+	async function sendCountRequest () {
 		const data = computeCountQuery(searchValue);
 		const countResponse = await sendRequest(data);
 		fieldCounts = mapResponseToFieldCount(countResponse);
 		console.log("fieldCounts", fieldCounts);
 	}
 
+	function sendIfTimeElapsed () {
+		const now = Date.now();
+		if (now - lastScheduling > 200) {
+			sendCountRequest();
+		}
+	}
+
+	function scheduleCountRequest (event) {
+		lastScheduling = Date.now();
+		searchValue = event.detail;
+		setTimeout(sendIfTimeElapsed, 200);
+	}
 	function fieldSelected (event) {
 		selectedField = event.detail;
 	}
@@ -116,6 +133,11 @@
 	async function handleBlur () {
 		setTimeout( () => searchIsFocused = false, 10);
 	}*/
+	onMount(() => {
+		window.onload = () => {
+			searchWidget.focus();
+		}
+	})
 </script>
 
 <div class='content'>
@@ -124,8 +146,9 @@
 			<label>{selectedField}</label>
 		{/if}
 		<Search
+			bind:this={searchWidget}
 			on:search={sendSearchRequest}
-			on:edit={sendCountRequest}
+			on:edit={scheduleCountRequest}
 		/>
 		<FieldMenu {fieldCounts} on:fieldSelected={fieldSelected}/>
 	</div>
@@ -144,7 +167,7 @@
 		overflow: hidden;
 	}
 	.search-bar {
-		width: 75%;
+		width: 25%;
 		margin: auto;
 	}
 	.response {
