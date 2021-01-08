@@ -226,5 +226,6 @@
 
 	.popdown {
 		position: absolute;
+		width: 25%;
 	}
 </style>
