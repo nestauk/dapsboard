@@ -15,9 +15,9 @@
 	import JSONTree from 'svelte-json-tree';
 
 	import {constructQuery} from 'elasticsearch/utils/aggQuery';
-	import {IS_BROWSER} from 'app/utils/generic';
-	import {request} from 'app/utils/net';
-	import {getSchema, getSearchURL} from 'app/utils/specs';
+	import {IS_BROWSER} from 'utils/generic';
+	import {request} from 'utils/net';
+	import {getSchema, getSearchURL} from 'utils/specs';
 
 	export let id;
 	export let dataset;

@@ -1,7 +1,7 @@
 import clip from 'clipboardy';
 import {stringify} from '@svizzle/utils';
 
-import {stringifyObj} from 'svizzle/utils/obj-string';
+import {stringifyObj} from 'utils/svizzle/utils/obj-string';
 
 import {builderTesterConfig} from 'app/machines/builder/tester.config';
 import {builderTesterOptions} from 'app/machines/builder/tester.options';

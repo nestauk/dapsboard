@@ -1,6 +1,6 @@
 <script>
-	import {request} from 'app/utils/net';
-	import {getSearchURL} from 'app/utils/specs';
+	import {request} from 'utils/net';
+	import {getSearchURL} from 'utils/specs';
 
 	import DATASETS from 'app/data/routes.json';
 

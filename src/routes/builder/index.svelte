@@ -27,7 +27,7 @@
 	import { parseParams } from 'app/machines/builder/formediting.options';
 
 	import {getAggDocs} from 'elasticsearch/utils/docs';
-	import {getSearchURL} from 'app/utils/specs';
+	import {getSearchURL} from 'utils/specs';
 
 	const { machine: routeMachine, contextStores: {
 		// config

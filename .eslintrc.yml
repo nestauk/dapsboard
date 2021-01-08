@@ -207,6 +207,7 @@ rules:
       - 'svizzle'
       - 'test_assets'
       - 'types'
+      - 'utils'
   node/no-missing-import:
     - error
     - tryExtensions:
