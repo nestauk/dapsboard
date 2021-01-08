@@ -141,6 +141,7 @@
 	}
 	function fieldSelected (event) {
 		userSelection = event.detail;
+		selectedFieldName = computeSelection(fieldCounts);
 	}
 	function selectNext () {
 		let index = fieldCounts.findIndex(field =>
