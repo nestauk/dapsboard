@@ -15,6 +15,13 @@
 	const dataset = DATASETS.general_cordis_v0;
 	const url = getSearchURL(dataset);
 	const SEND_DELAY = 200;
+	const keywordFieldTypes = [
+		'keyword',
+		'keywordArray',
+		'textWithKeyword',
+		'textWithKeywordArray'
+	];
+
 
 	let response;
 	let fieldCounts;
@@ -24,13 +31,7 @@
 	let lastScheduling;
 	let searchValue;
 	let searchIsFocused = false;
-
-	let keywordFieldTypes = [
-		'keyword',
-		'keywordArray',
-		'textWithKeyword',
-		'textWithKeywordArray'
-	];
+	let awaitingResponse = false;
 
 	const getKeywordFields = _.pipe([
 		_.pairs,
@@ -112,8 +113,11 @@
 	}
 
 	async function sendSearchRequest (event) {
+		response = null;
+		awaitingResponse = true;
 		const data = computeSearchQuery(event.detail);
 		response = await sendRequest(data);
+		awaitingResponse = false;
 	}
 
 	async function sendCountRequest () {
@@ -204,6 +208,9 @@
 		{/if}
 	</div>
 	<div class='response'>
+		{#if awaitingResponse}
+			Waiting for response...
+		{/if}
 		{#if response}
 			<JSONTree value={response} />
 		{/if}
