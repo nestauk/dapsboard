@@ -32,6 +32,7 @@
 	let searchValue;
 	let searchIsFocused = false;
 	let awaitingResponse = false;
+	let userSelection;
 
 	const getKeywordFields = _.pipe([
 		_.pairs,
@@ -100,7 +101,6 @@
 		}
 	}
 
-	let userSelection;
 	function computeSelection (counts) {
 		const exists = counts.some(item => item.name === userSelection);
 		if (!userSelection || !exists) {
@@ -128,7 +128,6 @@
 			field.count > 0 || field.name === userSelection
 		);
 		selectedFieldName = computeSelection(fieldCounts);
-		console.log("fieldCounts", fieldCounts);
 	}
 
 	function sendIfTimeElapsed () {
