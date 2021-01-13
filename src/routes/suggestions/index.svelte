@@ -7,6 +7,7 @@
 	import {applyFnMap, makeIsIncluded} from '@svizzle/utils';
 	
 	import DATASETS from 'app/data/routes.json';
+	import {stopWords} from 'utils/stopwords';
 
 	import Search from 'app/components/Search.svelte';
 	import FieldMenu from 'app/components/elementary/FieldMenu.svelte';
@@ -102,7 +103,8 @@
 			aggs: {
 				[requestedFieldName]: {
 					significant_text: {
-						field: requestedFieldName
+						field: requestedFieldName,
+						include: stopWords
 					}
 				}
 			}
