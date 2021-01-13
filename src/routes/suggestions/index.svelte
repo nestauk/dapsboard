@@ -268,7 +268,7 @@
 		overflow: hidden;
 	}
 	.search-bar {
-		width: 25%;
+		width: 50%;
 		margin: auto;
 	}
 	.response {
@@ -277,6 +277,6 @@
 
 	.popdown {
 		position: absolute;
-		width: 25%;
+		width: 50%;
 	}
 </style>
