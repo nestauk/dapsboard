@@ -174,7 +174,8 @@
 		const data = computeDetailsQuery(fieldName, searchValue);
 		const suggestionsResponse = await sendRequest(data);
 		// TODO check for error messages
-		info.suggestions = suggestionsResponse.aggregations[fieldName].buckets.map(sugg => sugg.key);
+		const buckets = suggestionsResponse.aggregations[fieldName].buckets;
+		info.suggestions = buckets.map(sugg => `${sugg.key} (${sugg.doc_count})`);
 		if (info.suggestions.length === 0) {
 			info.suggestions.push('-- no suggestions found --')
 		}
