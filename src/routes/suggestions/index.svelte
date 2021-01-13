@@ -162,7 +162,7 @@
 	function scheduleCountRequest (event) {
 		lastScheduling = Date.now();
 		searchValue = event.detail;
-		setTimeout(sendIfTimeElapsed, SEND_DELAY);
+		setTimeout(sendIfTimeElapsed, SEND_DELAY + 10);
 	}
 
 	async function sendSuggestionsRequest (event) {
