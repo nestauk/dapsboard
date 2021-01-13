@@ -169,11 +169,15 @@
 		if (info.suggestions) {
 			return;
 		}
-		info.suggestions = [];
+		info.suggestions = ['waiting...'];
+		fieldCounts = fieldCounts;
 		const data = computeDetailsQuery(fieldName, searchValue);
 		const suggestionsResponse = await sendRequest(data);
 		// TODO check for error messages
 		info.suggestions = suggestionsResponse.aggregations[fieldName].buckets.map(sugg => sugg.key);
+		if (info.suggestions.length === 0) {
+			info.suggestions.push('-- no suggestions found --')
+		}
 		fieldCounts = fieldCounts;
 		console.log("countRespoonse", info);
 	}
