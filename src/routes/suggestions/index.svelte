@@ -34,6 +34,8 @@
 	let searchIsFocused = false;
 	let awaitingResponse = false;
 
+	let showFullResponse = true;
+
 	const getKeywordFields = _.pipe([
 		_.pairs,
 		_.filterWith(_.pipe([
@@ -253,12 +255,23 @@
 			</div>
 		{/if}
 	</div>
+
+	<div>
+		<input type='checkbox' bind:checked={showFullResponse} />
+		Display full response
+	</div>
+
 	<div class='response'>
 		{#if awaitingResponse}
 			Waiting for response...
 		{/if}
-		{#if response}
+		{#if showFullResponse && response}
 			<JSONTree value={response} />
+		{/if}
+		{#if !showFullResponse && response}
+			{#each response.hits.hits as hit}
+				<p>{hit._source[selectedFieldName]}</p>
+			{/each}
 		{/if}
 	</div>
 </div>
@@ -267,7 +280,7 @@
 	.content {
 		height: 100%;
 		display: grid;
-		grid-template-rows: min-content 1fr;
+		grid-template-rows: min-content min-content 1fr;
 		overflow: hidden;
 	}
 	.search-bar {
