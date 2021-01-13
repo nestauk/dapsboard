@@ -179,6 +179,7 @@
 		// TODO check for error messages
 		let {buckets} = suggestionsResponse.aggregations[fieldName];
 		buckets = buckets.filter(sugg => sugg.key !== searchTerm);
+		buckets = buckets.sort((a, b) => b.doc_count - a.doc_count);
 		info.suggestions = buckets.map(sugg => `${sugg.key} (${sugg.doc_count})`);
 		if (info.suggestions.length === 0) {
 			info.suggestions.push('-- no suggestions found --')
