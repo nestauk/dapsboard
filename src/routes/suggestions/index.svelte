@@ -171,10 +171,12 @@
 		}
 		info.suggestions = ['waiting...'];
 		fieldCounts = fieldCounts;
-		const data = computeDetailsQuery(fieldName, searchValue);
+		const searchTerm = searchValue.toLowerCase();
+		const data = computeDetailsQuery(fieldName, searchTerm);
 		const suggestionsResponse = await sendRequest(data);
 		// TODO check for error messages
-		const buckets = suggestionsResponse.aggregations[fieldName].buckets;
+		let {buckets} = suggestionsResponse.aggregations[fieldName];
+		buckets = buckets.filter(sugg => sugg.key !== searchTerm);
 		info.suggestions = buckets.map(sugg => `${sugg.key} (${sugg.doc_count})`);
 		if (info.suggestions.length === 0) {
 			info.suggestions.push('-- no suggestions found --')
