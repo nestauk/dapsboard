@@ -294,5 +294,6 @@
 	.popdown {
 		position: absolute;
 		width: 50%;
+		z-index: 1;
 	}
 </style>
