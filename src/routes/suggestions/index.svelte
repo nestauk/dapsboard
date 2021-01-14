@@ -176,7 +176,6 @@
 		info.suggestions = ['waiting...'];
 		fieldCounts = fieldCounts;
 		const data = computeDetailsQuery(fieldName, searchValue);
-		const data = computeDetailsQuery(fieldName, searchTerm);
 		const suggestionsResponse = await sendRequest(data);
 		// TODO check for error messages
 		let {buckets} = suggestionsResponse.aggregations[fieldName];
