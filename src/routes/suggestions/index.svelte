@@ -70,7 +70,7 @@
 
 	function computeFieldForCountQuery (name, term) {
 		return {
-			match : {
+			term : {
 				[name] : term
 			}
 		};
@@ -163,7 +163,7 @@
 
 	function scheduleCountRequest (event) {
 		lastScheduling = Date.now();
-		searchValue = event.detail;
+		searchValue = event.detail.toLowerCase();
 		setTimeout(sendIfTimeElapsed, SEND_DELAY + 10);
 	}
 
@@ -175,12 +175,12 @@
 		}
 		info.suggestions = ['waiting...'];
 		fieldCounts = fieldCounts;
-		const searchTerm = searchValue.toLowerCase();
+		const data = computeDetailsQuery(fieldName, searchValue);
 		const data = computeDetailsQuery(fieldName, searchTerm);
 		const suggestionsResponse = await sendRequest(data);
 		// TODO check for error messages
 		let {buckets} = suggestionsResponse.aggregations[fieldName];
-		buckets = buckets.filter(sugg => sugg.key !== searchTerm);
+		buckets = buckets.filter(sugg => sugg.key !== searchValue);
 		buckets = buckets.sort((a, b) => b.doc_count - a.doc_count);
 		info.suggestions = buckets.map(sugg => `${sugg.key} (${sugg.doc_count})`);
 		if (info.suggestions.length === 0) {
