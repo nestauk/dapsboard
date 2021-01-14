@@ -23,7 +23,6 @@
 		'textWithKeywordArray'
 	];
 
-
 	let response;
 	let fieldCounts;
 	let selectedFieldName;
@@ -106,7 +105,8 @@
 				[requestedFieldName]: {
 					significant_text: {
 						field: requestedFieldName,
-						include: stopWords
+						include: stopWords,
+						min_doc_count: 1
 					}
 				}
 			}
@@ -163,7 +163,7 @@
 
 	function scheduleCountRequest (event) {
 		lastScheduling = Date.now();
-		searchValue = event.detail.toLowerCase();
+		searchValue = event.detail.trim().toLowerCase();
 		setTimeout(sendIfTimeElapsed, SEND_DELAY + 10);
 	}
 
