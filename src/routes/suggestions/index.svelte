@@ -23,18 +23,16 @@
 		'textWithKeywordArray'
 	];
 
-	let response;
-	let fieldCounts;
-	let selectedFieldName;
-	let userSelection;
-	let searchWidget;
-
-	let lastScheduling;
-	let searchValue;
-	let searchIsFocused = false;
 	let awaitingResponse = false;
-
+	let fieldCounts;
+	let lastScheduling;
+	let response;
+	let searchIsFocused = false;
+	let searchValue;
+	let searchWidget;
+	let selectedFieldName;
 	let showFullResponse = true;
+	let userSelection;
 
 	const getKeywordFields = _.pipe([
 		_.pairs,
@@ -95,7 +93,7 @@
 		return query;
 	}
 
-	function computeDetailsQuery (requestedFieldName, term) {
+	function computeSuggestionsQuery (requestedFieldName, term) {
 		return {
 			size: 0,
 			query: {
@@ -152,7 +150,6 @@
 			field.count > 0 || field.name === userSelection
 		);
 		selectedFieldName = computeSelection(fieldCounts);
-		console.log("fieldCounts", fieldCounts);
 	}
 
 	function sendIfTimeElapsed () {
@@ -176,8 +173,8 @@
 		}
 		info.suggestions = ['waiting...'];
 		fieldCounts = fieldCounts;
-		const data = computeDetailsQuery(fieldName, searchValue);
-		const suggestionsResponse = await sendRequest(data);
+		const payload = computeSuggestionsQuery(fieldName, searchValue);
+		const suggestionsResponse = await sendRequest(payload);
 		// TODO check for error messages
 		let {buckets} = suggestionsResponse.aggregations[fieldName];
 		buckets = buckets.filter(sugg => sugg.key !== searchValue);
@@ -190,7 +187,7 @@
 		console.log("countRespoonse", info);
 	}
 
-	function fieldSelected (event) {
+	function onFieldSelected (event) {
 		userSelection = event.detail;
 		selectedFieldName = computeSelection(fieldCounts);
 	}
@@ -249,7 +246,7 @@
 				<FieldMenu
 					{fieldCounts}
 					{selectedFieldName}
-					on:fieldSelected={fieldSelected}
+					on:fieldSelected={onFieldSelected}
 					on:requestDetails={sendSuggestionsRequest}
 				/>
 			</div>
