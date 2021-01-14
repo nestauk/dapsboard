@@ -26,6 +26,7 @@
 	let response;
 	let fieldCounts;
 	let selectedFieldName;
+	let userSelection;
 	let searchWidget;
 
 	let lastScheduling;
@@ -78,7 +79,8 @@
 	function computeCountQuery (searchTerm) {
 		const schema = getSchema(dataset);
 		const keywordFields = getKeywordFields(schema);
-		const filters = keywordFields.map(i => [i, computeFieldForCountQuery(i, searchTerm)]);
+		const filters = keywordFields
+		.map(name => [name, computeFieldForCountQuery(name, searchTerm)]);
 
 		const query = {
 			size: 0,
@@ -122,7 +124,6 @@
 		}
 	}
 
-	let userSelection;
 	function computeSelection (counts) {
 		const exists = counts.some(item => item.name === userSelection);
 		if (!userSelection || !exists) {
