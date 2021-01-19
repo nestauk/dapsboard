@@ -8,6 +8,8 @@
 	import IconChevronLeft from 'app/components/icons/IconChevronLeft.svelte';
 	import IconChevronDown from 'app/components/icons/IconChevronDown.svelte';
 	import IconChevronUp from 'app/components/icons/IconChevronUp.svelte';
+	import FieldMenu from 'app/components/elementary/FieldMenu.svelte';
+	import Search from 'app/components/Search.svelte';
 	import {createExploreMachine} from 'app/machines/explore/route';
 	import {selectedDatasetFields} from 'app/stores/exploreStores';
 	import {makeDepthByField, makeExploreIndexPath} from 'app/utils/exploreUtils';
@@ -22,8 +24,11 @@
 	const padding = halfLineHeight / 2;
 
 	const {machine, contextStores: {
+		fieldCounts,
 		isNextFieldDisabled,
 		isPrevFieldDisabled,
+		isFieldsMenuActive,
+		selectedFieldName,
 		selectedFields,
 		currentResult,
 	}} = createExploreMachine();
@@ -86,6 +91,10 @@
 		machine.send('TOGGLED_FIELD_COUNTER', {field});
 	const clickedNextField = () => machine.send('SELECTED_NEXT_FIELD');
 	const clickedPrevField = () => machine.send('SELECTED_PREVIOUS_FIELD');
+
+	const onSearchRequested = ({detail}) => machine.send({type:'SEARCHED', detail});
+	const onSearchEdited = ({detail}) => machine.send({type:'TYPED', detail});
+	const onFieldSelected = () => machine.send('FIELD_SELECTED');
 </script>
 
 <svelte:head>
@@ -93,6 +102,22 @@
 </svelte:head>
 
 <section class='layout'>
+	<section class='contentsearch'>
+		<Search
+			fieldName={$selectedFieldName}
+			on:search={onSearchRequested}
+			on:edit={onSearchEdited}
+		/>
+		{#if $isFieldsMenuActive}
+			<div class='popdown'>
+				<FieldMenu
+					{$fieldCounts}
+					activeFieldName={selectedFieldName}
+					on:fieldSelected={onFieldSelected}
+				/>
+			</div>
+		{/if}
+	</section>
 	<section class='navheader'>
 		<a class='undecor' href={hrefBack}>
 			<IconChevronLeft />
@@ -178,14 +203,20 @@
 	.layout {
 		--dim-headerHeight: 3rem;
 		display: grid;
-		grid-template-columns: var(--dim-sidebarWidth) calc(100% - var(--dim-sidebarWidth));
-		grid-template-rows: var(--dim-headerHeight) calc(100% - 2 * var(--dim-headerHeight)) var(--dim-headerHeight);
+		grid-template-columns: var(--dim-sidebarWidth) 1fr;
+		grid-template-rows: min-content var(--dim-headerHeight) 1fr var(--dim-headerHeight);
 		grid-template-areas:
+			"searchbar1 searchbar1"
 			"sidebar1 content1"
 			"sidebar2 content2"
 			"sidebar3 content2";
 		height: 100%;
 		width: 100%;
+	}
+
+	/* searchbar */
+	.contentsearch {
+		grid-area: searchbar1;
 	}
 
 	/* sidebar: header */
