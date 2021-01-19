@@ -24,7 +24,7 @@
 	const padding = halfLineHeight / 2;
 
 	const {machine, contextStores: {
-		fieldCounts,
+		fieldStats,
 		isNextFieldDisabled,
 		isPrevFieldDisabled,
 		isFieldsMenuActive,
@@ -94,6 +94,8 @@
 
 	const onSearchRequested = ({detail}) => machine.send({type:'SEARCHED', detail});
 	const onSearchEdited = ({detail}) => machine.send({type:'TYPED', detail});
+	const onSearchFocused = () => machine.send('FIELD_STATS_SHOWN');
+	const onSearchBlurred = () => machine.send('FIELD_STATS_HIDDEN');
 	const onFieldSelected = () => machine.send('FIELD_SELECTED');
 </script>
 
@@ -107,13 +109,15 @@
 			fieldName={$selectedFieldName}
 			on:search={onSearchRequested}
 			on:edit={onSearchEdited}
+			on:focus={onSearchFocused}
+			on:blur={onSearchBlurred}
+			on:fieldSelected={onFieldSelected}
 		/>
 		{#if $isFieldsMenuActive}
 			<div class='popdown'>
 				<FieldMenu
-					{$fieldCounts}
-					activeFieldName={selectedFieldName}
-					on:fieldSelected={onFieldSelected}
+					fieldStats={$fieldStats}
+					selectedFieldName={$selectedFieldName}
 				/>
 			</div>
 		{/if}
@@ -217,6 +221,11 @@
 	/* searchbar */
 	.contentsearch {
 		grid-area: searchbar1;
+	}
+	.popdown {
+		position: absolute;
+		width: 100%;
+		z-index: 1;
 	}
 
 	/* sidebar: header */
