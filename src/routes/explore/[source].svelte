@@ -31,6 +31,7 @@
 		selectedFieldName,
 		selectedFields,
 		currentResult,
+		suggestions,
 	}} = createExploreMachine();
 
 	$: ({params: {source}, query: {project, version, fields}} = $page);
@@ -96,7 +97,9 @@
 	const onSearchEdited = ({detail}) => machine.send({type:'TYPED', detail});
 	const onSearchFocused = () => machine.send('FIELD_STATS_SHOWN');
 	const onSearchBlurred = () => machine.send('FIELD_STATS_HIDDEN');
-	const onFieldSelected = () => machine.send('FIELD_SELECTED');
+	const onFieldSelected = ({detail}) => machine.send({type:'FIELD_SELECTED', detail});
+	const onUpArrow = () => machine.send('PREV_FIELD_SELECTED');
+	const onDownArrow = () => machine.send('NEXT_FIELD_SELECTED');
 </script>
 
 <svelte:head>
@@ -111,13 +114,16 @@
 			on:edit={onSearchEdited}
 			on:focus={onSearchFocused}
 			on:blur={onSearchBlurred}
-			on:fieldSelected={onFieldSelected}
+			on:upArrow={onUpArrow}
+			on:downArrow={onDownArrow}
 		/>
 		{#if $isFieldsMenuActive}
 			<div class='popdown'>
 				<FieldMenu
 					fieldStats={$fieldStats}
 					selectedFieldName={$selectedFieldName}
+					suggestions={$suggestions}
+					on:fieldSelected={onFieldSelected}
 				/>
 			</div>
 		{/if}
