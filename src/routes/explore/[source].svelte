@@ -119,15 +119,8 @@
 			on:upArrow={onUpArrow}
 			on:downArrow={onDownArrow}
 		/>
-		{#if $isFieldsMenuActive}
+		{#if $isFieldsMenuActive && $fieldStats.length > 0}
 			<div class='searchhelpers' class:withSuggestions={$suggestions.length > 0}>
-				<div>
-					<FieldMenu
-						fieldStats={$fieldStats}
-						selectedFieldName={$selectedFieldName}
-						on:fieldSelected={onFieldSelected}
-					/>
-				</div>
 				{#if $suggestions.length > 0}
 					<ul class='suggestions'>
 						{#each $suggestions as suggestion}
@@ -135,6 +128,13 @@
 						{/each}
 					</ul>
 				{/if}
+				<div>
+					<FieldMenu
+						fieldStats={$fieldStats}
+						selectedFieldName={$selectedFieldName}
+						on:fieldSelected={onFieldSelected}
+					/>
+				</div>
 			</div>
 		{/if}
 	</section>
