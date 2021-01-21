@@ -129,9 +129,11 @@
 					/>
 				</div>
 				{#if $suggestions.length > 0}
-					<div class='suggestions'>
-						{$suggestions}
-					</div>
+					<ul class='suggestions'>
+						{#each $suggestions as suggestion}
+							<li>{suggestion}</li>
+						{/each}
+					</ul>
 				{/if}
 			</div>
 		{/if}
@@ -236,6 +238,8 @@
 	.contentsearch {
 		grid-area: searchbar1;
 		position: relative;
+		width: 75%;
+		margin: auto;
 	}
 	.searchhelpers {
 		position: absolute;
@@ -243,15 +247,20 @@
 		z-index: 1;
 		display: grid;
 		grid-template-columns: 1fr;
-		padding: 0 1em;
+		border: thin solid #B4E4FF;
 	}
 	.withSuggestions {
 		grid-template-columns: 1fr 1fr;
 	}
 	.suggestions {
-		background: rgb(206, 222, 241);
+		background: #DAF1FF;
 		padding: .5em;
-		border: thin solid black;
+		list-style: none;
+	}
+	.suggestions > li {
+		display: inline-block;
+		padding: 0 .5em;
+		white-space: nowrap;
 	}
 	/* sidebar: header */
 
