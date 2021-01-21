@@ -93,11 +93,13 @@
 	const clickedNextField = () => machine.send('SELECTED_NEXT_FIELD');
 	const clickedPrevField = () => machine.send('SELECTED_PREVIOUS_FIELD');
 
-	const onSearchRequested = ({detail}) => machine.send({type:'SEARCHED', detail});
+	const onSearchRequested = ({detail}) =>
+		machine.send({type:'SEARCHED', detail});
 	const onSearchEdited = ({detail}) => machine.send({type:'TYPED', detail});
 	const onSearchFocused = () => machine.send('FIELD_STATS_SHOWN');
 	const onSearchBlurred = () => machine.send('FIELD_STATS_HIDDEN');
-	const onFieldSelected = ({detail}) => machine.send({type:'FIELD_SELECTED', detail});
+	const onFieldSelected = ({detail}) =>
+		machine.send({type:'FIELD_SELECTED', detail});
 	const onUpArrow = () => machine.send('PREV_FIELD_SELECTED');
 	const onDownArrow = () => machine.send('NEXT_FIELD_SELECTED');
 </script>
@@ -110,21 +112,27 @@
 	<section class='contentsearch'>
 		<Search
 			fieldName={$selectedFieldName}
-			on:search={onSearchRequested}
 			on:edit={onSearchEdited}
+			on:search={onSearchRequested}
 			on:focus={onSearchFocused}
 			on:blur={onSearchBlurred}
 			on:upArrow={onUpArrow}
 			on:downArrow={onDownArrow}
 		/>
 		{#if $isFieldsMenuActive}
-			<div class='popdown'>
-				<FieldMenu
-					fieldStats={$fieldStats}
-					selectedFieldName={$selectedFieldName}
-					suggestions={$suggestions}
-					on:fieldSelected={onFieldSelected}
-				/>
+			<div class='searchhelpers' class:withSuggestions={$suggestions.length > 0}>
+				<div>
+					<FieldMenu
+						fieldStats={$fieldStats}
+						selectedFieldName={$selectedFieldName}
+						on:fieldSelected={onFieldSelected}
+					/>
+				</div>
+				{#if $suggestions.length > 0}
+					<div class='suggestions'>
+						{$suggestions}
+					</div>
+				{/if}
 			</div>
 		{/if}
 	</section>
@@ -228,12 +236,22 @@
 	.contentsearch {
 		grid-area: searchbar1;
 	}
-	.popdown {
+	.searchhelpers {
 		position: absolute;
 		width: 100%;
 		z-index: 1;
+		display: grid;
+		grid-template-columns: 1fr;
+		padding: 0 1em;
 	}
-
+	.withSuggestions {
+		grid-template-columns: 1fr 1fr;
+	}
+	.suggestions {
+		background: rgb(206, 222, 241);
+		padding: .5em;
+		border: thin solid black;
+	}
 	/* sidebar: header */
 
 	.navheader {
