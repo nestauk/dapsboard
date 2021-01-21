@@ -222,10 +222,10 @@
 		--dim-headerHeight: 3rem;
 		display: grid;
 		grid-template-columns: var(--dim-sidebarWidth) 1fr;
-		grid-template-rows: min-content var(--dim-headerHeight) 1fr var(--dim-headerHeight);
+		grid-template-rows: var(--dim-headerHeight) min-content 1fr var(--dim-headerHeight);
 		grid-template-areas:
-			"searchbar1 searchbar1"
 			"sidebar1 content1"
+			"sidebar2 searchbar1"
 			"sidebar2 content2"
 			"sidebar3 content2";
 		height: 100%;
@@ -235,6 +235,7 @@
 	/* searchbar */
 	.contentsearch {
 		grid-area: searchbar1;
+		position: relative;
 	}
 	.searchhelpers {
 		position: absolute;
