@@ -247,13 +247,13 @@
 		z-index: 1;
 		display: grid;
 		grid-template-columns: 1fr;
-		border: thin solid #B4E4FF;
+		border: thin solid var(--color-main);
 	}
 	.withSuggestions {
 		grid-template-columns: 1fr 1fr;
 	}
 	.suggestions {
-		background: #DAF1FF;
+		background: var(--color-blue-pale);
 		padding: .5em;
 		list-style: none;
 	}
