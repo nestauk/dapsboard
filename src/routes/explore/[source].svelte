@@ -86,22 +86,22 @@
 		};
 	});
 
-	const clickedField = field =>
-		machine.send('SELECTED_FIELDS', {fields: [field]});
-	const clickedFieldCounter = field =>
-		machine.send('TOGGLED_FIELD_COUNTER', {field});
+	const clickedField =
+		field => machine.send('SELECTED_FIELDS', {fields: [field]});
+	const clickedFieldCounter =
+		field => machine.send('TOGGLED_FIELD_COUNTER', {field});
 	const clickedNextField = () => machine.send('SELECTED_NEXT_FIELD');
 	const clickedPrevField = () => machine.send('SELECTED_PREVIOUS_FIELD');
 
-	const onSearchRequested = ({detail}) =>
-		machine.send({type:'SEARCHED', detail});
+	const onDownArrow = () => machine.send('NEXT_FIELD_SELECTED');
+	const onFieldSelected =
+		({detail}) => machine.send({type:'FIELD_SELECTED', detail});
+	const onSearchBlurred = () => machine.send('FIELD_STATS_HIDDEN');
 	const onSearchEdited = ({detail}) => machine.send({type:'TYPED', detail});
 	const onSearchFocused = () => machine.send('FIELD_STATS_SHOWN');
-	const onSearchBlurred = () => machine.send('FIELD_STATS_HIDDEN');
-	const onFieldSelected = ({detail}) =>
-		machine.send({type:'FIELD_SELECTED', detail});
+	const onSearchRequested =
+		({detail}) => machine.send({type:'SEARCHED', detail});
 	const onUpArrow = () => machine.send('PREV_FIELD_SELECTED');
-	const onDownArrow = () => machine.send('NEXT_FIELD_SELECTED');
 </script>
 
 <svelte:head>
@@ -120,7 +120,10 @@
 			on:upArrow={onUpArrow}
 		/>
 		{#if $isFieldsMenuActive && $fieldStats.length > 0}
-			<div class='searchhelpers' class:withSuggestions={$suggestions.length > 0}>
+			<div
+				class:withSuggestions={$suggestions.length > 0}
+				class='searchhelpers'
+			>
 				{#if $suggestions.length > 0}
 					<ul class='suggestions'>
 						{#each $suggestions as suggestion}
@@ -131,8 +134,8 @@
 				<div>
 					<FieldMenu
 						fieldStats={$fieldStats}
-						selectedFieldName={$selectedFieldName}
 						on:fieldSelected={onFieldSelected}
+						selectedFieldName={$selectedFieldName}
 					/>
 				</div>
 			</div>
