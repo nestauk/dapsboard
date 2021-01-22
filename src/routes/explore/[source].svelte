@@ -112,12 +112,12 @@
 	<section class='contentsearch'>
 		<Search
 			fieldName={$selectedFieldName}
-			on:edit={onSearchEdited}
-			on:search={onSearchRequested}
-			on:focus={onSearchFocused}
 			on:blur={onSearchBlurred}
-			on:upArrow={onUpArrow}
 			on:downArrow={onDownArrow}
+			on:edit={onSearchEdited}
+			on:focus={onSearchFocused}
+			on:search={onSearchRequested}
+			on:upArrow={onUpArrow}
 		/>
 		{#if $isFieldsMenuActive && $fieldStats.length > 0}
 			<div class='searchhelpers' class:withSuggestions={$suggestions.length > 0}>
@@ -247,15 +247,17 @@
 		z-index: 1;
 		display: grid;
 		grid-template-columns: 1fr;
-		border: thin solid var(--color-main);
+		border: thin solid var(--color-menu-dark);
 	}
 	.withSuggestions {
 		grid-template-columns: 1fr 1fr;
 	}
 	.suggestions {
-		background: var(--color-blue-pale);
-		padding: .5em;
+		background: var(--color-menu-dark);
+		color: white;
+		font-size: 1.1rem;
 		list-style: none;
+		padding: 0.8rem;
 	}
 	.suggestions > li {
 		display: inline-block;

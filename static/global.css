@@ -76,17 +76,19 @@ a.undecor {
 }
 
 :root {
-	--color-main-lighter: rgb(180, 180, 180);
-	--color-main: rgb(40, 40, 40);
-	--color-selected: lightseagreen;
-	--color-grey-70: rgb(70, 70, 70);
-	--color-link: var(--color-main);
-	--color-link-ext: var(--color-blue);
-	--color-blue: rgb(104, 192, 255);
+	--color-background: var(--color-main-lighter);
+	--color-blue-darker: rgb(25, 159, 255);
 	--color-blue-lighter: rgb(171, 220, 255);
 	--color-blue-pale: rgb(224, 242, 255);
-	--color-blue-darker: rgb(25, 159, 255);
-	--color-background: var(--color-main-lighter);
+	--color-blue: rgb(104, 192, 255);
+	--color-grey-70: rgb(70, 70, 70);
+	--color-link-ext: var(--color-blue);
+	--color-link: var(--color-main);
+	--color-main-lighter: rgb(180, 180, 180);
+	--color-main: rgb(40, 40, 40);
+	--color-menu-dark: var(--color-main); /* #aa42b2; */
+	--color-menu-light: white;
+	--color-selected: lightseagreen;
 	--dim-fontsize-light: 200;
 	--dim-header-height: 3rem;
 	--dim-main-height: calc(100% - var(--dim-header-height));
