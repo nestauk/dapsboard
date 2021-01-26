@@ -1,18 +1,18 @@
 @font-face {
-  font-family: 'Open Sans Light';
-  src: url('/font/OpenSans-Light.ttf') format('truetype');
+	font-family: 'Open Sans Light';
+	src: url('/font/OpenSans-Light.ttf') format('truetype');
 }
 @font-face {
-  font-family: 'Open Sans Regular';
-  src: url('/font/OpenSans-Regular.ttf') format('truetype');
+	font-family: 'Open Sans Regular';
+	src: url('/font/OpenSans-Regular.ttf') format('truetype');
 }
 @font-face {
-  font-family: 'Open Sans Bold';
-  src: url('/font/OpenSans-Bold.ttf') format('truetype');
+	font-family: 'Open Sans Bold';
+	src: url('/font/OpenSans-Bold.ttf') format('truetype');
 }
 @font-face {
-  font-family: 'Open Sans SemiBold';
-  src: url('/font/OpenSans-SemiBold.ttf') format('truetype');
+	font-family: 'Open Sans SemiBold';
+	src: url('/font/OpenSans-SemiBold.ttf') format('truetype');
 }
 
 * {
@@ -58,10 +58,10 @@ a.undecor {
 }
 
 .semibold {
-  font-family: 'Open Sans SemiBold', sans-serif;
+	font-family: 'Open Sans SemiBold', sans-serif;
 }
 .bold {
-  font-family: 'Open Sans Bold', sans-serif;
+	font-family: 'Open Sans Bold', sans-serif;
 }
 
 .clickable {
