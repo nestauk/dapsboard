@@ -83,6 +83,7 @@
 		return () => {
 			removeEventListener('popstate', pageReloader);
 			unsubscribe?.();
+			machine.send('RESET_SEARCH');
 		};
 	});
 
@@ -111,7 +112,7 @@
 <section class='layout'>
 	<section class='contentsearch'>
 		<Search
-			fieldName={$selectedFieldName}
+			fieldName={$selectedFieldName ?? ''}
 			on:blur={onSearchBlurred}
 			on:downArrow={onDownArrow}
 			on:edit={onSearchEdited}
