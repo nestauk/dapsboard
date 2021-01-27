@@ -8,8 +8,8 @@
 	import IconChevronLeft from 'app/components/icons/IconChevronLeft.svelte';
 	import IconChevronDown from 'app/components/icons/IconChevronDown.svelte';
 	import IconChevronUp from 'app/components/icons/IconChevronUp.svelte';
-	import FieldMenu from 'app/components/elementary/FieldMenu.svelte';
-	import Search from 'app/components/Search.svelte';
+	import FieldMenu from 'app/components/explore/suggestions/FieldMenu.svelte';
+	import Search from 'app/components/explore/suggestions/Search.svelte';
 	import {createExploreMachine} from 'app/machines/explore/route';
 	import {selectedDatasetFields} from 'app/stores/exploreStores';
 	import {makeDepthByField, makeExploreIndexPath} from 'app/utils/exploreUtils';
