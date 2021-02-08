@@ -8,6 +8,8 @@
 	import IconChevronLeft from 'app/components/icons/IconChevronLeft.svelte';
 	import IconChevronDown from 'app/components/icons/IconChevronDown.svelte';
 	import IconChevronUp from 'app/components/icons/IconChevronUp.svelte';
+	import FieldMenu from 'app/components/explore/suggestions/FieldMenu.svelte';
+	import Search from 'app/components/explore/suggestions/Search.svelte';
 	import {createExploreMachine} from 'app/machines/explore/route';
 	import {selectedDatasetFields} from 'app/stores/exploreStores';
 	import {makeDepthByField, makeExploreIndexPath} from 'app/utils/exploreUtils';
@@ -22,10 +24,14 @@
 	const padding = halfLineHeight / 2;
 
 	const {machine, contextStores: {
+		fieldStats,
 		isNextFieldDisabled,
 		isPrevFieldDisabled,
+		isFieldsMenuActive,
+		selectedFieldName,
 		selectedFields,
 		currentResult,
+		suggestions,
 	}} = createExploreMachine();
 
 	$: ({params: {source}, query: {project, version, fields}} = $page);
@@ -77,15 +83,26 @@
 		return () => {
 			removeEventListener('popstate', pageReloader);
 			unsubscribe?.();
+			machine.send('RESET_SEARCH');
 		};
 	});
 
-	const clickedField = field =>
-		machine.send('SELECTED_FIELDS', {fields: [field]});
-	const clickedFieldCounter = field =>
-		machine.send('TOGGLED_FIELD_COUNTER', {field});
+	const clickedField =
+		field => machine.send('SELECTED_FIELDS', {fields: [field]});
+	const clickedFieldCounter =
+		field => machine.send('TOGGLED_FIELD_COUNTER', {field});
 	const clickedNextField = () => machine.send('SELECTED_NEXT_FIELD');
 	const clickedPrevField = () => machine.send('SELECTED_PREVIOUS_FIELD');
+
+	const onDownArrow = () => machine.send('NEXT_FIELD_SELECTED');
+	const onFieldSelected =
+		({detail}) => machine.send({type:'FIELD_SELECTED', detail});
+	const onSearchBlurred = () => machine.send('FIELD_STATS_HIDDEN');
+	const onSearchEdited = ({detail}) => machine.send({type:'TYPED', detail});
+	const onSearchFocused = () => machine.send('FIELD_STATS_SHOWN');
+	const onSearchRequested =
+		({detail}) => machine.send({type:'SEARCHED', detail});
+	const onUpArrow = () => machine.send('PREV_FIELD_SELECTED');
 </script>
 
 <svelte:head>
@@ -93,6 +110,38 @@
 </svelte:head>
 
 <section class='layout'>
+	<section class='contentsearch'>
+		<Search
+			fieldName={$selectedFieldName ?? ''}
+			on:blur={onSearchBlurred}
+			on:downArrow={onDownArrow}
+			on:edit={onSearchEdited}
+			on:focus={onSearchFocused}
+			on:search={onSearchRequested}
+			on:upArrow={onUpArrow}
+		/>
+		{#if $isFieldsMenuActive && $fieldStats.length > 0}
+			<div
+				class:withSuggestions={$suggestions.length > 0}
+				class='searchhelpers'
+			>
+				{#if $suggestions.length > 0}
+					<ul class='suggestions'>
+						{#each $suggestions as suggestion}
+							<li>{suggestion}</li>
+						{/each}
+					</ul>
+				{/if}
+				<div>
+					<FieldMenu
+						fieldStats={$fieldStats}
+						on:fieldSelected={onFieldSelected}
+						selectedFieldName={$selectedFieldName}
+					/>
+				</div>
+			</div>
+		{/if}
+	</section>
 	<section class='navheader'>
 		<a class='undecor' href={hrefBack}>
 			<IconChevronLeft />
@@ -178,16 +227,47 @@
 	.layout {
 		--dim-headerHeight: 3rem;
 		display: grid;
-		grid-template-columns: var(--dim-sidebarWidth) calc(100% - var(--dim-sidebarWidth));
-		grid-template-rows: var(--dim-headerHeight) calc(100% - 2 * var(--dim-headerHeight)) var(--dim-headerHeight);
+		grid-template-columns: var(--dim-sidebarWidth) 1fr;
+		grid-template-rows: var(--dim-headerHeight) min-content 1fr var(--dim-headerHeight);
 		grid-template-areas:
 			"sidebar1 content1"
+			"sidebar2 searchbar1"
 			"sidebar2 content2"
 			"sidebar3 content2";
 		height: 100%;
 		width: 100%;
 	}
 
+	/* searchbar */
+	.contentsearch {
+		grid-area: searchbar1;
+		position: relative;
+		width: 75%;
+		margin: auto;
+	}
+	.searchhelpers {
+		position: absolute;
+		width: 100%;
+		z-index: 1;
+		display: grid;
+		grid-template-columns: 1fr;
+		border: thin solid var(--color-menu-dark);
+	}
+	.withSuggestions {
+		grid-template-columns: 1fr 1fr;
+	}
+	.suggestions {
+		background: var(--color-menu-dark);
+		color: white;
+		font-size: 1.1rem;
+		list-style: none;
+		padding: 0.8rem;
+	}
+	.suggestions > li {
+		display: inline-block;
+		padding: 0 .5em;
+		white-space: nowrap;
+	}
 	/* sidebar: header */
 
 	.navheader {
