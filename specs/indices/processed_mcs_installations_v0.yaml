@@ -1,0 +1,91 @@
+source:
+  -
+    provider_name: MCS
+    provider_url: https://mcscertified.com/ 
+dataset:
+  api_type: ElasticSearch
+  api_version: 7.10
+  config_url: https://gist.githubusercontent.com/doogyb/05f58239c674feb0975b7c582c993b1a/raw/177fca03e4ec82f188294b6dc5129ce246ecdae3/epc_with_hp_install_dates_v0_config.json
+  endpoint_url: https://es.annotations.dap-tools.uk/processed_mcs_installations
+  provider_name: DAPS (Nesta)
+  provider_url: https://github.com/nestauk/nesta
+  schema:
+    address_1:
+      type: textWithKeyword
+    address_2:
+      type: textWithKeyword
+    address_3:
+      type: textWithKeyword
+    alt_type:
+      type: textWithKeyword
+    capacity:
+      type: float
+    cert_date:
+      type: textWithKeyword
+    cluster:
+      type: boolean
+    commission_date:
+      type: date
+    commission_year:
+      type: float
+    cost:
+      type: float
+    county:
+      type: textWithKeyword
+    design:
+      type: textWithKeyword
+    end_user_installation_type:
+      type: textWithKeyword
+    estimated_annual_generation:
+      type: float
+    flow_temp:
+      type: float
+    fuel_type:
+      type: textWithKeyword
+    green_deal:
+      type: textWithKeyword
+    heat_demand:
+      type: float
+    heat_supplied:
+      type: float
+    installation_type:
+      type: textWithKeyword
+    installer_name:
+      type: textWithKeyword
+    local_authority:
+      type: textWithKeyword
+    manufacturer:
+      type: textWithKeyword
+    metering:
+      type: textWithKeyword
+    n_certificates:
+      type: float
+    new:
+      type: textWithKeyword
+    postcode:
+      type: textWithKeyword
+    product_id:
+      type: textWithKeyword
+    product_name:
+      type: textWithKeyword
+    products:
+      type: textWithKeyword
+    rhi:
+      type: boolean
+    rhi_not_ready:
+      type: textWithKeyword
+    rhi_status:
+      type: textWithKeyword
+    scop:
+      type: float
+    system_type:
+      type: textWithKeyword
+    tech_type:
+      type: textWithKeyword
+    version:
+      type: long
+    water_demand:
+      type: float
+    water_supplied:
+      type: float
+  version: 0
