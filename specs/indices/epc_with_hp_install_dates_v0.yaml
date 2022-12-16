@@ -1,0 +1,39 @@
+source:
+  -
+    provider_name: EPC
+    provider_url: https://epc.opendatacommunities.org/ 
+dataset:
+  api_type: ElasticSearch
+  api_version: 7.10
+  config_url: https://gist.githubusercontent.com/doogyb/05f58239c674feb0975b7c582c993b1a/raw/177fca03e4ec82f188294b6dc5129ce246ecdae3/epc_with_hp_install_dates_v0_config.json
+  endpoint_url: https://es.annotations.dap-tools.uk/epc_with_hp_install_dates
+  provider_name: DAPS (Nesta)
+  provider_url: https://github.com/nestauk/nesta
+  schema:
+    postcode:
+      type: textWithKeyword
+    postcode_district:
+      type: textWithKeyword
+    tenure:
+      type: textWithKeyword
+    built_form:
+      type: textWithKeyword
+    property_type:
+      type: textWithKeyword
+    construction_age_band:
+      type: textWithKeyword
+    number_habitable_rooms:
+      type: float
+    mains_gas_flag:
+      type: textWithKeyword
+    energy_consumption_current:
+      type: float
+    current_energy_rating:
+      type: textWithKeyword
+    country:
+      type: textWithKeyword
+    hp_installed:
+      type: boolean
+    hp_install_date:
+      type: date
+  version: 0
