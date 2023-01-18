@@ -7,11 +7,11 @@
 
 import path from 'path';
 
-import * as _ from 'lamb';
-import yaml from 'js-yaml';
 import {readDir, readFile, saveObj} from '@svizzle/file';
 import {tapMessage} from '@svizzle/dev';
 import {applyFnMap} from '@svizzle/utils';
+import yaml from 'js-yaml';
+import * as _ from 'lamb';
 
 import {makeDatasetBySource} from 'utils/specs';
 import {indexById} from 'utils/generic';
@@ -51,7 +51,7 @@ const run = async () => {
 	const datasets = await Promise.all(
 		refs.map(ref =>
 			readFile(ref.filepath, 'utf-8')
-			.then(yaml.safeLoad)
+			.then(yaml.load)
 			.then(spec => ({
 				..._.skipIn(ref, ['filepath']),
 				spec

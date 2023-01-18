@@ -4,15 +4,15 @@
 	node/no-deprecated-api
 */
 
-import {terser} from 'rollup-plugin-terser';
-import babel from 'rollup-plugin-babel';
-import cleanup from 'rollup-plugin-cleanup';
+import {babel} from '@rollup/plugin-babel';
 import commonjs from '@rollup/plugin-commonjs';
 import json from '@rollup/plugin-json';
-import replace from '@rollup/plugin-replace';
 import resolve from '@rollup/plugin-node-resolve';
-import svelte from 'rollup-plugin-svelte';
+import replace from '@rollup/plugin-replace';
+import terser from '@rollup/plugin-terser';
 import yaml from '@rollup/plugin-yaml';
+import cleanup from 'rollup-plugin-cleanup';
+import svelte from 'rollup-plugin-svelte';
 
 import config from 'sapper/config/rollup.js';
 import pkg from './package.json';
@@ -23,9 +23,9 @@ const inspect = process.env.INSPECT;
 const dev = mode === 'development';
 const legacy = Boolean(process.env.SAPPER_LEGACY_BUILD);
 const Babel = babel({
-	extensions: ['.js', '.mjs', '.html', '.svelte'],
-	runtimeHelpers: true,
+	babelHelpers: 'runtime',
 	exclude: ['node_modules/@babel/**'],
+	extensions: ['.js', '.mjs', '.html', '.svelte'],
 	presets: [
 		['@babel/preset-env', {
 			targets: '> 0.25%, not dead'
@@ -37,7 +37,7 @@ const Babel = babel({
 		['@babel/plugin-transform-runtime', {
 			useESModules: true
 		}]
-	]
+	],
 });
 
 const onwarn = (warning, _onwarn) =>
