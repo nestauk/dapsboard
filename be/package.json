@@ -1,8 +1,11 @@
 {
 	"dependencies": {
-		"husky": "^4.3.0",
+		"fastify": "^4.11.0",
 		"mongodb": "^4.13.0",
 		"nodemon": "^2.0.20"
+	},
+	"devDependencies": {
+		"husky": "^4.3.0"
 	},
 	"description": "A cache for the ElasticSearch aggregation requests performed by dapsboard",
 	"husky": {
