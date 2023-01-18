@@ -1,3 +1,3 @@
-# DAPS user interface
+# Dapsboard
 
-A user interface to visualise the data hosted in the Nesta DAPS platform.
+A web app to visualise the data hosted in the Nesta DAPS platform.

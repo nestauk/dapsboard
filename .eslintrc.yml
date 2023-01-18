@@ -11,23 +11,10 @@ extends:
 globals:
   Atomics: readonly
   SharedArrayBuffer: readonly
-overrides:
-  -
-    files:
-      - '**/*.svelte'
-    processor: svelte3/svelte3
-    rules:
-      brace-style: off
-      import/no-unresolved: off # svelte components not found
-      no-invalid-this: off
-      no-new: off
-      node/no-missing-import: off # svelte components not found
 parser: babel-eslint
 parserOptions:
   ecmaVersion: 2018
   sourceType: module
-plugins:
-  - svelte3
 rules:
   accessor-pairs: error
   array-bracket-newline: off

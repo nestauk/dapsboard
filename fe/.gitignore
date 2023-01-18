@@ -1,0 +1,5 @@
+/__sapper__
+/node_modules
+/src/node_modules/@sapper/
+/src/node_modules/app/data
+/static/dsl/

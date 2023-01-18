@@ -19,7 +19,7 @@ import {indexById} from 'utils/generic';
 const DATASETS_PATH = path.resolve(__dirname, '../node_modules/app/data/datasets.json');
 const ROUTES_PATH = path.resolve(__dirname, '../node_modules/app/data/routes.json');
 const SIDEBAR_PATH = path.resolve(__dirname, '../node_modules/app/data/sidebar.json');
-const INDICES_SPECS_DIR = path.resolve(__dirname, '../../specs/indices');
+const INDICES_SPECS_DIR = path.resolve(__dirname, '../../../specs/indices');
 
 const isYamlFile = name => path.parse(name).ext === '.yaml';
 

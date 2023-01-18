@@ -1,3 +1,7 @@
+# 0.0.7
+
+- Moved the front-end to `fe/`
+
 # 0.0.6
 
 - Added type system based on TypeScript
