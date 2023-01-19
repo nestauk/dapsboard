@@ -1,6 +1,7 @@
 import Fastify from 'fastify';
 
-import { collection } from './db.js';
+import { cache } from './db.js';
+import { hash } from './hash.js';
 
 
 const fastify = Fastify({
@@ -9,31 +10,32 @@ const fastify = Fastify({
 
 const { PORT } = process.env || 3000;
 
-fastify.put('/', (request, reply) => {
-	collection.insertOne(request.body)
-	reply.send('Insertion succeeded')
-})
+fastify.post('/*', async (request, reply) => {
 
-const getIdSchema = {
-	params: {
-		type: 'object',
-		properties: {
-			id: { type: 'number' }
-		}
+	const input = JSON.stringify(request.url) + JSON.stringify(request.body);
+	const hashed = hash(input);
+
+	const doc = await cache.findOne({ _id: hashed });
+
+	if (doc) {
+		return reply.send({
+			...doc,
+			mongo: true
+		});
 	}
-}
-fastify.get('/:id', { schema: getIdSchema }, async (request, reply) => {
 
-	const { id } = request.params;
-	const query = { id }
-	const result = await collection.findOne(query)
-	const replyBody = result || { error: `No doc with id ${id} found` }
-	const code = result ? 200 : 404;
-	reply.code(code).send(replyBody)
-})
+	const fresh = {
+		_id: hashed,
+		url: request.url,
+		body: request.body,
+	};
 
-const cursor = await collection.find({})
-cursor.forEach(console.log)
+	cache.insertOne(fresh);
+	return reply.send({
+		...fresh,
+		mongo: false
+	});
+});
 
 const start = async () => {
 	try {
@@ -44,4 +46,4 @@ const start = async () => {
 	}
 };
 
-start()
+start();
