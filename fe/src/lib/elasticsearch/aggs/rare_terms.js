@@ -1,21 +1,21 @@
-import {esSearchableString} from 'elasticsearch/aggs/ref/typeGroups';
+import {esSearchableString} from '$lib/elasticsearch/aggs/ref/typeGroups';
 import {
 	optional,
 	termsExclude,
 	termsInclude,
-} from 'elasticsearch/types/params';
+} from '$lib/elasticsearch/types/params';
 import {
 	floatD,
 	integerD,
 	string,
-} from 'types';
+} from '$lib/types';
 import {
 	field,
 	missing,
 	termsExclude as termsExcludeDoc,
 	termsInclude as termsIncludeDoc,
-} from 'elasticsearch/aggs/ref/requestDoc';
-import response from 'elasticsearch/aggs/response/bucketsDocCount';
+} from '$lib/elasticsearch/aggs/ref/requestDoc';
+import response from '$lib/elasticsearch/aggs/response/bucketsDocCount';
 
 export default {
 	id: 'rare_terms',

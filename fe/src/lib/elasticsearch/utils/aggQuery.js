@@ -1,7 +1,7 @@
 import * as _ from 'lamb';
 
-import aggsIdByFieldType from 'elasticsearch/config/aggsIdByFieldType';
-import {getESType} from 'utils/specs';
+import aggsIdByFieldType from '$lib/elasticsearch/config/aggsIdByFieldType';
+import {getESType} from '$lib/utils/specs';
 
 const hasKeywordField = _.anyOf([
 	_.is('textWithKeyword'),

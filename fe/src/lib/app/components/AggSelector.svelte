@@ -1,7 +1,7 @@
 <script>
-	import Select from 'app/components/elementary/Select.svelte';
-	import ExternalLink from 'app/components/ExternalLink.svelte';
-	import aggsDocURL from 'elasticsearch/config/aggsDocURL';
+	import Select from '$lib/app/components/elementary/Select.svelte';
+	import ExternalLink from '$lib/app/components/ExternalLink.svelte';
+	import aggsDocURL from '$lib/elasticsearch/config/aggsDocURL';
 
 	export let title = '';
 	export let selectedOption = null;

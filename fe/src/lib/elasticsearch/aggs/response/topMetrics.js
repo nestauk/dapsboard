@@ -3,8 +3,8 @@ import {
 	integer,
 	objectOf,
 	recordLike
-} from 'types';
-import {esNumericButBoolean} from 'elasticsearch/aggs/ref/typeGroups';
+} from '$lib/types';
+import {esNumericButBoolean} from '$lib/elasticsearch/aggs/ref/typeGroups';
 
 export default {
 	id: 'top',

@@ -14,7 +14,7 @@ import {
 	stringD,
 	unionOf,
 	xorOf,
-} from 'types';
+} from '$lib/types';
 
 /* conditions */
 

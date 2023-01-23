@@ -6,7 +6,7 @@ import {
 	object,
 	objectOf,
 	unionOf,
-} from 'types';
+} from '$lib/types';
 
 export default {
 	id: 'hits',

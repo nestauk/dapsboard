@@ -1,12 +1,12 @@
-import {esNumericButBoolean} from 'elasticsearch/aggs/ref/typeGroups';
-import {optional, script} from 'elasticsearch/types/params';
-import {string, number} from 'types';
+import {esNumericButBoolean} from '$lib/elasticsearch/aggs/ref/typeGroups';
+import {optional, script} from '$lib/elasticsearch/types/params';
+import {string, number} from '$lib/types';
 import {
 	field,
 	missing,
 	script as scriptDoc,
-} from 'elasticsearch/aggs/ref/requestDoc';
-import response from 'elasticsearch/aggs/response/value';
+} from '$lib/elasticsearch/aggs/ref/requestDoc';
+import response from '$lib/elasticsearch/aggs/response/value';
 
 export default {
 	id: 'sum',

@@ -6,18 +6,18 @@ import {applyFnMap} from '@svizzle/utils';
 import {
 	selectedDataset,
 	selectedDatasetSchema
-} from 'app/stores/exploreStores';
+} from '$lib/app/stores/exploreStores';
 import {
 	keywordFieldTypes,
 	makeGetFieldsOfTypes
-} from 'elasticsearch/types/fields.utils';
+} from '$lib/elasticsearch/types/fields.utils';
 import {
 	getCountQuery,
 	getSuggestionsQuery
-} from 'elasticsearch/aggs/utils/query';
-import {makeGetSuggestionsBy} from 'elasticsearch/aggs/utils/suggestions';
-import {request} from 'utils/net';
-import {getSearchURL} from 'utils/specs';
+} from '$lib/elasticsearch/aggs/utils/query';
+import {makeGetSuggestionsBy} from '$lib/elasticsearch/aggs/utils/suggestions';
+import {request} from '$lib/utils/net';
+import {getSearchURL} from '$lib/utils/specs';
 
 import {createBaseSearchStores} from './search.context';
 

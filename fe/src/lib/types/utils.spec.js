@@ -6,9 +6,9 @@ import {
 	booleanD,
 	isNative,
 	isShape,
-} from 'types';
-import {esNumeric, esDates} from 'elasticsearch/aggs/ref/typeGroups';
-import {date_YYYYMMDD_dash} from 'elasticsearch/types/fields';
+} from '$lib/types';
+import {esNumeric, esDates} from '$lib/elasticsearch/aggs/ref/typeGroups';
+import {date_YYYYMMDD_dash} from '$lib/elasticsearch/types/fields';
 
 import {
 	isSameType,

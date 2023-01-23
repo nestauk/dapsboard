@@ -1,5 +1,5 @@
-import {objectOf} from 'types';
-import {geoPointObject} from 'elasticsearch/types/fields';
+import {objectOf} from '$lib/types';
+import {geoPointObject} from '$lib/elasticsearch/types/fields';
 
 export default {
 	id: 'geo_bounds',

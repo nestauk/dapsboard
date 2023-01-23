@@ -1,5 +1,5 @@
 <script>
-	import IconSliders from 'app/components/icons/IconSliders.svelte';
+	import IconSliders from '$lib/app/components/icons/IconSliders.svelte';
 	export let position = 'top-right';
 	export let popup = 'bottom';
 	export let className = '';

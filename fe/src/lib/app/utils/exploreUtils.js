@@ -1,20 +1,20 @@
 import * as _ from 'lamb';
 
-import {getApiVersionOf, getSchemaOf} from 'app/utils/data';
-import {getDatasetIdOf} from 'utils/specs';
+import {getApiVersionOf, getSchemaOf} from '$lib/app/utils/data';
+import {getDatasetIdOf} from '$lib/utils/specs';
 
-import * as aggsById from 'elasticsearch/aggs';
-import {makeRequestToQuery} from 'elasticsearch/aggs/utils/query';
-import {makeIsAggVersionCompatible} from 'elasticsearch/aggs/utils/version';
+import * as aggsById from '$lib/elasticsearch/aggs';
+import {makeRequestToQuery} from '$lib/elasticsearch/aggs/utils/query';
+import {makeIsAggVersionCompatible} from '$lib/elasticsearch/aggs/utils/version';
 
-import {aggHasNoRequiredParamsWithoutDefault} from 'elasticsearch/types/aggs.utils';
-import * as esTypes from 'elasticsearch/types/fields';
-import {isWithKeywordTypeId} from 'elasticsearch/types/fields.utils';
+import {aggHasNoRequiredParamsWithoutDefault} from '$lib/elasticsearch/types/aggs.utils';
+import * as esTypes from '$lib/elasticsearch/types/fields';
+import {isWithKeywordTypeId} from '$lib/elasticsearch/types/fields.utils';
 
-import * as types from 'types';
-import {makeIsTypeCompatibleWithType} from 'types/utils';
+import * as types from '$lib/types';
+import {makeIsTypeCompatibleWithType} from '$lib/types/utils';
 
-import {arrayToObjectWith} from 'utils/svizzle/utils/[any-array]-[array-object]';
+import {arrayToObjectWith} from '$lib/utils/svizzle/utils/[any-array]-[array-object]';
 
 export const aggs = _.values(aggsById);
 export const allTypes = {...types, ...esTypes};

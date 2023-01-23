@@ -1,12 +1,12 @@
-import {esSearchableField} from 'elasticsearch/aggs/ref/typeGroups';
-import {optional, script} from 'elasticsearch/types/params';
-import {integerD, string} from 'types';
+import {esSearchableField} from '$lib/elasticsearch/aggs/ref/typeGroups';
+import {optional, script} from '$lib/elasticsearch/types/params';
+import {integerD, string} from '$lib/types';
 import {
 	field,
 	missing,
 	script as scriptDoc,
-} from 'elasticsearch/aggs/ref/requestDoc';
-import response from 'elasticsearch/aggs/response/value';
+} from '$lib/elasticsearch/aggs/ref/requestDoc';
+import response from '$lib/elasticsearch/aggs/response/value';
 
 export default {
 	id: 'cardinality',

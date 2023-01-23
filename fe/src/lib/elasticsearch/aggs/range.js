@@ -1,4 +1,4 @@
-import {optional, script} from 'elasticsearch/types/params';
+import {optional, script} from '$lib/elasticsearch/types/params';
 import {
 	arrayOf,
 	booleanD,
@@ -6,9 +6,9 @@ import {
 	objectOf,
 	someOf,
 	string,
-} from 'types';
-import {field, keyed, script as scriptDoc} from 'elasticsearch/aggs/ref/requestDoc';
-import response from 'elasticsearch/aggs/response/bucketsRange';
+} from '$lib/types';
+import {field, keyed, script as scriptDoc} from '$lib/elasticsearch/aggs/ref/requestDoc';
+import response from '$lib/elasticsearch/aggs/response/bucketsRange';
 
 export default {
 	id: 'range',

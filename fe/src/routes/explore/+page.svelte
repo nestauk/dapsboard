@@ -5,9 +5,9 @@
 </script>
 
 <script>
-	import IconChevronDown from 'app/components/icons/IconChevronDown.svelte';
-	import IconChevronUp from 'app/components/icons/IconChevronUp.svelte';
-	import IconChevronRight from 'app/components/icons/IconChevronRight.svelte';
+	import IconChevronDown from '$lib/app/components/icons/IconChevronDown.svelte';
+	import IconChevronUp from '$lib/app/components/icons/IconChevronUp.svelte';
+	import IconChevronRight from '$lib/app/components/icons/IconChevronRight.svelte';
 
 	import {
 		navigator,
@@ -15,8 +15,8 @@
 		selectDataset,
 		selectSource,
 		toggleSource,
-	} from 'app/stores/exploreStores';
-	import {makeExploreQuery} from 'app/utils/exploreUtils';
+	} from '$lib/app/stores/exploreStores';
+	import {makeExploreQuery} from '$lib/app/utils/exploreUtils';
 
 	const makeHrefBoard = ({fields, source, project, version}) =>
 		`explore/${source}?${makeExploreQuery({fields, project, version})}`;

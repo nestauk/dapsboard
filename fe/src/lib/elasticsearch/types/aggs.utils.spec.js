@@ -1,7 +1,7 @@
 import assert from 'assert';
 
-import {optional} from 'elasticsearch/types/params';
-import {integer, integerD} from 'types';
+import {optional} from '$lib/elasticsearch/types/params';
+import {integer, integerD} from '$lib/types';
 
 import {aggHasNoRequiredParamsWithoutDefault} from './aggs.utils';
 

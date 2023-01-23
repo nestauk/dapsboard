@@ -1,6 +1,6 @@
-import {esSearchableField} from 'elasticsearch/aggs/ref/typeGroups';
-import {optional} from 'elasticsearch/types/params';
-import {stringD} from 'types';
+import {esSearchableField} from '$lib/elasticsearch/aggs/ref/typeGroups';
+import {optional} from '$lib/elasticsearch/types/params';
+import {stringD} from '$lib/types';
 
 export default {
 	id: 'reverse_nested',

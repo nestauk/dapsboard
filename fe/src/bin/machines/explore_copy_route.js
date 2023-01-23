@@ -1,9 +1,9 @@
 import clip from 'clipboardy';
 import {stringify} from '@svizzle/utils';
 
-import {exploreConfig} from 'app/machines/explore/route.config';
-import {exploreOptions} from 'app/machines/explore/route';
-import {stringifyObj} from 'utils/svizzle/utils/obj-string';
+import {exploreConfig} from '../../lib/app/machines/explore/route.config.js';
+import {exploreOptions} from '../../lib/app/machines/explore/route.js';
+import {stringifyObj} from '../utils/svizzle/utils/obj-string.js';
 
 // eslint-disable-next-line no-empty-function
 clip.write(`Machine(${stringify(exploreConfig)}, ${stringifyObj(exploreOptions, () => {})})`);

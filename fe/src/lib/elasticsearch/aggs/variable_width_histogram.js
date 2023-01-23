@@ -1,7 +1,7 @@
-import {optional} from 'elasticsearch/types/params';
-import {integerD, number, string} from 'types';
-import {field} from 'elasticsearch/aggs/ref/requestDoc';
-import response from 'elasticsearch/aggs/response/bucketsDocCount';
+import {optional} from '$lib/elasticsearch/types/params';
+import {integerD, number, string} from '$lib/types';
+import {field} from '$lib/elasticsearch/aggs/ref/requestDoc';
+import response from '$lib/elasticsearch/aggs/response/bucketsDocCount';
 
 export default {
 	id: 'variable_width_histogram',

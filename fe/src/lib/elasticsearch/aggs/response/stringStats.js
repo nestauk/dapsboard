@@ -1,9 +1,9 @@
-import {optional} from 'elasticsearch/types/params';
+import {optional} from '$lib/elasticsearch/types/params';
 import {
 	integer,
 	float,
 	recordLike
-} from 'types';
+} from '$lib/types';
 
 export default {
 	id: 'string_stats',

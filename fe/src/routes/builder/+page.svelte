@@ -4,30 +4,30 @@
 	import { readable } from 'svelte/store';
 	import rison from 'rison-esm';
 	import { stores } from '@sapper/app';
-	import ROUTES from 'app/data/routes';
+	import ROUTES from '$lib/app/data/routes';
 
-	import { integer } from 'types'
+	import { integer } from '$lib/types';
 
-	import ExternalLink from 'app/components/ExternalLink.svelte';
-	import JSONValue from 'app/components/JSONValue.svelte';
-	import TypedField from 'app/components/elementary/TypedField.svelte';
+	import ExternalLink from '$lib/app/components/ExternalLink.svelte';
+	import JSONValue from '$lib/app/components/JSONValue.svelte';
+	import TypedField from '$lib/app/components/elementary/TypedField.svelte';
 
-	import TabContainer from 'app/components/elementary/TabContainer.svelte';
-	import Tab from 'app/components/elementary/Tab.svelte';
-	import Select from 'app/components/elementary/Select.svelte';
-	import SelectMenu from 'app/components/elementary/SelectMenu.svelte';
-	import AggSelector from 'app/components/AggSelector.svelte';
-	import PanelMenu from 'app/components/elementary/PanelMenu.svelte';
-	import MenuItem from 'app/components/elementary/MenuItem.svelte';
-	import IconDelete from 'app/components/icons/IconDelete.svelte';
-	import IconClipboard from 'app/components/icons/IconClipboard.svelte';
-	import IconCheck from 'app/components/icons/IconCheck.svelte';
+	import TabContainer from '$lib/app/components/elementary/TabContainer.svelte';
+	import Tab from '$lib/app/components/elementary/Tab.svelte';
+	import Select from '$lib/app/components/elementary/Select.svelte';
+	import SelectMenu from '$lib/app/components/elementary/SelectMenu.svelte';
+	import AggSelector from '$lib/app/components/AggSelector.svelte';
+	import PanelMenu from '$lib/app/components/elementary/PanelMenu.svelte';
+	import MenuItem from '$lib/app/components/elementary/MenuItem.svelte';
+	import IconDelete from '$lib/app/components/icons/IconDelete.svelte';
+	import IconClipboard from '$lib/app/components/icons/IconClipboard.svelte';
+	import IconCheck from '$lib/app/components/icons/IconCheck.svelte';
 
-	import { createBuilderMachine } from 'app/machines/builder/route';
-	import { parseParams } from 'app/machines/builder/formediting.options';
+	import { createBuilderMachine } from '$lib/app/machines/builder/route';
+	import { parseParams } from '$lib/app/machines/builder/formediting.options';
 
-	import {getAggDocs} from 'elasticsearch/utils/docs';
-	import {getSearchURL} from 'utils/specs';
+	import {getAggDocs} from '$lib/elasticsearch/utils/docs';
+	import {getSearchURL} from '$lib/utils/specs';
 
 	const { machine: routeMachine, contextStores: {
 		// config

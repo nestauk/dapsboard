@@ -1,5 +1,5 @@
 <script>
-	import sources from 'app/data/sidebar.json';
+	import sources from '$lib/app/data/sidebar.json';
 </script>
 
 <section class="container">

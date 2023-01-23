@@ -1,5 +1,5 @@
 <script>
-	import {version} from 'app/utils/version';
+	import {version} from '$lib/app/utils/version';
 
 	import ExternalLink from './ExternalLink.svelte';
 

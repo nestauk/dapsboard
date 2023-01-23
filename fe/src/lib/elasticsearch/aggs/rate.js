@@ -5,10 +5,10 @@ import {
 	// rateIntervalsFromMonth,
 	// rateIntervalsToWeek,
 	script,
-} from 'elasticsearch/types/params';
-import {number, string} from 'types';
-import {field, script as scriptDoc} from 'elasticsearch/aggs/ref/requestDoc';
-import response from 'elasticsearch/aggs/response/value';
+} from '$lib/elasticsearch/types/params';
+import {number, string} from '$lib/types';
+import {field, script as scriptDoc} from '$lib/elasticsearch/aggs/ref/requestDoc';
+import response from '$lib/elasticsearch/aggs/response/value';
 
 export default {
 	id: 'rate',

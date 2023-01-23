@@ -9,15 +9,15 @@ import {
 	is_object,
 	is_xor,
 	isNative,
-} from 'types'
+} from '$lib/types'
 
-import { getKeyOf } from 'utils/generic';
+import { getKeyOf } from '$lib/utils/generic';
 
-import ArrayEditor from 'app/components/elementary/ArrayEditor.svelte';
-import BooleanRadios from 'app/components/elementary/BooleanRadios.svelte';
-import ObjectEditor from 'app/components/elementary/ObjectEditor.svelte';
-import RadioList from 'app/components/elementary/RadioList.svelte';
-import SimpleField from 'app/components/elementary/SimpleField.svelte';
+import ArrayEditor from '$lib/app/components/elementary/ArrayEditor.svelte';
+import BooleanRadios from '$lib/app/components/elementary/BooleanRadios.svelte';
+import ObjectEditor from '$lib/app/components/elementary/ObjectEditor.svelte';
+import RadioList from '$lib/app/components/elementary/RadioList.svelte';
+import SimpleField from '$lib/app/components/elementary/SimpleField.svelte';
 
 const typeEditors = {
 	boolean: {

@@ -10,7 +10,7 @@ import {
 	string,
 	stringD,
 	nativeKey,
-} from 'types';
+} from '$lib/types';
 
 describe('elasticsearch/types/genericTypes', function () {
 

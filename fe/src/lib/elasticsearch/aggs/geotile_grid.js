@@ -1,13 +1,13 @@
-import {geoBounds, geoPointObject} from 'elasticsearch/types/fields';
-import {optional} from 'elasticsearch/types/params';
+import {geoBounds, geoPointObject} from '$lib/elasticsearch/types/fields';
+import {optional} from '$lib/elasticsearch/types/params';
 import {
 	integer,
 	integerD,
 	intWithin,
 	string,
-} from 'types';
-import {field} from 'elasticsearch/aggs/ref/requestDoc';
-import response from 'elasticsearch/aggs/response/bucketsGeotileGrid';
+} from '$lib/types';
+import {field} from '$lib/elasticsearch/aggs/ref/requestDoc';
+import response from '$lib/elasticsearch/aggs/response/bucketsGeotileGrid';
 
 export default {
 	id: 'geotile_grid',

@@ -1,10 +1,10 @@
 // import assert from 'assert';
 // import * as _ from 'lamb';
 
-// import {aggParamShapeByAggId} from 'elasticsearch/config/aggParamShapeByAggId';
-// import aggParamDocByAggId from 'elasticsearch/config/aggParamDocByAggId';
-// import aggsDocURL from 'elasticsearch/config/aggsDocURL';
-// import {evaluate} from 'utils/generic';
+// import {aggParamShapeByAggId} from '$lib/elasticsearch/config/aggParamShapeByAggId';
+// import aggParamDocByAggId from '$lib/elasticsearch/config/aggParamDocByAggId';
+// import aggsDocURL from '$lib/elasticsearch/config/aggsDocURL';
+// import {evaluate} from '$lib/utils/generic';
 
 // const getParams = _.mapWith(([key, definition]) => [key, _.keys(definition)]);
 

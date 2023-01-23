@@ -1,4 +1,4 @@
-import {integer, float, number} from 'types';
+import {integer, float, number} from '$lib/types';
 
 export default {
 	id: 'boxplot',

@@ -1,5 +1,5 @@
-import {arrayOf, integer, objectOf} from 'types';
-import {zoomXYString} from 'elasticsearch/types/response';
+import {arrayOf, integer, objectOf} from '$lib/types';
+import {zoomXYString} from '$lib/elasticsearch/types/response';
 
 export default {
 	id: 'buckets_geotile_grid',

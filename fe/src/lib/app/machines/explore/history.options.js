@@ -1,7 +1,7 @@
 import {get} from 'svelte/store';
 import {assign, send} from 'xstate';
 
-import {makeExplorePath} from 'app/utils/exploreUtils';
+import {makeExplorePath} from '$lib/app/utils/exploreUtils';
 
 const updateCurrentURL = ctx => {
 	const {project, source, version} = get(ctx.dataset);

@@ -3,7 +3,7 @@ import {
 	integer,
 	number,
 	objectOf
-} from 'types';
+} from '$lib/types';
 
 export default {
 	id: 'buckets_number',

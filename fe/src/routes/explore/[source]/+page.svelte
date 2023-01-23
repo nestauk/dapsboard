@@ -5,14 +5,14 @@
 
 	import {stores} from '@sapper/app';
 
-	import IconChevronLeft from 'app/components/icons/IconChevronLeft.svelte';
-	import IconChevronDown from 'app/components/icons/IconChevronDown.svelte';
-	import IconChevronUp from 'app/components/icons/IconChevronUp.svelte';
-	import FieldMenu from 'app/components/explore/suggestions/FieldMenu.svelte';
-	import Search from 'app/components/explore/suggestions/Search.svelte';
-	import {createExploreMachine} from 'app/machines/explore/route';
-	import {selectedDatasetFields} from 'app/stores/exploreStores';
-	import {makeDepthByField, makeExploreIndexPath} from 'app/utils/exploreUtils';
+	import IconChevronLeft from '$lib/app/components/icons/IconChevronLeft.svelte';
+	import IconChevronDown from '$lib/app/components/icons/IconChevronDown.svelte';
+	import IconChevronUp from '$lib/app/components/icons/IconChevronUp.svelte';
+	import FieldMenu from '$lib/app/components/explore/suggestions/FieldMenu.svelte';
+	import Search from '$lib/app/components/explore/suggestions/Search.svelte';
+	import {createExploreMachine} from '$lib/app/machines/explore/route';
+	import {selectedDatasetFields} from '$lib/app/stores/exploreStores';
+	import {makeDepthByField, makeExploreIndexPath} from '$lib/app/utils/exploreUtils';
 
 	const {page} = stores();
 

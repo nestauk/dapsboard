@@ -1,5 +1,5 @@
-import {esSearchableField} from 'elasticsearch/aggs/ref/typeGroups';
-import {string} from 'types';
+import {esSearchableField} from '$lib/elasticsearch/aggs/ref/typeGroups';
+import {string} from '$lib/types';
 
 export default {
 	id: 'nested',

@@ -1,12 +1,12 @@
 import * as _ from 'lamb';
 
-import aggsIdByFieldType from 'elasticsearch/config/aggsIdByFieldType';
+import aggsIdByFieldType from '$lib/elasticsearch/config/aggsIdByFieldType';
 import {
 	baseAggFor,
 	dateHistogramAggFor,
 	histogramAggFor,
 	termsAggFor,
-} from 'elasticsearch/types/aggs';
+} from '$lib/elasticsearch/types/aggs';
 import {
 	fieldObjectOf,
 	metricScript,
@@ -15,8 +15,8 @@ import {
 	sortOrder,
 	termsExclude,
 	termsInclude,
-} from 'elasticsearch/types/params';
-import {geoBounds, geoPointString} from 'elasticsearch/types/fields';
+} from '$lib/elasticsearch/types/params';
+import {geoBounds, geoPointString} from '$lib/elasticsearch/types/fields';
 import {
 	arrayOf,
 	boolean,
@@ -38,7 +38,7 @@ import {
 	stringD,
 	unionOf,
 	xorOf,
-} from 'types';
+} from '$lib/types';
 
 /* params */
 

@@ -1,5 +1,5 @@
 <script>
-	import Icon from 'app/components/icons/Icon.svelte';
+	import Icon from '$lib/app/components/icons/Icon.svelte';
 
 	export let size = null;
 	export let fill = null;

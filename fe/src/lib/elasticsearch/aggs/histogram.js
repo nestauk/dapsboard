@@ -4,15 +4,15 @@ import {
 	integerD,
 	number,
 	string,
-} from 'types';
-import {optional, sortOptions} from 'elasticsearch/types/params';
+} from '$lib/types';
+import {optional, sortOptions} from '$lib/elasticsearch/types/params';
 import {
 	field,
 	keyed,
 	min_doc_count,
 	missing
-} from 'elasticsearch/aggs/ref/requestDoc';
-import response from 'elasticsearch/aggs/response/bucketsDocCount';
+} from '$lib/elasticsearch/aggs/ref/requestDoc';
+import response from '$lib/elasticsearch/aggs/response/bucketsDocCount';
 
 export default {
 	id: 'histogram',

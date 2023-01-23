@@ -1,5 +1,5 @@
 <script context='module'>
-	import routes from 'app/data/routes.json';
+	import routes from '$lib/app/data/routes.json';
 
 	export function preload ({ params: {id} }) {
 		const dataset = routes[id];
@@ -14,10 +14,10 @@
 <script>
 	import JSONTree from 'svelte-json-tree';
 
-	import {constructQuery} from 'elasticsearch/utils/aggQuery';
+	import {constructQuery} from '$lib/elasticsearch/utils/aggQuery';
 	import {IS_BROWSER} from 'utils/generic';
-	import {request} from 'utils/net';
-	import {getSchema, getSearchURL} from 'utils/specs';
+	import {request} from '$lib/utils/net';
+	import {getSchema, getSearchURL} from '$lib/utils/specs';
 
 	export let id;
 	export let dataset;

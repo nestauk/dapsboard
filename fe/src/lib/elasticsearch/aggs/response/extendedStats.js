@@ -1,4 +1,4 @@
-import {integer, number, objectOf} from 'types';
+import {integer, number, objectOf} from '$lib/types';
 
 export default {
 	id: 'extended_stats',

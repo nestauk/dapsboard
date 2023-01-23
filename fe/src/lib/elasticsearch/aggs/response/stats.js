@@ -1,4 +1,4 @@
-import {integer, number} from 'types';
+import {integer, number} from '$lib/types';
 
 export default {
 	id: 'stats',

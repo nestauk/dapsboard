@@ -1,11 +1,11 @@
 import {
 	geoPointObject,
 	geoPointString
-} from 'elasticsearch/types/fields';
-import {optional} from 'elasticsearch/types/params';
-import {booleanD, string} from 'types';
-import {field, missing} from 'elasticsearch/aggs/ref/requestDoc';
-import response from 'elasticsearch/aggs/response/geoBounds';
+} from '$lib/elasticsearch/types/fields';
+import {optional} from '$lib/elasticsearch/types/params';
+import {booleanD, string} from '$lib/types';
+import {field, missing} from '$lib/elasticsearch/aggs/ref/requestDoc';
+import response from '$lib/elasticsearch/aggs/response/geoBounds';
 
 export default {
 	id: 'geo_bounds',

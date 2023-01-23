@@ -1,9 +1,9 @@
-import {esStrings} from 'elasticsearch/aggs/ref/typeGroups';
+import {esStrings} from '$lib/elasticsearch/aggs/ref/typeGroups';
 import {
 	optional,
 	termsExclude,
 	termsInclude,
-} from 'elasticsearch/types/params';
+} from '$lib/elasticsearch/types/params';
 import {
 	arrayOf,
 	booleanD,
@@ -12,15 +12,15 @@ import {
 	object,
 	objectOf,
 	string
-} from 'types';
+} from '$lib/types';
 import {
 	background_filter,
 	field,
 	min_doc_count,
 	termsExclude as termsExcludeDoc,
 	termsInclude as termsIncludeDoc,
-} from 'elasticsearch/aggs/ref/requestDoc';
-import response from 'elasticsearch/aggs/response/bucketsTextScore';
+} from '$lib/elasticsearch/aggs/ref/requestDoc';
+import response from '$lib/elasticsearch/aggs/response/bucketsTextScore';
 
 export default {
 	id: 'significant_text',

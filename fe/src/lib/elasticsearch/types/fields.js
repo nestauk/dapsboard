@@ -8,7 +8,7 @@ import {
 	shape,
 	string,
 	unionOf,
-} from 'types';
+} from '$lib/types';
 
 /* ES date fields */
 

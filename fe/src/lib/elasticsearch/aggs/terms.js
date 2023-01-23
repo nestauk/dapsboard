@@ -1,17 +1,17 @@
-import {esSearchableString} from 'elasticsearch/aggs/ref/typeGroups';
+import {esSearchableString} from '$lib/elasticsearch/aggs/ref/typeGroups';
 import {
 	enumsOf,
 	integer,
 	integerD,
 	string,
-} from 'types';
+} from '$lib/types';
 import {
 	optional,
 	script,
 	sortOptions,
 	termsExclude,
 	termsInclude,
-} from 'elasticsearch/types/params';
+} from '$lib/elasticsearch/types/params';
 import {
 	field,
 	min_doc_count,
@@ -19,8 +19,8 @@ import {
 	script as scriptDoc,
 	termsExclude as termsExcludeDoc,
 	termsInclude as termsIncludeDoc,
-} from 'elasticsearch/aggs/ref/requestDoc';
-import response from 'elasticsearch/aggs/response/bucketsTerms';
+} from '$lib/elasticsearch/aggs/ref/requestDoc';
+import response from '$lib/elasticsearch/aggs/response/bucketsTerms';
 
 export default {
 	id: 'terms',

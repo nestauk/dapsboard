@@ -1,12 +1,12 @@
-import {esSearchableString} from 'elasticsearch/aggs/ref/typeGroups';
-import {optional, script} from 'elasticsearch/types/params';
-import {booleanD, string} from 'types';
+import {esSearchableString} from '$lib/elasticsearch/aggs/ref/typeGroups';
+import {optional, script} from '$lib/elasticsearch/types/params';
+import {booleanD, string} from '$lib/types';
 import {
 	field,
 	missing,
 	script as scriptDoc,
-} from 'elasticsearch/aggs/ref/requestDoc';
-import response from 'elasticsearch/aggs/response/stringStats';
+} from '$lib/elasticsearch/aggs/ref/requestDoc';
+import response from '$lib/elasticsearch/aggs/response/stringStats';
 
 export default {
 	id: 'string_stats',

@@ -1,7 +1,7 @@
 import {selectingConfig} from './selecting.config';
 import {historyConfig} from './history.config';
 import {resultsConfig} from './results.config';
-import {searchConfig} from 'app/machines/explore/search.config.js';
+import {searchConfig} from '$lib/app/machines/explore/search.config.js';
 
 export const exploreConfig = {
 	id: 'ExploreRoute',

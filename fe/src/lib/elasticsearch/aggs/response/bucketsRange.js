@@ -1,11 +1,11 @@
-import {optional} from 'elasticsearch/types/params';
+import {optional} from '$lib/elasticsearch/types/params';
 import {
 	arrayOf,
 	integer,
 	string,
 	number,
 	objectOf,
-} from 'types';
+} from '$lib/types';
 
 export default {
 	id: 'buckets_range',

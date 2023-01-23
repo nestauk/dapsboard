@@ -1,9 +1,9 @@
 <script>
 	import { createEventDispatcher } from 'svelte';
 
-	import PanelMenu from 'app/components/elementary/PanelMenu.svelte';
-	import MenuItem from 'app/components/elementary/MenuItem.svelte';
-	import { autoID } from 'utils/generic';
+	import PanelMenu from '$lib/app/components/elementary/PanelMenu.svelte';
+	import MenuItem from '$lib/app/components/elementary/MenuItem.svelte';
+	import { autoID } from '$lib/utils/generic';
 
 	const dispatch = createEventDispatcher();
 

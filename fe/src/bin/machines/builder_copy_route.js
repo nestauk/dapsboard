@@ -1,10 +1,10 @@
 import clip from 'clipboardy';
 import {stringify} from '@svizzle/utils';
 
-import {stringifyObj} from 'utils/svizzle/utils/obj-string';
+import {stringifyObj} from '../../utils/svizzle/utils/obj-string';
 
-import {builderTesterConfig} from 'app/machines/builder/tester.config';
-import {builderTesterOptions} from 'app/machines/builder/tester.options';
+import {builderTesterConfig} from '../../lib/app/machines/builder/tester.config';
+import {builderTesterOptions} from '../../lib/app/machines/builder/tester.options';
 
 clip.write(`Machine(${stringify(builderTesterConfig)}, ${stringifyObj(builderTesterOptions)})`);
 console.log('/builder route copied to the clipboard\n');

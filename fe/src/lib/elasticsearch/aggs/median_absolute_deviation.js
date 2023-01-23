@@ -1,15 +1,15 @@
-import {optional, script} from 'elasticsearch/types/params';
+import {optional, script} from '$lib/elasticsearch/types/params';
 import {
 	integerD,
 	string,
 	number
-} from 'types';
+} from '$lib/types';
 import {
 	field,
 	missing,
 	script as scriptDoc,
-} from 'elasticsearch/aggs/ref/requestDoc';
-import response from 'elasticsearch/aggs/response/value';
+} from '$lib/elasticsearch/aggs/ref/requestDoc';
+import response from '$lib/elasticsearch/aggs/response/value';
 
 export default {
 	id: 'median_absolute_deviation',

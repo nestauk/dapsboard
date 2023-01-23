@@ -1,4 +1,4 @@
-import { formEditingConfig } from 'app/machines/builder/formediting.config';
+import { formEditingConfig } from '$lib/app/machines/builder/formediting.config';
 import { docsConfig } from './docs.config';
 import { historyConfig } from './history.config';
 

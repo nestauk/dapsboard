@@ -1,6 +1,6 @@
-import {esSearchableField} from 'elasticsearch/aggs/ref/typeGroups';
-import {optional} from 'elasticsearch/types/params';
-import {integerD} from 'types';
+import {esSearchableField} from '$lib/elasticsearch/aggs/ref/typeGroups';
+import {optional} from '$lib/elasticsearch/types/params';
+import {integerD} from '$lib/types';
 
 export default {
 	id: 'sampler',

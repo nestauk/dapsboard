@@ -1,7 +1,7 @@
-import {esSearchableField} from 'elasticsearch/aggs/ref/typeGroups';
-import {optional} from 'elasticsearch/types/params';
-import {enumsOf, integerD, string} from 'types';
-import {missing} from 'elasticsearch/aggs/ref/requestDoc';
+import {esSearchableField} from '$lib/elasticsearch/aggs/ref/typeGroups';
+import {optional} from '$lib/elasticsearch/types/params';
+import {enumsOf, integerD, string} from '$lib/types';
+import {missing} from '$lib/elasticsearch/aggs/ref/requestDoc';
 
 export default {
 	id: 'diversified_sampler',

@@ -4,7 +4,7 @@ import {
 	numString,
 	recordLike,
 	unionOf
-} from 'types';
+} from '$lib/types';
 
 export default {
 	id: 'numkeyToNum',

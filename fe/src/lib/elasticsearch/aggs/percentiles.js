@@ -1,5 +1,5 @@
-import {esNumericButBoolean} from 'elasticsearch/aggs/ref/typeGroups';
-import {optional, script} from 'elasticsearch/types/params';
+import {esNumericButBoolean} from '$lib/elasticsearch/aggs/ref/typeGroups';
+import {optional, script} from '$lib/elasticsearch/types/params';
 import {
 	arrayOf,
 	booleanD,
@@ -9,14 +9,14 @@ import {
 	objectOf,
 	string,
 	number
-} from 'types';
+} from '$lib/types';
 import {
 	field,
 	keyed,
 	missing,
 	script as scriptDoc,
-} from 'elasticsearch/aggs/ref/requestDoc';
-import response from 'elasticsearch/aggs/response/numToNum';
+} from '$lib/elasticsearch/aggs/ref/requestDoc';
+import response from '$lib/elasticsearch/aggs/response/numToNum';
 
 export default {
 	id: 'percentiles',

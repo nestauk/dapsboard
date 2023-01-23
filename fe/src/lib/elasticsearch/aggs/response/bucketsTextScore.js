@@ -4,7 +4,7 @@ import {
 	number,
 	objectOf,
 	string,
-} from 'types';
+} from '$lib/types';
 
 export default {
 	id: 'buckets_text_score',

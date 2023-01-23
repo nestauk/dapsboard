@@ -1,4 +1,4 @@
-import {integer} from 'types';
+import {integer} from '$lib/types';
 
 export default {
 	id: 'doc_count',

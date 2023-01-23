@@ -1,7 +1,7 @@
-import {esSearchableField} from 'elasticsearch/aggs/ref/typeGroups';
-import {string} from 'types';
-import {field} from 'elasticsearch/aggs/ref/requestDoc';
-import response from 'elasticsearch/aggs/response/docCount';
+import {esSearchableField} from '$lib/elasticsearch/aggs/ref/typeGroups';
+import {string} from '$lib/types';
+import {field} from '$lib/elasticsearch/aggs/ref/requestDoc';
+import response from '$lib/elasticsearch/aggs/response/docCount';
 
 export default {
 	id: 'missing',

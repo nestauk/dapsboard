@@ -1,5 +1,5 @@
-import DATASETS from 'app/data/datasets.json';
-import aggsIdByFieldType from 'elasticsearch/config/aggsIdByFieldType';
+import DATASETS from '$lib/app/data/datasets.json';
+import aggsIdByFieldType from '$lib/elasticsearch/config/aggsIdByFieldType';
 import {
 	metricLabels,
 	metricMultiFieldLabels,
@@ -7,8 +7,8 @@ import {
 	bucketMultiFieldLabels,
 	topBucketLabels,
 	nestedBucketLabels,
-} from 'elasticsearch/config/aggsLabels';
-import {getESType, getSchema} from 'utils/specs';
+} from '$lib/elasticsearch/config/aggsLabels';
+import {getESType, getSchema} from '$lib/utils/specs';
 
 export const aggregations = {};
 export const datasets = {};

@@ -1,7 +1,13 @@
-!src/node_modules/app
-!src/node_modules/elasticsearch
-!src/node_modules/svizzle
-!src/node_modules/test_assets
-!src/node_modules/types
-src/node_modules/@sapper/
-__sapper__
+.DS_Store
+.env
+.env.*
+!.env.example
+/.svelte-kit
+/build
+/node_modules
+/package
+
+# Ignore files for PNPM, NPM and YARN
+pnpm-lock.yaml
+package-lock.json
+yarn.lock
