@@ -38,7 +38,8 @@ export function createMachina (machineConfig, machineOptions, contextStores) {
 		context: contextStores
 	}, machineOptions);
 
-	const interpreter = interpret(machine, { devTools: process.env.INSPECT === 'true' });
+	// const interpreter = interpret(machine, { devTools: process.env.INSPECT === 'true' });
+	const interpreter = interpret(machine, { devTools: false });
 
 	interpreter.start();
 
