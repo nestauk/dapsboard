@@ -32,10 +32,10 @@ export const makeExploreQuery = ({fields, project, version}) => {
 }
 
 export const makeExploreIndexPath = ({project, source, version}) =>
-	`explore?source=${source}&${makeExploreQuery({project, version})}`;
+	`/explore?source=${source}&${makeExploreQuery({project, version})}`;
 
 export const makeExplorePath = ({fields, project, source, version}) =>
-	`explore/${source}?${makeExploreQuery({fields, project, version})}`;
+	`/explore/${source}?${makeExploreQuery({fields, project, version})}`;
 
 /* ES query */
 

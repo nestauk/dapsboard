@@ -1,8 +1,7 @@
 import * as _ from 'lamb';
 import { isObjNotEmpty, isNotNil } from '@svizzle/utils';
 import { get } from 'svelte/store';
-import rison from 'rison-esm';
-
+import { RISON } from 'rison2';
 const pickNonNil = _.pickIf(isNotNil);
 
 function formData (machine) {
@@ -36,7 +35,7 @@ function updateEntry (ctx, event) {
 	if (get(ctx.isParsing)) {
 		return;
 	}
-	const query = rison.encode(collectConfiguration(ctx));
+	const query = RISON.stringify(collectConfiguration(ctx));
 	const url = `${window.location.pathname}?q=${query}`;
 	let updateType = event.init
 		? 'pushState'

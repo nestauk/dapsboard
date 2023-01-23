@@ -1,7 +1,9 @@
 <script>
+	import {page as _page} from '$app/stores';
+
 	import Nav from '$lib/app/components/Nav.svelte';
 
-	export let segment;
+	$: [,segment] = $_page.url.pathname.split('/');
 </script>
 
 <header>

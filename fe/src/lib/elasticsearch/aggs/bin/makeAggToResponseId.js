@@ -1,7 +1,11 @@
 #!/usr/bin/env node -r esm
-/* eslint-disable node/shebang */
 
-import {resolve} from 'path';
+/* eslint-disable
+	node/shebang
+*/
+
+import path from 'path';
+import {fileURLToPath} from 'node:url';
 
 import {tapMessage} from '@svizzle/dev';
 import {writeFile} from '@svizzle/file';
@@ -10,7 +14,9 @@ import * as _ from 'lamb';
 
 import * as aggs from '../index';
 
-const PATH = resolve(__dirname, '../ref/aggToResponseType.yaml')
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+const PATH = path.resolve(__dirname, '../ref/aggToResponseType.yaml')
 const makeMap = _.mapValuesWith(_.getPath('response.id'));
 
 const mapStr = dump(makeMap(aggs));

@@ -1,9 +1,10 @@
 <script>
+    import {browser} from '$app/environment';
 	import * as _ from 'lamb';
 	import {onMount} from 'svelte';
 	import JSONTree from 'svelte-json-tree';
 
-	import {stores} from '@sapper/app';
+	import {page as _page} from '$app/stores';
 
 	import IconChevronLeft from '$lib/app/components/icons/IconChevronLeft.svelte';
 	import IconChevronDown from '$lib/app/components/icons/IconChevronDown.svelte';
@@ -13,8 +14,7 @@
 	import {createExploreMachine} from '$lib/app/machines/explore/route';
 	import {selectedDatasetFields} from '$lib/app/stores/exploreStores';
 	import {makeDepthByField, makeExploreIndexPath} from '$lib/app/utils/exploreUtils';
-
-	const {page} = stores();
+	import {parseSearchParams} from '$lib/utils/url';
 
 	const fontSize = 16;
 	const depthFontSize = 0.8 * fontSize;
@@ -34,9 +34,16 @@
 		suggestions,
 	}} = createExploreMachine();
 
-	$: ({params: {source}, query: {project, version, fields}} = $page);
+	let searchParams;
+	let source;
+	let project;
+	let version;
+	let fields;
 
 	let width = 0;
+
+	$: browser && ({params: {source}, url: {searchParams}} = $_page);
+	$: searchParams && ({project, version, fields} = parseSearchParams(searchParams));
 
 	$: if (source) {
 		machine.send('SELECT_SOURCE', {source});
@@ -78,7 +85,7 @@
 		};
 
 		addEventListener('popstate', pageReloader);
-		const unsubscribe = page.subscribe(pageReloader);
+		const unsubscribe = _page.subscribe(pageReloader);
 
 		return () => {
 			removeEventListener('popstate', pageReloader);

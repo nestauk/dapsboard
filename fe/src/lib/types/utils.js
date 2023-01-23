@@ -1,7 +1,7 @@
 import * as _ from 'lamb';
 
-import {occursWith} from '$lib/utils/svizzle/utils/[any-boolean]-[array-boolean]';
-import {ψ} from '$lib/utils/svizzle/utils/array-[any-any]';
+import {occursWith} from '$lib/utils/svizzle/utils/[any-boolean]-[array-boolean].js';
+import {ψ} from '$lib/utils/svizzle/utils/array-[any-any].js';
 
 import {
 	getNative,

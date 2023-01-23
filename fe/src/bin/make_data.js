@@ -1,7 +1,6 @@
 #!/usr/bin/env node -r esm
 
 /* eslint-disable
-	node/no-unpublished-import,
 	node/shebang
 */
 
@@ -49,12 +48,10 @@ const save = (/** @type {{ spec: unknown; constructor: Function; toString(): str
 
 const run = async () => {
 	const refs = await readDir(INDICES_SPECS_DIR)
-	// @ts-ignore
 	.then(_.pipe([_.filterWith(isYamlFile), _.mapWith(makeSchemaObj)]));
 
 	const datasets = await Promise.all(
 		refs.map(ref =>
-			// @ts-ignore
 			readFile(ref.filepath, 'utf-8')
 			.then(yaml.load)
 			.then(spec => ({
@@ -69,5 +66,4 @@ const run = async () => {
 	await save(makeDatasetBySource(datasets), SIDEBAR_PATH);
 }
 
-// @ts-ignore
 run().then(tapMessage('Done'));

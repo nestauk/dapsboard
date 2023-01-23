@@ -11,10 +11,10 @@
 					{source}
 				</p>
 				<ul>
-					{#each releases as {dataset, id}}
+					{#each releases as {id}}
 					<p>
 						<a
-							href='datasets/{id}'
+							href='/_datasets/{id}'
 						>
 							<span>{id}</span>
 						</a>

@@ -1,5 +1,6 @@
 import assert from 'assert';
 import path from 'path';
+import {fileURLToPath} from 'node:url';
 
 import * as _ from 'lamb';
 import {readDir, readFile} from '@svizzle/file';
@@ -10,6 +11,8 @@ import {
 	makeStartsWith,
 	sliceStringAt,
 } from '@svizzle/utils';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const INDEX_PATH = path.resolve(__dirname, '../index.js');
 const SRC_DIR_PATH = path.resolve(__dirname, '../');

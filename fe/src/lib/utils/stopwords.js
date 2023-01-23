@@ -139,4 +139,3 @@ export const stopWords = [
 	`you're`, `yours`, `yourself`, `yourselves`, `you've`, `yr`, `ys`, `yt`,
 	`z`, `zero`, `zi`, `zz`
 ];
-	

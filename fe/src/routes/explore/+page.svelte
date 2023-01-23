@@ -1,10 +1,7 @@
-<script context='module'>
-	export function preload ({ query: {project, source, version} }) {
-		return {project, source, version}
-	}
-</script>
-
 <script>
+	import {page as _page} from '$app/stores';
+	import {browser} from '$app/environment';
+
 	import IconChevronDown from '$lib/app/components/icons/IconChevronDown.svelte';
 	import IconChevronUp from '$lib/app/components/icons/IconChevronUp.svelte';
 	import IconChevronRight from '$lib/app/components/icons/IconChevronRight.svelte';
@@ -17,16 +14,21 @@
 		toggleSource,
 	} from '$lib/app/stores/exploreStores';
 	import {makeExploreQuery} from '$lib/app/utils/exploreUtils';
+	import {parseSearchParams} from '$lib/utils/url';
 
 	const makeHrefBoard = ({fields, source, project, version}) =>
-		`explore/${source}?${makeExploreQuery({fields, project, version})}`;
+		`/explore/${source}?${makeExploreQuery({fields, project, version})}`;
 
 	const hrefMenu = ({project, source, version}) =>
-		`explore?source=${source}&${makeExploreQuery({project, version})}`;
+		`/explore?source=${source}&${makeExploreQuery({project, version})}`;
 
-	export let source;
-	export let project;
-	export let version;
+	let searchParams;
+	let source;
+	let project;
+	let version;
+
+	$: browser && ({url: {searchParams}} = $_page);
+	$: searchParams && ({source, project, version} = parseSearchParams(searchParams));
 
 	$: hrefBoard = project && source && version
 		&& makeHrefBoard({project, source, version});

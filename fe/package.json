@@ -1,9 +1,11 @@
 {
 	"dependencies": {
+		"@svizzle/ui": "^0.9.1",
 		"@svizzle/utils": "^0.19.0",
 		"js-yaml": "^4.1.0",
 		"just-compare": "^2.3.0",
 		"lamb": "^0.61.0",
+		"rison2": "^0.2.3",
 		"svelte-json-tree": "^1.0.0",
 		"xstate": "^4.35.2"
 	},

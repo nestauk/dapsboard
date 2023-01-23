@@ -2,8 +2,8 @@
 	import * as _ from 'lamb';
 	import { onMount } from 'svelte';
 	import { readable } from 'svelte/store';
-	import rison from 'rison-esm';
-	import { stores } from '@sapper/app';
+	import { RISON } from 'rison2';
+	import {page as _page} from '$app/stores';
 	import ROUTES from '$lib/app/data/routes';
 
 	import { integer } from '$lib/types';
@@ -147,12 +147,11 @@
 		return $formParams?.[name];
 	}
 
-	const { page } = stores();
 	let eventType = 'READY';
-	onMount(async () => {
+	onMount(() => {
 		const loadPage = ({params}) => {
 			const event = {
-				query: params.q && rison.decode(params.q),
+				query: params.q && RISON.parse(params.q),
 			};
 			routeMachine.send(eventType);
 			parseParams(routeMachine, event);
@@ -166,8 +165,9 @@
 			});
 		};
 		addEventListener('popstate', pageReloader);
-		const unsubscribe = page.subscribe(pageReloader);
+		const unsubscribe = _page.subscribe(pageReloader);
 
+		/*
 		if (process.env.INSPECT === 'true') {
 			const module = await import('@xstate/inspect');
 			module.inspect({
@@ -175,6 +175,7 @@
 				iframe: false
 			});
 		}
+		*/
 
 		return () => {
 			removeEventListener('popstate', pageReloader);

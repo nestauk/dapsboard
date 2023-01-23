@@ -26,16 +26,16 @@
 	}
 </script>
 
-<div 
-	bind:this={icon} 
-	class={`icon ${position} ${className}`} 
+<div
+	bind:this={icon}
+	class={`icon ${position} ${className}`}
 	on:mouseenter={openMenu}
 	on:mouseleave={closeMenu}
 >
 	<IconSliders size={14} />
-	<menu 
-		bind:this={menu} 
-		class:menuOpen 
+	<menu
+		bind:this={menu}
+		class:menuOpen
 	>
 		<header>
 			<span>Settings</span>

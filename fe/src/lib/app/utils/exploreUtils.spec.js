@@ -1,7 +1,7 @@
 import assert from 'assert';
 
 import {selectionToAggsQuery} from '$lib/app/utils/exploreUtils';
-import general_arxiv_v0_date_created_article from 'test_assets/general_arxiv_v0_date_created_article.json';
+import general_arxiv_v0_date_created_article from '$lib/test_assets/general_arxiv_v0_date_created_article.json';
 
 describe('utils/exploreUtils.js', function () {
 	describe('selectionToAggsQuery', function () {

@@ -7,6 +7,7 @@
 	export let isTitleSlot;
 	export let isContentSlot;
 
+	// eslint-disable-next-line no-unused-vars
 	const {selectedTab, tabs} = getContext(tabsKey);
 
 	// eslint-disable-next-line no-unused-vars

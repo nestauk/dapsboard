@@ -1,38 +1,32 @@
-<script context='module'>
-	import routes from '$lib/app/data/routes.json';
-
-	export function preload ({ params: {id} }) {
-		const dataset = routes[id];
-
-		return {
-			id,
-			dataset
-		}
-	}
-</script>
-
 <script>
 	import JSONTree from 'svelte-json-tree';
 
+	import {browser} from '$app/environment';
+	import {page as _page} from '$app/stores';
+
+	import routes from '$lib/app/data/routes.json';
 	import {constructQuery} from '$lib/elasticsearch/utils/aggQuery';
-	import {IS_BROWSER} from 'utils/generic';
 	import {request} from '$lib/utils/net';
 	import {getSchema, getSearchURL} from '$lib/utils/specs';
 
-	export let id;
-	export let dataset;
-
+	let id;
+	let dataset;
 	let responsePromise;
+
+	let schema;
+	let query;
 
 	function doQuery (data) {
 		const url = getSearchURL(dataset);
 
-		return IS_BROWSER && request('POST', url, {data});
+		return browser && request('POST', url, {data});
 	}
 
-	$: schema = getSchema(dataset);
-	$: query = constructQuery(schema);
-	$: responsePromise = doQuery(query);
+	$: browser && ({params: {id}} = $_page);
+	$: dataset = routes[id];
+	$: dataset && (schema = getSchema(dataset));
+	$: schema && (query = constructQuery(schema));
+	$: query && (responsePromise = doQuery(query));
 </script>
 
 <svelte:head>
