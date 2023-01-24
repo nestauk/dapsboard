@@ -42,25 +42,24 @@
 
 <div class:largeItems={fieldEditor.component.name === 'ObjectEditor'}>
 	{#if value}
-	{#each value as item, id (item)}
-		<span>
-			<svelte:component
-				this={fieldEditor.component}
-				value={item}
-				{...fieldEditor.props}
-				on:change={e => {
-					const val = e.detail;
-					if (isEmpty(val))	{
-						discard(id);
-					}
-					else {
-						set(id, val);
-					}
-				}}
-			/>
-		</span>
-		<button on:click={() => discard(id)}>-</button>
-	{/each}
+		{#each value as item, id (item)}
+			<span>
+				<svelte:component
+					this={fieldEditor.component}
+					value={item}
+					{...fieldEditor.props}
+					on:change={e => {
+						const val = e.detail;
+						if (isEmpty(val))	{
+							discard(id);
+						} else {
+							set(id, val);
+						}
+					}}
+				/>
+			</span>
+			<button on:click={() => discard(id)}>-</button>
+		{/each}
 	{/if}
 	<span class='add'>
 		<button on:click={() => add()}>+</button>

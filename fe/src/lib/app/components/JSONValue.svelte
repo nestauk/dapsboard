@@ -1,72 +1,70 @@
 <script>
-import { createEventDispatcher } from 'svelte';
-import { keys } from 'lamb';
+	import { createEventDispatcher } from 'svelte';
+	import { keys } from 'lamb';
 
-const dispatch = createEventDispatcher();
+	const dispatch = createEventDispatcher();
 
-export let value;
-export let editable = false;
-export let parsedValue = null;
-export let highlighted = true;
-export let isErrorValue = false;
+	export let value;
+	export let editable = false;
+	export let parsedValue = null;
+	export let highlighted = true;
+	export let isErrorValue = false;
 
-let json = '';
+	let json = '';
 
-function generateHTML (input) {
-	const nodeType = typeof input;
-	let html;
+	function generateHTML (input) {
+		const nodeType = typeof input;
+		let html;
 
-	switch (nodeType) {
-		case 'boolean':
-		case 'number':
-			html = input.toString();
-			break;
-		case 'string':
-			html = `"${input}"`;
-			break;
-		case 'object': {
-			if (input === null) {
-				html = 'null';
-			} else if (Array.isArray(input)) {
-				let propsHtml = input.map((v, i) => `<li><span class='property-value'>${generateHTML(v)}</span>${i < input.length - 1 ? "<span class='boilerplate'>,</span>" : ""}</li>`);
+		switch (nodeType) {
+			case 'boolean':
+			case 'number':
+				html = input.toString();
+				break;
+			case 'string':
+				html = `"${input}"`;
+				break;
+			case 'object': {
+				if (input === null) {
+					html = 'null';
+				} else if (Array.isArray(input)) {
+					let propsHtml = input.map((v, i) => `<li><span class='property-value'>${generateHTML(v)}</span>${i < input.length - 1 ? "<span class='boilerplate'>,</span>" : ""}</li>`);
 
-				html = `<span class='boilerplate'>[</span> <ul class='property-list'>${propsHtml.join('')}</ul><span class='boilerplate'>]</span>`;
+					html = `<span class='boilerplate'>[</span> <ul class='property-list'>${propsHtml.join('')}</ul><span class='boilerplate'>]</span>`;
+				} else {
+					let propsHtml = keys(input).map((k, i) =>
+						`<li><span class='property-name'>"${k}"</span> <span class='boilerplate'>:</span> <span class='property-value'>${generateHTML(input[k])}</span>${i < keys.length - 1 ? "<span class='boilerplate'>,</span>" : ""}</li>`
+					);
+
+					html = `<span class='boilerplate'>{</span> <ul class='property-list'>${propsHtml.join('')}</ul><span class='boilerplate'>}</span>`;
+				}
+				break;
 			}
-			else {
-				let propsHtml = keys(input).map((k, i) =>
-					`<li><span class='property-name'>"${k}"</span> <span class='boilerplate'>:</span> <span class='property-value'>${generateHTML(input[k])}</span>${i < keys.length - 1 ? "<span class='boilerplate'>,</span>" : ""}</li>`
-				);
-
-				html = `<span class='boilerplate'>{</span> <ul class='property-list'>${propsHtml.join('')}</ul><span class='boilerplate'>}</span>`;
-			}
-			break;
+			default:
+				html = '';
 		}
-		default:
-			html = '';
+
+		return html;
 	}
 
-	return html;
-}
-
-function handleInput (event) {
-	try {
-		const text = event.target.textContent;
-		if (editable && text !== '') {
-			parsedValue = JSON.parse(text);
-		} else {
+	function handleInput (event) {
+		try {
+			const text = event.target.textContent;
+			if (editable && text !== '') {
+				parsedValue = JSON.parse(text);
+			} else {
+				parsedValue = null;
+			}
+			dispatch('change', parsedValue);
+		} catch (error) {
 			parsedValue = null;
+			console.log(error);
 		}
-		dispatch('change', parsedValue);
 	}
-	catch (error) {
-		parsedValue = null;
-		console.log(error);
-	}
-}
 
-$: json = highlighted
-	? generateHTML(parsedValue = value)
-	: JSON.stringify(parsedValue = value, null, 2);
+	$: json = highlighted
+		? generateHTML(parsedValue = value)
+		: JSON.stringify(parsedValue = value, null, 2);
 </script>
 
 {#if editable === true}

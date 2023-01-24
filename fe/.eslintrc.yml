@@ -24,6 +24,24 @@ overrides:
 - files:
   - '**/*.svelte'
   rules:
+    svelte/html-closing-bracket-spacing: error
+    svelte/html-quotes:
+    - error
+    - prefer: single
+    svelte/indent:
+    - warn
+    - indent: tab
+    svelte/no-at-debug-tags: warn
+    svelte/no-at-html-tags: warn
+    svelte/no-dupe-else-if-blocks: error
+    svelte/no-dupe-style-properties: error
+    svelte/no-dynamic-slot-name: error
+    svelte/no-inner-declarations: error
+    svelte/no-not-function-handler: error
+    svelte/no-object-in-text-mustaches: error
+    svelte/no-shorthand-style-property-overrides: error
+    svelte/no-unknown-style-directive-property: warn
+    svelte/no-unused-svelte-ignore: warn
     brace-style: off
     import/no-unresolved: off
     no-invalid-this: off

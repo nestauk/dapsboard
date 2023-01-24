@@ -7,7 +7,7 @@
 </script>
 
 <header>
-	<Nav {segment}/>
+	<Nav {segment} />
 </header>
 
 <main>

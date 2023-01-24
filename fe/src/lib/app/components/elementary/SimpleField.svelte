@@ -53,8 +53,7 @@
 			if (isNotNil(obj)) {
 				try {
 					result = JSON.parse(obj);
-				}
-				catch (e) {
+				} catch (e) {
 					console.log('Problem parsing JSON, aborting dispatch...', e);
 				}
 			}
@@ -69,11 +68,9 @@
 			&& isNotNil(incomingValue)
 		) {
 			result = incomingFormatters[dataType](incomingValue);
-		}
-		else if (type === 'json') {
+		} else if (type === 'json') {
 			result = incomingFormatters.json(incomingValue);
-		}
-		else {
+		} else {
 			result = incomingValue || '';
 		}
 		return result;
@@ -85,8 +82,7 @@
 			outgoing = outgoing && outgoing.length > 0
 				? outgoingFormatters[dataType](outgoing)
 				: null;
-		}
-		else if (type === 'json') {
+		} else if (type === 'json') {
 			outgoing = outgoingFormatters.json(outgoing);
 		}
 		return outgoing;

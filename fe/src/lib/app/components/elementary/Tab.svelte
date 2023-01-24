@@ -22,17 +22,17 @@
 
 {#if isTitleSlot}
 	<button
-		type="button"
-		class="tab"
+		type='button'
+		class='tab'
 		class:selected={isSelected}
 		on:click={onClick}
 	>
-		<slot name="title"/>
+		<slot name='title' />
 	</button>
 {/if}
 
 {#if isContentSlot && isSelected}
-	<slot/>
+	<slot />
 {/if}
 
 <style>
