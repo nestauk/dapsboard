@@ -2,7 +2,6 @@
 	import {browser} from '$app/environment';
 	import * as _ from 'lamb';
 	import {onMount} from 'svelte';
-	import JSONTree from 'svelte-json-tree';
 
 	import {page as _page} from '$app/stores';
 
@@ -15,6 +14,7 @@
 
 	import FieldMenu from '$lib/app/components/explore/suggestions/FieldMenu.svelte';
 	import Search from '$lib/app/components/explore/suggestions/Search.svelte';
+	import AggResultView from '$lib/app/components/AggResultView.svelte';
 	import {createExploreMachine} from '$lib/app/machines/explore/route.js';
 	import {selectedDatasetFields} from '$lib/app/stores/exploreStores.js';
 	import {makeDepthByField, makeExploreIndexPath} from '$lib/app/utils/exploreUtils.js';
@@ -235,7 +235,11 @@
 	</section>
 	<section class='results'>
 		{#if $currentResult}
-			<JSONTree value={$currentResult} />
+			{#if $currentResult.aggregations}
+				{#each Object.entries($currentResult.aggregations) as aggregation}
+					<AggResultView aggKey={aggregation[0]} aggResult={aggregation[1]}/>
+				{/each}
+			{/if}
 		{/if}
 	</section>
 </section>
@@ -387,7 +391,9 @@
 	}
 
 	.results {
+		display: grid;
 		grid-area: content2;
+	    grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
 		overflow-y: auto;
 		padding: 1rem;
 	}
