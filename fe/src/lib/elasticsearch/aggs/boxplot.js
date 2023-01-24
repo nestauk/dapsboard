@@ -1,11 +1,11 @@
-import {optional, script} from '$lib/elasticsearch/types/params';
-import {integerD, number, string} from '$lib/types';
+import {optional, script} from '$lib/elasticsearch/types/params.js';
+import {integerD, number, string} from '$lib/types/index.js';
 import {
 	field,
 	missing,
 	script as scriptDoc
-} from '$lib/elasticsearch/aggs/ref/requestDoc';
-import response from '$lib/elasticsearch/aggs/response/boxplot';
+} from '$lib/elasticsearch/aggs/ref/requestDoc.js';
+import response from '$lib/elasticsearch/aggs/response/boxplot.js';
 
 export default {
 	id: 'boxplot',

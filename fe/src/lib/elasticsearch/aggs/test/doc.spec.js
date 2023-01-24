@@ -1,4 +1,4 @@
-// import assert from 'assert';
+// import assert from 'node:assert';
 // import * as _ from 'lamb';
 
 // import {aggParamShapeByAggId} from '$lib/elasticsearch/config/aggParamShapeByAggId';

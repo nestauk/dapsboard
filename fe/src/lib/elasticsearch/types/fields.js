@@ -8,7 +8,7 @@ import {
 	shape,
 	string,
 	unionOf,
-} from '$lib/types';
+} from '$lib/types/index.js';
 
 /* ES date fields */
 

@@ -1,5 +1,5 @@
-import {esNumeric} from '$lib/elasticsearch/aggs/ref/typeGroups';
-import {optional, script} from '$lib/elasticsearch/types/params';
+import {esNumeric} from '$lib/elasticsearch/aggs/ref/typeGroups.js';
+import {optional, script} from '$lib/elasticsearch/types/params.js';
 import {
 	arrayOf,
 	booleanD,
@@ -7,14 +7,14 @@ import {
 	number,
 	objectOf,
 	string,
-} from '$lib/types';
+} from '$lib/types/index.js';
 import {
 	keyed,
 	field,
 	missing,
 	script as scriptDoc,
-} from '$lib/elasticsearch/aggs/ref/requestDoc';
-import response from '$lib/elasticsearch/aggs/response/numToNum';
+} from '$lib/elasticsearch/aggs/ref/requestDoc.js';
+import response from '$lib/elasticsearch/aggs/response/numToNum.js';
 
 export default {
 	id: 'percentile_ranks',

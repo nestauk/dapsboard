@@ -1,5 +1,5 @@
 import { writable } from 'svelte/store';
-import { DEFAULT_FIELD_DOCS, DEFAULT_AGG_DOCS } from './docs.options';
+import { DEFAULT_FIELD_DOCS, DEFAULT_AGG_DOCS } from './docs.options.js';
 
 export function createFormEditingStores () {
 	return {

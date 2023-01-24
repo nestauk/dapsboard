@@ -1,10 +1,10 @@
-import {esSearchableString} from '$lib/elasticsearch/aggs/ref/typeGroups';
+import {esSearchableString} from '$lib/elasticsearch/aggs/ref/typeGroups.js';
 import {
 	optional,
 	script,
 	termsExclude,
 	termsInclude,
-} from '$lib/elasticsearch/types/params';
+} from '$lib/elasticsearch/types/params.js';
 import {
 	boolean,
 	integerD,
@@ -13,7 +13,7 @@ import {
 	objectD,
 	objectOf,
 	string
-} from '$lib/types';
+} from '$lib/types/index.js';
 import {
 	background_filter,
 	field,
@@ -21,8 +21,8 @@ import {
 	script as scriptDoc,
 	termsExclude as termsExcludeDoc,
 	termsInclude as termsIncludeDoc,
-} from '$lib/elasticsearch/aggs/ref/requestDoc';
-import response from '$lib/elasticsearch/aggs/response/bucketsTextScore';
+} from '$lib/elasticsearch/aggs/ref/requestDoc.js';
+import response from '$lib/elasticsearch/aggs/response/bucketsTextScore.js';
 
 export default {
 	id: 'significant_terms',

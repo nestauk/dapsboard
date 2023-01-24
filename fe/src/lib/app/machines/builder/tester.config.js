@@ -1,4 +1,4 @@
-import { routeConfig } from './route.config';
+import { routeConfig } from './route.config.js';
 
 const tester_context = {
 	autoExecute: false,

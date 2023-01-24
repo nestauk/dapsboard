@@ -14,7 +14,7 @@ import {
 	stringD,
 	unionOf,
 	xorOf,
-} from '$lib/types';
+} from '$lib/types/index.js';
 
 /* conditions */
 

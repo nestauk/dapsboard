@@ -1,13 +1,13 @@
 import {actions, assign} from 'xstate';
 
-import {stringifyContextStores} from '$lib/app/machines/utils';
+import {stringifyContextStores} from '$lib/app/machines/utils.js';
 import {
 	resetSources,
 	selectSource,
 	selectDataset,
-} from '$lib/app/stores/exploreStores';
-import {getDatasetOf} from '$lib/app/utils/data';
-import {getSearchURL} from '$lib/utils/specs';
+} from '$lib/app/stores/exploreStores.js';
+import {getDatasetOf} from '$lib/app/utils/data.js';
+import {getSearchURL} from '$lib/utils/specs.js';
 
 const {choose, log} = actions;
 

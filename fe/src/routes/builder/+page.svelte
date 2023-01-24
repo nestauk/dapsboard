@@ -4,9 +4,9 @@
 	import { readable } from 'svelte/store';
 	import { RISON } from 'rison2';
 	import {page as _page} from '$app/stores';
-	import ROUTES from '$lib/app/data/routes';
+	import ROUTES from '$lib/app/data/routes.json';
 
-	import { integer } from '$lib/types';
+	import { integer } from '$lib/types/index.js';
 
 	import ExternalLink from '$lib/app/components/ExternalLink.svelte';
 	import JSONValue from '$lib/app/components/JSONValue.svelte';
@@ -23,11 +23,11 @@
 	import IconClipboard from '$lib/app/components/icons/IconClipboard.svelte';
 	import IconCheck from '$lib/app/components/icons/IconCheck.svelte';
 
-	import { createBuilderMachine } from '$lib/app/machines/builder/route';
-	import { parseParams } from '$lib/app/machines/builder/formediting.options';
+	import { createBuilderMachine } from '$lib/app/machines/builder/route.js';
+	import { parseParams } from '$lib/app/machines/builder/formediting.options.js';
 
-	import {getAggDocs} from '$lib/elasticsearch/utils/docs';
-	import {getSearchURL} from '$lib/utils/specs';
+	import {getAggDocs} from '$lib/elasticsearch/utils/docs.js';
+	import {getSearchURL} from '$lib/utils/specs.js';
 
 	const { machine: routeMachine, contextStores: {
 		// config
@@ -128,8 +128,7 @@
 		const fieldDocs = hoveredFieldDocs || clickedFieldDocs;
 		if (fieldDocs) {
 			routeMachine.send('FIELD_DOC_SHOWN', {docstring:fieldDocs});
-		}
-		else {
+		} else {
 			routeMachine.send('FIELD_DOC_DEFAULT');
 		}
 	}

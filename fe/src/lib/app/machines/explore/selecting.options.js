@@ -3,7 +3,7 @@ import {toggleItem} from '@svizzle/utils';
 import {get} from 'svelte/store';
 import {assign, send} from 'xstate';
 
-import {selectionToAggsQuery} from '$lib/app/utils/exploreUtils';
+import {selectionToAggsQuery} from '$lib/app/utils/exploreUtils.js';
 
 const selectFields = (ctx, {fields}) => {
 	ctx.selectedFields.set(fields);

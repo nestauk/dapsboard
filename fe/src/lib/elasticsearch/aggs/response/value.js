@@ -1,5 +1,5 @@
-import {optional} from '$lib/elasticsearch/types/params';
-import {number} from '$lib/types';
+import {optional} from '$lib/elasticsearch/types/params.js';
+import {number} from '$lib/types/index.js';
 
 export default {
 	id: 'value',

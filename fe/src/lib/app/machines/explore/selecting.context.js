@@ -5,7 +5,7 @@ import {isNotNil} from '@svizzle/utils';
 import {
 	selectedDatasetFieldsIndicesMap,
 	selectedDatasetFieldsZip,
-} from '$lib/app/stores/exploreStores';
+} from '$lib/app/stores/exploreStores.js';
 
 export const createSelectionStores = () => {
 	const selectedFields = writable([]);

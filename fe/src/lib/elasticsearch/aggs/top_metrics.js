@@ -1,10 +1,10 @@
-import {esNumeric} from '$lib/elasticsearch/aggs/ref/typeGroups';
+import {esNumeric} from '$lib/elasticsearch/aggs/ref/typeGroups.js';
 import {
 	fieldObjectOf,
 	optional,
 	sortOrder
-} from '$lib/elasticsearch/types/params';
-import {geoPointString} from '$lib/elasticsearch/types/fields';
+} from '$lib/elasticsearch/types/params.js';
+import {geoPointString} from '$lib/elasticsearch/types/fields.js';
 import {
 	arrayOf,
 	enumsOf,
@@ -12,8 +12,8 @@ import {
 	objectOf,
 	string,
 	unionOf
-} from '$lib/types';
-import response from '$lib/elasticsearch/aggs/response/topMetrics';
+} from '$lib/types/index.js';
+import response from '$lib/elasticsearch/aggs/response/topMetrics.js';
 
 export default {
 	id: 'top_metrics',

@@ -1,13 +1,13 @@
-import {esNumericButBoolean} from '$lib/elasticsearch/aggs/ref/typeGroups';
-import {optional, script} from '$lib/elasticsearch/types/params';
+import {esNumericButBoolean} from '$lib/elasticsearch/aggs/ref/typeGroups.js';
+import {optional, script} from '$lib/elasticsearch/types/params.js';
 import {
 	object,
 	objectOf,
 	string,
 	number
-} from '$lib/types';
-import {missing, script as scriptDoc} from '$lib/elasticsearch/aggs/ref/requestDoc';
-import response from '$lib/elasticsearch/aggs/response/value';
+} from '$lib/types/index.js';
+import {missing, script as scriptDoc} from '$lib/elasticsearch/aggs/ref/requestDoc.js';
+import response from '$lib/elasticsearch/aggs/response/value.js';
 
 export default {
 	id: 'weighted_avg',

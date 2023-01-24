@@ -1,11 +1,11 @@
-import {esDates} from '$lib/elasticsearch/aggs/ref/typeGroups';
+import {esDates} from '$lib/elasticsearch/aggs/ref/typeGroups.js';
 import {
 	optional,
 	genericInterval,
 	calendarInterval,
 	fixedInterval,
 	sortOptions,
-} from '$lib/elasticsearch/types/params';
+} from '$lib/elasticsearch/types/params.js';
 import {
 	booleanD,
 	extentOf,
@@ -13,14 +13,14 @@ import {
 	string,
 	stringD,
 	xorOf,
-} from '$lib/types';
+} from '$lib/types/index.js';
 import {
 	field,
 	keyed,
 	min_doc_count,
 	missing
-} from '$lib/elasticsearch/aggs/ref/requestDoc';
-import response from '$lib/elasticsearch/aggs/response/bucketsDate';
+} from '$lib/elasticsearch/aggs/ref/requestDoc.js';
+import response from '$lib/elasticsearch/aggs/response/bucketsDate.js';
 
 export default {
 	id: 'date_histogram',

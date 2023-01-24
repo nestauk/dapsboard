@@ -12,8 +12,8 @@
 		selectDataset,
 		selectSource,
 		toggleSource,
-	} from '$lib/app/stores/exploreStores';
-	import {makeExploreQuery} from '$lib/app/utils/exploreUtils';
+	} from '$lib/app/stores/exploreStores.js';
+	import {makeExploreQuery} from '$lib/app/utils/exploreUtils.js';
 	import {collectionToObject} from '$lib/utils/svizzle/utils/collection-object.js';
 
 	const makeHrefBoard = ({fields, source, project, version}) =>

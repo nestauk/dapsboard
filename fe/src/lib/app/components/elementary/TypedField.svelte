@@ -2,9 +2,9 @@
 	import { createEventDispatcher } from 'svelte';
 
 	import IconHelpCircle from '$lib/app/components/icons/IconHelpCircle.svelte';
-	import {is_boolean, is_enums} from '$lib/types';
-	import { getEditor } from '$lib/app/components/elementary/TypedField.utils';
-	import { autoID } from '$lib/utils/generic';
+	import {is_boolean, is_enums} from '$lib/types/index.js';
+	import { getEditor } from '$lib/app/components/elementary/TypedField.utils.js';
+	import { autoID } from '$lib/utils/generic.js';
 
 	const dispatch = createEventDispatcher();
 

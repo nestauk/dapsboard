@@ -1,4 +1,4 @@
-import {integer, float, number} from '$lib/types';
+import {integer, float, number} from '$lib/types/index.js';
 
 export default {
 	id: 'boxplot',

@@ -10,7 +10,7 @@ import {
 	isNative,
 	isShape,
 	isShapeWithNative,
-} from './index';
+} from './index.js';
 
 export const isSameType = type => _.anyOf([
 	_.allOf([

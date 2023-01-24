@@ -3,7 +3,7 @@ import {
 	integer,
 	number,
 	objectOf
-} from '$lib/types';
+} from '$lib/types/index.js';
 
 export default {
 	id: 'buckets_number',

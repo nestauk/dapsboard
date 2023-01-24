@@ -9,9 +9,9 @@ import {
 	is_object,
 	is_xor,
 	isNative,
-} from '$lib/types'
+} from '$lib/types/index.js'
 
-import { getKeyOf } from '$lib/utils/generic';
+import { getKeyOf } from '$lib/utils/generic.js';
 
 import ArrayEditor from '$lib/app/components/elementary/ArrayEditor.svelte';
 import BooleanRadios from '$lib/app/components/elementary/BooleanRadios.svelte';

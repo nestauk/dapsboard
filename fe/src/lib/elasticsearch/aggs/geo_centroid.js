@@ -1,7 +1,7 @@
-import {geoPointObject} from '$lib/elasticsearch/types/fields';
-import {string} from '$lib/types';
-import {field} from '$lib/elasticsearch/aggs/ref/requestDoc';
-import response from '$lib/elasticsearch/aggs/response/geoCentroid';
+import {geoPointObject} from '$lib/elasticsearch/types/fields.js';
+import {string} from '$lib/types/index.js';
+import {field} from '$lib/elasticsearch/aggs/ref/requestDoc.js';
+import response from '$lib/elasticsearch/aggs/response/geoCentroid.js';
 
 export default {
 	id: 'geo_centroid',

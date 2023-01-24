@@ -2,11 +2,11 @@ import { assign, send, spawn } from 'xstate';
 import { get } from 'svelte/store';
 import { capitalize, isObjNotEmpty, negate } from '@svizzle/utils';
 
-import { bucketLabels } from '$lib/elasticsearch/config/aggsLabels';
+import { bucketLabels } from '$lib/elasticsearch/config/aggsLabels.js';
 
-import { bindToStore } from '../utils';
-import { createFormStores } from './form.context';
-import { formTemplate } from './form';
+import { bindToStore } from '../utils.js';
+import { createFormStores } from './form.context.js';
+import { formTemplate } from './form.js';
 
 const AXIS_NAMES = [
 	'primary',

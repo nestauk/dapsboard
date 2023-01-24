@@ -2,6 +2,7 @@ import * as _ from 'lamb';
 import { isObjNotEmpty, isNotNil } from '@svizzle/utils';
 import { get } from 'svelte/store';
 import { RISON } from 'rison2';
+
 const pickNonNil = _.pickIf(isNotNil);
 
 function formData (machine) {

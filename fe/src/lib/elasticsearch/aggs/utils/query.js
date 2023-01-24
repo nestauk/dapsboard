@@ -1,7 +1,7 @@
 import * as _ from 'lamb';
 
-import {getDefault, hasDefault} from '$lib/types';
-import {stopWords} from '$lib/utils/stopwords';
+import {getDefault, hasDefault} from '$lib/types/index.js';
+import {stopWords} from '$lib/utils/stopwords.js';
 
 // params that startsWith('__') should be required, with no default
 export const makeRequestToQuery = fieldName => _.pipe([

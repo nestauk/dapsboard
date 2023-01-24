@@ -1,10 +1,10 @@
 import clip from 'clipboardy';
 import {stringify} from '@svizzle/utils';
 
-import {stringifyObj} from '$lib/utils/svizzle/utils/obj-string.js';
+import {stringifyObj} from '../../lib/utils/svizzle/utils/obj-string.js';
 
-import {formConfig} from '$lib/app/machines/builder/form.config.js';
-import {builderTesterOptions} from '$lib/app/machines/builder/tester.options.js';
+import {formConfig} from '../../lib/app/machines/builder/form.config.js';
+import {builderTesterOptions} from '../../lib/app/machines/builder/tester.options.js';
 
 clip.write(`Machine(${stringify({
 	...formConfig,
