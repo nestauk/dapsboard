@@ -23,16 +23,16 @@ const ROUTES_PATH = path.resolve(__dirname, '../lib/app/data/routes.json');
 const SIDEBAR_PATH = path.resolve(__dirname, '../lib/app/data/sidebar.json');
 const INDICES_SPECS_DIR = path.resolve(__dirname, '../../../specs/indices');
 
-const isYamlFile = (/** @type {string} */ name) => path.parse(name).ext === '.yaml';
+const isYamlFile = name => path.parse(name).ext === '.yaml';
 
-const getPathName = (/** @type {string} */ string) => path.parse(string).name;
+const getPathName = string => path.parse(string).name;
 
-const makeDatasetName = (/** @type {string} */ string) => getPathName(string).split('_v')[0];
-const makeLabel = (/** @type {string} */ string) => getPathName(string).replace(/_/gu, ' ');
-const makeProject = (/** @type {string} */ string) => getPathName(string).split('_')[0];
-const makeSource = (/** @type {string} */ string) => getPathName(string).split('_')[1];
-const makeVersion = (/** @type {string} */ string) => getPathName(string).split('_')[2].replace('v', '');
-const resolveSchema = (/** @type {string} */ string) => path.resolve(INDICES_SPECS_DIR, string);
+const makeDatasetName = string => getPathName(string).split('_v')[0];
+const makeLabel = string => getPathName(string).replace(/_/gu, ' ');
+const makeProject = string => getPathName(string).split('_')[0];
+const makeSource = string => getPathName(string).split('_')[1];
+const makeVersion = string => getPathName(string).split('_')[2].replace('v', '');
+const resolveSchema = string => path.resolve(INDICES_SPECS_DIR, string);
 
 const makeSchemaObj = applyFnMap({
 	dataset: makeDatasetName,
@@ -44,7 +44,7 @@ const makeSchemaObj = applyFnMap({
 	version: makeVersion
 });
 
-const save = (/** @type {{ spec: unknown; constructor: Function; toString(): string; toLocaleString(): string; valueOf(): Object; hasOwnProperty(v: PropertyKey): boolean; isPrototypeOf(v: Object): boolean; propertyIsEnumerable(v: PropertyKey): boolean; }[]} */ data, /** @type {string} */ dest) => saveObj(dest, 2)(data).then(tapMessage(`Saved ${dest}`));
+const save = (/** @type {{ spec: unknown; constructor: Function; toString(): string; toLocaleString(): string; valueOf(): Object; hasOwnProperty(v: PropertyKey): boolean; isPrototypeOf(v: Object): boolean; propertyIsEnumerable(v: PropertyKey): boolean; }[]} */ data, dest) => saveObj(dest, 2)(data).then(tapMessage(`Saved ${dest}`));
 
 const run = async () => {
 	const refs = await readDir(INDICES_SPECS_DIR)
