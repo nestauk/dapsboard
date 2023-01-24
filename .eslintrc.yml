@@ -2,7 +2,7 @@ env:
   browser: true
   es6: true
   node: true
-  mocha: true
+  mocha: false
 extends:
   - eslint:recommended
   - plugin:node/recommended
@@ -11,9 +11,13 @@ extends:
 globals:
   Atomics: readonly
   SharedArrayBuffer: readonly
-parser: babel-eslint
+parser: '@babel/eslint-parser'
 parserOptions:
-  ecmaVersion: 2019
+  babelOptions:
+    plugins:
+    - "@babel/plugin-syntax-import-assertions"
+  ecmaVersion: 2021
+  requireConfigFile: false
   sourceType: module
 rules:
   accessor-pairs: error

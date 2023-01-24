@@ -1,16 +1,12 @@
 {
 	"description": "Dapsboard web app",
 	"devDependencies": {
-		"@babel/core": "^7.20.12",
-		"@babel/plugin-proposal-optional-chaining": "^7.20.7",
-		"@babel/plugin-syntax-dynamic-import": "^7.8.3",
-		"@babel/plugin-transform-runtime": "^7.19.6",
-		"@babel/preset-env": "^7.20.2",
-		"@babel/runtime": "^7.12.7",
-		"babel-eslint": "^10.1.0",
-		"eslint": "^7.32.0",
+		"@babel/eslint-parser": "^7.19.1",
+		"@babel/plugin-syntax-import-assertions": "^7.20.0",
+		"eslint": "^8.32.0",
 		"eslint-plugin-import": "^2.27.5",
-		"eslint-plugin-node": "^11.1.0"
+		"eslint-plugin-node": "^11.1.0",
+		"husky": "^4.3.0"
 	},
 	"license": "MIT",
 	"name": "dapsboard_app",

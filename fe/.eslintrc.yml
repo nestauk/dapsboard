@@ -1,6 +1,5 @@
 overrides:
-  -
-    files:
+  - files:
       - '**/*.svelte'
     processor: svelte3/svelte3
     rules:
@@ -9,5 +8,9 @@ overrides:
       no-invalid-this: off
       no-new: off
       node/no-missing-import: off # svelte components not found
+  - files:
+    - '**/*.spec.js'
+    env:
+      mocha: true
 plugins:
   - svelte3
