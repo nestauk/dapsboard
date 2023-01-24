@@ -13,8 +13,8 @@ import {applyFnMap} from '@svizzle/utils';
 import yaml from 'js-yaml';
 import * as _ from 'lamb';
 
-import {makeDatasetBySource} from '../lib/utils/specs.js';
-import {indexById} from '../lib/utils/generic.js';
+import {makeDatasetBySource} from '$lib/utils/specs.js';
+import {indexById} from '$lib/utils/generic.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
