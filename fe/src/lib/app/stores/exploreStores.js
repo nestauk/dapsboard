@@ -9,10 +9,10 @@ import {
 	valuesWith,
 } from '@svizzle/utils';
 
-import Datasets from '$lib/app/data/datasets.json';
-import {indexById} from '$lib/utils/generic';
-import {getDatasetIdOf, getSchema, groupBySource} from '$lib/utils/specs';
-import {safeApply} from '$lib/utils/svizzle/utils/[any-any]-[any-any]';
+import Datasets from '$lib/app/data/datasets.json' assert {type: 'json'};
+import {indexById} from '$lib/utils/generic.js';
+import {getDatasetIdOf, getSchema, groupBySource} from '$lib/utils/specs.js';
+import {safeApply} from '$lib/utils/svizzle/utils/[any-any]-[any-any].js';
 
 /* sources */
 

@@ -3,7 +3,7 @@ import {
 	integer,
 	objectOf,
 	string
-} from '$lib/types';
+} from '$lib/types/index.js';
 
 export default {
 	id: 'buckets_geohash_grid',

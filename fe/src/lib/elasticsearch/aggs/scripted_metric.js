@@ -1,6 +1,6 @@
-import {optional, metricScript} from '$lib/elasticsearch/types/params';
-import {any, object} from '$lib/types';
-import response from '$lib/elasticsearch/aggs/response/value';
+import {optional, metricScript} from '$lib/elasticsearch/types/params.js';
+import {any, object} from '$lib/types/index.js';
+import response from '$lib/elasticsearch/aggs/response/value.js';
 
 export default {
 	id: 'scripted_metric',

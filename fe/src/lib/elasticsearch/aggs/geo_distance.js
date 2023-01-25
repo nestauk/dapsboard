@@ -1,5 +1,5 @@
-import {geoPoint} from '$lib/elasticsearch/types/fields';
-import {optional} from '$lib/elasticsearch/types/params';
+import {geoPoint} from '$lib/elasticsearch/types/fields.js';
+import {optional} from '$lib/elasticsearch/types/params.js';
 import {
 	arrayOf,
 	booleanD,
@@ -9,9 +9,9 @@ import {
 	string,
 	someOf,
 	unionOf,
-} from '$lib/types';
-import {field, keyed} from '$lib/elasticsearch/aggs/ref/requestDoc';
-import response from '$lib/elasticsearch/aggs/response/bucketsRange';
+} from '$lib/types/index.js';
+import {field, keyed} from '$lib/elasticsearch/aggs/ref/requestDoc.js';
+import response from '$lib/elasticsearch/aggs/response/bucketsRange.js';
 
 export default {
 	id: 'geo_distance',

@@ -1,8 +1,8 @@
 import * as _ from 'lamb';
 import {isObjEmpty} from '@svizzle/utils';
 
-import {hasNoDefault, nativeKey, shapeKey} from '$lib/types';
-import {is_required} from '$lib/elasticsearch/types/params.utils';
+import {hasNoDefault, nativeKey, shapeKey} from '$lib/types/index.js';
+import {is_required} from '$lib/elasticsearch/types/params.utils.js';
 
 // agg.request -> boolean
 export const aggHasNoRequiredParams = _.pipe([

@@ -1,9 +1,9 @@
-import assert from 'assert';
+import assert from 'node:assert';
 
-import {optional} from '$lib/elasticsearch/types/params';
-import {integer, integerD} from '$lib/types';
+import {optional} from '$lib/elasticsearch/types/params.js';
+import {integer, integerD} from '$lib/types/index.js';
 
-import {aggHasNoRequiredParamsWithoutDefault} from './aggs.utils';
+import {aggHasNoRequiredParamsWithoutDefault} from './aggs.utils.js';
 
 describe('elasticsearch/types/aggs.utils', function () {
 	describe('aggHasNoRequiredParamsWithoutDefault', function () {

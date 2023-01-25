@@ -1,5 +1,5 @@
-import {esSearchableField} from '$lib/elasticsearch/aggs/ref/typeGroups';
-import {optional, sortOrder} from '$lib/elasticsearch/types/params';
+import {esSearchableField} from '$lib/elasticsearch/aggs/ref/typeGroups.js';
+import {optional, sortOrder} from '$lib/elasticsearch/types/params.js';
 import {
 	arrayOf,
 	integerD,
@@ -7,8 +7,8 @@ import {
 	recordLike,
 	string,
 	unionOf
-} from '$lib/types';
-import response from '$lib/elasticsearch/aggs/response/hits';
+} from '$lib/types/index.js';
+import response from '$lib/elasticsearch/aggs/response/hits.js';
 
 export default {
 	id: 'top_hits',

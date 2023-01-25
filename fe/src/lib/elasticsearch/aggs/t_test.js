@@ -1,12 +1,12 @@
-import {esNumeric} from '$lib/elasticsearch/aggs/ref/typeGroups';
-import {optional, script} from '$lib/elasticsearch/types/params';
+import {esNumeric} from '$lib/elasticsearch/aggs/ref/typeGroups.js';
+import {optional, script} from '$lib/elasticsearch/types/params.js';
 import {
 	enumsOf,
 	object,
 	objectOf,
 	string
-} from '$lib/types';
-import response from '$lib/elasticsearch/aggs/response/value';
+} from '$lib/types/index.js';
+import response from '$lib/elasticsearch/aggs/response/value.js';
 
 export default {
 	id: 't_test',

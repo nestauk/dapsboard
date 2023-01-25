@@ -1,16 +1,16 @@
-import {createMachina} from '../utils';
+import {createMachina} from '../utils.js';
 
-import {createHistoryStores} from './history.context';
-import {historyOptions} from './history.options';
-import {createResultsStores} from './results.context';
-import {resultsOptions} from './results.options';
-import {exploreConfig} from './route.config';
-import {createRouteStores} from './route.context';
-import {routeOptions} from './route.options';
-import {createSelectionStores} from './selecting.context';
-import {selectingOptions} from './selecting.options';
-import {createSearchStores} from './search.context';
-import {searchOptions} from './search.options';
+import {createHistoryStores} from './history.context.js';
+import {historyOptions} from './history.options.js';
+import {createResultsStores} from './results.context.js';
+import {resultsOptions} from './results.options.js';
+import {exploreConfig} from './route.config.js';
+import {createRouteStores} from './route.context.js';
+import {routeOptions} from './route.options.js';
+import {createSelectionStores} from './selecting.context.js';
+import {selectingOptions} from './selecting.options.js';
+import {createSearchStores} from './search.context.js';
+import {searchOptions} from './search.options.js';
 
 /* TODO
 // nm/svizzle/utils/array-[array-object].js: makeMergeBy

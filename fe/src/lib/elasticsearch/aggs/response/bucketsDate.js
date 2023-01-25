@@ -1,5 +1,5 @@
-import {arrayOf, integer, objectOf} from '$lib/types';
-import {esDates} from '$lib/elasticsearch/aggs/ref/typeGroups';
+import {arrayOf, integer, objectOf} from '$lib/types/index.js';
+import {esDates} from '$lib/elasticsearch/aggs/ref/typeGroups.js';
 
 export default {
 	id: 'buckets_date',

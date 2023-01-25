@@ -9,10 +9,10 @@ import {
 	shapeKey,
 	defaultKey,
 	isAppDefaultKey
-} from '$lib/types';
-import {optionalKey} from '$lib/elasticsearch/types/params';
+} from '$lib/types/index.js';
+import {optionalKey} from '$lib/elasticsearch/types/params.js';
 
-import {is_required} from '$lib/elasticsearch/types/params.utils';
+import {is_required} from '$lib/elasticsearch/types/params.utils.js';
 
 const getParamInfo = valuesWith(
 	(paramType, paramId) => ({

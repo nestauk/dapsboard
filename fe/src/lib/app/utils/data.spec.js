@@ -1,6 +1,6 @@
 import assert from 'assert';
 
-import {getDatasetOf} from '$lib/app/utils/data';
+import {getDatasetOf} from '$lib/app/utils/data.js';
 import general_arxiv_v0 from '$lib/test_assets/general_arxiv_v0.json';
 
 describe('utils/data.js', function () {

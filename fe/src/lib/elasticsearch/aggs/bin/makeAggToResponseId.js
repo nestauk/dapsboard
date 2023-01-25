@@ -4,7 +4,7 @@
 	node/shebang
 */
 
-import path from 'path';
+import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 
 import {tapMessage} from '@svizzle/dev';
@@ -12,7 +12,7 @@ import {writeFile} from '@svizzle/file';
 import {dump} from 'js-yaml';
 import * as _ from 'lamb';
 
-import * as aggs from '../index';
+import * as aggs from '../index.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 

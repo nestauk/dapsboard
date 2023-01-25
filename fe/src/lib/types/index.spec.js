@@ -1,4 +1,4 @@
-import assert from 'assert';
+import assert from 'node:assert';
 
 import {
 	arrayD,
@@ -10,7 +10,7 @@ import {
 	string,
 	stringD,
 	nativeKey,
-} from '$lib/types';
+} from '$lib/types/index.js';
 
 describe('elasticsearch/types/genericTypes', function () {
 

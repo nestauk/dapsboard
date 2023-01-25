@@ -1,6 +1,6 @@
-import assert from 'assert';
+import assert from 'node:assert';
 
-import {makeIsAggVersionCompatible} from './version';
+import {makeIsAggVersionCompatible} from './version.js';
 
 describe('elasticsearch/aggs/utils/version', function () {
 	describe('makeIsAggVersionCompatible', function () {

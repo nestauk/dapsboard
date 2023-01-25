@@ -10,13 +10,13 @@ import {
 	textArray,
 	textWithKeyword,
 	textWithKeywordArray,
-} from '$lib/elasticsearch/types/fields';
+} from '$lib/elasticsearch/types/fields.js';
 import {
 	boolean,
 	float,
 	integer,
 	unionOf,
-} from '$lib/types';
+} from '$lib/types/index.js';
 
 export const esDates = unionOf(
 	date,

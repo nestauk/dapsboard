@@ -1,8 +1,8 @@
-import { createMachina } from '../utils';
+import { createMachina } from '../utils.js';
 import { Machine } from 'xstate';
 
-import { formConfig } from './form.config';
-import { formOptions } from './form.options';
+import { formConfig } from './form.config.js';
+import { formOptions } from './form.options.js';
 
 export const createFormMachine = ctx => createMachina(
 	formConfig,

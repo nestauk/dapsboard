@@ -2,8 +2,8 @@ import * as _ from 'lamb';
 import {get} from 'svelte/store';
 import {assign, send} from 'xstate';
 
-import {request} from '$lib/utils/net';
-import {makeExplorePath} from '$lib/app/utils/exploreUtils';
+import {request} from '$lib/utils/net.js';
+import {makeExplorePath} from '$lib/app/utils/exploreUtils.js';
 
 const isMatching = ctx => {
 	const {project, source, version} = get(ctx.dataset);

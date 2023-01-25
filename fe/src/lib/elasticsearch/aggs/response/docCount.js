@@ -1,4 +1,4 @@
-import {integer} from '$lib/types';
+import {integer} from '$lib/types/index.js';
 
 export default {
 	id: 'doc_count',

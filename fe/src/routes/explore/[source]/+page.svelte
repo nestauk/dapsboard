@@ -11,9 +11,9 @@
 	import IconChevronUp from '$lib/app/components/icons/IconChevronUp.svelte';
 	import FieldMenu from '$lib/app/components/explore/suggestions/FieldMenu.svelte';
 	import Search from '$lib/app/components/explore/suggestions/Search.svelte';
-	import {createExploreMachine} from '$lib/app/machines/explore/route';
-	import {selectedDatasetFields} from '$lib/app/stores/exploreStores';
-	import {makeDepthByField, makeExploreIndexPath} from '$lib/app/utils/exploreUtils';
+	import {createExploreMachine} from '$lib/app/machines/explore/route.js';
+	import {selectedDatasetFields} from '$lib/app/stores/exploreStores.js';
+	import {makeDepthByField, makeExploreIndexPath} from '$lib/app/utils/exploreUtils.js';
 	import {collectionToObject} from '$lib/utils/svizzle/utils/collection-object.js';
 
 	const fontSize = 16;

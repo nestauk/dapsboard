@@ -5,6 +5,9 @@ extends:
 rules:
   node/no-missing-import: off
   node/no-extraneous-import: off
+#  import/extensions:
+#    - error
+#    - always
 settings:
   import/parsers:
     svelte-eslint-parser:
@@ -17,7 +20,6 @@ settings:
         '$lib': './src/lib'
       extensions:
       - '.js'
-      - '.svelte'
 overrides:
 - files:
   - '**/*.svelte'

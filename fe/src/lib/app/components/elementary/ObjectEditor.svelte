@@ -1,7 +1,7 @@
 <script>
 	import { createEventDispatcher } from 'svelte';
-	import { getParamsInfo } from '$lib/elasticsearch/utils/aggParams';
-	import { is_xor, is_intWithUnit } from '$lib/types';
+	import { getParamsInfo } from '$lib/elasticsearch/utils/aggParams.js';
+	import { is_xor, is_intWithUnit } from '$lib/types/index.js';
 	import TypedField from '$lib/app/components/elementary/TypedField.svelte';
 
 	const dispatch = createEventDispatcher();

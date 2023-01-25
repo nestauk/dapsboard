@@ -14,7 +14,7 @@ import {
 	fields,
 	types,
 	fieldNames
-} from '$lib/app/machines/builder/dictionaries';
+} from '$lib/app/machines/builder/dictionaries.js';
 import DATASETS from '$lib/app/data/datasets.json';
 import {
 	getDefault,
@@ -24,7 +24,7 @@ import {
 	is_object,
 	is_xor,
 	isNative,
-} from '$lib/types';
+} from '$lib/types/index.js';
 import {
 	metricLabels,
 	metricMultiFieldLabels,
@@ -32,15 +32,15 @@ import {
 	bucketLabels,
 	bucketMultiFieldLabels,
 	nestedBucketLabels
-} from '$lib/elasticsearch/config/aggsLabels';
-import {is_optional} from '$lib/elasticsearch/types/params.utils';
-import {request} from '$lib/utils/net';
-import {getESType, getSchema, getSearchURL} from '$lib/utils/specs';
-import {getParamsInfo, mergeDocs} from '$lib/elasticsearch/utils/aggParams';
-import {buildAggregation} from '$lib/elasticsearch/utils/aggQuery';
+} from '$lib/elasticsearch/config/aggsLabels.js';
+import {is_optional} from '$lib/elasticsearch/types/params.utils.js';
+import {request} from '$lib/utils/net.js';
+import {getESType, getSchema, getSearchURL} from '$lib/utils/specs.js';
+import {getParamsInfo, mergeDocs} from '$lib/elasticsearch/utils/aggParams.js';
+import {buildAggregation} from '$lib/elasticsearch/utils/aggQuery.js';
 
-import aggParamsShapeByFieldtypeByAggId from '$lib/elasticsearch/config/aggParamsShapeByFieldtypeByAggId';
-import aggParamDocByAggId from '$lib/elasticsearch/config/aggParamDocByAggId';
+import aggParamsShapeByFieldtypeByAggId from '$lib/elasticsearch/config/aggParamsShapeByFieldtypeByAggId.js';
+import aggParamDocByAggId from '$lib/elasticsearch/config/aggParamDocByAggId.js';
 
 function setSelection (ctx, event) {
 	ctx.selection.set({

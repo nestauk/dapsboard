@@ -9,7 +9,7 @@
 		svgXmlns,
 		viewBox,
 		width as _width,
-	} from './config';
+	} from './config.js';
 
 	export let fill;
 	export let height;

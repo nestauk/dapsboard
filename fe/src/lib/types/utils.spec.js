@@ -1,4 +1,4 @@
-import assert from 'assert';
+import assert from 'node:assert';
 
 import {
 	array,
@@ -6,14 +6,14 @@ import {
 	booleanD,
 	isNative,
 	isShape,
-} from '$lib/types';
-import {esNumeric, esDates} from '$lib/elasticsearch/aggs/ref/typeGroups';
-import {date_YYYYMMDD_dash} from '$lib/elasticsearch/types/fields';
+} from '$lib/types/index.js';
+import {esNumeric, esDates} from '$lib/elasticsearch/aggs/ref/typeGroups.js';
+import {date_YYYYMMDD_dash} from '$lib/elasticsearch/types/fields.js';
 
 import {
 	isSameType,
 	makeIsTypeInUnion,
-} from './utils';
+} from './utils.js';
 
 const isSameTypeAsBoolean = isSameType(boolean);
 

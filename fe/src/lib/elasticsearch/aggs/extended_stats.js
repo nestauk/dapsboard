@@ -1,12 +1,12 @@
-import {esNumeric} from '$lib/elasticsearch/aggs/ref/typeGroups';
-import {optional, script} from '$lib/elasticsearch/types/params';
-import {floatD, number, string} from '$lib/types';
+import {esNumeric} from '$lib/elasticsearch/aggs/ref/typeGroups.js';
+import {optional, script} from '$lib/elasticsearch/types/params.js';
+import {floatD, number, string} from '$lib/types/index.js';
 import {
 	field,
 	missing,
 	script as scriptDoc,
-} from '$lib/elasticsearch/aggs/ref/requestDoc';
-import response from '$lib/elasticsearch/aggs/response/extendedStats';
+} from '$lib/elasticsearch/aggs/ref/requestDoc.js';
+import response from '$lib/elasticsearch/aggs/response/extendedStats.js';
 
 export default {
 	id: 'extended_stats',

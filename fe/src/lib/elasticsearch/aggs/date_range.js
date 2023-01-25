@@ -1,5 +1,5 @@
-import {esDates} from '$lib/elasticsearch/aggs/ref/typeGroups';
-import {dateMathString, optional} from '$lib/elasticsearch/types/params';
+import {esDates} from '$lib/elasticsearch/aggs/ref/typeGroups.js';
+import {dateMathString, optional} from '$lib/elasticsearch/types/params.js';
 import {
 	arrayOf,
 	booleanD,
@@ -8,9 +8,9 @@ import {
 	string,
 	stringD,
 	unionOf,
-} from '$lib/types';
-import {field, keyed, missing} from '$lib/elasticsearch/aggs/ref/requestDoc';
-import response from '$lib/elasticsearch/aggs/response/bucketsDateRange';
+} from '$lib/types/index.js';
+import {field, keyed, missing} from '$lib/elasticsearch/aggs/ref/requestDoc.js';
+import response from '$lib/elasticsearch/aggs/response/bucketsDateRange.js';
 
 export default {
 	id: 'date_range',

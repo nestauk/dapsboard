@@ -1,10 +1,10 @@
-import { createMachina } from '../utils';
+import { createMachina } from '../utils.js';
 
-import { formEditingOptions } from './formediting.options';
-import { docsOptions } from './docs.options';
-import { historyOptions } from './history.options';
-import { routeConfig } from './route.config';
-import { createFormEditingStores } from './formediting.context';
+import { formEditingOptions } from './formediting.options.js';
+import { docsOptions } from './docs.options.js';
+import { historyOptions } from './history.options.js';
+import { routeConfig } from './route.config.js';
+import { createFormEditingStores } from './formediting.context.js';
 
 export const options = {
 	actions: {

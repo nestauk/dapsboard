@@ -1,6 +1,6 @@
-import { formEditingConfig } from '$lib/app/machines/builder/formediting.config';
-import { docsConfig } from './docs.config';
-import { historyConfig } from './history.config';
+import { formEditingConfig } from './formediting.config.js';
+import { docsConfig } from './docs.config.js';
+import { historyConfig } from './history.config.js';
 
 export const routeConfig = {
 	id: 'BuilderRoute',

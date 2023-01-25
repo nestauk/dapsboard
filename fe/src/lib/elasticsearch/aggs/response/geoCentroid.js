@@ -1,5 +1,5 @@
-import {integer, objectOf} from '$lib/types';
-import {latitude, longitude} from '$lib/elasticsearch/types/fields';
+import {integer, objectOf} from '$lib/types/index.js';
+import {latitude, longitude} from '$lib/elasticsearch/types/fields.js';
 
 export default {
 	id: 'geo_centroid',

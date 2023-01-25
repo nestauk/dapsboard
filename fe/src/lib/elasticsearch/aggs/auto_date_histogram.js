@@ -1,13 +1,13 @@
-import {esDates} from '$lib/elasticsearch/aggs/ref/typeGroups';
-import {optional} from '$lib/elasticsearch/types/params';
+import {esDates} from '$lib/elasticsearch/aggs/ref/typeGroups.js';
+import {optional} from '$lib/elasticsearch/types/params.js';
 import {
 	integer,
 	integerD,
 	string,
 	stringD,
-} from '$lib/types';
-import {field, missing} from '$lib/elasticsearch/aggs/ref/requestDoc';
-import response from '$lib/elasticsearch/aggs/response/bucketsDate';
+} from '$lib/types/index.js';
+import {field, missing} from '$lib/elasticsearch/aggs/ref/requestDoc.js';
+import response from '$lib/elasticsearch/aggs/response/bucketsDate.js';
 
 export default {
 	id: 'auto_date_histogram',

@@ -1,5 +1,5 @@
 import * as _ from 'lamb';
-import {optionalKey} from '$lib/elasticsearch/types/params';
+import {optionalKey} from '$lib/elasticsearch/types/params.js';
 
 /* conditions */
 

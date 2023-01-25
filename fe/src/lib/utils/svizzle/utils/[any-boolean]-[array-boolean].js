@@ -5,6 +5,6 @@
 import * as _ from 'lamb';
 import {isNotNil} from '@svizzle/utils';
 
-import {ψ} from './array-[any-any]';
+import {ψ} from './array-[any-any].js';
 
 export const occursWith = predicate => ψ(_.findWhere(predicate), isNotNil);

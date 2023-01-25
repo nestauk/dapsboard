@@ -1,4 +1,4 @@
-import {integer, number, objectOf} from '$lib/types';
+import {integer, number, objectOf} from '$lib/types/index.js';
 
 export default {
 	id: 'extended_stats',

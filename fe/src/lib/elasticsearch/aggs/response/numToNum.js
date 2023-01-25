@@ -4,7 +4,7 @@ import {
 	numString,
 	recordLike,
 	unionOf
-} from '$lib/types';
+} from '$lib/types/index.js';
 
 export default {
 	id: 'numkeyToNum',

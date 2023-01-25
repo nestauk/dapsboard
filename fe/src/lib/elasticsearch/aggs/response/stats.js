@@ -1,4 +1,4 @@
-import {integer, number} from '$lib/types';
+import {integer, number} from '$lib/types/index.js';
 
 export default {
 	id: 'stats',

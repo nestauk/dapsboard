@@ -4,7 +4,7 @@ import {
 	number,
 	objectOf,
 	string,
-} from '$lib/types';
+} from '$lib/types/index.js';
 
 export default {
 	id: 'buckets_text_score',

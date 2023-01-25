@@ -5,9 +5,9 @@
 	import {page as _page} from '$app/stores';
 
 	import routes from '$lib/app/data/routes.json';
-	import {constructQuery} from '$lib/elasticsearch/utils/aggQuery';
-	import {request} from '$lib/utils/net';
-	import {getSchema, getSearchURL} from '$lib/utils/specs';
+	import {constructQuery} from '$lib/elasticsearch/utils/aggQuery.js';
+	import {request} from '$lib/utils/net.js';
+	import {getSchema, getSearchURL} from '$lib/utils/specs.js';
 
 	let id;
 	let dataset;

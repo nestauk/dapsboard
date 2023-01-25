@@ -1,4 +1,4 @@
-import {string} from '$lib/types';
+import {string} from '$lib/types/index.js';
 
 export const zoomXYString = {
 	...string,

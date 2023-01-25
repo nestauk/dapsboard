@@ -7,7 +7,7 @@ import {
 	sortOptions,
 	termsExclude,
 	termsInclude,
-} from '$lib/elasticsearch/types/params';
+} from '$lib/elasticsearch/types/params.js';
 import {
 	booleanD,
 	enumsOf,
@@ -20,7 +20,7 @@ import {
 	string,
 	stringD,
 	xorOf,
-} from '$lib/types';
+} from '$lib/types/index.js';
 
 export const baseAggFor = fieldType => ({
 	field: string,
