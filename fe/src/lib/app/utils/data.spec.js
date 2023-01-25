@@ -1,16 +1,8 @@
 import assert from 'node:assert';
-import path from 'node:path';
-import {fileURLToPath} from 'node:url';
-
-import {readJson} from '@svizzle/file';
 
 import {getDatasetOf} from '../../app/utils/data.js';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-
-const GENERAL_ARXIV_V0_PATH = path.resolve(__dirname, '../../test_assets/general_arxiv_v0.json');
-const general_arxiv_v0 = await readJson(GENERAL_ARXIV_V0_PATH);
-
+import general_arxiv_v0 from '../../test_assets/general_arxiv_v0.json' assert {type: 'json'};
 
 describe('utils/data.js', function () {
 
