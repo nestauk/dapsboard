@@ -1,5 +1,12 @@
-/__sapper__
+.DS_Store
+.env
+.env.*
+!.env.example
+/.svelte-kit
+/build
 /node_modules
-/src/node_modules/@sapper/
-/src/node_modules/app/data
+/package
+/src/lib/app/data
 /static/dsl/
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*

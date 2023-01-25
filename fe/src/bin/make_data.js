@@ -1,11 +1,11 @@
 #!/usr/bin/env node -r esm
 
 /* eslint-disable
-	node/no-unpublished-import,
 	node/shebang
 */
 
-import path from 'path';
+import path from 'node:path';
+import {fileURLToPath} from 'node:url';
 
 import {readDir, readFile, saveObj} from '@svizzle/file';
 import {tapMessage} from '@svizzle/dev';
@@ -13,12 +13,14 @@ import {applyFnMap} from '@svizzle/utils';
 import yaml from 'js-yaml';
 import * as _ from 'lamb';
 
-import {makeDatasetBySource} from 'utils/specs';
-import {indexById} from 'utils/generic';
+import {makeDatasetBySource} from '../lib/utils/specs.js';
+import {indexById} from '../lib/utils/generic.js';
 
-const DATASETS_PATH = path.resolve(__dirname, '../node_modules/app/data/datasets.json');
-const ROUTES_PATH = path.resolve(__dirname, '../node_modules/app/data/routes.json');
-const SIDEBAR_PATH = path.resolve(__dirname, '../node_modules/app/data/sidebar.json');
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+const DATASETS_PATH = path.resolve(__dirname, '../lib/app/data/datasets.json');
+const ROUTES_PATH = path.resolve(__dirname, '../lib/app/data/routes.json');
+const SIDEBAR_PATH = path.resolve(__dirname, '../lib/app/data/sidebar.json');
 const INDICES_SPECS_DIR = path.resolve(__dirname, '../../../specs/indices');
 
 const isYamlFile = name => path.parse(name).ext === '.yaml';

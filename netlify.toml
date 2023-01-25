@@ -1,4 +1,7 @@
 [build]
-  command = "cd fe && npm i --legacy-peer-deps && npm run deploy"
-  environment = {NODE_VERSION = "18.13.0"}
-  publish = "fe/__sapper__/export/"
+  command = "cd fe && npm i && npm run deploy"
+	publish = "fe/build"
+
+[build.environment]
+  NODE_VERSION = "18.13.0"
+  ADAPTER = "netlify"
