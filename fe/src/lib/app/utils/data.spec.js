@@ -1,8 +1,8 @@
 import assert from 'node:assert';
 
-import {getDatasetOf} from '../../app/utils/data.js';
+import {getDatasetOf} from '$lib/app/utils/data.js';
 
-import general_arxiv_v0 from '../../test_assets/general_arxiv_v0.json' assert {type: 'json'};
+import general_arxiv_v0 from '$lib/test_assets/general_arxiv_v0.json' assert {type: 'json'};
 
 describe('utils/data.js', function () {
 

@@ -1,8 +1,8 @@
 import assert from 'node:assert';
 
-import {selectionToAggsQuery} from '../../app/utils/exploreUtils.js';
+import {selectionToAggsQuery} from '$lib/app/utils/exploreUtils.js';
 
-import general_arxiv_v0_date_created_article from '../../test_assets/general_arxiv_v0_date_created_article.json' assert {type: 'json'};
+import general_arxiv_v0_date_created_article from '$lib/test_assets/general_arxiv_v0_date_created_article.json' assert {type: 'json'};
 
 describe('utils/exploreUtils.js', function () {
 	describe('selectionToAggsQuery', function () {
