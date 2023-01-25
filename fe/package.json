@@ -64,6 +64,5 @@
 		"rmvite": "rimraf node_modules/.vite",
 		"unittests": "mocha --spec src/**/*.spec.js"
 	},
-	"type": "module",
-	"version": "0.0.1"
+	"type": "module"
 }
