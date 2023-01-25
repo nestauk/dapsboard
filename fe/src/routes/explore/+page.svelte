@@ -14,7 +14,7 @@
 		toggleSource,
 	} from '$lib/app/stores/exploreStores';
 	import {makeExploreQuery} from '$lib/app/utils/exploreUtils';
-	import {parseSearchParams} from '$lib/utils/url';
+	import {collectionToObject} from '$lib/utils/svizzle/collection-object.js';
 
 	const makeHrefBoard = ({fields, source, project, version}) =>
 		`/explore/${source}?${makeExploreQuery({fields, project, version})}`;
@@ -28,7 +28,7 @@
 	let version;
 
 	$: browser && ({url: {searchParams}} = $_page);
-	$: searchParams && ({source, project, version} = parseSearchParams(searchParams));
+	$: searchParams && ({source, project, version} = collectionToObject(searchParams));
 
 	$: hrefBoard = project && source && version
 		&& makeHrefBoard({project, source, version});

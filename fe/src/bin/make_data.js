@@ -44,7 +44,7 @@ const makeSchemaObj = applyFnMap({
 	version: makeVersion
 });
 
-const save = (/** @type {{ spec: unknown; constructor: Function; toString(): string; toLocaleString(): string; valueOf(): Object; hasOwnProperty(v: PropertyKey): boolean; isPrototypeOf(v: Object): boolean; propertyIsEnumerable(v: PropertyKey): boolean; }[]} */ data, dest) => saveObj(dest, 2)(data).then(tapMessage(`Saved ${dest}`));
+const save = (data, dest) => saveObj(dest, 2)(data).then(tapMessage(`Saved ${dest}`));
 
 const run = async () => {
 	const refs = await readDir(INDICES_SPECS_DIR)

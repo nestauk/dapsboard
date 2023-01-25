@@ -14,7 +14,7 @@
 	import {createExploreMachine} from '$lib/app/machines/explore/route';
 	import {selectedDatasetFields} from '$lib/app/stores/exploreStores';
 	import {makeDepthByField, makeExploreIndexPath} from '$lib/app/utils/exploreUtils';
-	import {parseSearchParams} from '$lib/utils/url';
+	import {collectionToObject} from '$lib/utils/svizzle/collection-object.js';
 
 	const fontSize = 16;
 	const depthFontSize = 0.8 * fontSize;
@@ -43,7 +43,7 @@
 	let width = 0;
 
 	$: browser && ({params: {source}, url: {searchParams}} = $_page);
-	$: searchParams && ({project, version, fields} = parseSearchParams(searchParams));
+	$: searchParams && ({project, version, fields} = collectionToObject(searchParams));
 
 	$: if (source) {
 		machine.send('SELECT_SOURCE', {source});

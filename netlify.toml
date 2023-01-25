@@ -1,4 +1,7 @@
 [build]
   command = "cd fe && npm i && npm run deploy"
-  environment = {NODE_VERSION = "18.13.0"}
 	publish = "fe/build"
+
+[build.environment]
+  NODE_VERSION = "18.13.0"
+  ADAPTER = "netlify"
