@@ -1,3 +1,7 @@
+# 0.0.8
+
+- fe: use SvelteKit
+
 # 0.0.7
 
 - Moved the front-end to `fe/`
