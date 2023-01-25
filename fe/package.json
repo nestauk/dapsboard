@@ -49,20 +49,20 @@
 		"copy_builder_form": "node src/bin/machines/builder_copy_form.js",
 		"copy_builder_route": "node src/bin/machines/builder_copy_route.js",
 		"copy_explore_route": "node src/bin/machines/explore_copy_route.js",
+		"linklib": "cd node_modules && ln -s ../src/lib \\$lib && cd ..",
 		"deploy": "npm run makedata && npm run build",
 		"dev": "vite dev",
 		"devinspect": "export INSPECT=true && vite dev",
 		"lint": "eslint .",
 		"makedata": "npm run mkdirdata && npm run chmod && node ./src/bin/make_data.js",
 		"mkdirdata": "mkdirp ./src/lib/app/data",
-		"prepare": "npm run makedata && svelte-kit sync",
+		"prepare": "npm run linklib && npm run makedata && svelte-kit sync",
 		"preview": "vite preview",
-		"redev": "npm run rmkv && npm run prepare && npm run dev",
+		"redev": "npm run rmkv && svelte-kit sync && npm run dev",
 		"rmkit": "rimraf .svelte-kit",
 		"rmkv": "npm run rmkit && npm run rmvite",
 		"rmvite": "rimraf node_modules/.vite",
 		"unittests": "mocha --spec src/**/*.spec.js"
 	},
-	"type": "module",
-	"version": "0.0.1"
+	"type": "module"
 }
