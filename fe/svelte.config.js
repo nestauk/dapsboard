@@ -1,11 +1,11 @@
-import adapterAuto from '@sveltejs/adapter-auto';
-import adapterStatic from '@sveltejs/adapter-static';
-import adapterNetlify from '@sveltejs/adapter-netlify';
-
-import {readJson} from '@svizzle/file';
-
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
+
+import adapterAuto from '@sveltejs/adapter-auto';
+import adapterNetlify from '@sveltejs/adapter-netlify';
+import adapterStatic from '@sveltejs/adapter-static';
+
+import {readJson} from '@svizzle/file';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const SOURCES_PATH = path.resolve(__dirname, './src/lib/app/data/sidebar.json')

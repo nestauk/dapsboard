@@ -14,7 +14,7 @@
 	import {createExploreMachine} from '$lib/app/machines/explore/route';
 	import {selectedDatasetFields} from '$lib/app/stores/exploreStores';
 	import {makeDepthByField, makeExploreIndexPath} from '$lib/app/utils/exploreUtils';
-	import {collectionToObject} from '$lib/utils/svizzle/collection-object.js';
+	import {collectionToObject} from '$lib/utils/svizzle/utils/collection-object.js';
 
 	const fontSize = 16;
 	const depthFontSize = 0.8 * fontSize;

@@ -14,7 +14,7 @@
 		toggleSource,
 	} from '$lib/app/stores/exploreStores';
 	import {makeExploreQuery} from '$lib/app/utils/exploreUtils';
-	import {collectionToObject} from '$lib/utils/svizzle/collection-object.js';
+	import {collectionToObject} from '$lib/utils/svizzle/utils/collection-object.js';
 
 	const makeHrefBoard = ({fields, source, project, version}) =>
 		`/explore/${source}?${makeExploreQuery({fields, project, version})}`;
