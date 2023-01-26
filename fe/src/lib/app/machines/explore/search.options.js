@@ -1,7 +1,7 @@
+import {applyFnMap} from '@svizzle/utils';
 import * as _ from 'lamb';
 import {get} from 'svelte/store';
 import {assign, send} from 'xstate';
-import {applyFnMap} from '@svizzle/utils';
 
 import {
 	selectedDataset,
@@ -247,7 +247,6 @@ export const searchOptions = {
 		setSuggestionsCacheKey: assign(setSuggestionsCacheKey),
 		updateCurrentField: assign(updateCurrentField),
 		updateFieldStats: assign(updateFieldStats),
-		// updateQuery: assign(updateQuery),
 		updateSearchQuery: assign(updateSearchQuery),
 		updateStatsCache: assign(updateStatsCache),
 		updateSuggestions: assign(updateSuggestions),

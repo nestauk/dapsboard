@@ -25,8 +25,6 @@ export const searchConfig = {
 							target: 'Idle',
 							actions: [
 								'setMenuInactive',
-								'updateQuery',
-								'sendQueryUpdated',
 							]
 						},
 					},

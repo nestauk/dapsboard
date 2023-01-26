@@ -1,9 +1,9 @@
-import * as _ from 'lamb';
 import {toggleItem} from '@svizzle/utils';
+import * as _ from 'lamb';
 import {get} from 'svelte/store';
 import {assign, send} from 'xstate';
 
-import {selectionToAggsQuery} from '$lib/app/utils/exploreUtils.js';
+import {selectionToAggs} from '$lib/app/utils/exploreUtils.js';
 
 const selectFields = (ctx, {fields}) => {
 	ctx.selectedFields.set(fields);
@@ -25,11 +25,11 @@ const selectPreviousField = ctx => {
 	return ctx;
 }
 
-const updateQuery = ctx => {
+const updateAggs = ctx => {
 	const fields = get(ctx.selectedFields);
 	const {project, source, version} = get(ctx.dataset);
-	const query = selectionToAggsQuery({fields, project, source, version});
-	ctx.query.set(query);
+	const selectionAggs = selectionToAggs({fields, project, source, version});
+	ctx.selectionAggs.set(selectionAggs);
 	return ctx;
 }
 
@@ -38,9 +38,9 @@ export const selectingOptions = {
 		selectFields: assign(selectFields),
 		selectNextField: assign(selectNextField),
 		selectPreviousField: assign(selectPreviousField),
-		sendQueryUpdated: send('QUERY_UPDATED'),
+		sendAggsUpdated: send('AGGS_UPDATED'),
 		toggleField: assign(toggleField),
-		updateQuery: assign(updateQuery),
+		updateAggs: assign(updateAggs),
 	},
 	guards: {
 	}

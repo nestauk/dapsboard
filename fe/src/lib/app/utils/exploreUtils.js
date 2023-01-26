@@ -1,22 +1,17 @@
+import {makeMergeAppliedFnMap, transformValues} from '@svizzle/utils';
 import * as _ from 'lamb';
 
 import {getApiVersionOf, getSchemaOf} from '$lib/app/utils/data.js';
-import {getDatasetIdOf} from '$lib/utils/specs.js';
-
 import * as aggsById from '$lib/elasticsearch/aggs/index.js';
-import {makeRequestToQuery} from '$lib/elasticsearch/aggs/utils/query.js';
 import {makeIsAggVersionCompatible} from '$lib/elasticsearch/aggs/utils/version.js';
-
 import {aggHasNoRequiredParamsWithoutDefault} from '$lib/elasticsearch/types/aggs.utils.js';
 import * as esTypes from '$lib/elasticsearch/types/fields.js';
 import {isWithKeywordTypeId} from '$lib/elasticsearch/types/fields.utils.js';
-
 import * as types from '$lib/types/index.js';
+import {getDefault, hasDefault} from '$lib/types/index.js';
 import {makeIsTypeCompatibleWithType} from '$lib/types/utils.js';
 
-import {arrayToObjectWith} from '$lib/utils/svizzle/utils/[any-array]-[array-object].js';
-
-export const aggs = _.values(aggsById);
+export const allAggs = _.values(aggsById);
 export const allTypes = {...types, ...esTypes};
 
 /* URL */
@@ -39,20 +34,35 @@ export const makeExplorePath = ({fields, project, source, version}) =>
 
 /* ES query */
 
-const getCompatibleAggs = (type, apiVersion) => _.filter(aggs, _.allOf([
+const getCompatibleAggs = (type, apiVersion) => _.filter(allAggs, _.allOf([
 	makeIsAggVersionCompatible(apiVersion),
 	_.pipe([_.getKey('fieldType'), makeIsTypeCompatibleWithType(type)]),
-	_.pipe([_.getKey('request'), aggHasNoRequiredParamsWithoutDefault]),
 ]));
 
-export const selectionToAggsQuery = ({fields, project, source, version}) => {
+export const isValidAgg = _.pipe([
+	_.getKey('request'),
+	aggHasNoRequiredParamsWithoutDefault
+]);
+
+export const useDefaults = _.pipe([
+	_.collect([
+		_.pipe([
+			_.skipIf(_.isNil),
+			_.pickIf(hasDefault),
+			_.mapValuesWith(getDefault)
+		]),
+		_.pick(['field']),
+	]),
+	_.apply(_.merge)
+])
+
+export const selectionToAggs = ({fields, project, source, version}) => {
 	// use only the first field for now
 	const [fieldName] = fields;
 
 	// inspect dataset spec
 	const apiVersion = getApiVersionOf({project, source, version});
 	const schema = getSchemaOf({project, source, version});
-	const datasetId = getDatasetIdOf({project, source, version});
 
 	// get field type
 	const fieldTypeId = schema[fieldName] && schema[fieldName].type;
@@ -61,30 +71,20 @@ export const selectionToAggsQuery = ({fields, project, source, version}) => {
 	// filter aggs
 	const compatibleAggs = getCompatibleAggs(fieldType, apiVersion);
 
-	// make query
+	// add `request.field`
 	const esFieldName = isWithKeywordTypeId(fieldTypeId)
 		? `${fieldName}.keyword`
 		: fieldName;
-	const requestToQuery = makeRequestToQuery(esFieldName);
-	const aggsToObject = arrayToObjectWith(agg => [
-		`${datasetId}.${fieldName}.${agg.id}.${agg.response.id}`,
-		{[agg.id]: requestToQuery(agg.request)}
-	]);
+	const selectionAggs = _.map(
+		compatibleAggs,
+		transformValues({
+			request: makeMergeAppliedFnMap({
+				field: obj => _.has(obj, 'field') ? esFieldName : undefined,
+			})
+		}),
+	);
 
-	const query = {
-		aggs: aggsToObject(compatibleAggs),
-		size: 0,
-	};
-
-	return query;
-
-	// TODO #220: add to the URL as `&preference=...` for caching
-	// import {joinWithDash} from '@svizzle/utils';
-	// const makePreferenceKey = _.pipe([_.pluck('id'), joinWithDash]);
-	// const preference =
-	// 	`${datasetId}.${fieldName}.${makePreferenceKey(compatibleAggs)}`;
-	//
-	// return {preference, query};
+	return selectionAggs;
 };
 
 /* other */

@@ -2,7 +2,7 @@ export const resultsConfig = {
 	id: 'Results',
 	initial: 'CheckMatching',
 	on: {
-		QUERY_UPDATED: {
+		AGGS_UPDATED: {
 			target: '#Results.CheckMatching'
 		}
 	},
@@ -38,9 +38,33 @@ export const resultsConfig = {
 						{
 							target: '#Matching',
 							cond: 'isInCache',
-							actions: ['loadFromCache'],
+							actions: ['loadFromCache']
 						},
-						{ target: 'Pending' }
+						{
+							target: 'UpdatingQueue',
+							actions: ['initQueue']
+						}
+					]
+				},
+				UpdatingQueue: {
+					entry: [
+						'conditionalLog',
+						'updateAggsParams',
+						'updateQueue',
+					],
+					always: [
+						{
+							target: 'Pending',
+							cond: 'hasQuery',
+						},
+						{
+							target: '#Matching',
+							actions: [
+								'updateCache',
+								'updateCurrentResults',
+								'resetQueue',
+							]
+						},
 					]
 				},
 				Pending: {
@@ -49,10 +73,9 @@ export const resultsConfig = {
 						id: 'request',
 						src: 'apiRequest',
 						onDone: {
-							target: '#Results.Matching',
+							target: 'UpdatingQueue',
 							actions: [
-								'updateCache',
-								'updateCurrentResults',
+								'mergeQueueResults',
 							]
 						},
 						onError: {

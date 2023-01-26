@@ -1,6 +1,6 @@
+import {isNotNil} from '@svizzle/utils';
 import * as _ from 'lamb';
 import {derived, writable} from 'svelte/store';
-import {isNotNil} from '@svizzle/utils';
 
 import {
 	selectedDatasetFieldsIndicesMap,
@@ -41,7 +41,7 @@ export const createSelectionStores = () => {
 		isPrevFieldDisabled,
 		nextPair,
 		prevPair,
-		query: writable({}),
 		selectedFields,
+		selectionAggs: writable({}),
 	}
 };
