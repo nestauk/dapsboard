@@ -1,7 +1,7 @@
 <script>
 	import { createEventDispatcher } from 'svelte';
 
-	import IconHelpCircle from '$lib/app/components/icons/IconHelpCircle.svelte';
+	import {Icon, HelpCircle} from '@svizzle/ui';
 	import {is_boolean, is_enums} from '$lib/types/index.js';
 	import { getEditor } from '$lib/app/components/elementary/TypedField.utils.js';
 	import { autoID } from '$lib/utils/generic.js';
@@ -55,7 +55,10 @@
 >
 	{labelText.startsWith('_') ? '' : labelText}
 	{#if help}
-		<IconHelpCircle size={14} />
+		<Icon
+			glyph={HelpCircle}
+			size={14}
+		/>
 	{/if}
 </label>
 <div

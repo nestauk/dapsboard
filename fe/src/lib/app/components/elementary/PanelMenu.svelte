@@ -1,5 +1,5 @@
 <script>
-	import IconSliders from '$lib/app/components/icons/IconSliders.svelte';
+	import {Icon, Sliders} from '@svizzle/ui';
 	export let position = 'top-right';
 	export let popup = 'bottom';
 	export let className = '';
@@ -32,7 +32,10 @@
 	on:mouseenter={openMenu}
 	on:mouseleave={closeMenu}
 >
-	<IconSliders size={14} />
+	<Icon
+		glyph={Sliders}
+		size={14}
+	/>
 	<menu
 		bind:this={menu}
 		class:menuOpen

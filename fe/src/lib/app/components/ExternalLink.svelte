@@ -1,5 +1,5 @@
 <script>
-	import IconExternalLink from './icons/IconExternalLink.svelte';
+	import {Icon, ExternalLink} from '@svizzle/ui';
 
 	export let href;
 	export let text;
@@ -9,10 +9,12 @@
 	$: text = text || '';
 </script>
 
+<!-- svelte-ignore security-anchor-rel-noreferrer -->
 <a {href} target='_blank' on:click={e => e.stopPropagation()}>
 	<span>{text}</span>
 	<span>
-		<IconExternalLink
+		<Icon 
+			glyph={ExternalLink}
 			{size}
 			stroke='rgb(16, 174, 249)'
 		/>

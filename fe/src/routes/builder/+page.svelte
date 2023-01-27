@@ -19,9 +19,12 @@
 	import AggSelector from '$lib/app/components/AggSelector.svelte';
 	import PanelMenu from '$lib/app/components/elementary/PanelMenu.svelte';
 	import MenuItem from '$lib/app/components/elementary/MenuItem.svelte';
-	import IconDelete from '$lib/app/components/icons/IconDelete.svelte';
-	import IconClipboard from '$lib/app/components/icons/IconClipboard.svelte';
-	import IconCheck from '$lib/app/components/icons/IconCheck.svelte';
+	import {
+		Icon,
+		Delete,
+		Clipboard,
+		Check
+	 } from '@svizzle/ui';
 
 	import { createBuilderMachine } from '$lib/app/machines/builder/route.js';
 	import { parseParams } from '$lib/app/machines/builder/formediting.options.js';
@@ -212,7 +215,10 @@
 					}
 					option.machine.send('SELECTION_CHANGED', payload);
 				}}>
-					<IconDelete size={14} />
+					<Icon
+						glyph={Delete}
+						size={14}
+					/>
 				</div>
 			</div>
 		</Select>
@@ -515,9 +521,16 @@
 					on:click={handleCopyResponse}
 				>
 					{#if !responseCopied}
-						<IconClipboard size={14} />
+						<Icon
+							glyph={Clipboard}
+							size={14}
+						/>
 					{:else}
-						<IconCheck size={14} stroke='green' />
+						<Icon
+							glyph={Check}
+							size={14}
+							stroke='green'
+						/>
 					{/if}
 				</div>
 			{/if}

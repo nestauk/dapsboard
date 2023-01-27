@@ -6,9 +6,13 @@
 
 	import {page as _page} from '$app/stores';
 
-	import IconChevronLeft from '$lib/app/components/icons/IconChevronLeft.svelte';
-	import IconChevronDown from '$lib/app/components/icons/IconChevronDown.svelte';
-	import IconChevronUp from '$lib/app/components/icons/IconChevronUp.svelte';
+	import {
+		Icon,
+		ChevronDown,
+		ChevronLeft,
+		ChevronUp
+	} from '@svizzle/ui';
+
 	import FieldMenu from '$lib/app/components/explore/suggestions/FieldMenu.svelte';
 	import Search from '$lib/app/components/explore/suggestions/Search.svelte';
 	import {createExploreMachine} from '$lib/app/machines/explore/route.js';
@@ -151,7 +155,7 @@
 	</section>
 	<section class='navheader'>
 		<a class='undecor' href={hrefBack}>
-			<IconChevronLeft />
+			<Icon glyph={ChevronLeft} />
 		</a>
 		<p>
 			<span>{source}</span>
@@ -209,7 +213,10 @@
 			class='button fieldnav'
 			on:click={!$isNextFieldDisabled && clickedNextField}
 		>
-			<IconChevronDown stroke='white' />
+			<Icon
+				glyph={ChevronDown}
+				stroke='white'
+			/>
 		</div>
 		<div
 			class:clickable={!$isPrevFieldDisabled}
@@ -217,7 +224,10 @@
 			class='button fieldnav'
 			on:click={!$isPrevFieldDisabled && clickedPrevField}
 		>
-			<IconChevronUp stroke='white' />
+			<Icon
+				glyph={ChevronUp}
+				stroke='white'
+			/>
 		</div>
 	</section>
 	<section class='contentheader'>
