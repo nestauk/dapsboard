@@ -1,7 +1,7 @@
 <script>
-	import {version} from '$lib/app/utils/version.js';
+	import {Link} from '@svizzle/ui';
 
-	import ExternalLink from './ExternalLink.svelte';
+	import {version} from '$lib/app/utils/version.js';
 
 	const changelogUrl = 'https://github.com/nestauk/dapsboard/blob/dev/CHANGELOG.md';
 
@@ -41,7 +41,12 @@
 				<a href='/feedback'>Feedback</a>
 			</li> -->
 			<li>
-				<ExternalLink href={changelogUrl} text={version} />
+				<Link
+					href={changelogUrl}
+					type='external'
+				>
+					{version}
+				</Link>
 			</li>
 		</ul>
 	</div>

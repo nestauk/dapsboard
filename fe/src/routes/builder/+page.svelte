@@ -1,4 +1,6 @@
 <script>
+	import {Link} from '@svizzle/ui';
+
 	import * as _ from 'lamb';
 	import { onMount } from 'svelte';
 	import { readable } from 'svelte/store';
@@ -8,7 +10,6 @@
 
 	import { integer } from '$lib/types/index.js';
 
-	import ExternalLink from '$lib/app/components/ExternalLink.svelte';
 	import JSONValue from '$lib/app/components/JSONValue.svelte';
 	import TypedField from '$lib/app/components/elementary/TypedField.svelte';
 
@@ -311,7 +312,11 @@
 		>
 			<div class='select-item'>
 				<div>{option.text}</div>
-				<ExternalLink href={getSearchURL(ROUTES[option.text])} size={14} />
+				<Link
+					href={getSearchURL(ROUTES[option.text])}
+					size={14}
+					type='external'
+				/>
 			</div>
 		</Select>
 	</section>

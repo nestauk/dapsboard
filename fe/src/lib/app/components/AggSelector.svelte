@@ -1,6 +1,6 @@
 <script>
+	import {Link} from '@svizzle/ui';
 	import Select from '$lib/app/components/elementary/Select.svelte';
-	import ExternalLink from '$lib/app/components/ExternalLink.svelte';
 	import aggsDocURL from '$lib/elasticsearch/config/aggsDocURL.js';
 
 	export let title = '';
@@ -26,7 +26,11 @@
 		on:mouseout={() => setAggDocs?.(null)}
 	>
 		<div>{option.text}</div>
-		<ExternalLink href={aggsDocURL[option.value]} size={14} />
+		<Link
+			href={aggsDocURL[option.value]}
+			size={14}
+			type='external'
+		/>
 	</div>
 </Select>
 
