@@ -5,7 +5,9 @@ import {applyFnMap, makeWithKeys} from '@svizzle/utils';
 
 import aggToResponseType from '../../elasticsearch/aggs/ref/aggToResponseType.js';
 import Location from '../components/views/Location.svelte';
-import Number from '../components/views/Number.svelte';
+import Histogram from '../components/views/Histogram.svelte';
+import NumberDisplay from '../components/views/NumberDisplay.svelte';
+import Stats from '../components/views/Stats.svelte';
 
 const getEmptyObject = _.always(null);
 const getLabelFromOrigin = _.getKey('aggId');
@@ -15,8 +17,10 @@ const getValue = _.getKey('value');
 const getDocCount = _.getKey('doc_count');
 const getLocation = _.getKey('location');
 
-const buildLabelProp = applyFnMap({label: getLabelFromOrigin});
+const getLabelProp = applyFnMap({label: getLabelFromOrigin});
+const getTitleProp = applyFnMap({title: getLabelFromOrigin});
 const getJSONTreeProps = applyFnMap({value: _.identity});
+const getStatsProps = applyFnMap({stats: _.identity});
 
 const bucketsToBarchartItems = _.pipe([
 	_.getKey('buckets'),
@@ -25,6 +29,27 @@ const bucketsToBarchartItems = _.pipe([
 		value: getDocCount
 	}))
 ]);
+
+// gets `key` property in each array item and returns an
+// equivalent range with output format: [key, difference with next key]
+// input format of each array item is {key, doc_count}
+const bucketsToHistogramItems = _.pipe([
+	_.getKey('buckets'),
+	_.mapWith(_.collect([getKey, getDocCount])),
+	_.mapWith(([key, value], i, arr) => {
+		const [[firstItem], [secondItem]] = arr;
+		const firstDifference = secondItem ? secondItem - firstItem : null;
+
+		const nextKey = arr[i + 1]?.[0];
+		const endRange = nextKey ? nextKey : key + firstDifference;
+
+		return {
+			range: [key, endRange],
+			value
+		};
+	})
+]);
+
 
 const resultsMap = {
 	boxplot: {
@@ -53,8 +78,12 @@ const resultsMap = {
 		transformOrigin: getEmptyObject
 	},
 	buckets_number: {
-		component: JSONTree,
-		transformResult: getJSONTreeProps,
+		component: Histogram,
+		transformResult: aggResult => ({
+			bins: bucketsToHistogramItems(aggResult),
+			width: 200,
+			height: 600,
+		}),
 		transformOrigin: getEmptyObject
 	},
 	buckets_range: {
@@ -64,27 +93,27 @@ const resultsMap = {
 	},
 	buckets_terms: {
 		component: BarchartVDiv,
-		transformResult: (/** @type {any} */ aggResult) => ({
+		transformResult: aggResult => ({
 			items: bucketsToBarchartItems(aggResult)
 		}),
 		transformOrigin: getEmptyObject
 	},
 	buckets_text_score: {
 		component: BarchartVDiv,
-		transformResult: (/** @type {any} */ aggResult) => ({
+		transformResult: aggResult => ({
 			items: bucketsToBarchartItems(aggResult)
 		}),
 		transformOrigin: getEmptyObject
 	},
 	doc_count: {
-		component: Number,
+		component: NumberDisplay,
 		transformResult: applyFnMap({value: getDocCount}),
-		transformOrigin: buildLabelProp
+		transformOrigin: getLabelProp
 	},
 	extended_stats: {
-		component: JSONTree,
-		transformResult: getJSONTreeProps,
-		transformOrigin: getEmptyObject
+		component: Stats,
+		transformResult: getStatsProps,
+		transformOrigin: getLabelProp
 	},
 	geo_bounds: {
 		component: JSONTree,
@@ -107,9 +136,9 @@ const resultsMap = {
 		transformOrigin: getEmptyObject
 	},
 	stats: {
-		component: JSONTree,
-		transformResult: getJSONTreeProps,
-		transformOrigin: getEmptyObject
+		component: Stats,
+		transformResult: getStatsProps,
+		transformOrigin: getLabelProp
 	},
 	string_stats: {
 		component: JSONTree,
@@ -122,9 +151,9 @@ const resultsMap = {
 		transformOrigin: getEmptyObject
 	},
 	value: {
-		component: Number,
+		component: NumberDisplay,
 		transformResult: applyFnMap({value: getValue}),
-		transformOrigin: buildLabelProp
+		transformOrigin: getLabelProp
 	},
 };
 
@@ -133,7 +162,7 @@ const parseAggKey = _.pipe([
 	makeWithKeys(['datasetId', 'fieldName', 'aggId', 'responseId']),
 ]);
 
-export const getComponent = (/** @type {any} */ aggKey, /** @type {any} */ aggResult) => {
+export const getComponent = (aggKey, aggResult) => {
 	const origin = parseAggKey(aggKey);
 	const {aggId} = origin;
 	const responseType = aggToResponseType[aggId];
