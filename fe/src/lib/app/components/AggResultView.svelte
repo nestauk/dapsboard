@@ -37,6 +37,7 @@
 <style>
 	.View {
 		margin: 0.5em;
+		max-height: 100%;
 	}
 	.label {
 		font-weight: bold;
