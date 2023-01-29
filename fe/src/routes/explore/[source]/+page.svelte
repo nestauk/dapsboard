@@ -1,5 +1,5 @@
 <script>
-    import {browser} from '$app/environment';
+	import {browser} from '$app/environment';
 	import * as _ from 'lamb';
 	import {onMount} from 'svelte';
 	import JSONTree from 'svelte-json-tree';

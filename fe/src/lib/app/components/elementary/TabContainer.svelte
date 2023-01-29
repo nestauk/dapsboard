@@ -1,4 +1,4 @@
-<script context="module">
+<script context='module'>
 	export const tabsKey = {};
 </script>
 
@@ -27,11 +27,11 @@
 </script>
 
 <div class={`tab-control ${className}`}>
-	<div class="tabs">
-		<slot isTitleSlot={true} isContentSlot={false}/>
+	<div class='tabs'>
+		<slot isTitleSlot={true} isContentSlot={false} />
 	</div>
-	<div class="tab-content">
-		<slot isTitleSlot={false} isContentSlot={true}/>
+	<div class='tab-content'>
+		<slot isTitleSlot={false} isContentSlot={true} />
 	</div>
 </div>
 

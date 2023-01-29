@@ -2,30 +2,30 @@
 	import sources from '$lib/app/data/sidebar.json';
 </script>
 
-<section class="container">
+<section class='container'>
 	<nav>
 		<ul>
 			{#each sources as {source, releases}}
-			<li>
-				<p>
-					{source}
-				</p>
-				<ul>
-					{#each releases as {id}}
+				<li>
 					<p>
-						<a
-							href='/_datasets/{id}'
-						>
-							<span>{id}</span>
-						</a>
+						{source}
 					</p>
-					{/each}
-				</ul>
-			</li>
+					<ul>
+						{#each releases as {id}}
+							<p>
+								<a
+									href='/_datasets/{id}'
+								>
+									<span>{id}</span>
+								</a>
+							</p>
+						{/each}
+					</ul>
+				</li>
 			{/each}
 		</ul>
 	</nav>
-	<section class="content">
+	<section class='content'>
 		<slot></slot>
 	</section>
 </section>

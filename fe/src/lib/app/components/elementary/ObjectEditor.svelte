@@ -34,24 +34,24 @@
 </script>
 
 <div>
-{#each aggParamsInfo as paramInfo (`${id}-${paramInfo.paramId}`)}
-	{#if !isParamSelector
-		|| ['__selection', value?.__selection].includes(paramInfo.paramId)
-	}
-		<TypedField
-			labelText={isParamSelector || isIntWithUnits ? '' : paramInfo.paramId}
-			required={isParamSelector
-				? required
-				: required && paramInfo.required
-			}
-			dataType={paramInfo.displayText}
-			typeObject={paramInfo.type}
-			value={getFieldValue(paramInfo.paramId)}
-			on:change={event => handleChange({[paramInfo.paramId]: event.detail})}
-			help={false}
-		/>
-	{/if}
-{/each}
+	{#each aggParamsInfo as paramInfo (`${id}-${paramInfo.paramId}`)}
+		{#if !isParamSelector
+			|| ['__selection', value?.__selection].includes(paramInfo.paramId)
+		}
+			<TypedField
+				labelText={isParamSelector || isIntWithUnits ? '' : paramInfo.paramId}
+				required={isParamSelector
+					? required
+					: required && paramInfo.required
+				}
+				dataType={paramInfo.displayText}
+				typeObject={paramInfo.type}
+				value={getFieldValue(paramInfo.paramId)}
+				on:change={event => handleChange({[paramInfo.paramId]: event.detail})}
+				help={false}
+			/>
+		{/if}
+	{/each}
 </div>
 
 <style>

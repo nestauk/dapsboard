@@ -183,7 +183,7 @@
 	});
 </script>
 
-<section class="query-builder">
+<section class='query-builder'>
 	<section class='axes'>
 		<header class='bold'>Axes</header>
 		<Select
@@ -229,7 +229,7 @@
 		<header class='bold'>Aggregations</header>
 		<section>
 			<AggSelector
-				title="Bucketing"
+				title='Bucketing'
 				selectedOption={$selection.aggregation}
 				hideDisabled={$hideDisabledAggregations}
 				options={$bucketOptions}
@@ -237,7 +237,7 @@
 				selectionChangedHandler={aggSelectionChanged}
 			/>
 			<AggSelector
-				title="Bucketing (multi-field)"
+				title='Bucketing (multi-field)'
 				selectedOption={$selection.aggregation}
 				hideDisabled={$hideDisabledAggregations}
 				options={$bucketMultiFieldOptions}
@@ -245,7 +245,7 @@
 				selectionChangedHandler={aggSelectionChanged}
 			/>
 			<AggSelector
-				title="Bucketing (nested)"
+				title='Bucketing (nested)'
 				selectedOption={$selection.aggregation}
 				hideDisabled={$hideDisabledAggregations}
 				options={$nestedBucketOptions}
@@ -253,7 +253,7 @@
 				selectionChangedHandler={aggSelectionChanged}
 			/>
 			<AggSelector
-				title="Metric"
+				title='Metric'
 				selectedOption={$selection.aggregation}
 				hideDisabled={$hideDisabledAggregations}
 				options={$metricOptions}
@@ -261,7 +261,7 @@
 				selectionChangedHandler={aggSelectionChanged}
 			/>
 			<AggSelector
-				title="Metric (multi-field)"
+				title='Metric (multi-field)'
 				selectedOption={$selection.aggregation}
 				hideDisabled={$hideDisabledAggregations}
 				options={$metricMultiFieldOptions}
@@ -305,7 +305,7 @@
 		>
 			<div class='select-item'>
 				<div>{option.text}</div>
-				<ExternalLink href={getSearchURL(ROUTES[option.text])} size={14}/>
+				<ExternalLink href={getSearchURL(ROUTES[option.text])} size={14} />
 			</div>
 		</Select>
 	</section>
@@ -345,7 +345,7 @@
 			<div class='form-fields'>
 				<TypedField
 					labelText='result size'
-					required=true
+					required={true}
 					dataType='integer'
 					typeObject={integer}
 					value={$resultSize}
@@ -515,9 +515,9 @@
 					on:click={handleCopyResponse}
 				>
 					{#if !responseCopied}
-						<IconClipboard size={14}/>
+						<IconClipboard size={14} />
 					{:else}
-						<IconCheck size={14} stroke='green'/>
+						<IconCheck size={14} stroke='green' />
 					{/if}
 				</div>
 			{/if}

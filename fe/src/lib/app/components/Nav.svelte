@@ -11,7 +11,7 @@
 <nav>
 	<div>
 		<ul>
-			<li class:selected='{segment === undefined}'>
+			<li class:selected={segment === undefined}>
 				<a href='/'><span class='bold'>Home</span></a>
 			</li>
 			<!-- <li class:selected='{segment === "datasets"}'>
@@ -20,15 +20,15 @@
 					href='/datasets'
 				><span class='bold'>Datasets</span></a>
 			</li> -->
-			<li class:selected='{segment === "builder"}'>
+			<li class:selected={segment === "builder"}>
 				<a
-					rel=prefetch
+					rel='prefetch'
 					href='/builder'
 				><span class='bold'>Inspect</span></a>
 			</li>
-			<li class:selected='{segment === "explore"}'>
+			<li class:selected={segment === "explore"}>
 				<a
-					rel=prefetch
+					rel='prefetch'
 					href='/explore'
 				><span class='bold'>Explore</span></a>
 			</li>
@@ -41,7 +41,7 @@
 				<a href='/feedback'>Feedback</a>
 			</li> -->
 			<li>
-				<ExternalLink href={changelogUrl} text={version}/>
+				<ExternalLink href={changelogUrl} text={version} />
 			</li>
 		</ul>
 	</div>

@@ -1,30 +1,30 @@
 <script>
-import { createEventDispatcher } from 'svelte';
+	import { createEventDispatcher } from 'svelte';
 
-const dispatch = createEventDispatcher();
+	const dispatch = createEventDispatcher();
 
-export let options;
-export let selectedOption;
-export let unselectable = true;
-export let hideDisabled = false;
-export let disabled = false;
+	export let options;
+	export let selectedOption;
+	export let unselectable = true;
+	export let hideDisabled = false;
+	export let disabled = false;
 
-function handleClick (v, isDisabled) {
-	if (disabled) {
-		return;
+	function handleClick (v, isDisabled) {
+		if (disabled) {
+			return;
+		}
+		const oldSelection = selectedOption;
+		if (unselectable && selectedOption === v) {
+			selectedOption = undefined;
+			oldSelection !== selectedOption && dispatch('selectionChanged', selectedOption);
+			return;
+		}
+
+		if (!isDisabled) {
+			selectedOption = v;
+			oldSelection !== selectedOption && dispatch('selectionChanged', selectedOption);
+		}
 	}
-	const oldSelection = selectedOption;
-	if (unselectable && selectedOption === v) {
-		selectedOption = undefined;
-		oldSelection !== selectedOption && dispatch('selectionChanged', selectedOption);
-		return;
-	}
-
-	if (!isDisabled) {
-		selectedOption = v;
-		oldSelection !== selectedOption && dispatch('selectionChanged', selectedOption);
-	}
-}
 </script>
 
 <ul class:disabled>

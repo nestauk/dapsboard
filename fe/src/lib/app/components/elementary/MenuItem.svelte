@@ -1,3 +1,3 @@
 <li>
-	<slot/>
+	<slot />
 </li>
