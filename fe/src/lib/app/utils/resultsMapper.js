@@ -3,7 +3,7 @@ import JSONTree from 'svelte-json-tree';
 import {BarchartVDiv} from '@svizzle/barchart';
 import {applyFnMap, makeWithKeys} from '@svizzle/utils';
 
-import aggToResponseType from '../../elasticsearch/aggs/ref/aggToResponseType.yaml';
+import aggToResponseType from '../../elasticsearch/aggs/ref/aggToResponseType.js';
 import Location from '../components/views/Location.svelte';
 import Number from '../components/views/Number.svelte';
 
