@@ -345,7 +345,7 @@
 			<div class='form-fields'>
 				<TypedField
 					labelText='result size'
-					required='true'
+					required={true}
 					dataType='integer'
 					typeObject={integer}
 					value={$resultSize}
