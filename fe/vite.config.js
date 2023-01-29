@@ -1,12 +1,10 @@
 // eslint-disable-next-line import/no-unresolved
-import { sveltekit } from '@sveltejs/kit/vite';
-import ViteYaml from '@modyfi/vite-plugin-yaml';
+import {sveltekit} from '@sveltejs/kit/vite';
 
 /** @type {import('vite').UserConfig} */
 const config = {
 	plugins: [
-		sveltekit(),
-		ViteYaml()
+		sveltekit()
 	],
 	server: {
 		fs: {
