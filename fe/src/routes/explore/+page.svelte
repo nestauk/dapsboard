@@ -2,9 +2,12 @@
 	import {page as _page} from '$app/stores';
 	import {browser} from '$app/environment';
 
-	import IconChevronDown from '$lib/app/components/icons/IconChevronDown.svelte';
-	import IconChevronUp from '$lib/app/components/icons/IconChevronUp.svelte';
-	import IconChevronRight from '$lib/app/components/icons/IconChevronRight.svelte';
+	import {
+		Icon,
+		ChevronDown,
+		ChevronRight,
+		ChevronUp
+	} from '@svizzle/ui';
 
 	import {
 		navigator,
@@ -81,9 +84,9 @@
 								on:click={toggleSource(source)}
 							>
 								{#if isExpanded}
-									<IconChevronUp />
+									<Icon glyph={ChevronUp} />
 								{:else}
-									<IconChevronDown />
+									<Icon glyph={ChevronDown} />
 								{/if}
 							</div>
 						{/if}
@@ -123,7 +126,7 @@
 			>
 				<div class='button'>
 					<p>Explore</p>
-					<IconChevronRight />
+					<Icon glyph={ChevronRight} />
 				</div>
 			</a>
 		{:else}
