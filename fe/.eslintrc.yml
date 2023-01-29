@@ -29,10 +29,10 @@ overrides:
     - error
     - prefer: single
     svelte/indent:
-    - warn
+    - off
     - indent: tab
     svelte/no-at-debug-tags: warn
-    svelte/no-at-html-tags: warn
+    svelte/no-at-html-tags: off
     svelte/no-dupe-else-if-blocks: error
     svelte/no-dupe-style-properties: error
     svelte/no-dynamic-slot-name: error
