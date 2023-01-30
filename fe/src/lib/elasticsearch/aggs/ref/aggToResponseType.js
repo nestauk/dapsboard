@@ -29,6 +29,7 @@ export default {
 	"sum": "value",
 	"t_test": "value",
 	"terms": "buckets_terms",
+	"top_hits": "hits",
 	"top_metrics": "top",
 	"value_count": "value",
 	"variable_width_histogram": "buckets_number",
