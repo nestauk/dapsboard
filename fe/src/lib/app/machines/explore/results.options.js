@@ -142,8 +142,9 @@ const updateQueue = ctx => {
 	const datasetId = getDatasetIdOf({project, source, version});
 	const aggsToObject = arrayToObjectWith(agg => {
 		const requestWithDefaults = useDefaults(agg.request);
+		const replacedFieldName = agg.request.field.replace('.', '_');
 		return [
-			`${datasetId}.${agg.request.field || 'noField'}.${agg.id}.${agg.response.id}`,
+			`${datasetId}.${replacedFieldName || 'noField'}.${agg.id}.${agg.response.id}`,
 			{[agg.id]: requestWithDefaults}
 		]
 	});
