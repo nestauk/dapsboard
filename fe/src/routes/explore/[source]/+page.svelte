@@ -235,11 +235,9 @@
 	</section>
 	<section class='results'>
 		{#if $currentResult}
-			{#if $currentResult.aggregations}
-				{#each Object.entries($currentResult.aggregations) as aggregation}
-					<AggResultView aggKey={aggregation[0]} aggResult={aggregation[1]}/>
-				{/each}
-			{/if}
+			{#each Object.entries($currentResult) as [aggKey, aggResult]}
+				<AggResultView {aggKey} {aggResult}/>
+			{/each}
 		{/if}
 	</section>
 </section>
