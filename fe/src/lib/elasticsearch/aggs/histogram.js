@@ -1,8 +1,8 @@
 import {
 	booleanD,
 	extent,
+	integer,
 	integerD,
-	floatD,
 	number,
 	string,
 } from '$lib/types/index.js';
@@ -27,7 +27,7 @@ export default {
 	request: { // [0]
 		extended_bounds: optional(extent),
 		field: string,
-		interval: floatD(10),
+		interval: integer,
 		keyed: optional(booleanD(false)),
 		min_doc_count: optional(integerD(1, true)),
 		missing: optional(number), // [1]
