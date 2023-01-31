@@ -103,7 +103,7 @@ const resultsToParams = applyFnMap({
 
 				const {stats: {count, min, max}} = resultsKeyedByAggId;
 				const binCount = Math.min(Math.sqrt(count), 50);
-				const interval = Math.max(Math.round((max - min) / binCount, 10), 1);
+				const interval = Math.max(Math.round((max - min) / binCount), 1);
 
 				// eslint-disable-next-line consistent-return
 				return integerD(interval);
