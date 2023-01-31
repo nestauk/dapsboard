@@ -1,5 +1,5 @@
 <script>
-	import {getComponent} from '../utils/resultsMapper'
+	import {getComponentConfig} from '../utils/resultsMapper'
 
 	export let aggKey;
 	export let aggResult;
@@ -15,7 +15,7 @@
 			keyProps,
 			origin,
 			resultProps,
-		} = getComponent(aggKey, aggResult)
+		} = getComponentConfig(aggKey, aggResult)
 	);
 	$: props = {
 		...keyProps,

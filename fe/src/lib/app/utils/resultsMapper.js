@@ -8,7 +8,7 @@ import {
 	makeWithKeys
 } from '@svizzle/utils';
 
-import {getLocation, getDocCount} from '../../utils/specs.js';
+import {getDocCount, getLocation} from '../../utils/specs.js';
 import aggToResponseType from '../../elasticsearch/aggs/ref/aggToResponseType.js';
 
 import Histogram from '../components/svizzle/HistogramDiv.svelte';
@@ -170,7 +170,7 @@ const parseAggKey = _.pipe([
 	makeWithKeys(['datasetId', 'fieldName', 'aggId', 'responseId']),
 ]);
 
-export const getComponent = (aggKey, aggResult) => {
+export const getComponentConfig = (aggKey, aggResult) => {
 	const origin = parseAggKey(aggKey);
 	const {aggId} = origin;
 	const responseType = aggToResponseType[aggId];
@@ -181,8 +181,8 @@ export const getComponent = (aggKey, aggResult) => {
 	const {component} = resultSpec;
 	return {
 		component,
-		resultProps: resultSpec.transformResult(aggResult),
 		keyProps: resultSpec.transformOrigin(origin),
-		origin
+		origin,
+		resultProps: resultSpec.transformResult(aggResult),
 	}
 }
