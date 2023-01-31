@@ -3,7 +3,7 @@
 
 	import PanelMenu from '$lib/app/components/elementary/PanelMenu.svelte';
 	import MenuItem from '$lib/app/components/elementary/MenuItem.svelte';
-	import { autoID } from '$lib/utils/generic.js';
+	import { autoID } from '$lib/utils/ids.js';
 
 	const dispatch = createEventDispatcher();
 

@@ -1,18 +1,20 @@
 <script>
-	import {Link} from '@svizzle/ui';
-
+	import {
+		Check,
+		Clipboard,
+		Delete,
+		Icon,
+		Link,
+	} from '@svizzle/ui';
 	import * as _ from 'lamb';
 	import { onMount } from 'svelte';
 	import { readable } from 'svelte/store';
 	import { RISON } from 'rison2';
+
 	import {page as _page} from '$app/stores';
 	import ROUTES from '$lib/app/data/routes.json';
-
-	import { integer } from '$lib/types/index.js';
-
 	import JSONValue from '$lib/app/components/JSONValue.svelte';
 	import TypedField from '$lib/app/components/elementary/TypedField.svelte';
-
 	import TabContainer from '$lib/app/components/elementary/TabContainer.svelte';
 	import Tab from '$lib/app/components/elementary/Tab.svelte';
 	import Select from '$lib/app/components/elementary/Select.svelte';
@@ -20,17 +22,10 @@
 	import AggSelector from '$lib/app/components/AggSelector.svelte';
 	import PanelMenu from '$lib/app/components/elementary/PanelMenu.svelte';
 	import MenuItem from '$lib/app/components/elementary/MenuItem.svelte';
-	import {
-		Icon,
-		Delete,
-		Clipboard,
-		Check
-	 } from '@svizzle/ui';
-
 	import { createBuilderMachine } from '$lib/app/machines/builder/route.js';
 	import { parseParams } from '$lib/app/machines/builder/formediting.options.js';
-
 	import {getAggDocs} from '$lib/elasticsearch/utils/docs.js';
+	import { integer } from '$lib/types/index.js';
 	import {getSearchURL} from '$lib/utils/specs.js';
 
 	const { machine: routeMachine, contextStores: {

@@ -1,6 +1,6 @@
 <script>
 	import {createEventDispatcher} from 'svelte';
-	import {autoID} from '$lib/utils/generic.js';
+	import { autoID } from '$lib/utils/ids.js';
 
 	const dispatch = createEventDispatcher();
 

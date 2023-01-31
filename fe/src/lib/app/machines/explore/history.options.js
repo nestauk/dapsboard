@@ -1,4 +1,3 @@
-import {isClientSide} from '@svizzle/ui';
 import {get} from 'svelte/store';
 import {assign, send} from 'xstate';
 
@@ -17,9 +16,7 @@ export const historyOptions = {
 		updateCurrentURL: assign(updateCurrentURL),
 		sendCurrentUrlUpdated: send('CURRENT_URL_UPDATED'),
 		updateEntry: ctx => {
-			if (isClientSide) {
-				history.pushState(null, window.title, get(ctx.currentURL));
-			}
+			globalThis.history && history.pushState(null, window.title, get(ctx.currentURL));
 		}
 	},
 	guards: {}

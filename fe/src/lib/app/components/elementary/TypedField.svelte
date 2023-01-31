@@ -4,7 +4,7 @@
 	import {Icon, HelpCircle} from '@svizzle/ui';
 	import {is_boolean, is_enums} from '$lib/types/index.js';
 	import { getEditor } from '$lib/app/components/elementary/TypedField.utils.js';
-	import { autoID } from '$lib/utils/generic.js';
+	import { autoID } from '$lib/utils/ids.js';
 
 	const dispatch = createEventDispatcher();
 
