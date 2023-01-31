@@ -236,7 +236,7 @@
 	<section class='results'>
 		{#if $currentResult}
 			{#each Object.entries($currentResult) as [aggKey, aggResult]}
-				<AggResultView {aggKey} {aggResult}/>
+				<AggResultView {aggKey} {aggResult} />
 			{/each}
 		{/if}
 	</section>
@@ -391,7 +391,7 @@
 	.results {
 		display: grid;
 		grid-area: content2;
-	    grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+		grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
 		overflow-y: auto;
 		padding: 1rem;
 	}

@@ -1,21 +1,23 @@
 import * as _ from 'lamb';
 import JSONTree from 'svelte-json-tree';
 import {BarchartVDiv} from '@svizzle/barchart';
-import {applyFnMap, makeWithKeys} from '@svizzle/utils';
+import {
+	applyFnMap,
+	getKey,
+	getValue,
+	makeWithKeys
+} from '@svizzle/utils';
 
+import {getLocation, getDocCount} from '../../utils/specs.js';
 import aggToResponseType from '../../elasticsearch/aggs/ref/aggToResponseType.js';
+
+import Histogram from '../components/svizzle/HistogramDiv.svelte';
 import Location from '../components/views/Location.svelte';
-import Histogram from '../components/views/Histogram.svelte';
 import NumberDisplay from '../components/views/NumberDisplay.svelte';
 import Stats from '../components/views/Stats.svelte';
 
 const getEmptyObject = _.always(null);
 const getLabelFromOrigin = _.getKey('aggId');
-
-const getKey = _.getKey('key');
-const getValue = _.getKey('value');
-const getDocCount = _.getKey('doc_count');
-const getLocation = _.getKey('location');
 
 const getLabelProp = applyFnMap({label: getLabelFromOrigin});
 const getTitleProp = applyFnMap({title: getLabelFromOrigin});
@@ -157,6 +159,12 @@ const resultsMap = {
 	},
 };
 
+const defaultComponent = {
+	component: JSONTree,
+	transformResult: applyFnMap({value: getValue}),
+	transformOrigin: getLabelProp
+}
+
 const parseAggKey = _.pipe([
 	_.splitBy('.'),
 	makeWithKeys(['datasetId', 'fieldName', 'aggId', 'responseId']),
@@ -167,9 +175,9 @@ export const getComponent = (aggKey, aggResult) => {
 	const {aggId} = origin;
 	const responseType = aggToResponseType[aggId];
 	if (!(responseType in resultsMap)) {
-		throw new Error(`Unknown response type ${responseType} for agg ${origin.aggId}`);
+		console.log(`Unknown response type ${responseType} for agg ${origin.aggId}, using JSONTree.`);
 	}
-	const resultSpec = resultsMap[responseType];
+	const resultSpec = resultsMap[responseType] || defaultComponent;
 	const {component} = resultSpec;
 	return {
 		component,

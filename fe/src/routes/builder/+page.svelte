@@ -4,8 +4,9 @@
 		Clipboard,
 		Delete,
 		Icon,
-		Link,
+		Link
 	} from '@svizzle/ui';
+
 	import * as _ from 'lamb';
 	import { onMount } from 'svelte';
 	import { readable } from 'svelte/store';
