@@ -7,7 +7,7 @@
 	import routes from '$lib/app/data/routes.json';
 	import {constructQuery} from '$lib/elasticsearch/utils/aggQuery.js';
 	import {request} from '$lib/utils/net.js';
-	import {getSchema, getSearchURL} from '$lib/utils/specs.js';
+	import {getSchema, getBeSearchURL} from '$lib/utils/specs.js';
 
 	let id;
 	let dataset;
@@ -17,7 +17,7 @@
 	let query;
 
 	function doQuery (data) {
-		const url = getSearchURL(dataset);
+		const url = getBeSearchURL(dataset);
 
 		return browser && request('POST', url, {data});
 	}

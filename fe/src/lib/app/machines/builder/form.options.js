@@ -35,7 +35,7 @@ import {
 } from '$lib/elasticsearch/config/aggsLabels.js';
 import {is_optional} from '$lib/elasticsearch/types/params.utils.js';
 import {request} from '$lib/utils/net.js';
-import {getESType, getSchema, getSearchURL} from '$lib/utils/specs.js';
+import {getEsSearchURL, getESType, getSchema} from '$lib/utils/specs.js';
 import {getParamsInfo, mergeDocs} from '$lib/elasticsearch/utils/aggParams.js';
 import {buildAggregation} from '$lib/elasticsearch/utils/aggQuery.js';
 
@@ -322,7 +322,7 @@ function computeRequest (ctx) {
 	};
 	ctx.computedQuery.set(requestBody);
 	ctx.readyForRequest.set(aggParams.isRequiredSet);
-	ctx.url = getSearchURL(DATASETS.find(ds => dataset === ds.id));
+	ctx.url = getEsSearchURL(DATASETS.find(ds => dataset === ds.id));
 
 	return ctx;
 }

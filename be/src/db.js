@@ -4,5 +4,5 @@ import { MongoClient } from 'mongodb';
 const uri = "mongodb://mongo";
 const client = new MongoClient(uri);
 
-const database = client.db('dapsboardCache');
+const database = client.db('dapsboard');
 export const cache = database.collection('cache');

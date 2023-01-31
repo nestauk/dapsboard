@@ -1,0 +1,7 @@
+dapsboard.cache.dev.dap-tools.uk {
+    reverse_proxy localhost:4000
+}
+
+dapsboard.cache.prod.dap-tools.uk {
+    reverse_proxy localhost:4000
+}
