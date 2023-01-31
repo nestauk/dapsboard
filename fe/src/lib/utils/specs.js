@@ -25,6 +25,9 @@ export const getESType = _.adapter([
 	_.always('unknown')
 ]);
 
+export const getDocCount = _.getKey('doc_count');
+export const getLocation = _.getKey('location');
+
 // e.g. `arxlive_arxiv_v3`
 export const getDatasetIdOf =
 	({project, source, version}) => `${project}_${source}_v${version}`;

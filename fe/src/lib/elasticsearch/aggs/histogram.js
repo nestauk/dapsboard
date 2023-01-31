@@ -1,6 +1,7 @@
 import {
 	booleanD,
 	extent,
+	integer,
 	integerD,
 	number,
 	string,
@@ -26,7 +27,7 @@ export default {
 	request: { // [0]
 		extended_bounds: optional(extent),
 		field: string,
-		interval: number,
+		interval: integer,
 		keyed: optional(booleanD(false)),
 		min_doc_count: optional(integerD(1, true)),
 		missing: optional(number), // [1]

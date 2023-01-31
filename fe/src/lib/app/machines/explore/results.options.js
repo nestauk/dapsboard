@@ -102,11 +102,8 @@ const resultsToParams = applyFnMap({
 				}
 
 				const {stats: {count, min, max}} = resultsKeyedByAggId;
-				const binCount = Math.sqrt(count);
-				const interval = Math.max(
-					Math.round((max - min) / binCount, 10),
-					1
-				);
+				const binCount = Math.min(Math.sqrt(count), 50);
+				const interval = Math.max(Math.round((max - min) / binCount), 1);
 
 				// eslint-disable-next-line consistent-return
 				return integerD(interval);
@@ -142,8 +139,9 @@ const updateQueue = ctx => {
 	const datasetId = getDatasetIdOf({project, source, version});
 	const aggsToObject = arrayToObjectWith(agg => {
 		const requestWithDefaults = useDefaults(agg.request);
+		const replacedFieldName = agg.request.field?.replace('.keyword', '') || 'noField';
 		return [
-			`${datasetId}.${agg.request.field || 'noField'}.${agg.id}.${agg.response.id}`,
+			`${datasetId}.${replacedFieldName}.${agg.id}.${agg.response.id}`,
 			{[agg.id]: requestWithDefaults}
 		]
 	});
