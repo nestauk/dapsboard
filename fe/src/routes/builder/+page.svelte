@@ -27,7 +27,7 @@
 	import { parseParams } from '$lib/app/machines/builder/formediting.options.js';
 	import {getAggDocs} from '$lib/elasticsearch/utils/docs.js';
 	import { integer } from '$lib/types/index.js';
-	import {getSearchURL} from '$lib/utils/specs.js';
+	import {getBeSearchURL} from '$lib/utils/specs.js';
 
 	const { machine: routeMachine, contextStores: {
 		// config
@@ -309,7 +309,7 @@
 			<div class='select-item'>
 				<div>{option.text}</div>
 				<Link
-					href={getSearchURL(ROUTES[option.text])}
+					href={getBeSearchURL(ROUTES[option.text])}
 					size={14}
 					type='external'
 				/>

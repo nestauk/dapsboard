@@ -7,7 +7,7 @@ import {
 	selectDataset,
 } from '$lib/app/stores/exploreStores.js';
 import {getDatasetOf} from '$lib/app/utils/data.js';
-import {getSearchURL} from '$lib/utils/specs.js';
+import {getBeSearchURL} from '$lib/utils/specs.js';
 
 const {choose, log} = actions;
 
@@ -19,7 +19,7 @@ const setDataset = (ctx, {project, source, version}) => {
 
 const setURL = (ctx, {project, source, version}) => {
 	const dataset = getDatasetOf({project, source, version});
-	const queryURL = getSearchURL(dataset);
+	const queryURL = getBeSearchURL(dataset);
 	ctx.queryURL.set(queryURL);
 
 	return ctx;

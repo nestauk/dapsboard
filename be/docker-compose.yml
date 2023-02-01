@@ -12,6 +12,8 @@ services:
       PORT: 4000
   mongo:
     image: "mongo"
+    ports:
+      - 27017:27017
     volumes:
       - mongodb:/data/db
 

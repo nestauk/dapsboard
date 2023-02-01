@@ -1,40 +1,55 @@
 import Fastify from 'fastify';
+import cors from '@fastify/cors';
 
 import { cache } from './db.js';
 import { hash } from './hash.js';
 
+const { PORT } = process.env;
 
 const fastify = Fastify({
 	logger: true
 });
 
-const { PORT } = process.env || 3000;
+await fastify.register(cors);
 
-fastify.post('/*', async (request, reply) => {
+fastify.route({
+	method: ['GET', 'POST'],
+	url: '/*',
+	handler: async (request, reply) => {
 
-	const input = JSON.stringify(request.url) + JSON.stringify(request.body);
-	const hashed = hash(input);
+		const input = JSON.stringify(request.url) + JSON.stringify(request.body);
+		const hashed = hash(input);
 
-	const doc = await cache.findOne({ _id: hashed });
+		const doc = await cache.findOne({ _id: hashed });
+		if (doc) {
+			return reply.send(doc.aggregation);
+		}
 
-	if (doc) {
-		return reply.send({
-			...doc,
-			mongo: true
+		const esEndpoint = request.url.slice(1, request.url.length);
+		const response = await fetch(esEndpoint, {
+			headers: {
+				'Accept': 'application/json',
+				'Content-Type': 'application/json'
+			},
+			method: 'POST',
+			body: JSON.stringify(request.body)
 		});
+
+		if (!response.ok) {
+			return reply.code(response.status).send(await response.json())
+		}
+
+		const aggregation = await response.json();
+		const fresh = {
+			_id: hashed,
+			url: request.url,
+			body: request.body,
+			aggregation
+		};
+		cache.updateOne({ _id: hashed }, { $set: fresh }, { upsert: true });
+
+		return reply.send(aggregation);
 	}
-
-	const fresh = {
-		_id: hashed,
-		url: request.url,
-		body: request.body,
-	};
-
-	cache.insertOne(fresh);
-	return reply.send({
-		...fresh,
-		mongo: false
-	});
 });
 
 const start = async () => {

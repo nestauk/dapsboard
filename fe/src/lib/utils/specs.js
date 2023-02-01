@@ -4,20 +4,26 @@ This file is imported by `src/bin/make_data.js`
 - we can't import @svizzle/ui as its index exports `.svelte` files
 */
 
-import * as _ from 'lamb';
 import {
 	isObject,
 	isString,
 	makePostfixed,
 	applyFnMap
 } from '@svizzle/utils';
+import * as _ from 'lamb';
+
+import {useCache, selectedCacheURL} from '$lib/env.js';
 
 export const getSource = _.getKey('source');
 export const getSpecVersion = _.getKey('version');
 export const getApiVersion = _.getPath('spec.dataset.api_version');
 export const getSchema = _.getPath('spec.dataset.schema');
-export const getEndpointURL = _.getPath('spec.dataset.endpoint_url');
-export const getSearchURL = _.pipe([getEndpointURL, makePostfixed('/_search')]);
+export const getEsEndpointURL = _.getPath('spec.dataset.endpoint_url');
+export const getEsSearchURL = _.pipe([getEsEndpointURL, makePostfixed('/_search')]);
+export const getBeEndpointURL = useCache
+	? spec => `${selectedCacheURL}/${_.getPathIn(spec, 'spec.dataset.endpoint_url')}`
+	: getEsEndpointURL;
+export const getBeSearchURL = _.pipe([getBeEndpointURL, makePostfixed('/_search')]);
 export const getFieldTypeId = _.getKey('type');
 export const getESType = _.adapter([
 	_.casus(isObject, getFieldTypeId),

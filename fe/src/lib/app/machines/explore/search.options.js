@@ -17,7 +17,7 @@ import {
 } from '$lib/elasticsearch/aggs/utils/query.js';
 import {makeGetSuggestionsBy} from '$lib/elasticsearch/aggs/utils/suggestions.js';
 import {request} from '$lib/utils/net.js';
-import {getSearchURL} from '$lib/utils/specs.js';
+import {getBeSearchURL} from '$lib/utils/specs.js';
 
 import {createBaseSearchStores} from './search.context.js';
 
@@ -57,7 +57,7 @@ const fieldsStatsRequest = ({searchQuery}) => {
 		getKeywordFields(get(selectedDatasetSchema)),
 		get(searchQuery)
 	);
-	const url = getSearchURL(get(selectedDataset));
+	const url = getBeSearchURL(get(selectedDataset));
 	return request('POST', url, {data});
 };
 
@@ -172,7 +172,7 @@ const updateStatsCache = (ctx, {data}) => {
 
 const suggestionsRequest = ctx => request(
 	'POST',
-	getSearchURL(get(selectedDataset)),
+	getBeSearchURL(get(selectedDataset)),
 	{
 		data: getSuggestionsQuery(
 			get(ctx.selectedFieldName),
