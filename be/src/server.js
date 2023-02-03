@@ -4,23 +4,34 @@ import * as _ from 'lamb';
 
 import { buildRequest, makeRequest } from 'dap_dv_backends_utils/es/requests.mjs';
 
-import {cache} from './db.js';
+import {coverage} from './coverage.js'
+import {cache, cacheRequest} from './db.js';
 import {hash} from './hash.js';
 import {authenticationHook} from './hooks.js';
 
 const {PORT} = process.env;
 
 const fastify = Fastify({
-	logger: true
+	logger: false
 });
 
 await fastify.register(cors, { origin: true });
 
 fastify.addHook('onRequest', authenticationHook);
 
+fastify.addHook('preValidation', async (request, reply) => {
+	const input = JSON.stringify(request.url) + JSON.stringify(request.body);
+	request.hash = hash(input);
+	const doc = await cache.findOne({ _id: request.hash });
+	if (doc) {
+		return reply.send(doc.aggregation);
+	}
+})
+
+const esRoute = '/es/*'
 fastify.route({
 	method: ['GET', 'POST'],
-	url: '/*',
+	url: esRoute,
 	handler: async (request, reply) => {
 
 		if (request.notAuthorised) {
@@ -63,6 +74,18 @@ fastify.route({
 		return reply.send(aggregation);
 	}
 });
+
+const coverageRoute = '/coverage/*'
+fastify.get(coverageRoute, async (request, reply) => {
+
+	// 18 - length of string /coverage/ and of string https://
+	const esEndpoint = request.url.slice(coverageRoute.length - 1, request.url.length);
+	const removeProtocol = _.replace(/https?:\/\//gu, '')
+	const [domain, index] = _.split(removeProtocol(esEndpoint), '/')
+	const aggregation = await coverage(domain, index);
+	cacheRequest(request, aggregation);
+	return reply.send(aggregation);
+})
 
 const start = async () => {
 	try {

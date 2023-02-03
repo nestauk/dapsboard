@@ -15,9 +15,12 @@
 		selectDataset,
 		selectSource,
 		toggleSource,
+		selectedDataset,
+		selectedDatasetFields
 	} from '$lib/app/stores/exploreStores.js';
 	import {makeExploreQuery} from '$lib/app/utils/exploreUtils.js';
 	import {collectionToObject} from '$lib/utils/svizzle/utils/collection-object.js';
+	import {getFieldSetsPromise} from '$lib/elasticsearch/utils/coverage.js';
 
 	const makeHrefBoard = ({fields, source, project, version}) =>
 		`/explore/${source}?${makeExploreQuery({fields, project, version})}`;
@@ -29,6 +32,19 @@
 	let source;
 	let project;
 	let version;
+	let fieldSets;
+	let fieldSetsLoadingError = false;
+
+	const waitFieldsets = async (dataset, fields) => {
+		try {
+			fieldSets = null;
+			fieldSetsLoadingError = false;
+			fieldSets = await getFieldSetsPromise(dataset, fields);
+			console.log('fieldSets', fieldSets);
+		} catch (error) {
+			fieldSetsLoadingError = true;
+		}
+	};
 
 	$: browser && ({url: {searchParams}} = $_page);
 	$: searchParams && ({source, project, version} = collectionToObject(searchParams));
@@ -41,8 +57,11 @@
 	} else {
 		resetSources();
 	}
-
+	
 	$: project && source && version && selectDataset({project, source, version});
+	$: if ($selectedDataset && $selectedDatasetFields) {
+		waitFieldsets($selectedDataset, $selectedDatasetFields);
+	}
 </script>
 
 <svelte:head>
@@ -119,16 +138,18 @@
 	</nav>
 	<main>
 		{#if hrefBoard}
-			<a
-				href={hrefBoard}
-				class='undecor'
-				rel='prefetch'
-			>
-				<div class='button'>
-					<p>Explore</p>
-					<Icon glyph={ChevronRight} />
-				</div>
-			</a>
+			<div class='overview'>
+				<a
+					href={hrefBoard}
+					class='undecor'
+					rel='prefetch'
+				>
+					<div class='button'>
+						<p>Explore</p>
+						<Icon glyph={ChevronRight} />
+					</div>
+				</a>
+			</div>
 		{:else}
 			<p class='message'>Please Select a dataset</p>
 		{/if}
@@ -215,6 +236,13 @@
 		justify-content: center;
 	}
 
+	.overview {
+		width: 100%;
+		height: 100%;
+		display: grid;
+		align-content: start;
+		grid-template-rows: 1fr min-content;
+	}
 	.message {
 		background-color: var(--color-blue-darker);
 		border-radius: 10rem;
