@@ -68,6 +68,7 @@ export default {
 		size: 'How many term buckets should be returned out of the overall terms list.',
 	},
 	response,
+	subAggs: true,
 	tag: 'bucketing',
 	version: '7.9',
 };

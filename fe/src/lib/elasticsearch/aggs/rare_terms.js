@@ -44,6 +44,7 @@ export default {
 		precision: 'The precision of the internal CuckooFilters. Smaller precision leads to better approximation, but higher memory usage. Cannot be smaller than 0.00001. Default 0.01',
 	},
 	response,
+	subAggs: true,
 	tag: 'bucketing',
 	version: '7.9',
 };

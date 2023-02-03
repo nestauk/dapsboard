@@ -42,6 +42,6 @@ export const createSelectionStores = () => {
 		nextPair,
 		prevPair,
 		selectedFields,
-		selectionAggs: writable({}),
+		selectionAggsHierarchy: writable({}),
 	}
 };

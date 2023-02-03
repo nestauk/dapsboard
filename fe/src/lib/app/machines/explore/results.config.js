@@ -2,7 +2,7 @@ export const resultsConfig = {
 	id: 'Results',
 	initial: 'Idle',
 	on: {
-		AGGS_UPDATED: {
+		AGGS_HIERARCHY_UPDATED: {
 			target: '#Results.CheckMatching'
 		}
 	},
@@ -51,13 +51,12 @@ export const resultsConfig = {
 				UpdatingQueue: {
 					entry: [
 						'conditionalLog',
-						'updateAggsParams',
 						'updateQueue',
 					],
 					always: [
 						{
 							target: 'Pending',
-							cond: 'hasQuery',
+							cond: 'hasQueuedAggs',
 						},
 						{
 							target: '#Matching',
@@ -77,7 +76,7 @@ export const resultsConfig = {
 						onDone: {
 							target: 'UpdatingQueue',
 							actions: [
-								'mergeQueueResults',
+								'updateQueueResults',
 							]
 						},
 						onError: {

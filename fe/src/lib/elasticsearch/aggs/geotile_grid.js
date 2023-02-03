@@ -33,6 +33,7 @@ export default {
 		size: 'The maximum number of geohash buckets to return (defaults to 10,000). When results are trimmed, buckets are prioritised based on the volumes of documents they contain.',
 	},
 	response,
+	subAggs: true,
 	tag: 'bucketing',
 	version: '7.9',
 };

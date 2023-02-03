@@ -39,6 +39,7 @@ export default {
 		script: scriptDoc
 	},
 	response,
+	subAggs: true,
 	tag: 'bucketing',
 	version: '7.9',
 };

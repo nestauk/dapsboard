@@ -25,6 +25,7 @@ export default {
 		shard_size: 'The number of buckets that the coordinating node will request from each shard.',
 	},
 	response,
+	subAggs: true,
 	tag: 'bucketing',
 	lastChecked: '7.9',
 };

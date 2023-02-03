@@ -17,5 +17,6 @@ export default {
 	requestDoc: {
 		path: 'Path of the nested documents within the top level documents.',
 	},
+	subAggs: true,
 	tag: 'bucketing',
 };

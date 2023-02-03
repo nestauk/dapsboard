@@ -3,7 +3,7 @@ import * as _ from 'lamb';
 import {get} from 'svelte/store';
 import {assign, send} from 'xstate';
 
-import {selectionToAggs} from '$lib/app/utils/exploreUtils.js';
+import {selectionToAggsHierarchy} from '$lib/app/utils/exploreUtils.js';
 
 const selectFields = (ctx, {fields}) => {
 	ctx.selectedFields.set(fields);
@@ -25,11 +25,11 @@ const selectPreviousField = ctx => {
 	return ctx;
 }
 
-const updateAggs = ctx => {
+const updateSelectionAggsHierarchy = ctx => {
 	const fields = get(ctx.selectedFields);
 	const {project, source, version} = get(ctx.dataset);
-	const selectionAggs = selectionToAggs({fields, project, source, version});
-	ctx.selectionAggs.set(selectionAggs);
+	const selectionAggsHierarchy = selectionToAggsHierarchy({fields, project, source, version});
+	ctx.selectionAggsHierarchy.set(selectionAggsHierarchy);
 	return ctx;
 }
 
@@ -38,9 +38,9 @@ export const selectingOptions = {
 		selectFields: assign(selectFields),
 		selectNextField: assign(selectNextField),
 		selectPreviousField: assign(selectPreviousField),
-		sendAggsUpdated: send('AGGS_UPDATED'),
+		sendAggsHierarchyUpdated: send('AGGS_HIERARCHY_UPDATED'),
 		toggleField: assign(toggleField),
-		updateAggs: assign(updateAggs),
+		updateSelectionAggsHierarchy: assign(updateSelectionAggsHierarchy),
 	},
 	guards: {
 	}

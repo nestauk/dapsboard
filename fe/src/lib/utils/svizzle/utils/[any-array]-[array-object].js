@@ -30,3 +30,4 @@ export const arrayToObjectWith = valueIndexToPair => _.pipe([
 	_.mapWith(valueIndexToPair),
 	_.fromPairs,
 ]);
+// FIXME unused as of now

@@ -36,6 +36,7 @@ export default {
 		time_zone: 'The time_zone parameter can be used to indicate that bucketing should use a different time zone.',
 	},
 	response,
+	subAggs: true,
 	tag: 'bucketing',
 	version: '7.9',
 };

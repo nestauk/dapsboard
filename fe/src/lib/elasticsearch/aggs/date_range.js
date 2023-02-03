@@ -44,6 +44,7 @@ export default {
 		time_zone: 'Dates can be converted from another time zone to UTC by specifying an ISO 8601 UTC offset (e.g. +01:00 or -08:00) or as one of the time zone ids from the TZ database (e.g. `CET`).', // [1]
 	},
 	response,
+	subAggs: true,
 	tag: 'bucketing',
 	version: '7.9',
 };

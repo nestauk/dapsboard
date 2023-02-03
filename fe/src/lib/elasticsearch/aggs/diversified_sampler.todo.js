@@ -27,6 +27,7 @@ export default {
 		missing,
 		shard_size: 'The shard_size parameter limits how many top-scoring documents are collected in the sample processed on each shard. The default value is 100.'
 	},
+	subAggs: true,
 	tag: 'bucketing',
 };
 

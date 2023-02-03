@@ -8,32 +8,32 @@ export const selectingConfig = {
 					target: 'Idle',
 					actions: [
 						'selectFields',
-						'updateAggs',
-						'sendAggsUpdated'
+						'updateSelectionAggsHierarchy',
+						'sendAggsHierarchyUpdated'
 					],
 				},
 				TOGGLED_FIELD_COUNTER: {
 					target: 'Idle',
 					actions: [
 						'toggleField',
-						'updateAggs',
-						'sendAggsUpdated'
+						'updateSelectionAggsHierarchy',
+						'sendAggsHierarchyUpdated'
 					]
 				},
 				SELECTED_NEXT_FIELD: {
 					target: 'Idle',
 					actions: [
 						'selectNextField',
-						'updateAggs',
-						'sendAggsUpdated'
+						'updateSelectionAggsHierarchy',
+						'sendAggsHierarchyUpdated'
 					]
 				},
 				SELECTED_PREVIOUS_FIELD: {
 					target: 'Idle',
 					actions: [
 						'selectPreviousField',
-						'updateAggs',
-						'sendAggsUpdated'
+						'updateSelectionAggsHierarchy',
+						'sendAggsHierarchyUpdated'
 					]
 				},
 			}

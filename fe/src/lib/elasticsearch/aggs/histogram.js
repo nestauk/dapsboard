@@ -45,6 +45,7 @@ export default {
 		order: 'The order of the buckets can be customized by setting the order parameter. ',
 	},
 	response,
+	subAggs: true,
 	tag: 'bucketing',
 	version: '7.9',
 };

@@ -45,6 +45,7 @@ export default {
 		unit: 'By default, the distance unit is m (meters) but it can also accept: mi (miles), in (inches), yd (yards), km (kilometers), cm (centimeters), mm (millimeters).',
 	},
 	response,
+	subAggs: true,
 	tag: 'bucketing',
 	version: '7.9',
 };

@@ -54,9 +54,11 @@ export default {
 		size: 'How many term buckets should be returned out of the overall terms list.',
 	},
 	response,
+	subAggs: false, // [2]
 	tag: 'bucketing',
 	version: '7.9',
 };
 
 // [0] 7.9: no params table
 // [1] `size` and `shard_size` are interrelated: https://www.elastic.co/guide/en/elasticsearch/reference/7.9/search-aggregations-bucket-significanttext-aggregation.html#sig-text-shard-size
+// [2] {"error":{"root_cause":[{"type":"aggregation_initialization_exception","reason":"Aggregator [mosaic_nih_v5.id_iso2_country.significant_text.buckets_text_score] of type [significant_text] cannot accept sub-aggregations"}],"type":"aggregation_initialization_exception","reason":"Aggregator [mosaic_nih_v5.id_iso2_country.significant_text.buckets_text_score] of type [significant_text] cannot accept sub-aggregations"},"status":500}

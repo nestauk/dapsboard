@@ -19,6 +19,7 @@ export default {
 		field,
 	},
 	response,
+	subAggs: true,
 	tag: 'bucketing',
 	version: '7.9',
 };
