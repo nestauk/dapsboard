@@ -7,15 +7,15 @@
 
 	import {
 		_isAuthModalOpen,
-		_credentials
+		_credentials,
+        _isAuthenticated
 	} from '$lib/app/stores/auth.js';
     import {
 		requestNestaToken,
 		verifyNestaToken
 	} from '$lib/app/utils/net.js';
 
-	let currentEmail;
-	let submittedEmail;
+	let email;
 	let message;
 
 	const validEmailRegex = emailRegex({exact: true});
@@ -24,7 +24,7 @@
 
 	const validatePastedToken = async token =>
 		validateTokenFormat(token)
-		&& await verifyNestaToken(currentEmail, token);
+		&& await verifyNestaToken(email, token);
 
 	const onEmailSubmitted = async ({detail: email}) => {
 		const result = await requestNestaToken(email);
@@ -33,7 +33,6 @@
 			message = result.error;
 			return;
 		} else {
-			submittedEmail = email;
 			message = 'Token sent to your email. Paste it above to authenticate.';
 		}
 	};
@@ -43,7 +42,8 @@
 	};
 
 	const onTokenSubmitted = ({detail: token}) => {
-		$_credentials = {email: submittedEmail, token};
+		$_isAuthenticated = true;
+		$_credentials = {email, token};
 		message = 'Authenticated. You can now query the backend.';
 		setTimeout(closeModal, 2000);
 	};
@@ -64,7 +64,7 @@
 		</p>
 		<div class='form'>
 			<InputWidget
-				bind:value={currentEmail}
+				bind:value={email}
 				buttonText='Request'
 				on:valueSubmitted={onEmailSubmitted}
 				placeholder='Please input your email address'

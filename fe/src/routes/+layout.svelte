@@ -12,14 +12,33 @@
 
 	import {
 		_credentials,
+		_isAuthenticated,
 		_isAuthModalOpen
 	} from '$lib/app/stores/auth.js';
+    import { verifyNestaToken } from '$lib/app/utils/net.js';
 
 	const onCloseAuth = () => {
 		$_isAuthModalOpen = false;
 	};
 
+	const verifyCredentials = async () => {
+		const {email, token} = $_credentials;
+		const result = await verifyNestaToken(email, token);
+		if (result) {
+			$_isAuthenticated = true;
+		} else {
+			$_credentials = null;
+		}
+	};
+
 	$: [,segment] = $_page.url.pathname.split('/');
+
+	$: if (!$_isAuthenticated && $_credentials?.token) {
+		verifyCredentials();
+	}
+	$: if (!$_credentials?.token && $_isAuthenticated) {
+		$_isAuthenticated = false;
+	}
 </script>
 
 <ScreenSensor />

@@ -2,7 +2,7 @@
 	import {Icon, Link, Lock, Unlock} from '@svizzle/ui';
 
     import {
-		_credentials,
+		_isAuthenticated,
 		_isAuthModalOpen
 	} from '$lib/app/stores/auth.js';
 	import {version} from '$lib/app/utils/version.js';
@@ -15,8 +15,7 @@
 		$_isAuthModalOpen = true;
 	};
 
-	$: isAuthenticated = Boolean($_credentials?.token);
-	$: authIcon = isAuthenticated ? Unlock : Lock;
+	$: authIcon = $_isAuthenticated ? Unlock : Lock;
 </script>
 
 <nav>
