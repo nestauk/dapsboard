@@ -36,6 +36,7 @@ export async function request (
 		}
 		return response[type]();
 	} catch (error) {
+		// FIXME not all HTTP error responses necesarily have a JSON body
 		error.jsonMessage = await response.clone().json();
 		logError(error, error.stack);
 		throw error;

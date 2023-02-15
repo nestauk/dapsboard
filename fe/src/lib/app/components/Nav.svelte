@@ -1,11 +1,22 @@
 <script>
-	import {Link} from '@svizzle/ui';
+	import {Icon, Link, Lock, Unlock} from '@svizzle/ui';
 
+    import {
+		_credentials,
+		_isAuthModalOpen
+	} from '$lib/app/stores/auth.js';
 	import {version} from '$lib/app/utils/version.js';
 
 	const changelogUrl = 'https://github.com/nestauk/dapsboard/blob/dev/CHANGELOG.md';
 
 	export let segment;
+
+	const onAuthClick = () => {
+		$_isAuthModalOpen = true;
+	};
+
+	$: isAuthenticated = Boolean($_credentials?.token);
+	$: authIcon = isAuthenticated ? Unlock : Lock;
 </script>
 
 <nav>
@@ -40,6 +51,14 @@
 			<!-- <li class:selected='{segment === "feedback"}'>
 				<a href='/feedback'>Feedback</a>
 			</li> -->
+			<li>
+				<button on:click={onAuthClick}>
+					<Icon
+						glyph={authIcon}
+						stroke='white'
+					/>
+				</button>
+			</li>
 			<li>
 				<Link
 					href={changelogUrl}
@@ -103,5 +122,12 @@
 		text-decoration: none;
 		display: block;
 		user-select: none;
+	}
+
+	button {
+		background: none;
+		border: none;
+		padding: 0;
+		cursor: pointer;
 	}
 </style>
