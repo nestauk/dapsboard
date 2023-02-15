@@ -9,14 +9,24 @@
 		_isAuthModalOpen,
 		_credentials
 	} from '$lib/app/stores/auth.js';
-    import {requestNestaToken} from '$lib/app/utils/auth.js';
+    import {
+		requestNestaToken,
+		verifyNestaToken
+	} from '$lib/app/utils/net.js';
 
+	let currentEmail;
 	let submittedEmail;
 	let message;
 
 	const validEmailRegex = emailRegex({exact: true});
-	const validateEmail = email => validEmailRegex.test(email);
-	const validateToken = token => token.match(/^[0-9a-f]{32}$/ui);
+	const validateEmailFormat = email => validEmailRegex.test(email);
+	const validateTokenFormat = token => token.match(/^[0-9a-f]{32}$/ui);
+
+	const verifyCredentials = (email, token) => verifyNestaToken(email, token);
+
+	const validatePastedToken = async token =>
+		validateTokenFormat(token)
+		&& await verifyCredentials(currentEmail, token);
 
 	const onEmailSubmitted = async ({detail: email}) => {
 		const result = await requestNestaToken(email);
@@ -56,16 +66,17 @@
 		</p>
 		<div class='form'>
 			<InputWidget
+				bind:value={currentEmail}
 				buttonText='Request'
 				on:valueSubmitted={onEmailSubmitted}
 				placeholder='Please input your email address'
-				validateValue={validateEmail}
+				validateValue={validateEmailFormat}
 			/>
 			<InputWidget
 				buttonText='Authenticate'
 				on:valueSubmitted={onTokenSubmitted}
 				placeholder='Please paste your token here'
-				validateValue={validateToken}
+				validateValue={validatePastedToken}
 			/>
 		</div>
 		{#if message}

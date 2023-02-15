@@ -15,18 +15,23 @@
 		borderColor: 'rgb(70, 70, 70)',
 		invalidValueColor: 'red',
 		maxWidth: '32em'
-	};
+	}
+
+	let isValid = false;
+
+	const waitValidate = async value => {
+		isValid = await validateValue(value);
+	}
 
 	const dispatch = createEventDispatcher();
-
 	const onSubmit = () => isValid && dispatch('valueSubmitted', value);
 
-	$: isValid = validateValue(value);
+	$: waitValidate(value);
 	$: inputTheme = {
 		borderColor: isValid
 			? theme.borderColor
 			: theme.invalidValueColor
-	};
+	}
 	$: style = makeStyleVars(theme);
 </script>
 
