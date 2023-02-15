@@ -22,11 +22,9 @@
 	const validateEmailFormat = email => validEmailRegex.test(email);
 	const validateTokenFormat = token => token.match(/^[0-9a-f]{32}$/ui);
 
-	const verifyCredentials = (email, token) => verifyNestaToken(email, token);
-
 	const validatePastedToken = async token =>
 		validateTokenFormat(token)
-		&& await verifyCredentials(currentEmail, token);
+		&& await verifyNestaToken(currentEmail, token);
 
 	const onEmailSubmitted = async ({detail: email}) => {
 		const result = await requestNestaToken(email);
