@@ -77,5 +77,9 @@
 		border-radius: 0.125em;
 		font-size: 1em;
 		padding: 0.5em;
+		cursor: pointer;
+	}
+	button[disabled] {
+		cursor: initial;
 	}
 </style>

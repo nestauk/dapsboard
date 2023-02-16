@@ -1,6 +1,6 @@
 import {get} from 'svelte/store';
 
-import { _credentials } from '../stores/auth.js';
+import {_credentials} from '$lib/app/stores/auth.js';
 import {request} from '$lib/utils/net.js';
 
 const authBaseURL = 'https://api.dap-tools.uk/auth';

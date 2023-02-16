@@ -21,30 +21,26 @@
 	const validateEmailFormat = email => validEmailRegex.test(email);
 	const validateTokenFormat = token => token.match(/^[0-9a-f]{32}$/ui);
 
-	const validatePastedToken = async token =>
-		validateTokenFormat(token)
-		&& await verifyNestaToken(email, token);
+	const validatePastedToken = async (token) => {
+		const isValidToken = validateTokenFormat(token);
+		const result = isValidToken && await verifyNestaToken(email, token);
+		return result;
+	}
 
 	const onEmailSubmitted = async ({detail: email}) => {
 		const result = await requestNestaToken(email);
 
 		if (result.error) {
 			message = result.error;
-			return;
 		} else {
 			message = 'Token sent to your email. Paste it above to authenticate.';
 		}
-	};
-
-	const closeModal = () => {
-		$_isAuthModalOpen = false;
 	};
 
 	const onTokenSubmitted = ({detail: token}) => {
 		$_isAuthenticated = true;
 		$_credentials = {email, token};
 		message = 'Authenticated. You can now query the backend.';
-		setTimeout(closeModal, 2000);
 	};
 </script>
 
@@ -55,9 +51,8 @@
 	<div class='content'>
 		<h1>Authenticate</h1>
 		<p>
-			To use this feature you need to authenticate with your Nesta email.
-			Please request a token and paste it below once retrieved from your
-			mailbox.
+			You need to authenticate with your Nesta email. Please request a
+			token and paste it below once retrieved from your mailbox.
 		</p>
 		<div class='form'>
 			<InputWidget
