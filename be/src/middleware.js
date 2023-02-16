@@ -1,8 +1,10 @@
 import * as _ from 'lamb';
+import {
+	authenticate,
+	parseBasicAuth
+} from 'dap_dv_backends_utils/auth/authentication.mjs';
 
-
-import { authenticate, parseBasicAuth } from 'dap_dv_backends_utils/auth/authentication.mjs';
-import { CROSS_ORIGIN_DOMAINS, PROTECTED_DATASETS } from './conf.js';
+import {CROSS_ORIGIN_DOMAINS, PROTECTED_DATASETS} from './conf.js';
 
 const AUTH_ENDPOINT = 'https://authentication.dap-tools.uk/authenticate';
 

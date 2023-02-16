@@ -1,12 +1,12 @@
-import Fastify from 'fastify';
 import cors from '@fastify/cors';
 import middie from '@fastify/middie';
+import Fastify from 'fastify';
 
-import { cache } from './db.js';
-import { hash } from './hash.js';
-import { authenticationMiddleware } from './middleware.js'
+import {cache} from './db.js';
+import {hash} from './hash.js';
+import {authenticationMiddleware} from './middleware.js'
 
-const { PORT } = process.env;
+const {PORT} = process.env;
 
 const fastify = Fastify({
 	logger: true
