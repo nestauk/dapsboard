@@ -4,6 +4,7 @@
 
 	import Input from './Input.svelte';
 
+	export let autofocus = false;
 	export let buttonText = 'Submit';
 	export let hasButton = true;
 	export let placeholder = 'Please insert a value';
@@ -26,6 +27,7 @@
 	const dispatch = createEventDispatcher();
 	const onSubmit = () => isValid && dispatch('valueSubmitted', value);
 
+	$: autofocus = autofocus ?? false;
 	$: waitValidate(value);
 	$: inputTheme = {
 		borderColor: isValid
@@ -38,7 +40,7 @@
 <div class='ValueWidget' {style}>
 	<div class='controls'>
 		<Input
-			autofocus=true
+			{autofocus}
 			bind:value
 			on:submitted={onSubmit}
 			placeholder={placeholder}

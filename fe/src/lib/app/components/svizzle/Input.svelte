@@ -42,13 +42,7 @@
 	};
 
 	onMount(() => {
-		// https://github.com/sveltejs/sapper/issues/619#issuecomment-480616597
-		// FIXME check with screen readers
-		if (autofocus) {
-			setTimeout(() => {
-				input.focus();
-			}, 100);
-		}
+		autofocus && input.focus();
 	});
 
 	$: theme = theme ? {...defaultTheme, ...theme} : defaultTheme;

@@ -56,6 +56,7 @@
 		</p>
 		<div class='form'>
 			<InputWidget
+				autofocus={true}
 				bind:value={email}
 				buttonText='Request'
 				on:valueSubmitted={onEmailSubmitted}
