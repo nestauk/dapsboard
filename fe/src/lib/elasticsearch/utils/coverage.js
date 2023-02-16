@@ -1,18 +1,41 @@
+import {arraySum} from '@svizzle/utils';
 import * as _ from 'lamb';
 import {getBeCoverageEndpointURL} from '$lib/utils/specs.js'
 
-const transform = _.pipe([
+import {authedRequest} from '$lib/app/utils/net.js';
+
+const transformCoverageResponse = _.pipe([
 	_.pairs,
-	_.mapWith(([key, count]) => ({
-		fieldSet: key.split('&'),
-		count
-	}))
+	_.mapWith(([key, count]) => [
+		key,
+		{
+			id: key,
+			fields: key.split('&'),
+			count
+		}
+	]),
+	_.fromPairs
 ]);
 
-export const getFieldSetsPromise = async dataset => {
+const fieldSetsCache = {};
+
+export const getCoveragePromise = async dataset => {
 	const endpoint = getBeCoverageEndpointURL(dataset);
-	const response = await fetch(endpoint);
-	const responseJson = await response.json();
-	const fieldSets = transform(responseJson);
-	return fieldSets;
+
+	if (fieldSetsCache[endpoint]) {
+		return fieldSetsCache[endpoint];
+	}
+
+	const jsonResponse = await authedRequest('GET', endpoint);
+
+	const fieldSetsMap = transformCoverageResponse(jsonResponse);
+	const total = arraySum(_.values(fieldSetsMap).map(_.getPath('count')));
+
+	const result = {
+		fieldSetsMap,
+		total
+	}
+
+	fieldSetsCache[endpoint] = result;
+	return result;
 }
