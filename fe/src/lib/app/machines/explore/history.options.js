@@ -4,9 +4,11 @@ import {assign, send} from 'xstate';
 import {makeExplorePath} from '$lib/app/utils/exploreUtils.js';
 
 const updateCurrentURL = ctx => {
+	console.log('ctx', ctx)
 	const {project, source, version} = get(ctx.dataset);
 	const fields = get(ctx.selectedFields);
-	const url = makeExplorePath({fields, project, source, version});
+	const neededFields = get(ctx._neededFields);
+	const url = makeExplorePath({fields, neededFields, project, source, version});
 	ctx.currentURL.set(url);
 	return ctx;
 }

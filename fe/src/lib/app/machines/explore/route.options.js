@@ -17,6 +17,12 @@ const setDataset = (ctx, {project, source, version}) => {
 	return ctx;
 }
 
+const setNeededFields = (ctx, {neededFields}) => {
+	ctx._neededFields.set(neededFields.split(','));
+
+	return ctx;
+}
+
 const setURL = (ctx, {project, source, version}) => {
 	const dataset = getDatasetOf({project, source, version});
 	const queryURL = getBeSearchURL(dataset);
@@ -45,6 +51,7 @@ export const routeOptions = {
 			},
 		]),
 		setDataset: assign(setDataset),
+		setNeededFields: assign(setNeededFields),
 		setURL: assign(setURL),
 		resetSources: () => {
 			resetSources()

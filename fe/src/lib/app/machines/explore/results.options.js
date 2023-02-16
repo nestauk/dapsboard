@@ -15,7 +15,8 @@ import {integerD} from '$lib/types/index.js';
 const isMatching = ctx => {
 	const {project, source, version} = get(ctx.dataset);
 	const fields = get(ctx.selectedFields);
-	const targetPath = makeExplorePath({fields, project, source, version});
+	const neededFields = get(ctx._neededFields);
+	const targetPath = makeExplorePath({fields, neededFields, project, source, version});
 	return targetPath === get(ctx.currentURL);
 }
 
@@ -27,7 +28,8 @@ const isInCache = ctx => {
 const setCacheKey = ctx => {
 	const {project, source, version} = get(ctx.dataset);
 	const fields = get(ctx.selectedFields);
-	ctx.cacheKey.set(makeExplorePath({fields, project, source, version}));
+	const neededFields = get(ctx._neededFields);
+	ctx.cacheKey.set(makeExplorePath({fields, neededFields, project, source, version}));
 	return ctx;
 }
 
@@ -269,14 +271,25 @@ const updateQueue = ctx => {
 
 const hasQueuedAggs = ctx => isObjNotEmpty(get(ctx.queuedAggs));
 
+const neededFieldsToQuery = neededFields => ({
+	bool: {
+		must: _.map(neededFields, field => ({exists: {field}}))
+
+	}
+});
+
 const requestQueuedAggs = ctx => {
 	ctx.currentResult.set();
 	const aggs = get(ctx.queuedAggs);
 
+	const neededFields = get(ctx._neededFields);
+	const query = neededFieldsToQuery(neededFields);
+	// TODO add to `query` to connect the search panel here
+
 	const data = {
 		aggs,
+		query,
 		size: 0,
-		// TODO add `query` to connect the search panel here
 	};
 
 	return authedRequest('POST', get(ctx.queryURL), {data});
