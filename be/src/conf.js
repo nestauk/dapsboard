@@ -1,6 +1,6 @@
 export const PROTECTED_DATASETS = [
-	'mcs',
-	'epc'
+	'processed_mcs_installations',
+	'epc_with_hp_install_dates'
 ]
 
 export const CROSS_ORIGIN_DOMAINS = [

@@ -2,7 +2,7 @@
 	"dependencies": {
 		"@fastify/cors": "^8.2.0",
 		"@fastify/middie": "^8.1.0",
-		"dap_dv_backends_utils": "github:nestauk/dap_dv_backends_utils#v0.0.6",
+		"dap_dv_backends_utils": "github:nestauk/dap_dv_backends_utils#v0.0.7",
 		"fastify": "^4.11.0",
 		"lamb": "^0.61.0",
 		"mongodb": "^4.13.0",
