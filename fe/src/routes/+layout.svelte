@@ -1,10 +1,6 @@
 <script>
-	import {
-		_screen,
-		ScreenSensor,
-		StorageIO
-	} from '@svizzle/ui';
-	
+	import {ScreenSensor, StorageIO} from '@svizzle/ui';
+
 	import {page as _page} from '$app/stores';
 
 	import Nav from '$lib/app/components/Nav.svelte';
@@ -15,7 +11,7 @@
 		_isAuthenticated,
 		_isAuthModalOpen
 	} from '$lib/app/stores/auth.js';
-    import { verifyNestaToken } from '$lib/app/utils/net.js';
+	import { verifyNestaToken } from '$lib/app/utils/net.js';
 
 	const onCloseAuth = () => {
 		$_isAuthModalOpen = false;

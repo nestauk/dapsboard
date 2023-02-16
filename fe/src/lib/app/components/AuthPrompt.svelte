@@ -1,16 +1,15 @@
 <script>
 	import {_screen, Banner} from '@svizzle/ui';
-	// FIXME Consider RFC 5322 compliant email validation
 	import emailRegex from 'email-regex';
+	// FIXME Consider RFC 5322 compliant email validation
 
 	import InputWidget from '$lib/app/components/svizzle/InputWidget.svelte';
-
 	import {
 		_isAuthModalOpen,
 		_credentials,
-        _isAuthenticated
+		_isAuthenticated
 	} from '$lib/app/stores/auth.js';
-    import {
+	import {
 		requestNestaToken,
 		verifyNestaToken
 	} from '$lib/app/utils/net.js';

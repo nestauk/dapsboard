@@ -1,7 +1,7 @@
 <script>
 	import {Icon, Link, Lock, Unlock} from '@svizzle/ui';
 
-    import {
+	import {
 		_isAuthenticated,
 		_isAuthModalOpen
 	} from '$lib/app/stores/auth.js';

@@ -1,8 +1,8 @@
-import * as _ from 'lamb';
 import {
 	authenticate,
 	parseBasicAuth
 } from 'dap_dv_backends_utils/auth/authentication.mjs';
+import * as _ from 'lamb';
 
 import {CROSS_ORIGIN_DOMAINS, PROTECTED_DATASETS} from './conf.js';
 
