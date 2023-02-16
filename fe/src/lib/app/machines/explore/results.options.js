@@ -15,7 +15,7 @@ import {
 	useDefaults
 } from '$lib/app/utils/exploreUtils.js';
 import {integerD} from '$lib/types/index.js';
-import {request} from '$lib/utils/net.js';
+import {authedRequest} from '$lib/app/utils/net.js';
 import {getDatasetIdOf} from '$lib/utils/specs.js';
 import {arrayToObjectWith}
 	from '$lib/utils/svizzle/utils/[any-array]-[array-object].js';
@@ -161,7 +161,7 @@ const hasQuery = ctx => isObjNotEmpty(get(ctx.query).aggs);
 
 const doQuery = ctx => {
 	ctx.currentResult.set(null);
-	return request('POST', get(ctx.queryURL), {data: get(ctx.query)});
+	return authedRequest('POST', get(ctx.queryURL), {data: get(ctx.query)});
 }
 
 const getError = (ctx, event) => {
