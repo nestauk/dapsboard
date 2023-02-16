@@ -47,8 +47,6 @@
 		message = 'Authenticated. You can now query the backend.';
 		setTimeout(closeModal, 2000);
 	};
-
-	$: console.log('credentials', $_credentials);
 </script>
 
 <Banner
