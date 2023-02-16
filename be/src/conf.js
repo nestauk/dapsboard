@@ -4,6 +4,6 @@ export const PROTECTED_DATASETS = [
 ]
 
 export const CROSS_ORIGIN_DOMAINS = [
-	'dapsboard-dev.netlify.app',
-	'dapsboard-staging.netlify.app'
+	'https://dapsboard-dev.netlify.app',
+	'https://dapsboard-staging.netlify.app'
 ]
