@@ -16,7 +16,6 @@ import {
 	fieldNames
 } from '$lib/app/machines/builder/dictionaries.js';
 import DATASETS from '$lib/app/data/datasets.json';
-import {request} from '$lib/utils/net.js';
 import {
 	getDefault,
 	hasDefault,
@@ -35,6 +34,7 @@ import {
 	nestedBucketLabels
 } from '$lib/elasticsearch/config/aggsLabels.js';
 import {is_optional} from '$lib/elasticsearch/types/params.utils.js';
+import {request} from '$lib/utils/net.js';
 import {getEsSearchURL, getESType, getSchema} from '$lib/utils/specs.js';
 import {getParamsInfo, mergeDocs} from '$lib/elasticsearch/utils/aggParams.js';
 import {buildAggregation} from '$lib/elasticsearch/utils/aggQuery.js';
