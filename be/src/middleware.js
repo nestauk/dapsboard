@@ -30,7 +30,7 @@ export const authenticationMiddleware = async (req, res, next) => {
 		return;
 	}
 	// check that the non-signed request is coming from dapsboard
-	if (!(req.headers.origin in CROSS_ORIGIN_DOMAINS)) {
+	if (!_.isIn(CROSS_ORIGIN_DOMAINS, req.headers.origin)) {
 		res.statusCode = 401;
 		res.setHeader('Content-Type', 'application/json');
 		res.write(JSON.stringify({ error: 'CORS policy is blocking this request' }));
