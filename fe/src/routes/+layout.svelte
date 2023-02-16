@@ -1,10 +1,50 @@
 <script>
+	import {ScreenSensor, StorageIO} from '@svizzle/ui';
+
 	import {page as _page} from '$app/stores';
 
 	import Nav from '$lib/app/components/Nav.svelte';
+	import AuthPrompt from '$lib/app/components/AuthPrompt.svelte';
+
+	import {
+		_credentials,
+		_isAuthenticated,
+		_isAuthModalOpen
+	} from '$lib/app/stores/auth.js';
+	import { verifyNestaToken } from '$lib/app/utils/net.js';
+
+	const onCloseAuth = () => {
+		$_isAuthModalOpen = false;
+	};
+
+	const verifyCredentials = async () => {
+		const {email, token} = $_credentials;
+		const result = await verifyNestaToken(email, token);
+		if (result) {
+			$_isAuthenticated = true;
+		} else {
+			$_credentials = null;
+		}
+	};
 
 	$: [,segment] = $_page.url.pathname.split('/');
+
+	$: if (!$_isAuthenticated && $_credentials?.token) {
+		verifyCredentials();
+	}
+	$: if (!$_credentials?.token && $_isAuthenticated) {
+		$_isAuthenticated = false;
+	}
 </script>
+
+<ScreenSensor />
+<StorageIO
+	_store={_credentials}
+	defaultValue={{}}
+	isReactive={true}
+	key='credentials'
+	type='localStorage'
+/>
 
 <header>
 	<Nav {segment} />
@@ -13,6 +53,10 @@
 <main>
 	<slot></slot>
 </main>
+
+{#if $_isAuthModalOpen}
+	<AuthPrompt on:close={onCloseAuth}/>
+{/if}
 
 <style>
 	header {
