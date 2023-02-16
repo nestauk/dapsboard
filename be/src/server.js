@@ -9,7 +9,7 @@ import { authenticationMiddleware } from './middleware.js'
 const { PORT } = process.env;
 
 const fastify = Fastify({
-	logger: false
+	logger: true
 });
 
 await fastify.register(cors, { origin: true });

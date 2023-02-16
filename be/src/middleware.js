@@ -39,7 +39,6 @@ export const authenticationMiddleware = async (req, res, next) => {
 	}
 	const urlParts = _.split(req.url, '/')
 	const dataset = urlParts.at(-2).trim();
-	console.log(dataset)
 	if (_.isIn(PROTECTED_DATASETS, dataset)) {
 		res.statusCode = 401;
 		res.setHeader('Content-Type', 'application/json');
