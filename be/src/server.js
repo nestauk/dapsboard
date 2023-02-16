@@ -1,8 +1,10 @@
 import Fastify from 'fastify';
 import cors from '@fastify/cors';
+import middie from '@fastify/middie';
 
 import { cache } from './db.js';
 import { hash } from './hash.js';
+import { authenticationMiddleware } from './middleware.js'
 
 const { PORT } = process.env;
 
@@ -10,7 +12,10 @@ const fastify = Fastify({
 	logger: true
 });
 
-await fastify.register(cors);
+await fastify.register(cors, { origin: true });
+await fastify.register(middie);
+
+fastify.use(authenticationMiddleware)
 
 fastify.route({
 	method: ['GET', 'POST'],
