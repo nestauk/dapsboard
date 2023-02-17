@@ -18,7 +18,7 @@ export const authedRequest = (
 	const headers = {...options.headers};
 
 	const credentials = get(_credentials);
-	if (credentials) {
+	if (credentials?.token) {
 		const {email, token} = credentials;
 		headers.Authorization = `Basic ${btoa(`${email}:${token}`)}`;
 	}
