@@ -1,26 +1,28 @@
 import cors from '@fastify/cors';
-import middie from '@fastify/middie';
 import Fastify from 'fastify';
 
 import {cache} from './db.js';
 import {hash} from './hash.js';
-import {authenticationMiddleware} from './middleware.js'
+import {authenticationHook} from './hooks.js'
 
 const {PORT} = process.env;
 
 const fastify = Fastify({
-	logger: true
+	logger: false
 });
 
 await fastify.register(cors, { origin: true });
-await fastify.register(middie);
 
-fastify.use(authenticationMiddleware)
+fastify.addHook('onRequest', authenticationHook);
 
 fastify.route({
 	method: ['GET', 'POST'],
 	url: '/*',
 	handler: async (request, reply) => {
+
+		if (request.notAuthorised) {
+			return reply.code(401).send({ error: request.errorMessage });
+		}
 
 		const input = JSON.stringify(request.url) + JSON.stringify(request.body);
 		const hashed = hash(input);
