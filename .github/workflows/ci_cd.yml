@@ -1,0 +1,27 @@
+name: Push to remote
+
+on:
+  push:
+    branches:
+      - 'dev'
+      - 'staging'
+
+jobs:
+  push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with: 
+          fetch-depth: 0
+      - name: Push to remote server
+        env:
+          PRIVATE_KEY: ${{ secrets.BACKEND_SSH_PRIVATE_KEY }}
+          BRANCH: ${{ github.ref_name }}
+        run: |
+          install -m 600 -D /dev/null ~/.ssh/private-key.pem
+          echo "$PRIVATE_KEY" > ~/.ssh/private-key.pem
+          ssh-keyscan -H dapsboard.cache.$BRANCH.dap-tools.uk > ~/.ssh/known_hosts
+          git config core.sshCommand 'ssh -i ~/.ssh/private-key.pem' 
+          git remote add $BRANCH ubuntu@dapsboard.cache.$BRANCH.dap-tools.uk:/home/ubuntu/dapsboard.git
+          git push $BRANCH --force

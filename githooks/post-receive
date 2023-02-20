@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# Change this to staging on the staging server
+branch="dev"
+
+while read oldrev newrev ref
+do
+    if [[ $ref =~ .*/$branch$ ]]; then
+        echo "$branch ref received. Deploying $branch branch..."
+        git --work-tree=$HOME/dapsboard --git-dir=$HOME/dapsboard.git checkout $branch -f
+        cd $HOME/dapsboard/be
+        docker compose down
+        docker compose build
+        docker compose up -d
+    else
+        echo "Ref $ref successfully received.  Doing nothing: only the $branch branch may be deployed on this server."
+    fi
+done
