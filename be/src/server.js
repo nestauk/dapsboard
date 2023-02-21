@@ -49,7 +49,7 @@ fastify.route({
 		);
 		const response = await makeRequest(req);
 		if (!response.code.toString().startsWith("2")) {
-			return reply.code(response.code).send(response.body)
+			return reply.code(response.code).send(response.body);
 		}
 
 		const aggregation = response.body;
