@@ -30,15 +30,18 @@ export async function request (
 	try {
 		response = await fetch(url, reqOptions);
 		if (Math.floor(response.status / 100) !== 2) {
-			throw new Error(
-				`API request failed! - ${response.status}: ${response.statusText}`
-			);
+			throw new Error('API request failed!');
 		}
 		return response[type]();
 	} catch (error) {
-		// FIXME not all HTTP error responses necesarily have a JSON body
-		error.jsonMessage = await response.clone().json();
-		logError(error, error.stack);
+		if (response) {
+			// FIXME not all HTTP error responses necesarily have a JSON body
+			error.jsonMessage = await response.clone().json();
+			error.httpStatus = response.status;
+			error.httpStatusText = response.statusText;
+		}
+
+		logError('request() failure', error, error.stack);
 		throw error;
 	}
 }

@@ -1,6 +1,9 @@
 import {get} from 'svelte/store';
 
-import {_credentials} from '$lib/app/stores/auth.js';
+import {
+	_credentials,
+	_isAuthModalOpen
+} from '$lib/app/stores/auth.js';
 import {request} from '$lib/utils/net.js';
 
 const authBaseURL = 'https://api.dap-tools.uk/auth';
@@ -10,7 +13,7 @@ const getTokenRequestEndpointURL = email =>
 const getTokenVerifyEndpointURL = (email, token) =>
 	`${authBaseURL}/authenticate?email=${email}&token=${token}`;
 
-export const authedRequest = (
+export const authedRequest = async (
 	method,
 	url,
 	options = {}
@@ -22,15 +25,24 @@ export const authedRequest = (
 		const {email, token} = credentials;
 		headers.Authorization = `Basic ${btoa(`${email}:${token}`)}`;
 	}
-
-	return request(
-		method,
-		url,
-		{
-			...options,
-			headers
+	let response;
+	try {
+		response = await request(
+			method,
+			url,
+			{
+				...options,
+				headers
+			}
+		);
+	} catch (error) {
+		if (error.httpStatus === 401 || error.httpStatus === 403) {
+			_credentials.set(null);
+			_isAuthModalOpen.set(true);
 		}
-	);
+		throw error;
+	}
+	return response;
 }
 
 export const requestNestaToken = async email => {
