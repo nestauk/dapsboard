@@ -164,8 +164,8 @@ const doQuery = ctx => {
 	return authedRequest('POST', get(ctx.queryURL), {data: get(ctx.query)});
 }
 
-const getError = (ctx, event) => {
-	ctx.currentResult.set(event.data.jsonMessage);
+const getError = (ctx) => {
+	ctx.currentResult.set({});
 	return ctx;
 }
 

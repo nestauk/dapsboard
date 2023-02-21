@@ -1,12 +1,14 @@
 export const resultsConfig = {
 	id: 'Results',
-	initial: 'CheckMatching',
+	initial: 'Idle',
 	on: {
 		AGGS_UPDATED: {
 			target: '#Results.CheckMatching'
 		}
 	},
 	states: {
+		Idle: {
+		},
 		CheckMatching: {
 			entry: ['conditionalLog'],
 			always: [
