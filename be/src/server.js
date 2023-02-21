@@ -1,12 +1,12 @@
 import cors from '@fastify/cors';
 import Fastify from 'fastify';
-import * as _ from 'lamb'
+import * as _ from 'lamb';
 
-import { buildRequest, makeRequest } from 'dap_dv_backends_utils/es/requests.mjs'
+import { buildRequest, makeRequest } from 'dap_dv_backends_utils/es/requests.mjs';
 
 import {cache} from './db.js';
 import {hash} from './hash.js';
-import {authenticationHook} from './hooks.js'
+import {authenticationHook} from './hooks.js';
 
 const {PORT} = process.env;
 
@@ -37,8 +37,8 @@ fastify.route({
 
 		const esEndpoint = request.url.slice(1, request.url.length);
 		// 18 - length of string /coverage/ and of string https://
-		const removeProtocol = _.replace(/https?:\/\//gu, '')
-		const [domain, index, path] = _.split(removeProtocol(esEndpoint), '/')
+		const removeProtocol = _.replace(/https?:\/\//gu, '');
+		const [domain, index, path] = _.split(removeProtocol(esEndpoint), '/');
 		const req = buildRequest(
 			domain,
 			`${index}/${path}`,
@@ -46,7 +46,7 @@ fastify.route({
 			{
 				payload: JSON.stringify(request.body)
 			}
-		)
+		);
 		const response = await makeRequest(req);
 		if (!response.code.toString().startsWith("2")) {
 			return reply.code(response.code).send(response.body)
