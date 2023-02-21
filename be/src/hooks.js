@@ -8,6 +8,16 @@ import {CROSS_ORIGIN_DOMAINS, PROTECTED_DATASETS} from './conf.js';
 
 const AUTH_ENDPOINT = 'https://authentication.dap-tools.uk/authenticate';
 
+const isCrossOriginRequestAuthorised = request => {
+	const {origin} = request.headers;
+	const isAllowed = _.reduce(
+		CROSS_ORIGIN_DOMAINS,
+		(acc, curr) => acc || curr.test(origin),
+		false
+	)
+	return isAllowed
+}
+
 export const authenticationHook = async req => {
 
 	req.notAuthorised = false;
@@ -27,7 +37,7 @@ export const authenticationHook = async req => {
 		}
 	} else {
 		// check that the non-signed request is coming from dapsboard
-		if (!_.isIn(CROSS_ORIGIN_DOMAINS, req.headers.origin)) {
+		if (!isCrossOriginRequestAuthorised(req)) {
 			req.notAuthorised = true;
 			req.errorMessage = 'CORS policy is blocking this request';
 		}
