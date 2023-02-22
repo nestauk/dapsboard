@@ -4,7 +4,7 @@ import * as _ from 'lamb';
 
 import { buildRequest, makeRequest } from 'dap_dv_backends_utils/es/requests.mjs';
 
-import {coverage} from './coverage.js'
+import {coverage} from './coverage.js';
 import {cache, cacheRequest} from './db.js';
 import {hash} from './hash.js';
 import {authenticationHook} from './hooks.js';
@@ -26,9 +26,10 @@ fastify.addHook('preValidation', async (request, reply) => {
 	if (doc) {
 		return reply.send(doc.aggregation);
 	}
-})
+});
 
-const esRoute = '/es/*'
+const esRoute = '/es/*';
+
 fastify.route({
 	method: ['GET', 'POST'],
 	url: esRoute,
@@ -75,17 +76,18 @@ fastify.route({
 	}
 });
 
-const coverageRoute = '/coverage/*'
+const coverageRoute = '/coverage/*';
+
 fastify.get(coverageRoute, async (request, reply) => {
 
 	// 18 - length of string /coverage/ and of string https://
 	const esEndpoint = request.url.slice(coverageRoute.length - 1, request.url.length);
-	const removeProtocol = _.replace(/https?:\/\//gu, '')
-	const [domain, index] = _.split(removeProtocol(esEndpoint), '/')
+	const removeProtocol = _.replace(/https?:\/\//gu, '');
+	const [domain, index] = _.split(removeProtocol(esEndpoint), '/');
 	const aggregation = await coverage(domain, index);
 	cacheRequest(request, aggregation);
 	return reply.send(aggregation);
-})
+});
 
 const start = async () => {
 	try {
@@ -94,6 +96,6 @@ const start = async () => {
 		fastify.log.error(err);
 		throw new Error(err);
 	}
-};
+}
 
 start();

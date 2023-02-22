@@ -11,7 +11,7 @@ const isFieldInDoc = (field, doc) => {
 }
 
 const computeSet = (fields, doc) => {
-	const set = _.filter(fields, f => isFieldInDoc(f, doc))
+	const set = _.filter(fields, f => isFieldInDoc(f, doc));
 	const setString = _.join(set, '&');
 	return setString;
 }
@@ -20,8 +20,8 @@ export const coverage = async (domain, index) => {
 	const total = await count(domain, index);
 	const mapping = await getMappings(domain, index);
 	const fields = _.keys(
-		mapping[index].mappings.properties ||
-		mapping[index].mappings._doc.properties
+		mapping[index].mappings.properties
+		|| mapping[index].mappings._doc.properties
 	);
 	const scroller = scroll(domain, index, {size: 10000});
 	const counts = {};
