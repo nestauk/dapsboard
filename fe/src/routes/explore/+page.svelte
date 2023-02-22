@@ -15,9 +15,12 @@
 		selectDataset,
 		selectSource,
 		toggleSource,
+		selectedDataset,
+		selectedDatasetFields
 	} from '$lib/app/stores/exploreStores.js';
 	import {makeExploreQuery} from '$lib/app/utils/exploreUtils.js';
 	import {collectionToObject} from '$lib/utils/svizzle/utils/collection-object.js';
+	import {getFieldSetsPromise} from '$lib/elasticsearch/utils/coverage.js';
 
 	const makeHrefBoard = ({fields, source, project, version}) =>
 		`/explore/${source}?${makeExploreQuery({fields, project, version})}`;
@@ -29,6 +32,19 @@
 	let source;
 	let project;
 	let version;
+	let fieldSets;
+	let fieldSetsLoadingError = false;
+
+	const waitFieldsets = async (dataset, fields) => {
+		try {
+			fieldSets = null;
+			fieldSetsLoadingError = false;
+			fieldSets = await getFieldSetsPromise(dataset, fields);
+			console.log('fieldSets', fieldSets);
+		} catch (error) {
+			fieldSetsLoadingError = true;
+		}
+	};
 
 	$: browser && ({url: {searchParams}} = $_page);
 	$: searchParams && ({source, project, version} = collectionToObject(searchParams));
@@ -41,8 +57,11 @@
 	} else {
 		resetSources();
 	}
-
+	
 	$: project && source && version && selectDataset({project, source, version});
+	$: if ($selectedDataset && $selectedDatasetFields) {
+		waitFieldsets($selectedDataset, $selectedDatasetFields);
+	}
 </script>
 
 <svelte:head>

@@ -14,8 +14,8 @@ const isCrossOriginRequestAuthorised = request => {
 		CROSS_ORIGIN_DOMAINS,
 		(acc, curr) => acc || curr.test(origin),
 		false
-	)
-	return isAllowed
+	);
+	return isAllowed;
 }
 
 export const authenticationHook = async req => {
@@ -33,7 +33,7 @@ export const authenticationHook = async req => {
 		// if user is authenticated then they can access all datasets
 		if (!isAuthorized) {
 			req.notAuthorised = true;
-			req.errorMessage = 'Token cannot be authenticated'
+			req.errorMessage = 'Token cannot be authenticated';
 		}
 	} else {
 		// check that the non-signed request is coming from dapsboard
@@ -41,11 +41,11 @@ export const authenticationHook = async req => {
 			req.notAuthorised = true;
 			req.errorMessage = 'CORS policy is blocking this request';
 		}
-		const urlParts = _.split(req.url, '/')
+		const urlParts = _.split(req.url, '/');
 		const dataset = urlParts.at(-2).trim();
 		if (_.isIn(PROTECTED_DATASETS, dataset)) {
 			req.notAuthorised = true;
-			req.errorMessage = 'This dataset is protected'
+			req.errorMessage = 'This dataset is protected';
 		}
 	}
-};
+}
