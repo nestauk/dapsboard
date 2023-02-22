@@ -14,8 +14,8 @@ import {
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-const INDEX_PATH = path.resolve(__dirname, '../index.js');
-const SRC_DIR_PATH = path.resolve(__dirname, '../');
+const SRC_DIR_PATH = path.resolve(__dirname, '../spec/');
+const INDEX_PATH = path.resolve(SRC_DIR_PATH, 'index.js');
 const REGEX = /export \{default as .*\} from '\.\/(.*).js';\n/ug;
 
 const isAggModule = _.allOf([
@@ -26,7 +26,7 @@ const isAggModule = _.allOf([
 	_.not(makeEndsWith('.spec.js')),
 ]);
 
-describe('elasticsearch/aggs: exports', function () {
+describe('elasticsearch/aggs/spec/: exports', function () {
 	it('All agg valid modules are exported', async function () {
 		const leftovers = await Promise.all([
 			readDir(SRC_DIR_PATH).then(_.pipe([
@@ -46,7 +46,7 @@ describe('elasticsearch/aggs: exports', function () {
 		if (gotDupes) {
 			const list = leftovers.map(makePrefixed('- ')).join('\n');
 			console.log(`\n======================\n✋`)
-			console.log(`elasticsearch/aggs/index.js not exporting modules with these filenames:\n\n${list}`)
+			console.log(`elasticsearch/aggs/spec/index.js not exporting modules with these filenames:\n\n${list}`)
 			console.log(`======================\n`)
 		}
 

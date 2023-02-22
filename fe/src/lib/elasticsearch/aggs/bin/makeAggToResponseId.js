@@ -11,7 +11,7 @@ import {tapMessage} from '@svizzle/dev';
 import {saveExportedObj} from '@svizzle/file';
 import * as _ from 'lamb';
 
-import * as aggs from '../index.js';
+import * as aggs from '../spec/index.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 

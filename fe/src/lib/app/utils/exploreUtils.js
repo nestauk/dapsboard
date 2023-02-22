@@ -7,7 +7,7 @@ import {
 import * as _ from 'lamb';
 
 import {getApiVersionOf, getSchemaOf} from '$lib/app/utils/data.js';
-import * as aggsById from '$lib/elasticsearch/aggs/index.js';
+import * as aggsById from '$lib/elasticsearch/aggs/spec/index.js';
 import {makeIsAggVersionCompatible} from '$lib/elasticsearch/aggs/utils/version.js';
 import {aggHasNoRequiredParamsWithoutDefault} from '$lib/elasticsearch/types/aggs.utils.js';
 import * as esTypes from '$lib/elasticsearch/types/fields.js';
