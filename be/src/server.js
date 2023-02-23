@@ -50,7 +50,7 @@ fastify.route({
 		const esEndpoint = request.url.slice(1, request.url.length);
 		// 18 - length of string /coverage/ and of string https://
 		const removeProtocol = _.replace(/https?:\/\//gu, '');
-		const [domain, index, path] = _.split(removeProtocol(esEndpoint), '/');
+		const [__, domain, index, path] = _.split(removeProtocol(esEndpoint), '/');
 		const req = buildRequest(
 			domain,
 			`${index}/${path}`,

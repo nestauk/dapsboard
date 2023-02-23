@@ -22,7 +22,7 @@ export const getEsEndpointURL = _.getPath('spec.dataset.endpoint_url');
 export const getEsSearchURL = _.pipe([getEsEndpointURL, makePostfixed('/_search')]);
 export const getBeEndpointURL = useCache
 	// FIXME import `es` from shared configuration with BE
-	? spec => `${selectedCacheURL}/${_.getPathIn(spec, 'spec.dataset.endpoint_url')}`
+	? spec => `${selectedCacheURL}/es/${_.getPathIn(spec, 'spec.dataset.endpoint_url')}`
 	: getEsEndpointURL;
 export const getBeCoverageEndpointURL = spec =>
 	`${selectedCacheURL}/coverage/${_.getPathIn(spec, 'spec.dataset.endpoint_url')}`
