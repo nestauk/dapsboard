@@ -283,7 +283,9 @@ const requestQueuedAggs = ctx => {
 	const aggs = get(ctx.queuedAggs);
 
 	const neededFields = get(ctx._neededFields);
-	const query = neededFieldsToQuery(neededFields);
+	const query = neededFields?.length
+		? neededFieldsToQuery(neededFields)
+		: undefined;
 	// TODO add to `query` to connect the search panel here
 
 	const data = {

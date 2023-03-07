@@ -18,7 +18,7 @@ const setDataset = (ctx, {project, source, version}) => {
 }
 
 const setNeededFields = (ctx, {neededFields}) => {
-	ctx._neededFields.set(neededFields.split(','));
+	ctx._neededFields.set(neededFields?.split(',') || []);
 
 	return ctx;
 }

@@ -196,7 +196,7 @@
 						{#if row.isHeaderRow}
 							<th
 								class='fieldSet {row.id}'
-								class:clickable={selectionMode === 'rows'}
+								class:clickable={selectionMode === 'columns'}
 								class:selectedHeader={isFieldSetSelected(fieldSetId)}
 								on:click={() => toggleColumn(fieldSetId)}
 								on:keydown={makeToggleColumnKeyHandler(fieldSetId)}
