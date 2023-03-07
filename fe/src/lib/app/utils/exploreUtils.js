@@ -22,11 +22,14 @@ export const allTypes = {...types, ...esTypes};
 
 /* URL */
 
-export const makeExploreQuery = ({fields, project, version}) => {
+export const makeExploreQuery = ({fields, project, neededFields, version}) => {
 	let query = `project=${project}&version=${version}`;
 
-	if (fields) {
+	if (fields && fields.length) {
 		query = `${query}&fields=${fields.join(',')}`
+	}
+	if (neededFields && neededFields.length) {
+		query = `${query}&neededFields=${neededFields.join(',')}`
 	}
 
 	return query;
@@ -35,8 +38,8 @@ export const makeExploreQuery = ({fields, project, version}) => {
 export const makeExploreIndexPath = ({project, source, version}) =>
 	`/explore?source=${source}&${makeExploreQuery({project, version})}`;
 
-export const makeExplorePath = ({fields, project, source, version}) =>
-	`/explore/${source}?${makeExploreQuery({fields, project, version})}`;
+export const makeExplorePath = ({fields, neededFields, project, source, version}) =>
+	`/explore/${source}?${makeExploreQuery({fields, neededFields, project, version})}`;
 
 /* ES query */
 

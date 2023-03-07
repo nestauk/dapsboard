@@ -44,11 +44,16 @@
 	let project;
 	let version;
 	let fields;
-
+	let neededFields;
 	let width = 0;
 
 	$: browser && ({params: {source}, url: {searchParams}} = $_page);
-	$: searchParams && ({project, version, fields} = collectionToObject(searchParams));
+	$: searchParams && ({
+		project,
+		version,
+		fields,
+		neededFields
+	} = collectionToObject(searchParams));
 
 	$: if (source) {
 		machine.send('SELECT_SOURCE', {source});
@@ -60,7 +65,7 @@
 		&& makeExploreIndexPath({project, source, version});
 
 	$: project && source && version
-		&& machine.send('DATASET_UPDATED', {project, source, version});
+		&& machine.send('DATASET_UPDATED', {project, source, version, neededFields});
 
 	$: selectionHeader = $selectedFields?.join(' by ') || '';
 	$: depthByField = makeDepthByField($selectedFields);

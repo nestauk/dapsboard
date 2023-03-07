@@ -2,20 +2,22 @@
     import {arraySum} from '@svizzle/utils';
 	import * as _ from 'lamb';
 
+	import {makeStandardKeyAdapter} from '$lib/app/utils/events.js';
+
 	import {
 		getPercent,
 		getTruthyKeys,
 		initSelectedFieldsMap,
 		initSelectedFieldSetsMap,
 		makeGetFieldSetsFor,
-		makeGetSelectedFields,
-		makeStandardKeyAdapter
+		makeGetSelectedFields
 	} from './utils.js';
 
 	export let coverage;
 	export let fields;
 	export let message;
 	export let selectionMode;
+	export let selectedFields;
 
 	let highlightedFields = [];
 	let columnsSelectedFieldSetsMap = [];
@@ -86,15 +88,13 @@
 
 	// row selection mode vars
 	$: rowsSelectedFieldNames = getTruthyKeys(rowsSelectedFieldsMap);
-	$: rowsSelectedFieldSets = rowsSelectedFieldNames.length
-		? _.filter(
-			fieldSets,
-			fieldSet => _.everyIn(
-				rowsSelectedFieldNames,
-				fieldName => fieldSet.fields.includes(fieldName)
-			)
+	$: rowsSelectedFieldSets = _.filter(
+		fieldSets,
+		fieldSet => _.everyIn(
+			rowsSelectedFieldNames,
+			fieldName => fieldSet.fields.includes(fieldName)
 		)
-		: [];
+	);
 	$: rowsSelectedFieldSetsIds = _.map(rowsSelectedFieldSets, _.getKey('id'));
 	$: rowsSelectionCount = arraySum(_.map(rowsSelectedFieldSets, _.getKey('count')));
 
@@ -117,6 +117,11 @@
 	$: selectionCount = selectionMode === 'rows'
 		? rowsSelectionCount
 		: columnsSelectionCount;
+
+	/* bound props */
+	$: selectedFields = selectionMode === 'rows'
+		? rowsSelectedFieldNames
+		: columnsSelectedFields;
 
 	/* rendering vars */
 	$: partitionedFieldSets = _.flatten([
@@ -191,7 +196,7 @@
 						{#if row.isHeaderRow}
 							<th
 								class='fieldSet {row.id}'
-								class:clickable={selectionMode === 'rows'}
+								class:clickable={selectionMode === 'columns'}
 								class:selectedHeader={isFieldSetSelected(fieldSetId)}
 								on:click={() => toggleColumn(fieldSetId)}
 								on:keydown={makeToggleColumnKeyHandler(fieldSetId)}

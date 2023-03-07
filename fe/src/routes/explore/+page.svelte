@@ -28,8 +28,8 @@
     import CoverageTable from '$lib/app/components/explore/coverage/CoverageTable.svelte';
 	import {getCoveragePromise} from '$lib/elasticsearch/utils/coverage.js';
 
-	const makeHrefBoard = ({fields, source, project, version}) =>
-		`/explore/${source}?${makeExploreQuery({fields, project, version})}`;
+	const makeHrefBoard = ({fields, source, project, neededFields, version}) =>
+		`/explore/${source}?${makeExploreQuery({fields, project, neededFields, version})}`;
 
 	const hrefMenu = ({project, source, version}) =>
 		`/explore?source=${source}&${makeExploreQuery({project, version})}`;
@@ -41,11 +41,12 @@
 	let coverage;
 	let coverageTableMessage;
 	let fieldSetsLoadingError = false;
+	let neededFields = [];
 	let selectionMode = 'rows';
 
 	const onKbdToggleSource = makeStandardKeyAdapter(toggleSource);
 
-	const waitFieldsets = async (dataset, fields) => {
+	const waitCoverage = async (dataset, fields) => {
 		try {
 			coverage = null;
 			fieldSetsLoadingError = false;
@@ -59,8 +60,8 @@
 	$: browser && ({url: {searchParams}} = $_page);
 	$: searchParams && ({source, project, version} = collectionToObject(searchParams));
 
-	$: hrefBoard = project && source && version
-		&& makeHrefBoard({project, source, version});
+	$: hrefBoard = project && source && version && neededFields
+		&& makeHrefBoard({project, neededFields, source, version});
 
 	$: if (source) {
 		selectSource(source);
@@ -191,6 +192,7 @@
 							{#if coverage}
 								<CoverageTable
 									bind:message={coverageTableMessage}
+									bind:selectedFields={neededFields}
 									{coverage}
 									fields={$selectedDatasetFields}
 									{selectionMode}

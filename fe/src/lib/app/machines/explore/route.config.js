@@ -22,6 +22,7 @@ export const exploreConfig = {
 					actions: [
 						'selectDataset',
 						'setDataset',
+						'setNeededFields',
 						'setURL',
 					]
 				},
