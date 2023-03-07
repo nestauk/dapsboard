@@ -1,4 +1,6 @@
 <script>
+	import {LayoutHMF} from '@svizzle/ui';
+
 	import {page as _page} from '$app/stores';
 	import {browser} from '$app/environment';
 
@@ -6,7 +8,9 @@
 		Icon,
 		ChevronDown,
 		ChevronRight,
-		ChevronUp
+		ChevronUp,
+		LoadingView,
+		MessageView
 	} from '@svizzle/ui';
 
 	import {
@@ -21,7 +25,8 @@
 	import {makeStandardKeyAdapter} from '$lib/app/utils/events.js';
 	import {makeExploreQuery} from '$lib/app/utils/exploreUtils.js';
 	import {collectionToObject} from '$lib/utils/svizzle/utils/collection-object.js';
-	import {getFieldSetsPromise} from '$lib/elasticsearch/utils/coverage.js';
+    import CoverageTable from '$lib/app/components/explore/coverage/CoverageTable.svelte';
+	import {getCoveragePromise} from '$lib/elasticsearch/utils/coverage.js';
 
 	const makeHrefBoard = ({fields, source, project, version}) =>
 		`/explore/${source}?${makeExploreQuery({fields, project, version})}`;
@@ -33,18 +38,20 @@
 	let source;
 	let project;
 	let version;
-	let fieldSets;
+	let coverage;
+	let coverageTableMessage;
 	let fieldSetsLoadingError = false;
+	let selectionMode = 'rows';
 
 	const onKbdToggleSource = makeStandardKeyAdapter(toggleSource);
 
 	const waitFieldsets = async (dataset, fields) => {
 		try {
-			fieldSets = null;
+			coverage = null;
 			fieldSetsLoadingError = false;
-			fieldSets = await getFieldSetsPromise(dataset, fields);
-			console.log('fieldSets', fieldSets);
+			coverage = await getCoveragePromise(dataset, fields);
 		} catch (error) {
+			console.error(error);
 			fieldSetsLoadingError = true;
 		}
 	};
@@ -63,7 +70,7 @@
 
 	$: project && source && version && selectDataset({project, source, version});
 	$: if ($selectedDataset && $selectedDatasetFields) {
-		waitFieldsets($selectedDataset, $selectedDatasetFields);
+		waitCoverage($selectedDataset, $selectedDatasetFields);
 	}
 </script>
 
@@ -142,16 +149,59 @@
 	</nav>
 	<main>
 		{#if hrefBoard}
-			<a
-				href={hrefBoard}
-				class='undecor'
-				rel='prefetch'
-			>
-				<div class='button'>
-					<p>Explore</p>
-					<Icon glyph={ChevronRight} />
-				</div>
-			</a>
+			<div class='overview'>
+				<LayoutHMF>
+					<header slot='header' class='coverageHeader'>
+						<div class='coverageOptions'>
+							<label class='clickable'>
+								<input
+									bind:group={selectionMode}
+									class='clickable'
+									type='radio'
+									value='rows'
+								>
+								Select rows
+							</label>
+							<label class='clickable'>
+								<input
+									bind:group={selectionMode}
+									class='clickable'
+									type='radio'
+									value='columns'
+								>
+								Select columns
+							</label>
+						</div>
+						<h2 class='coverageMessage'>{coverageTableMessage}</h2>
+						<a
+							href={hrefBoard}
+							class='undecor'
+							rel='prefetch'
+						>
+							<div class='button'>
+								<p>Explore</p>
+								<Icon glyph={ChevronRight} />
+							</div>
+						</a>
+					</header>
+					<div slot='main' class='coverage'>
+						{#if fieldSetsLoadingError}
+							<MessageView text='Error loading coverage results.' />
+						{:else}
+							{#if coverage}
+								<CoverageTable
+									bind:message={coverageTableMessage}
+									{coverage}
+									fields={$selectedDatasetFields}
+									{selectionMode}
+								/>
+							{:else}
+								<LoadingView message='Loading coverage results.' />
+							{/if}
+						{/if}
+					</div>
+				</LayoutHMF>
+			</div>
 		{:else}
 			<p class='message'>Please Select a dataset</p>
 		{/if}
@@ -238,6 +288,36 @@
 		justify-content: center;
 	}
 
+	.overview {
+		width: 100%;
+		height: 100%;
+		display: grid;
+		align-content: start;
+		grid-template-rows: 1fr;
+		overflow: auto;
+	}
+	.overview header {
+		width: 100%;
+		height: 100%;
+		display: grid;
+		grid-template-columns: min-content 1fr min-content;
+	}
+	.coverageHeader {
+		padding-bottom: 1em;
+		padding-right: 1em;
+	}
+	.coverageOptions {
+		white-space: nowrap;
+		display: grid;
+		align-content: center;
+	}
+	.coverageOptions label {
+		display: block;
+	}
+	.coverage {
+		width: 100%;
+		height: 100%;
+	}
 	.message {
 		background-color: var(--color-blue-darker);
 		border-radius: 10rem;
@@ -259,5 +339,13 @@
 	}
 	.button p {
 		margin-right: 0.5rem;
+	}
+
+	.coverageMessage {
+		width: 100%;
+		height: 100%;
+		display: grid;
+		align-items: center;
+		justify-items: center;
 	}
 </style>
