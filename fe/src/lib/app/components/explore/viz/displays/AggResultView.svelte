@@ -1,31 +1,32 @@
 <script>
-	import {getComponentConfig} from '../utils/resultsMapper'
+	import {isNotNil} from '@svizzle/utils';
 
-	export let aggKey;
-	export let aggResult;
+	import {getComponentConfig} from '$lib/app/utils/resultsMapper.js';
+
+	export let meta;
+	export let result;
+	export let title;
 
 	let component;
 	let keyProps;
-	let origin;
 	let resultProps;
 
-	$: aggKey && aggResult && (
+	$: meta && result && (
 		{
 			component,
 			keyProps,
-			origin,
 			resultProps,
-		} = getComponentConfig(aggKey, aggResult)
+		} = getComponentConfig(meta, result)
 	);
 	$: props = {
-		...keyProps,
+		// ...keyProps,
 		...resultProps
 	};
 </script>
 
-<div class='View'>
-	{#if !keyProps}
-		<div class='label'>{origin.aggId}</div>
+<div class='AggResultView'>
+	{#if isNotNil(title)}
+		<div class='label'>{title}</div>
 	{/if}
 	<div>
 		{#if component}
@@ -35,7 +36,7 @@
 </div>
 
 <style>
-	.View {
+	.AggResultView {
 		margin: 0.5em;
 		max-height: 100%;
 	}

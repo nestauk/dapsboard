@@ -76,7 +76,7 @@ const aggParamsSources = {
 		getter: applyFnMap({
 			interval: aggResult => {
 				const {count, min, max} = aggResult;
-				const binCount = Math.min(Math.sqrt(count), 50);
+				const binCount = Math.min(Math.sqrt(count), 10);
 				const interval = Math.max(Math.round((max - min) / binCount), 1);
 
 				// eslint-disable-next-line consistent-return
@@ -208,10 +208,6 @@ const partitionHierarchy = (hierarchy, queriedHierarchy) => {
 		}
 	);
 
-	// console.log('map', map);
-	console.log('validHierarchy', validHierarchy);
-	console.log('invalidHierarchy', invalidHierarchy);
-
 	return [validHierarchy, invalidHierarchy];
 }
 
@@ -251,8 +247,6 @@ const hierarchyToAggs = (hierarchy, queriedHierarchy) => {
 
 		aggs[id] = aggObject;
 	});
-
-	// console.log('aggs', aggs);
 
 	return aggs;
 };
