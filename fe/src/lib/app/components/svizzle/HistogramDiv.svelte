@@ -1,5 +1,6 @@
 <script>
 	import {makeStyleVars} from '@svizzle/dom';
+	import {isNotNil} from '@svizzle/utils';
 
 	import {HistogramG} from '@svizzle/histogram';
 
@@ -31,7 +32,7 @@
 	class:interactive={flags && flags.isInteractive}
 	{style}
 >
-	{#if title}
+	{#if isNotNil(title)}
 		<header class:rightToLeft={flags && flags.isRightToLeft}>
 			<h2>{title}</h2>
 		</header>

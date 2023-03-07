@@ -55,7 +55,7 @@
 </main>
 
 {#if $_isAuthModalOpen}
-	<AuthPrompt on:close={onCloseAuth}/>
+	<AuthPrompt on:close={onCloseAuth} />
 {/if}
 
 <style>

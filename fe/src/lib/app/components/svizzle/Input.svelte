@@ -72,7 +72,7 @@
 		>
 			<Icon
 				glyph={X}
-				size=16
+				size='16'
 				strokeWidth='1px'
 				stroke={theme.colorIcon}
 			/>

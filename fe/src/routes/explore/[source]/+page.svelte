@@ -12,11 +12,12 @@
 		ChevronUp
 	} from '@svizzle/ui';
 
+    import AggResults from '$lib/app/components/explore/viz/AggResults.svelte';
 	import FieldMenu from '$lib/app/components/explore/suggestions/FieldMenu.svelte';
 	import Search from '$lib/app/components/explore/suggestions/Search.svelte';
-	import AggResultView from '$lib/app/components/AggResultView.svelte';
 	import {createExploreMachine} from '$lib/app/machines/explore/route.js';
 	import {selectedDatasetFields} from '$lib/app/stores/exploreStores.js';
+	import {makeStandardKeyAdapter} from '$lib/app/utils/events.js';
 	import {makeDepthByField, makeExploreIndexPath} from '$lib/app/utils/exploreUtils.js';
 	import {collectionToObject} from '$lib/utils/svizzle/utils/collection-object.js';
 
@@ -105,6 +106,11 @@
 	const clickedNextField = () => machine.send('SELECTED_NEXT_FIELD');
 	const clickedPrevField = () => machine.send('SELECTED_PREVIOUS_FIELD');
 
+	const onKbdClickedField = makeStandardKeyAdapter(clickedField);
+	const onKbdClickedFieldCounter = makeStandardKeyAdapter(clickedFieldCounter);
+	const onKbdClickedNextField = makeStandardKeyAdapter(clickedNextField);
+	const onKbdClickedPrevField = makeStandardKeyAdapter(clickedPrevField);
+
 	const onDownArrow = () => machine.send('NEXT_FIELD_SELECTED');
 	const onFieldSelected =
 		({detail}) => machine.send({type:'FIELD_SELECTED', detail});
@@ -183,6 +189,7 @@
 							class='fieldname unselectable'
 							font-size={fontSize}
 							on:click={clickedField(field)}
+							on:keydown={onKbdClickedField(field)}
 							x={nameX}
 							y={halfLineHeight}
 						>{field}</text>
@@ -191,6 +198,7 @@
 							cx={depthCx}
 							cy={halfLineHeight}
 							on:click={clickedFieldCounter(field)}
+							on:keydown={onKbdClickedFieldCounter(field)}
 						/>
 						{#if depth}
 							<text
@@ -212,6 +220,7 @@
 			class:disabled={$isNextFieldDisabled}
 			class='button fieldnav'
 			on:click={!$isNextFieldDisabled && clickedNextField}
+			on:keydown={!$isNextFieldDisabled && onKbdClickedNextField}
 		>
 			<Icon
 				glyph={ChevronDown}
@@ -223,6 +232,7 @@
 			class:disabled={$isPrevFieldDisabled}
 			class='button fieldnav'
 			on:click={!$isPrevFieldDisabled && clickedPrevField}
+			on:keydown={!$isPrevFieldDisabled && onKbdClickedPrevField}
 		>
 			<Icon
 				glyph={ChevronUp}
@@ -234,11 +244,7 @@
 		<p>{selectionHeader}</p>
 	</section>
 	<section class='results'>
-		{#if $currentResult}
-			{#each Object.entries($currentResult) as [aggKey, aggResult]}
-				<AggResultView {aggKey} {aggResult} />
-			{/each}
-		{/if}
+		<AggResults results={$currentResult} />
 	</section>
 </section>
 
@@ -391,8 +397,10 @@
 	.results {
 		display: grid;
 		grid-area: content2;
-		grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+		grid-template-columns: 1fr;
+		align-items: start;
+		align-content: start;
 		overflow-y: auto;
-		padding: 1rem;
+		/* padding: 1rem; */
 	}
 </style>

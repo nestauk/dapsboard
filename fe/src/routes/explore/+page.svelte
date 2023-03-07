@@ -18,6 +18,7 @@
 		selectedDataset,
 		selectedDatasetFields
 	} from '$lib/app/stores/exploreStores.js';
+	import {makeStandardKeyAdapter} from '$lib/app/utils/events.js';
 	import {makeExploreQuery} from '$lib/app/utils/exploreUtils.js';
 	import {collectionToObject} from '$lib/utils/svizzle/utils/collection-object.js';
 	import {getFieldSetsPromise} from '$lib/elasticsearch/utils/coverage.js';
@@ -34,6 +35,8 @@
 	let version;
 	let fieldSets;
 	let fieldSetsLoadingError = false;
+
+	const onKbdToggleSource = makeStandardKeyAdapter(toggleSource);
 
 	const waitFieldsets = async (dataset, fields) => {
 		try {
@@ -57,7 +60,7 @@
 	} else {
 		resetSources();
 	}
-	
+
 	$: project && source && version && selectDataset({project, source, version});
 	$: if ($selectedDataset && $selectedDatasetFields) {
 		waitFieldsets($selectedDataset, $selectedDatasetFields);
@@ -101,6 +104,7 @@
 							<div
 								class='toggle'
 								on:click={toggleSource(source)}
+								on:keydown={onKbdToggleSource(source)}
 							>
 								{#if isExpanded}
 									<Icon glyph={ChevronUp} />

@@ -5,7 +5,6 @@
 
 	import InputWidget from '$lib/app/components/svizzle/InputWidget.svelte';
 	import {
-		_isAuthModalOpen,
 		_credentials,
 		_isAuthenticated
 	} from '$lib/app/stores/auth.js';
@@ -21,7 +20,7 @@
 	const validateEmailFormat = email => validEmailRegex.test(email);
 	const validateTokenFormat = token => token.match(/^[0-9a-f]{32}$/ui);
 
-	const validatePastedToken = async (token) => {
+	const validatePastedToken = async token => {
 		const isValidToken = validateTokenFormat(token);
 		const result = isValidToken && await verifyNestaToken(email, token);
 		return result;

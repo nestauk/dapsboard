@@ -83,8 +83,6 @@ export const selectionToAggsHierarchy = ({fields, project, source, version}) => 
 	const schema = getSchemaOf({project, source, version});
 	const datasetId = getDatasetIdOf({project, source, version});
 
-	// console.log('fields', fields);
-
 	const fieldCount = 2;
 	const aggsLayers = _.map(_.takeFrom(fields, fieldCount), fieldName => {
 		const fieldTypeId = schema[fieldName]?.type;
@@ -101,7 +99,6 @@ export const selectionToAggsHierarchy = ({fields, project, source, version}) => 
 
 		return editedCompatibleAggs;
 	});
-	// console.log('aggsLayers', aggsLayers);
 
 	const hierarchy = {};
 	for (
@@ -131,7 +128,6 @@ export const selectionToAggsHierarchy = ({fields, project, source, version}) => 
 			hierarchy[idx] = node;
 		});
 	}
-	// console.log('hierarchy', hierarchy);
 
 	return hierarchy
 };

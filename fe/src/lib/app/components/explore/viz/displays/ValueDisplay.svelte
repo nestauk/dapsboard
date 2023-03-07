@@ -4,7 +4,9 @@
 </script>
 
 <div>
-	<div class='label'>{label}</div>
+	{#if label}
+		<div class='label'>{label}</div>
+	{/if}
 	<div class='value'>{value}</div>
 </div>
 
