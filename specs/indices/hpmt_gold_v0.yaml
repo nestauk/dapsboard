@@ -1,0 +1,145 @@
+
+source:
+  -
+    provider_name: MCS
+    provider_url: https://mcscertified.com/
+  -
+    provider_name: EPC
+    provider_url: https://epc.opendatacommunities.org/  
+dataset:
+  api_type: ElasticSearch
+  api_version: 7.10
+  config_url: https://gist.githubusercontent.com/doogyb/ea8cf37920a12b4714b4c8c311b9bcfc/raw/514784b379d8f6246cb57f3150ef800b2f3a9eca/hpmt_gold_v0.json
+  endpoint_url: https://es.annotations.dap-tools.uk/hpmt_gold_interim
+  provider_name: DAPS (Nesta)
+  provider_url: https://github.com/nestauk/nesta
+
+  schema:
+    built_form:
+      type: textWithKeyword
+    construction_age_band:
+      type: textWithKeyword
+    country:
+      type: textWithKeyword
+    current_energy_rating:
+      type: textWithKeyword
+    floor_energy_eff:
+      type: textWithKeyword
+    glazed_area:
+      type: float
+    glazed_type:
+      type: textWithKeyword
+    heating_fuel:
+      type: textWithKeyword
+    heating_system:
+      type: textWithKeyword
+    hot_water_energy_eff:
+      type: textWithKeyword
+    hp_install_date:
+      type: date
+    hp_install_year:
+      type: float
+    hp_installed:
+      type: boolean
+    hp_type:
+      type: textWithKeyword
+    inspection_date:
+      type: date
+    itl121cd_installation:
+      type: textWithKeyword
+    itl121cd_installer:
+      type: textWithKeyword
+    itl121nm_installation:
+      type: textWithKeyword
+    itl121nm_installer:
+      type: textWithKeyword
+    itl221cd_installation:
+      type: textWithKeyword
+    itl221cd_installer:
+      type: textWithKeyword
+    itl221nm_installation:
+      type: textWithKeyword
+    itl221nm_installer:
+      type: textWithKeyword
+    itl321cd_installation:
+      type: textWithKeyword
+    itl321cd_installer:
+      type: textWithKeyword
+    itl321nm_installation:
+      type: textWithKeyword
+    itl321nm_installer:
+      type: textWithKeyword
+    lat:
+      type: float
+    lat_installer:
+      type: float
+    lau121cd_installation:
+      type: textWithKeyword
+    lau121cd_installer:
+      type: textWithKeyword
+    lau121nm_installation:
+      type: textWithKeyword
+    lau121nm_installer:
+      type: textWithKeyword
+    lighting_energy_eff:
+      type: textWithKeyword
+    local_authority_label:
+      type: textWithKeyword
+    long:
+      type: float
+    long_installer:
+      type: float
+    lsoa11cd_installation:
+      type: textWithKeyword
+    lsoa11cd_installer:
+      type: textWithKeyword
+    lsoa11nm_installation:
+      type: textWithKeyword
+    lsoa11nm_installer:
+      type: textWithKeyword
+    mainheat_description:
+      type: textWithKeyword
+    mainheat_energy_eff:
+      type: textWithKeyword
+    mains_gas_flag:
+      type: textWithKeyword
+    mcs_available:
+      type: boolean
+    msoa11cd_installation:
+      type: textWithKeyword
+    msoa11cd_installer:
+      type: textWithKeyword
+    msoa11nm_installation:
+      type: textWithKeyword
+    msoa11nm_installer:
+      type: textWithKeyword
+    number_habitable_rooms:
+      type: float
+    pcds:
+      type: textWithKeyword
+    pcds_installer:
+      type: textWithKeyword
+    photo_supply:
+      type: float
+    postcode:
+      type: textWithKeyword
+    potential_energy_rating:
+      type: textWithKeyword
+    property_type:
+      type: textWithKeyword
+    roof_energy_eff:
+      type: textWithKeyword
+    solar_water_heating_flag:
+      type: textWithKeyword
+    tenure:
+      type: textWithKeyword
+    total_floor_area:
+      type: float
+    transaction_type:
+      type: textWithKeyword
+    uprn:
+      type: float
+    walls_energy_eff:
+      type: textWithKeyword
+    windows_energy_eff:
+      type: textWithKeyword
