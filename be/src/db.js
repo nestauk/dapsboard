@@ -1,11 +1,13 @@
 import { MongoClient } from 'mongodb';
 
-// Replace the uri string with your connection string.
-const uri = "mongodb://mongo";
+const { MONGO_ROOT_USER: user, MONGO_ROOT_PASSWORD: password } = process.env;
+const uri = `mongodb://${user}:${password}@mongo`;
 const client = new MongoClient(uri);
 
 const database = client.db('dapsboard');
 export const cache = database.collection('cache');
+
+console.log(cache);
 
 export const cacheRequest = (request, aggregation) => {
 	const fresh = {
