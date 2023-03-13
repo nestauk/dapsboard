@@ -8,18 +8,22 @@ services:
       - .:/server
     ports:
       - 4000:4000 
-    env_file: .env
     environment:
       - PORT=4000
       - AWS_ACCESS_KEY_ID
       - AWS_SECRET_ACCESS_KEY
       - AWS_DEFAULT_REGION
+      - MONGO_ROOT_USER
+      - MONGO_ROOT_PASSWORD
   mongo:
     image: "mongo"
     ports:
       - 27017:27017
     volumes:
       - mongodb:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_ROOT_USER}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_ROOT_PASSWORD}
 
 volumes:
   mongodb:
