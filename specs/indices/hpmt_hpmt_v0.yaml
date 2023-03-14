@@ -51,12 +51,6 @@ dataset:
       type: textWithKeyword
     installer_geo_region_msoa11_name:
       type: textWithKeyword
-    local_authority_label:
-      type: textWithKeyword
-    pcds:
-      type: textWithKeyword
-    pcds_installer:
-      type: textWithKeyword
     property_energy_efficiency_floor:
       type: textWithKeyword
     property_energy_efficiency_hot_water:
