@@ -15,9 +15,14 @@ cd hooks
 touch post-receive
 ```
 
-Copy contents of [post-receive](./post-receive) to this file. Make sure you
-update the `branch` variable to reflect which one the remote is, i.e. either
-`dev` or `staging`, then make executable:
+Copy contents of [post-receive](./post-receive) to this file. 
+
+Please make sure that you:
+- Update the `branch` variable to reflect which one the remote is, i.e. either
+  `dev` or `staging`
+- Set the `MONGO_ROOT_USER` and `MONGO_ROOT_PASSWORD` variables in the script
+
+Then make executable:
 
 ```
 sudo chmod +x post-receive
