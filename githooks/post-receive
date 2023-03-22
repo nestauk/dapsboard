@@ -9,6 +9,8 @@ do
         echo "$branch ref received. Deploying $branch branch..."
         git --work-tree=$HOME/dapsboard --git-dir=$HOME/dapsboard.git checkout $branch -f
         cd $HOME/dapsboard/be
+        export MONGO_ROOT_USER=<your_root_user>
+        export MONGO_ROOT_PASSWORD=<your_root_password>
         docker compose down
         docker compose build
         docker compose up -d
