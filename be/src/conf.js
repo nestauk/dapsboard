@@ -6,4 +6,6 @@ export const CROSS_ORIGIN_DOMAINS = [
 export const PROTECTED_DATASETS = [
 	'epc_with_hp_install_dates',
 	'processed_mcs_installations',
+	'hpmt_gold_interim_v0',
+	'hpmt_gold_interim_v1'
 ];

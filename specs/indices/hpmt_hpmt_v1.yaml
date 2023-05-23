@@ -1,0 +1,143 @@
+
+source:
+  -
+    provider_name: MCS
+    provider_url: https://mcscertified.com/
+  -
+    provider_name: EPC
+    provider_url: https://epc.opendatacommunities.org/  
+dataset:
+  api_type: ElasticSearch
+  api_version: 7.10
+  config_url: https://gist.githubusercontent.com/doogyb/ea8cf37920a12b4714b4c8c311b9bcfc/raw/514784b379d8f6246cb57f3150ef800b2f3a9eca/hpmt_gold_v0.json
+  endpoint_url: https://es.annotations.dap-tools.uk/hpmt_gold_interim_v1
+  provider_name: DAPS (Nesta)
+  provider_url: https://github.com/nestauk/nesta
+
+  schema:
+    hp_feature_design:
+      type: textWithKeyword
+    hp_feature_flow_temperature:
+      type: float
+    hp_feature_heat_source:
+      type: textWithKeyword
+    hp_feature_heat_system:
+      type: textWithKeyword
+    hp_feature_power_capacity:
+      type: float
+    hp_feature_power_generation:
+      type: float
+    hp_feature_scop:
+      type: float
+    hp_id_brand:
+      type: textWithKeyword
+    hp_id_model:
+      type: textWithKeyword
+    installation_cost:
+      type: float
+    installation_date:
+      type: date
+    installation_date_month:
+      type: float
+    installation_date_year:
+      type: float
+    installer_certificate_date_end:
+      type: date
+    installer_certificate_date_start:
+      type: date
+    installer_geo_region_itl21_1_id:
+      type: textWithKeyword
+    installer_geo_region_itl21_1_name:
+      type: textWithKeyword
+    installer_geo_region_itl21_2_id:
+      type: textWithKeyword
+    installer_geo_region_itl21_2_name:
+      type: textWithKeyword
+    installer_geo_region_itl21_3_id:
+      type: textWithKeyword
+    installer_geo_region_itl21_3_name:
+      type: textWithKeyword
+    installer_geo_region_lau21_1_id:
+      type: textWithKeyword
+    installer_geo_region_lau21_1_name:
+      type: textWithKeyword
+    installer_geo_region_lsoa11_id:
+      type: textWithKeyword
+    installer_geo_region_lsoa11_name:
+      type: textWithKeyword
+    installer_geo_region_msoa11_id:
+      type: textWithKeyword
+    installer_geo_region_msoa11_name:
+      type: textWithKeyword
+    installer_geo_town:
+      type: textWithKeyword
+    property_geo_region_country:
+      type: textWithKeyword
+    property_geo_region_itl21_1_id:
+      type: textWithKeyword
+    property_geo_region_itl21_1_name:
+      type: textWithKeyword
+    property_geo_region_itl21_2_id:
+      type: textWithKeyword
+    property_geo_region_itl21_2_name:
+      type: textWithKeyword
+    property_geo_region_itl21_3_id:
+      type: textWithKeyword
+    property_geo_region_itl21_3_name:
+      type: textWithKeyword
+    property_geo_region_lau21_1_id:
+      type: textWithKeyword
+    property_geo_region_lau21_1_name:
+      type: textWithKeyword
+    property_geo_region_lsoa11_id:
+      type: textWithKeyword
+    property_geo_region_lsoa11_name:
+      type: textWithKeyword
+    property_geo_region_msoa11_id:
+      type: textWithKeyword
+    property_geo_region_msoa11_name:
+      type: textWithKeyword
+    property_energy_efficiency_floor:
+      type: textWithKeyword
+    property_energy_efficiency_hot_water:
+      type: textWithKeyword
+    property_energy_efficiency_lighting:
+      type: textWithKeyword
+    property_energy_efficiency_main_heat:
+      type: textWithKeyword
+    property_energy_efficiency_roof:
+      type: textWithKeyword
+    property_energy_efficiency_walls:
+      type: textWithKeyword
+    property_energy_efficiency_windows:
+      type: textWithKeyword
+    property_energy_rating_current:
+      type: textWithKeyword
+    property_energy_rating_potential:
+      type: textWithKeyword
+    property_feature_age_band:
+      type: textWithKeyword
+    property_feature_built_form:
+      type: textWithKeyword
+    property_feature_glazed_area:
+      type: float
+    property_feature_glazed_type:
+      type: textWithKeyword
+    property_feature_number_habitable_rooms:
+      type: float
+    property_feature_total_floor_area:
+      type: float
+    property_feature_type:
+      type: textWithKeyword
+    property_supply_heating_fuel_type:
+      type: textWithKeyword
+    property_supply_heating_system:
+      type: textWithKeyword
+    property_supply_mains_gas_flag:
+      type: textWithKeyword
+    property_supply_photovoltaic:
+      type: float
+    property_supply_solar_water_heating_flag:
+      type: textWithKeyword
+    property_tenure:
+      type: textWithKeyword
