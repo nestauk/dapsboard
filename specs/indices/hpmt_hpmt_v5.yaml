@@ -9,7 +9,7 @@ source:
 dataset:
   api_type: ElasticSearch
   api_version: 7.10
-  config_url: https://gist.githubusercontent.com/doogyb/ea8cf37920a12b4714b4c8c311b9bcfc/raw/514784b379d8f6246cb57f3150ef800b2f3a9eca/hpmt_gold_v0.json
+  config_url: https://gist.githubusercontent.com/doogyb/27ade77a9dba42a547087eaeb28cf06c/raw/861c5df30e066cb295e5e1d3771f867b3554c098/hpmt_gold_interim_v5.json
   endpoint_url: https://es.annotations.dap-tools.uk/hpmt_gold_interim_v5
   provider_name: DAPS (Nesta)
   provider_url: https://github.com/nestauk/nesta
@@ -74,13 +74,7 @@ dataset:
     installer_id_hash:
       type: textWithKeyword
     installer_name:
-      properties:
-        '1':
-          type: text
-          fields:
-            keyword:
-              type: keyword
-              ignore_above: 256
+      type: textWithKeyword
     lat:
       type: float
     lat_installer:
