@@ -15,10 +15,6 @@ dataset:
   provider_url: https://github.com/nestauk/nesta
 
   schema:
-    "@timestamp":
-      type: date
-    "@version":
-      type: textWithKeyword
     hp_feature_design:
       type: textWithKeyword
     hp_feature_flow_temperature:
