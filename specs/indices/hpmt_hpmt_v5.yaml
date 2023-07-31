@@ -1,0 +1,155 @@
+
+source:
+  -
+    provider_name: MCS
+    provider_url: https://mcscertified.com/
+  -
+    provider_name: EPC
+    provider_url: https://epc.opendatacommunities.org/
+dataset:
+  api_type: ElasticSearch
+  api_version: 7.10
+  config_url: https://gist.githubusercontent.com/doogyb/27ade77a9dba42a547087eaeb28cf06c/raw/861c5df30e066cb295e5e1d3771f867b3554c098/hpmt_gold_interim_v5.json
+  endpoint_url: https://es.annotations.dap-tools.uk/hpmt_gold_interim_v5
+  provider_name: DAPS (Nesta)
+  provider_url: https://github.com/nestauk/nesta
+
+  schema:
+    hp_feature_design:
+      type: textWithKeyword
+    hp_feature_flow_temperature:
+      type: float
+    hp_feature_power_capacity:
+      type: float
+    hp_feature_power_generation:
+      type: float
+    hp_feature_scop:
+      type: float
+    hp_id_brand:
+      type: textWithKeyword
+    hp_id_model:
+      type: textWithKeyword
+    installation_cost:
+      type: float
+    installation_date:
+      type: date
+    installation_type:
+      type: textWithKeyword
+    installer_certificate_date_end:
+      type: date
+    installer_certificate_date_start:
+      type: date
+    installer_geo_region_country21_name:
+      type: textWithKeyword
+    installer_geo_region_itl21_1_id:
+      type: textWithKeyword
+    installer_geo_region_itl21_1_name:
+      type: textWithKeyword
+    installer_geo_region_itl21_2_id:
+      type: textWithKeyword
+    installer_geo_region_itl21_2_name:
+      type: textWithKeyword
+    installer_geo_region_itl21_3_id:
+      type: textWithKeyword
+    installer_geo_region_itl21_3_name:
+      type: textWithKeyword
+    installer_geo_region_lad21_id:
+      type: textWithKeyword
+    installer_geo_region_lad21_name:
+      type: textWithKeyword
+    installer_geo_region_lsoa11_id:
+      type: textWithKeyword
+    installer_geo_region_lsoa11_name:
+      type: textWithKeyword
+    installer_geo_region_msoa11_id:
+      type: textWithKeyword
+    installer_geo_region_msoa11_name:
+      type: textWithKeyword
+    installer_id:
+      type: textWithKeyword
+    installer_id_hash:
+      type: textWithKeyword
+    installer_name:
+      type: textWithKeyword
+    lat:
+      type: float
+    lat_installer:
+      type: float
+    long:
+      type: float
+    long_installer:
+      type: float
+    pcds:
+      type: textWithKeyword
+    pcds_installer:
+      type: textWithKeyword
+    postcode:
+      type: textWithKeyword
+    property_energy_efficiency_floor:
+      type: textWithKeyword
+    property_energy_efficiency_hot_water:
+      type: textWithKeyword
+    property_energy_efficiency_lighting:
+      type: textWithKeyword
+    property_energy_efficiency_main_heat:
+      type: textWithKeyword
+    property_energy_efficiency_roof:
+      type: textWithKeyword
+    property_energy_efficiency_walls:
+      type: textWithKeyword
+    property_energy_efficiency_windows:
+      type: textWithKeyword
+    property_energy_rating_current:
+      type: textWithKeyword
+    property_energy_rating_potential:
+      type: textWithKeyword
+    property_feature_age_band:
+      type: textWithKeyword
+    property_feature_built_form:
+      type: textWithKeyword
+    property_feature_glazed_area:
+      type: float
+    property_feature_glazed_type:
+      type: textWithKeyword
+    property_feature_number_habitable_rooms:
+      type: float
+    property_feature_total_floor_area:
+      type: float
+    property_feature_type:
+      type: textWithKeyword
+    property_geo_region_country21_name:
+      type: textWithKeyword
+    property_geo_region_itl21_1_id:
+      type: textWithKeyword
+    property_geo_region_itl21_1_name:
+      type: textWithKeyword
+    property_geo_region_itl21_2_id:
+      type: textWithKeyword
+    property_geo_region_itl21_2_name:
+      type: textWithKeyword
+    property_geo_region_itl21_3_id:
+      type: textWithKeyword
+    property_geo_region_itl21_3_name:
+      type: textWithKeyword
+    property_geo_region_lad21_id:
+      type: textWithKeyword
+    property_geo_region_lad21_name:
+      type: textWithKeyword
+    property_geo_region_lsoa11_id:
+      type: textWithKeyword
+    property_geo_region_lsoa11_name:
+      type: textWithKeyword
+    property_geo_region_msoa11_id:
+      type: textWithKeyword
+    property_geo_region_msoa11_name:
+      type: textWithKeyword
+    property_supply_heating_fuel_type:
+      type: textWithKeyword
+    property_supply_heating_system:
+      type: textWithKeyword
+    property_supply_mains_gas_flag:
+      type: textWithKeyword
+    property_supply_solar_water_heating_flag:
+      type: boolean
+    property_tenure:
+      type: textWithKeyword
