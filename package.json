@@ -11,5 +11,10 @@
 	"license": "MIT",
 	"name": "dapsboard_app",
 	"repository": "github:nestauk/dapsboard",
-	"version": "0.0.8"
+	"version": "0.0.8",
+	"workspaces": [
+		"be",
+		"common",
+		"fe"
+	]
 }

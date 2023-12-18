@@ -1,0 +1,7 @@
+{
+  "description": "bla",
+  "main": "config.js",
+  "name": "common",
+  "type": "module",
+  "version": "1.0.0"
+}
