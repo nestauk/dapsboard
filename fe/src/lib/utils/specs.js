@@ -45,11 +45,13 @@ export const groupBySource = _.groupBy(getSource);
 
 export const makeDatasetBySource = _.pipe([
 	_.groupBy(getSource),
-	_.mapValuesWith(_.sortWith([_.getKey('project'), getSpecVersion])),
 	_.values,
-	_.sortWith([getSource]),
+	_.sortWith([_.getPath('0.source')]),
 	_.mapWith(applyFnMap({
 		source: _.getPath('0.source'),
-		releases: _.sortWith([getSpecVersion])
+		releases: _.sortWith([
+			_.getKey('project'),
+			_.sorterDesc(getSpecVersion)
+		])
 	}))
 ]);

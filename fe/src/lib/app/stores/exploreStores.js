@@ -11,7 +11,7 @@ import {
 
 import Datasets from '$lib/app/data/datasets.json' assert {type: 'json'};
 import {indexById} from '$lib/utils/generic.js';
-import {getDatasetIdOf, getSchema, groupBySource} from '$lib/utils/specs.js';
+import {getDatasetIdOf, getSchema, groupBySource, getSpecVersion} from '$lib/utils/specs.js';
 import {safeApply} from '$lib/utils/svizzle/utils/[any-any]-[any-any].js';
 
 /* sources */
@@ -19,7 +19,10 @@ import {safeApply} from '$lib/utils/svizzle/utils/[any-any]-[any-any].js';
 const makeSources = _.pipe([
 	groupBySource,
 	_.mapValuesWith(_.pipe([
-		_.sortWith([getId]),
+		_.sortWith([
+			_.getKey('project'),
+			_.sorterDesc(getSpecVersion)
+		]),
 		_.collect([_.getPath('0.id'), _.identity, indexById]),
 		([activeDatasetId, datasets, datasetsById]) => ({
 			activeDatasetId,
